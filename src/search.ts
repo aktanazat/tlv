@@ -57,6 +57,9 @@ export function parseTime(text: string): number {
   return Number(hours ?? 0) * 3600 + Number(minutes ?? 0) * 60 + secs;
 }
 
+/** Two ranges in one video whose overlap is at least this share of their union are one moment. */
+const SAME_MOMENT = 0.5;
+
 /** Overlap divided by union of two ranges. */
 export function overlapRatio(a: Range, b: Range): number {
   const union = Math.max(a.end, b.end) - Math.min(a.start, b.start);
@@ -74,7 +77,7 @@ export function mergeCandidates<C extends Clip>(candidates: Candidate<C>[], limi
   for (const candidate of ordered) {
     if (kept.length === limit) break;
     const duplicate = kept.some(
-      (other) => other.video_id === candidate.video_id && overlapRatio(other, candidate) >= 0.5,
+      (other) => other.video_id === candidate.video_id && overlapRatio(other, candidate) >= SAME_MOMENT,
     );
     if (!duplicate) kept.push(candidate);
   }
@@ -197,8 +200,9 @@ export type Judgement =
 
 /**
  * Confirms a candidate only when Pegasus matched the whole claim with enough
- * confidence and saw every step. The refined range spans the reported steps when they
- * all fall inside the window in order; otherwise the candidate range stands.
+ * confidence and saw every step, each starting no earlier than the one before. The
+ * refined range spans the reported steps when they all fall inside the window;
+ * otherwise the candidate range stands.
  */
 export function judge(verdict: Verdict, window: Range, candidate: Range, stepCount: number, minConfidence: number): Judgement {
   if (!verdict.match) return { confirmed: false, reason: "no match" };
@@ -213,6 +217,8 @@ export function judge(verdict: Verdict, window: Range, candidate: Range, stepCou
   }
   const unseen = verdict.steps.findIndex((s) => !s.seen);
   if (unseen >= 0) return { confirmed: false, reason: `step ${unseen + 1} not seen` };
+  const early = verdict.steps.findIndex((s, i) => i > 0 && s.start < (verdict.steps[i - 1]?.start ?? s.start));
+  if (early > 0) return { confirmed: false, reason: `step ${early + 1} starts before step ${early}` };
 
   const absolute = verdict.steps.map((s) => ({
     step: s.step,
@@ -235,6 +241,29 @@ export function judge(verdict: Verdict, window: Range, candidate: Range, stepCou
       end: Math.min(window.end, Math.max(window.start, s.end)),
     })),
   };
+}
+
+/**
+ * Drops confirmed moments that repeat one already kept: same video, overlapping by at
+ * least half of the shorter one. Not half the union: Pegasus moves the same 6 s moment
+ * by about 2 s between checks, which leaves repeats under half their union. The most
+ * confident stays (the earlier on a tie). Kept moments come back most confident first,
+ * each repeat with the moment it repeats.
+ */
+export function distinctMoments<M extends Range & { video_id: string; confidence: number }>(
+  moments: M[],
+): { kept: M[]; repeats: { moment: M; of: M }[] } {
+  const kept: M[] = [];
+  const repeats: { moment: M; of: M }[] = [];
+  for (const moment of [...moments].sort((a, b) => b.confidence - a.confidence || a.start - b.start)) {
+    const of = kept.find((k) => {
+      const overlap = Math.min(k.end, moment.end) - Math.max(k.start, moment.start);
+      return k.video_id === moment.video_id && overlap >= 0.5 * Math.min(k.end - k.start, moment.end - moment.start);
+    });
+    if (of) repeats.push({ moment, of });
+    else kept.push(moment);
+  }
+  return { kept, repeats };
 }
 
 /** A stable id for a confirmed observation: "obs_" plus a short hash. */

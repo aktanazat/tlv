@@ -7,10 +7,11 @@ import { homedir } from "node:os";
 import { basename, extname, join, resolve } from "node:path";
 import { z } from "zod";
 import * as api from "./api.ts";
-import { contactSheet, cut, dataDir, download, probe, slug, still } from "./media.ts";
+import { contactSheet, cut, dataDir, download, probe, slug, still, withLock } from "./media.ts";
 import {
   type Candidate,
   type Range,
+  distinctMoments,
   formatRange,
   formatTimecode,
   inspectionWindow,
@@ -38,6 +39,8 @@ const MIN_VIDEO_SECONDS = 4;
 const ASK_MIN_WINDOW_SECONDS = 4;
 const FIND_MIN_WINDOW_SECONDS = 6;
 const FIND_CONCURRENCY = 4;
+/** Pegasus step times were off by 1 to 3 s either way in live checks, so a found clip keeps this much more on each side. */
+const FIND_CLIP_MARGIN_SECONDS = 2;
 const LOOKUP_CONCURRENCY = 8;
 const SHEET_FRAMES = 6;
 const STILL_WIDTH = 960;
@@ -241,7 +244,7 @@ function storeItemFor(items: api.StoreItem[], assetId: string): api.StoreItem | 
  */
 async function mirrorToStore(storeName: string, video: Video, checkExisting: boolean): Promise<StoreState> {
   try {
-    const storeId = (await api.findKnowledgeStore(storeName)) ?? (await api.createKnowledgeStore(storeName));
+    const storeId = await withLock(`store-${storeName}`, () => api.ensureKnowledgeStore(storeName));
     const existing = checkExisting ? storeItemFor(await api.listStoreItems(storeId), video.asset_id) : undefined;
     if (existing && existing.status !== "failed") return { item_id: existing._id, status: existing.status ?? "unknown" };
     const metadata = { title: video.title, source: video.source, video_id: video.video_id };
@@ -271,7 +274,7 @@ export async function videoAdd(input: { source: string; title?: string; wait?: b
   const name = indexName(ctx);
   const source = normalizeSource(input.source);
   const wait = input.wait ?? true;
-  const indexId = (await api.findIndex(name)) ?? (await api.createIndex(name));
+  const indexId = await withLock(`index-${name}`, () => api.ensureIndex(name));
 
   // The index is the registry: a video that has not failed with the same source is this one.
   const existing = (await allVideos(indexId)).find((video) => video.status !== "failed" && video.source === source);
@@ -599,7 +602,7 @@ function verdictPrompt(claim: string, steps: string[], seconds: number): string 
     "match: true only if the whole claim happens here, with every step in this order. If the person, the action or the order is uncertain, answer false.",
     "confidence: from 0 to 1, how sure you are that the claim happens here.",
     "who: who does it, as identified on screen or by the commentary (name, jersey number, team); empty if unclear.",
-    "evidence: what you see or hear that decides it: jersey, number, score bug, on-screen text, commentary.",
+    "evidence: what you see or hear that decides it: jersey, number, score bug, on-screen text, commentary. Leave times out of it; the steps carry the times.",
     `steps: one entry per step above, in the same order, with the step text, seen (true only if it clearly happens), and its start and end in seconds from the start of this segment (0 to ${length}).`,
   ].join("\n");
 }
@@ -618,8 +621,11 @@ export type Observation = {
   evidence: string;
   confidence: number;
   steps: { step: string; start: number; end: number; timecode: string }[];
+  /** The cut clip: the observation plus FIND_CLIP_MARGIN_SECONDS on each side. */
   clip_path?: string;
+  /** A contact sheet across the clip, so one image shows every step. */
   frame_path?: string;
+  frame_times?: number[];
   cut_error?: string;
 };
 
@@ -704,17 +710,29 @@ export async function videoFind(
     ctx.progress?.(`checked ${checked} of ${candidates.length}`);
     return outcome;
   });
-  const confirmed = outcomes.flatMap((o) => ("observation" in o ? [o.observation] : []));
-  const rejected = outcomes.flatMap((o) => ("rejection" in o ? [o.rejection] : []));
+  const moments = distinctMoments(outcomes.flatMap((o) => ("observation" in o ? [o.observation] : [])));
+  const confirmed = moments.kept;
+  const rejected = [
+    ...outcomes.flatMap((o) => ("rejection" in o ? [o.rejection] : [])),
+    ...moments.repeats.map(({ moment, of }) => ({
+      video_id: moment.video_id,
+      start: moment.start,
+      end: moment.end,
+      reason: `same moment as ${of.id}`,
+    })),
+  ];
   if (input.cut ?? true) {
     for (const observation of confirmed) {
       const video = videos.get(observation.video_id);
       if (!video) continue;
       ctx.progress?.(`cutting ${observation.timecode} of "${observation.title}"`);
       try {
-        const files = await cutRange(video, observation, "mid");
+        const margin = FIND_CLIP_MARGIN_SECONDS;
+        const range = clampRange({ start: observation.start - margin, end: observation.end + margin }, video);
+        const files = await cutRange(video, range, "sheet");
         observation.clip_path = files.clip_path;
-        if (files.frame_path) observation.frame_path = files.frame_path;
+        observation.frame_path = files.frame_path;
+        observation.frame_times = files.frame_times;
       } catch (error) {
         observation.cut_error = error instanceof Error ? error.message : String(error);
       }
@@ -736,7 +754,7 @@ export function findText(r: FindResult): string {
     lines.push(`   evidence: ${o.evidence}`);
     for (const s of o.steps) lines.push(`   ${s.timecode}  ${s.step}`);
     if (o.clip_path) lines.push(`   clip: ${o.clip_path}`);
-    if (o.frame_path) lines.push(`   frame: ${o.frame_path}`);
+    if (o.frame_path) lines.push(`   frames: ${o.frame_path} (tiles at ${(o.frame_times ?? []).map(formatTimecode).join(", ")})`);
     if (o.cut_error) lines.push(`   not cut: ${o.cut_error}`);
   }
   for (const x of r.rejected) lines.push(`rejected ${formatRange(x.start, x.end)} video_id=${x.video_id}: ${x.reason}`);
@@ -958,7 +976,7 @@ export async function videoJockey(
     return (part.annotations ?? []).map((a): Citation => {
       const item = a.item_id ? itemsById.get(a.item_id) : undefined;
       const videoId = metaText(item?.item_metadata, "video_id");
-      const title = a.title || metaText(item?.item_metadata, "title");
+      const title = metaText(item?.item_metadata, "title") || a.title;
       const hasRange = typeof a.start_sec === "number" && typeof a.end_sec === "number";
       return {
         marker: codePoints.slice(a.start_index, a.end_index + 1).join(""),

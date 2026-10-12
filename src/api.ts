@@ -140,13 +140,14 @@ export async function findIndex(name: string): Promise<string | undefined> {
   return indexes.find((index) => index.index_name === name)?._id;
 }
 
-export async function createIndex(name: string): Promise<string> {
+/** The index with this name, created with Marengo 3.0 (visual and audio) when absent. */
+export async function ensureIndex(name: string): Promise<string> {
   const body = {
     index_name: name,
     models: [{ model_name: "marengo3.0", model_options: ["visual", "audio"] }],
     addons: ["thumbnail"],
   };
-  return (await request(created, "POST", "/indexes", { json: body }))._id;
+  return (await findIndex(name)) ?? (await request(created, "POST", "/indexes", { json: body }))._id;
 }
 
 // Assets
@@ -380,8 +381,8 @@ export async function findKnowledgeStore(name: string): Promise<string | undefin
   return (await listAll(namedSchema, "/knowledge-stores")).find((store) => store.name === name)?._id;
 }
 
-export async function createKnowledgeStore(name: string): Promise<string> {
-  return (await request(created, "POST", "/knowledge-stores", { json: { name } }))._id;
+export async function ensureKnowledgeStore(name: string): Promise<string> {
+  return (await findKnowledgeStore(name)) ?? (await request(created, "POST", "/knowledge-stores", { json: { name } }))._id;
 }
 
 export async function listStoreItems(storeId: string): Promise<StoreItem[]> {

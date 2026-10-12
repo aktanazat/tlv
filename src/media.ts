@@ -3,7 +3,7 @@
 // into place, so a failed run never leaves a broken file under the final name.
 
 import { createHash } from "node:crypto";
-import { mkdir, rename, rm } from "node:fs/promises";
+import { mkdir, rename, rm, stat } from "node:fs/promises";
 import { homedir } from "node:os";
 import { basename, extname, join } from "node:path";
 import { z } from "zod";
@@ -14,12 +14,39 @@ const YT_DLP_FORMAT = "bv*[height<=720][ext=mp4]+ba[ext=m4a]/b[height<=720][ext=
 const DIRECT_MEDIA_PATH = /\.(mp4|m4v|mov|webm|mkv|avi|mpe?g|3gp)$/i;
 /** Contact sheets stay within this width so they can go back to an agent as one image. */
 const SHEET_MAX_WIDTH = 1280;
+/** A lock held this long was left by a crashed run and is taken over. */
+const LOCK_STALE_MS = 2 * 60_000;
 
 /** A subdirectory of $TLV_HOME (default ~/.local/share/tlv), created on first use. */
-export async function dataDir(sub: "media" | "clips" | "frames"): Promise<string> {
+export async function dataDir(sub: "media" | "clips" | "frames" | "locks"): Promise<string> {
   const dir = join(process.env.TLV_HOME || join(homedir(), ".local", "share", "tlv"), sub);
   await mkdir(dir, { recursive: true });
   return dir;
+}
+
+/**
+ * Runs `fn` holding the lock directory $TLV_HOME/locks/<name>. mkdir is atomic, so tlv
+ * processes started together (agents adding videos in parallel) take turns creating a
+ * named index or store; the API alone let two parallel creates make two indexes "tlv".
+ */
+export async function withLock<T>(name: string, fn: () => Promise<T>): Promise<T> {
+  const lock = join(await dataDir("locks"), slug(name));
+  for (;;) {
+    try {
+      await mkdir(lock);
+      break;
+    } catch (error) {
+      if (!(error instanceof Error && "code" in error && error.code === "EEXIST")) throw error;
+      const heldMs = await stat(lock).then((s) => Date.now() - s.mtimeMs, () => 0);
+      if (heldMs > LOCK_STALE_MS) await rm(lock, { recursive: true, force: true });
+      else await Bun.sleep(200);
+    }
+  }
+  try {
+    return await fn();
+  } finally {
+    await rm(lock, { recursive: true, force: true });
+  }
 }
 
 /** Lowercase ASCII words joined by "-", at most 48 characters. */

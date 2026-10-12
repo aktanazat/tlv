@@ -164,7 +164,7 @@ export async function serveMcp(): Promise<void> {
         max_candidates: z.number().int().min(1).max(50).optional().describe("Candidates to check (default 8)"),
         pad: seconds.optional().describe("Seconds added around each candidate before checking (default 3)"),
         min_confidence: z.number().min(0).max(1).optional().describe("Lowest confidence to confirm (default 0.6)"),
-        cut: z.boolean().optional().describe("Cut each confirmed clip and its middle frame (default true)"),
+        cut: z.boolean().optional().describe("Cut each confirmed clip, 2 s wider on each side, with a contact sheet (default true)"),
         index,
       },
       annotations: { readOnlyHint: false, destructiveHint: false, openWorldHint: true },

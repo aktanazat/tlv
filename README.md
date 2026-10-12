@@ -85,13 +85,19 @@ timecodes (`1:23.4`, `00:01:23.4`). Progress goes to stderr.
 
 - The TwelveLabs index is the video registry: `title`, `source` and `local_path` live in each
   video's metadata. Adding the same source again returns the existing video, and restores the
-  local copy if it was deleted.
+  local copy if it was deleted. Parallel `add` runs take turns creating the index and the Jockey
+  store (a lock under `$TLV_HOME/locks`), since two creates at the same moment make two
+  indexes with one name.
 - `add` also puts each video in a Jockey knowledge store named after the index. A failure there
   is reported in the result and retried by the next `add` of that source.
 - People live in the entity collection `tlv-people`, shared by all indexes. On the free plan only
   one entity collection fits, and the sample collection counts.
 - `find` prefers a missed clip over a wrong one: a candidate is confirmed only when Pegasus
-  reports a match with enough confidence and saw every step.
+  reports a match with enough confidence and saw every step, each starting no earlier than the
+  one before. Two confirmed clips of the same moment (one video, overlapping by at least half of
+  the shorter clip) come back once, the more confident; the other is listed as rejected.
+- Pegasus places steps to within a few seconds, so `find` cuts each clip 2 s wider on each side
+  and returns a contact sheet across it rather than a single frame.
 
 ## Development
 

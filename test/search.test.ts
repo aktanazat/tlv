@@ -4,6 +4,7 @@ import {
   type Clip,
   type Verdict,
   chainSteps,
+  distinctMoments,
   formatRange,
   formatTimecode,
   inspectionWindow,
@@ -238,12 +239,25 @@ describe("verdicts", () => {
       verdict({ steps: [{ step: "steals", seen: true, start: 1, end: 3 }, { step: "dunks", seen: false, start: 5, end: 8 }] }),
       "step 2 not seen",
     ],
+    [
+      "a step that starts before the step before it",
+      verdict({ steps: [{ step: "steals", seen: true, start: 5, end: 8 }, { step: "dunks", seen: true, start: 1, end: 3 }] }),
+      "step 2 starts before step 1",
+    ],
   ])("judge rejects %s", (_, given, reason) => {
     expect(judge(given, window, candidate, 2, 0.6)).toEqual({ confirmed: false, reason });
   });
 
   test("judge confirms a confidence equal to the minimum", () => {
     expect(judge(verdict({ confidence: 0.6 }), window, candidate, 2, 0.6).confirmed).toBe(true);
+  });
+
+  test("judge confirms steps that start at the same time", () => {
+    const steps = [
+      { step: "scores", seen: true, start: 2, end: 4 },
+      { step: "celebrates", seen: true, start: 2, end: 6 },
+    ];
+    expect(judge(verdict({ steps }), window, candidate, 2, 0.6)).toMatchObject({ confirmed: true, start: 102, end: 106 });
   });
 
   test("judge refines the range to the steps, in video time, when they fit the window", () => {
@@ -279,6 +293,47 @@ describe("verdicts", () => {
     expect(judge(verdict({ steps }), window, candidate, 1, 0.6)).toMatchObject({
       steps: [{ step: "a", start: 100, end: 110 }],
     });
+  });
+});
+
+describe("distinct moments", () => {
+  const moment = (id: string, video_id: string, start: number, end: number, confidence: number) => ({ id, video_id, start, end, confidence });
+
+  test.each([
+    [
+      "drops the less confident of two moments in one video overlapping by half or more",
+      [moment("a", "v1", 0, 10, 0.9), moment("b", "v1", 2, 12, 0.95)],
+      ["b"],
+      [["a", "b"]],
+    ],
+    [
+      "drops a repeat whose times moved two seconds, under half their union",
+      [moment("a", "v1", 255.5, 261, 0.95), moment("b", "v1", 257.6, 263.6, 0.95)],
+      ["a"],
+      [["b", "a"]],
+    ],
+    [
+      "keeps the earlier of two equally confident repeats",
+      [moment("late", "v1", 1, 11, 0.9), moment("early", "v1", 0, 10, 0.9)],
+      ["early"],
+      [["late", "early"]],
+    ],
+    [
+      "keeps moments overlapping by less than half",
+      [moment("a", "v1", 0, 10, 0.9), moment("b", "v1", 6, 16, 0.8)],
+      ["a", "b"],
+      [],
+    ],
+    [
+      "keeps the same range in different videos",
+      [moment("a", "v1", 0, 10, 0.9), moment("b", "v2", 0, 10, 0.8)],
+      ["a", "b"],
+      [],
+    ],
+  ])("distinctMoments %s", (_, moments, kept, repeats) => {
+    const result = distinctMoments(moments);
+    expect(result.kept.map((m) => m.id)).toEqual(kept);
+    expect(result.repeats.map((r) => [r.moment.id, r.of.id])).toEqual(repeats);
   });
 });
 
