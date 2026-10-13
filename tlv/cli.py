@@ -59,6 +59,10 @@ commands:
   entity-name <id> <name>      name the person of an entity or appearance id
   entity-same <a> <b>          two entity or appearance ids are the same person
   entity-different <a> <b>     two entity or appearance ids are different people
+  person <who>                 one person across the videos: each stretch on screen, seconds on
+                               screen, where the name is said or shown, verified moments
+      --video ID               only this video (repeatable)
+      --strip                  also a filmstrip still of one crop per stretch
   jockey <question> [--session ID] [--video ID]...
                                answer a question about the whole collection, citing clips
   mcp                          serve these commands as MCP tools over stdio
@@ -75,7 +79,7 @@ Everything runs on this Mac; data lives in $TLV_HOME (default ~/.local/share/tlv
 TEXT_OPTIONS = ("index", "title", "max-gap", "limit", "from", "to", "schema", "max-candidates", "pad")
 TEXT_OPTIONS += ("min-confidence", "frame", "count", "session")
 LIST_OPTIONS = ("then", "modality", "video", "image", "at", "stage")
-FLAG_OPTIONS = ("json", "no-wait", "no-cut", "force")
+FLAG_OPTIONS = ("json", "no-wait", "no-cut", "force", "strip")
 COMMON_OPTIONS = ("index", "json", "help")
 
 
@@ -273,6 +277,14 @@ def _pair(args: list[str], _v: Values) -> dict[str, Any]:
     return {"a": args[0], "b": args[1]}
 
 
+def _person(args: list[str], v: Values) -> dict[str, Any]:
+    return _present(
+        who=_words(args, "a person: @Name, a name or an entity id"),
+        video_ids=v.get("video"),
+        strip=bool(v.get("strip")),
+    )
+
+
 def _jockey(args: list[str], v: Values) -> dict[str, Any]:
     return _present(question=_words(args, "a question"), session_id=v.get("session"), video_ids=v.get("video"))
 
@@ -362,6 +374,13 @@ COMMANDS: dict[str, Command] = {
     "entity-name": Command("tlv entity-name <id> <name>", (), _entity_name, core.entity_name, core.corrected_text),
     "entity-same": Command("tlv entity-same <a> <b>", (), _pair, core.entity_same, core.corrected_text),
     "entity-different": Command("tlv entity-different <a> <b>", (), _pair, core.entity_different, core.corrected_text),
+    "person": Command(
+        "tlv person <who> [--video ID]... [--strip]",
+        ("video", "strip"),
+        _person,
+        core.person,
+        core.person_text,
+    ),
     "jockey": Command(
         "tlv jockey <question> [--session ID] [--video ID]...",
         ("session", "video"),

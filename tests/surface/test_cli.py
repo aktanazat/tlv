@@ -79,6 +79,7 @@ def _no_index_env(monkeypatch):
         ("entity-name ent-3 LeBron James", "entity-name", {"target": "ent-3", "name": "LeBron James"}),
         ("entity-same ent-3 app-9", "entity-same", {"a": "ent-3", "b": "app-9"}),
         ("entity-different ent-3 ent-4", "entity-different", {"a": "ent-3", "b": "ent-4"}),
+        ("person @LeBron --video v1 --strip", "person", {"who": "@LeBron", "video_ids": ["v1"], "strip": True}),
         (
             "jockey who scored most? --session 0123456789ab --video v1",
             "jockey",
@@ -127,6 +128,7 @@ def test_index_and_json_apply_to_every_command(monkeypatch, line, env, index, as
         ("status a b", "expected a video_id", "usage: tlv status"),
         ("list extra", 'unexpected argument "extra"', "usage: tlv list"),
         ("entity-same a", "expected two entity or appearance ids", "usage: tlv entity-same"),
+        ("person --strip", "expected a person: @Name, a name or an entity id", "usage: tlv person"),
         ("mcp --json", "mcp takes no arguments", "usage: tlv mcp"),
         ("frobnicate", 'unknown command "frobnicate"', "Run tlv --help for usage."),
         ("list --bogus", "unrecognized arguments: --bogus", "Run tlv --help for usage."),

@@ -575,6 +575,76 @@ def corrected_text(r: dict[str, Any]) -> str:
     return "\n".join(_entity_line(e) for e in r["entities"])
 
 
+def person(index: str, who: str, strip: bool = False, video_ids: list[str] | None = None) -> dict[str, Any]:
+    """One person across the videos, with no reference photos: each stretch on screen with its
+    clearest crop, seconds on screen per video, where the name is said or shown, and the moments a
+    find verified about them. Reads the index only; no model runs. With `strip`, also a filmstrip
+    still of one crop per stretch."""
+    from tlv.entities import timeline
+
+    with _db(index) as db:
+        found = timeline.timeline(db, who, video_ids or ())
+    involved = {item.video_id for item in (*found.presences, *found.mentions, *found.verified)}
+    result: dict[str, Any] = {
+        "entity_ids": list(found.entity_ids),
+        "name": found.name,
+        "seconds": _r(sum(found.seconds.values())),
+        "videos": [
+            {"video_id": v.video_id, "title": v.title, "seconds": _r(found.seconds.get(v.video_id, 0.0))}
+            for v in found.videos
+            if v.video_id in involved
+        ],
+        "presences": [
+            {
+                "video_id": p.video_id,
+                **_span(Range(p.start, p.end)),
+                "seconds": _r(p.seen),
+                "best_t": _r(p.best_t),
+                "crop_path": p.crop_path,
+            }
+            for p in found.presences
+        ],
+        "mentions": [
+            {"video_id": m.video_id, "kind": m.kind, **_span(Range(m.start, m.end)), "text": m.text}
+            for m in found.mentions
+        ],
+        "verified": [
+            {
+                "video_id": m.video_id,
+                **_span(Range(m.start, m.end)),
+                "claims": list(m.claims),
+                "obs_ids": list(m.obs_ids),
+            }
+            for m in found.verified
+        ],
+    }
+    if strip:
+        out = store.data_dir("frames") / f"person-{found.entity_ids[0]}.jpg"
+        result["strip_path"] = str(timeline.strip(found, out)) if found.presences else None
+    return result
+
+
+def person_text(r: dict[str, Any]) -> str:
+    events: dict[str, list[tuple[float, str, str]]] = {}
+    for p in r["presences"]:
+        events.setdefault(p["video_id"], []).append((p["start"], p["timecode"], f"on screen {p['seconds']:.1f} s"))
+    for m in r["mentions"]:
+        said = m["kind"] == "speech"
+        when = format_timecode(m["start"]) if said or m["start"] == m["end"] else m["timecode"]
+        events.setdefault(m["video_id"], []).append((m["start"], when, f'{"said" if said else "shown"} "{m["text"]}"'))
+    for v in r["verified"]:
+        events.setdefault(v["video_id"], []).append((v["start"], v["timecode"], f"verified: {'; '.join(v['claims'])}"))
+    shown = sum(1 for v in r["videos"] if v["seconds"])
+    who = f"{r['name'] or 'unnamed person'} ({', '.join(r['entity_ids'])})"
+    lines = [f"{who}: {r['seconds']:.1f} s on screen in {shown} video{'s' * (shown != 1)}"]
+    for video in r["videos"]:
+        lines += ["", f'"{video["title"]}" video_id={video["video_id"]}: {video["seconds"]:.1f} s on screen']
+        lines += [f"  {when:<24}  {what}" for _, when, what in sorted(events[video["video_id"]], key=lambda e: e[0])]
+    if "strip_path" in r:
+        lines += ["", f"strip: {r['strip_path'] or 'none, not on screen in these videos'}"]
+    return "\n".join(lines)
+
+
 # video_jockey
 
 
