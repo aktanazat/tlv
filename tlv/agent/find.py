@@ -8,14 +8,14 @@ import hashlib
 import json
 import sqlite3
 import time
-from collections.abc import Callable
+from collections.abc import Callable, Mapping, Sequence
 from contextlib import closing
 from pathlib import Path
 from typing import Any
 
 from tlv import entities, media, store
 from tlv.agent import plan, retrieve, sources
-from tlv.agent.connect import LONGEST_LOOK_S, Candidate, looks, rank_clips, rank_steps
+from tlv.agent.connect import LONGEST_LOOK_S, Candidate, Clip, looks, rank_clips, rank_steps
 from tlv.agent.inspect import Moment, Rejection, check, hear, same_play
 from tlv.agent.model import Vlm
 from tlv.agent.plan import Sense
@@ -25,6 +25,9 @@ from tlv.media import Range
 from tlv.timecode import format_range
 
 Progress = Callable[[str], None] | None
+# Video-time ranges to search, by video id: a search narrowed to them skips every other video and
+# every hit outside them.
+Within = Mapping[str, Sequence[tuple[float, float]]]
 
 CHAIN_DEPTH = 40  # clips of each step tried in chains
 CLIP_MARGIN_S = 1.0  # step times land within a second, so a cut clip keeps a second more each side
@@ -71,6 +74,16 @@ def _steps(db: sqlite3.Connection, query: str, then: list[str], progress: Progre
     return plan.steps(plain[0], plain[1:], by_model if split else None)
 
 
+def clips_within(clips: list[Clip], within: Within) -> list[Clip]:
+    """The clips overlapping one of the ranges listed for their video, in the order given."""
+    return [c for c in clips if any(c.start < end and start < c.end for start, end in within.get(c.video_id, ()))]
+
+
+def _videos(db: sqlite3.Connection, video_ids: list[str] | None, within: Within | None) -> list[Video]:
+    """The videos to search: the named ones (every video when None) that `within` lists, if given."""
+    return [v for v in sources.videos(db, video_ids) if within is None or v.video_id in within]
+
+
 def _candidates(
     db: sqlite3.Connection,
     videos: list[Video],
@@ -79,9 +92,11 @@ def _candidates(
     max_gap: float,
     limit: int,
     modalities: list[str] | None,
+    within: Within | None,
 ) -> list[Candidate]:
     """Each step searched for in the channels of its sense (a spoken step by what is said), and an
-    ordered claim also as one sentence in the channels of all its steps."""
+    ordered claim also as one sentence in the channels of all its steps. With `within`, hits outside
+    its ranges are dropped before the best `limit` are chosen, so the limit fills with hits inside."""
     corpus = retrieve.load(db, [v.video_id for v in videos])
     asked = [(plan.topic(step) if s == "speech" else step, [s]) for step, s in zip(steps, senses, strict=True)]
     if len(steps) > 1:
@@ -90,6 +105,8 @@ def _candidates(
         retrieve.Query(text, tuple(entities.resolve(db, text)), retrieve.channels(by, modalities)) for text, by in asked
     ]
     ranked = retrieve.rank(db, corpus, queries)
+    if within is not None:
+        ranked = [clips_within(clips, within) for clips in ranked]
     if len(steps) == 1:
         return rank_clips(ranked[0], limit)
     *per_step, whole = ranked
@@ -103,15 +120,17 @@ def search(
     video_ids: list[str] | None = None,
     max_gap: float = 12,
     modalities: list[str] | None = None,
+    within: Within | None = None,
 ) -> dict[str, Any]:
     """Moments that may match the query, best first, unchecked. With `then`, each hit links one
-    moment per step in order, each step starting within `max_gap` seconds of the one before."""
+    moment per step in order, each step starting within `max_gap` seconds of the one before. With
+    `within`, only hits overlapping its ranges of their video count."""
     then = list(then)
     with closing(store.connect()) as db:
-        videos = sources.videos(db, video_ids)
+        videos = _videos(db, video_ids, within)
         steps = _steps(db, query, then, None, split=False)
         titles = {v.video_id: v.title for v in videos}
-        candidates = _candidates(db, videos, steps, [plan.sense(s) for s in steps], max_gap, limit, modalities)
+        candidates = _candidates(db, videos, steps, [plan.sense(s) for s in steps], max_gap, limit, modalities, within)
     return {"query": query, "then": then, "results": [_hit(c, steps, titles) for c in candidates]}
 
 
@@ -148,19 +167,21 @@ def find(
     cut: bool = True,
     video_ids: list[str] | None = None,
     progress: Progress = None,
+    within: Within | None = None,
 ) -> dict[str, Any]:
     """Checks the best candidates for a claim by looking at each, and returns the confirmed ones:
     one per play, its replays listed under it, each with its evidence. Every confirmed moment is
     saved as a verified observation. A claim made only of spoken steps is checked against the speech
-    alone, with no model loaded."""
+    alone, with no model loaded. With `within`, only candidates overlapping its ranges of their video
+    are checked, the best of them up to `max_candidates`."""
     began = time.monotonic()
     with closing(store.connect()) as db:
-        videos = sources.videos(db, video_ids)
+        videos = _videos(db, video_ids, within)
         steps = _steps(db, query, list(then), progress, split=True)
         senses = [plan.sense(step) for step in steps]
         claim = ", then ".join(steps)
         _say(progress, f"searching {len(videos)} videos for {len(steps)} steps")
-        candidates = _candidates(db, videos, steps, senses, 12, max_candidates, None)
+        candidates = _candidates(db, videos, steps, senses, 12, max_candidates, None, within)
         stretches = looks(candidates, LONGEST_LOOK_S)[:max_candidates]
         searched = time.monotonic()
         by_id = {v.video_id: v for v in videos}
