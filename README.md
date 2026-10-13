@@ -207,6 +207,11 @@ run on them. tlv found 17 of 23 with 4 wrong clips and 3 extra clips of a found 
 (`eval/results/everyday-merged-2026-10-13.json`); before the fixes it ran (spoken topics, joined
 pieces, people known only by sight) it found 12 with 4 wrong and 10 extra.
 
+Indexing a fresh 12-minute NBA video took 15 minutes on that Mac (0.8 minutes of video a minute)
+and an 8-minute lecture 4.5 minutes (1.8), most of it in captions; a picture that holds still,
+such as a slide, is captioned once. A search does not wait for indexing beyond the one model job
+already under way, at most a caption batch or two minutes of speech.
+
 tlv ran on an M4 Pro with 24 GB that other work kept busy. In the 60 s run, retrieval and model
 loading took 22 s per query against 9 s in an earlier run of the same queries at 44 s
 (`local-fast-2026-10-12.json`): swap stayed past 8 GB, so the model host let go of each model
