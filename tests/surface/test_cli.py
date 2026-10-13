@@ -85,6 +85,11 @@ def _no_index_env(monkeypatch):
             "jockey",
             {"question": "who scored most?", "session_id": "0123456789ab", "video_ids": ["v1"]},
         ),
+        ("search dunk --clock Q4", "search", {"query": "dunk", "clock": "Q4"}),
+        ('find dunk --clock "last 2 min"', "find", {"query": "dunk", "cut": True, "clock": "last 2 min"}),
+        ("more now only fourth quarter", "more", {"instruction": "now only fourth quarter"}),
+        ("at v1 4th 1:12 --cut", "at", {"video_id": "v1", "clock": "4th 1:12", "cut": True}),
+        ('at v1 "Q4 2:00-1:00"', "at", {"video_id": "v1", "clock": "Q4 2:00-1:00", "cut": False}),
     ],
 )
 def test_a_command_line_becomes_one_operation_call(line, name, kwargs):
@@ -129,6 +134,10 @@ def test_index_and_json_apply_to_every_command(monkeypatch, line, env, index, as
         ("list extra", 'unexpected argument "extra"', "usage: tlv list"),
         ("entity-same a", "expected two entity or appearance ids", "usage: tlv entity-same"),
         ("person --strip", "expected a person: @Name, a name or an entity id", "usage: tlv person"),
+        ("more", 'expected a follow-up, like "now only the 4th quarter"', "usage: tlv more"),
+        ("at", "expected a video_id", "usage: tlv at"),
+        ("at v1 --cut", 'expected a game clock, like "4th 1:12"', "usage: tlv at"),
+        ("find x --cut", "find does not take --cut", "usage: tlv find"),
         ("mcp --json", "mcp takes no arguments", "usage: tlv mcp"),
         ("frobnicate", 'unknown command "frobnicate"', "Run tlv --help for usage."),
         ("list --bogus", "unrecognized arguments: --bogus", "Run tlv --help for usage."),

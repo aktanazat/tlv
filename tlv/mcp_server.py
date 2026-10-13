@@ -1,7 +1,8 @@
 """The MCP server over stdio: one tool per tlv operation, with the tool names and input fields of
-the Twelve Labs client it replaces, plus the entity corrections, the timeline and a person's
-timeline. Each tool returns its result as structured content plus the short text rendering;
-video_cut, video_frames and video_person add the frame, contact sheet or filmstrip as an image.
+the Twelve Labs client it replaces, plus the entity corrections, the timeline, a person's
+timeline, the game clock and follow-ups to a find. Each tool returns its result as structured
+content plus the short text rendering; video_cut, video_frames, video_person and video_at add the
+frame, contact sheet, filmstrip or still as an image.
 Long tools send progress notifications when the client passes a progress token. Operations run in
 worker threads, so a long one never blocks the others."""
 
@@ -36,6 +37,14 @@ Then = Annotated[
 ]
 VideoIds = Annotated[list[Annotated[str, Field(min_length=1)]] | None, Field(description="Only these videos")]
 EntityRef = Annotated[str, Field(min_length=1, description="entity_id from video_entities, or an appearance id")]
+Clock = Annotated[
+    str | None,
+    Field(
+        min_length=1,
+        description='Only where the scoreboard shows this game time, e.g. "4th", "Q4 2:00-0:00", "2nd half", '
+        '"last 2 min"',
+    ),
+]
 
 READ = ToolAnnotations(read_only_hint=True, open_world_hint=False)
 WRITE = ToolAnnotations(read_only_hint=False, destructive_hint=False, idempotent_hint=True, open_world_hint=False)
@@ -165,6 +174,7 @@ def server(default_index: str) -> MCPServer:
         ] = 12,
         limit: Annotated[int, Field(ge=1, le=50, description="Most results (default 10)")] = 10,
         video_ids: VideoIds = None,
+        clock: Clock = None,
         index: Index = None,
     ) -> CallToolResult:
         result = await _run(
@@ -176,6 +186,7 @@ def server(default_index: str) -> MCPServer:
             max_gap=max_gap,
             limit=limit,
             video_ids=video_ids,
+            clock=clock,
         )
         return _reply(result, core.search_text(result))
 
@@ -225,6 +236,7 @@ def server(default_index: str) -> MCPServer:
         ] = 0.6,
         cut: Annotated[bool, Field(description="Cut each confirmed clip with a contact sheet (default true)")] = True,
         video_ids: VideoIds = None,
+        clock: Clock = None,
         index: Index = None,
     ) -> CallToolResult:
         result = await _run(
@@ -238,8 +250,28 @@ def server(default_index: str) -> MCPServer:
             min_confidence=min_confidence,
             cut=cut,
             video_ids=video_ids,
+            clock=clock,
         )
         return _reply(result, core.find_text(result))
+
+    @mcp.tool(
+        name="video_more",
+        title="Follow up on the last find",
+        description='Follow up on the last video_find in plain words. "now only fourth quarter", "without the '
+        'replays", "only the Warriors game" or "drop obs_..." keep some of its clips in milliseconds, with no model '
+        'and no new search; "same but Steph" finds again with that person in place of the one searched. Each '
+        "follow-up builds on the one before. Returns the find result with a followup block saying what changed.",
+        annotations=ToolAnnotations(read_only_hint=False, destructive_hint=False, open_world_hint=False),
+    )
+    async def video_more(
+        ctx: Context,
+        instruction: Annotated[
+            str, Field(min_length=1, description='e.g. "now only fourth quarter", "same but Steph"')
+        ],
+        index: Index = None,
+    ) -> CallToolResult:
+        result = await _run(core.video_more, ctx, index=pick(index), instruction=instruction)
+        return _reply(result, core.more_text(result))
 
     @mcp.tool(
         name="video_cut",
@@ -288,6 +320,24 @@ def server(default_index: str) -> MCPServer:
     async def video_timeline(video_id: VideoId, start: Seconds, end: Seconds, index: Index = None) -> CallToolResult:
         result = await _run(core.video_timeline, index=pick(index), video_id=video_id, start=start, end=end)
         return _reply(result, core.timeline_text(result))
+
+    @mcp.tool(
+        name="video_at",
+        title="Find a game time",
+        description="Every stretch of a video whose scoreboard shows a game time, read from its on-screen text with "
+        'no model: the live play and each replay that keeps the scoreboard on screen. "4th 1:12", "Q4 2:00-1:00", '
+        '"OT". Each comes with a still of its frame nearest that time (the first returned as an image) and, with '
+        "cut, a 6 s clip.",
+        annotations=WRITE,
+    )
+    async def video_at(
+        video_id: VideoId,
+        clock: Annotated[str, Field(min_length=1, description='Game time, e.g. "4th 1:12", "Q2 0:00", "OT"')],
+        cut: Annotated[bool, Field(description="Also cut a 6 s clip around each (default false)")] = False,
+        index: Index = None,
+    ) -> CallToolResult:
+        result = await _run(core.video_at, index=pick(index), video_id=video_id, clock=clock, cut=cut)
+        return _reply(result, core.at_text(result), result["hits"][0]["frame_path"] if result["hits"] else None)
 
     @mcp.tool(
         name="video_entity_add",
