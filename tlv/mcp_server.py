@@ -1,9 +1,9 @@
 """The MCP server over stdio: one tool per tlv operation, with the tool names and input fields of
-the Twelve Labs client it replaces, plus the entity corrections and the timeline. Each tool
-returns its result as structured content plus the short text rendering; video_cut and
-video_frames add the frame or contact sheet as an image. Long tools send progress notifications
-when the client passes a progress token. Operations run in worker threads, so a long one never
-blocks the others."""
+the Twelve Labs client it replaces, plus the entity corrections, the timeline and a person's
+timeline. Each tool returns its result as structured content plus the short text rendering;
+video_cut, video_frames and video_person add the frame, contact sheet or filmstrip as an image.
+Long tools send progress notifications when the client passes a progress token. Operations run in
+worker threads, so a long one never blocks the others."""
 
 from __future__ import annotations
 
@@ -362,6 +362,26 @@ def server(default_index: str) -> MCPServer:
     async def video_entity_different(a: EntityRef, b: EntityRef, index: Index = None) -> CallToolResult:
         result = await _run(core.entity_different, index=pick(index), a=a, b=b)
         return _reply(result, core.corrected_text(result))
+
+    @mcp.tool(
+        name="video_person",
+        title="A person's timeline",
+        description="One person across every video, from the index alone (no reference photos, no model): each "
+        "stretch they are on screen with its clearest crop, seconds on screen per video, where their name is said "
+        "or shown on screen, and the moments video_find verified about them. strip adds a filmstrip still of one "
+        "crop per stretch, returned as an image.",
+        annotations=READ,
+    )
+    async def video_person(
+        who: Annotated[
+            str, Field(min_length=1, description='"@LeBron_James", "LeBron" or an entity_id from video_entities')
+        ],
+        strip: Annotated[bool, Field(description="Also return a filmstrip still, one crop per stretch")] = False,
+        video_ids: VideoIds = None,
+        index: Index = None,
+    ) -> CallToolResult:
+        result = await _run(core.person, index=pick(index), who=who, strip=strip, video_ids=video_ids)
+        return _reply(result, core.person_text(result), result.get("strip_path"))
 
     @mcp.tool(
         name="video_jockey",

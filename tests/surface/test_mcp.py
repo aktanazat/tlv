@@ -25,7 +25,14 @@ TS_TOOLS = {
     "video_entities",
     "video_jockey",
 }
-NEW_TOOLS = {"video_index", "video_timeline", "video_entity_name", "video_entity_same", "video_entity_different"}
+NEW_TOOLS = {
+    "video_index",
+    "video_timeline",
+    "video_entity_name",
+    "video_entity_same",
+    "video_entity_different",
+    "video_person",
+}
 
 
 def test_stdio_server_lists_the_tools_and_answers_video_list(video, home):

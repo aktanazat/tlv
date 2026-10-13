@@ -15,6 +15,9 @@ names are those of the earlier Twelve Labs client, so agents that used it need n
   the same play come back as one clip with its other angles listed, not as separate results.
 - `timeline` shows the evidence for a range: speech word by word, on-screen text, sounds,
   captions and who is visible.
+- `person` follows one person across every video with no reference photo: each stretch they are
+  on screen, their seconds on screen, where their name is said or shown, the moments `find`
+  verified about them, and a filmstrip still of their clearest crops.
 - `jockey` answers a question about the whole collection in prose, citing clips.
 
 How it works is in [DESIGN.md](DESIGN.md).
@@ -60,10 +63,10 @@ holds downloads, `clips/` cut clips, `frames/` stills and contact sheets. `--ind
 
 Tools: `video_add`, `video_list`, `video_status`, `video_index`, `video_search`, `video_ask`,
 `video_find`, `video_cut`, `video_frames`, `video_timeline`, `video_entity_add`, `video_entities`,
-`video_entity_name`, `video_entity_same`, `video_entity_different`, `video_jockey`. Results come
-back as structured content plus a short text summary; `video_cut` and `video_frames` also return
-the frame or contact sheet as an image. Long calls send progress notifications when the client
-passes a progress token.
+`video_entity_name`, `video_entity_same`, `video_entity_different`, `video_person`, `video_jockey`.
+Results come back as structured content plus a short text summary; `video_cut`, `video_frames` and
+`video_person` also return the frame, contact sheet or filmstrip as an image. Long calls send
+progress notifications when the client passes a progress token.
 
 ## Examples
 
@@ -89,6 +92,9 @@ tlv entity-different ENTITY_A ENTITY_B
 tlv entity-add "LeBron James" --video VIDEO_ID --at 83.4 --at 412
 tlv find "LeBron James steals the ball" --then "he dunks"
 
+# one person across every video: on screen, named, verified; --strip adds a filmstrip still
+tlv person @LeBron --strip
+
 # look at a range, check it, cut it
 tlv frames VIDEO_ID --from 4:15 --to 4:22
 tlv timeline VIDEO_ID --from 4:15 --to 4:22
@@ -111,6 +117,9 @@ timecodes (`1:23.4`, `00:01:23.4`). Progress goes to stderr.
   answers the follow-up with the earlier questions and answers in view.
 - People belong to an index. Corrections are stored against the appearances they name, so they
   survive re-clustering when new videos are added.
+- `person` reads only what indexing and `find` stored, so it runs no model and answers in
+  milliseconds. Clusters that carry the same name count as one person; its filmstrip is saved
+  under `$TLV_HOME/frames/`.
 - `find` prefers a missed clip over a wrong one: a candidate is confirmed only when the frames
   show the claim with enough confidence and every step in order.
 

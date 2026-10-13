@@ -79,6 +79,16 @@ Signatures below are the interface; each owner may add private helpers freely. `
 - `add_reference(db, name, images=(), frames=()) -> dict`: teach a person from image files or
   (video_id, t) frames, for `video_entity_add`.
 
+`tlv/entities/timeline.py` (reads the index only; no model runs)
+- `timeline(db, who, video_ids=()) -> Timeline`: one person across the videos, for `tlv person`
+  and `video_person`: each stretch on screen with its clearest crop and the seconds seen, where
+  the name is said or shown by the rule clue naming uses, and the verified observations tied to
+  or naming the person, merged where they overlap. Clusters that share a name join; a query
+  naming two different people raises.
+- `presences(sightings, gap=2.0) -> list[Presence]`: sightings at most `gap` seconds apart, in
+  one video, as one stretch.
+- `strip(timeline, out) -> Path`: a filmstrip still, one tile per stretch, a band per video.
+
 `tlv/agent/` (results are plain dicts shaped like those of the Twelve Labs client it replaced,
 so the CLI and MCP output stays familiar)
 - `search(query, then=(), limit=10, video_ids=None, max_gap=12) -> SearchResult`
