@@ -5,7 +5,7 @@ from dataclasses import dataclass
 
 import pytest
 
-from tlv.agent.replay import GameClock, distinct_moments, merge_replays, read_clock
+from tlv.agent.replay import GameClock, distinct_moments, merge_replays, period_ended, read_clock
 from tlv.agent.sources import Line
 
 
@@ -42,10 +42,22 @@ class Seen:
             id="keeps the earlier of two equally confident repeats",
         ),
         pytest.param(
-            [Seen("a", "v1", 0, 10, 0.9), Seen("b", "v1", 6, 16, 0.8)],
+            [Seen("a", "v1", 0, 10, 0.9), Seen("b", "v1", 8, 18, 0.8)],
             ["a", "b"],
             [],
-            id="keeps moments overlapping by less than half",
+            id="keeps moments sharing under half the shorter and under 3 s",
+        ),
+        pytest.param(
+            [Seen("a", "v1", 112.8, 125.0, 1.0), Seen("b", "v1", 119.0, 136.1, 0.95)],
+            ["a"],
+            [("b", "a")],
+            id="drops a long moment sharing 3 s or more, under half the shorter",
+        ),
+        pytest.param(
+            [Seen("a", "v1", 0, 10, 0.95), Seen("b", "v1", 5, 15, 0.9), Seen("c", "v1", 12, 22, 0.8)],
+            ["a"],
+            [("b", "a"), ("c", "a")],
+            id="a moment repeating only a dropped repeat folds into what that one repeats",
         ),
         pytest.param(
             [Seen("a", "v1", 0, 10, 0.9), Seen("b", "v2", 0, 10, 0.8)],
@@ -63,6 +75,19 @@ def test_distinct_moments(moments, kept, repeats):
 
 def lines(*texts):
     return [Line(float(i), float(i), text) for i, text in enumerate(texts)]
+
+
+@pytest.mark.parametrize(
+    ("texts", "ended"),
+    [
+        pytest.param(["4TH 3.3", "4TH 2.6", "4TH 2.0", "4TH 1.0", "4TH 0.0"], True, id="the game clock runs down"),
+        pytest.param(["4TH 0.0"], True, id="0.0 with no reading before it"),
+        pytest.param(["4TH 24.6", "4TH 23.6", "4TH 0.0"], False, id="0.0 a second after 23.6 is the shot clock"),
+        pytest.param(["1ST 0.0", "1ST 12.3"], False, id="the clock reads on after 0.0"),
+    ],
+)
+def test_a_period_ends_only_on_a_clock_running_out(texts, ended):
+    assert period_ended(lines(*texts)) is ended
 
 
 @pytest.mark.parametrize(

@@ -3,21 +3,31 @@ The window and judge cases are ported from test/search.test.ts, with steps in vi
 
 import json
 import math
+from contextlib import closing
 from pathlib import Path
 
+import numpy as np
 import pytest
+from PIL import Image
 
+from tlv import store
+from tlv.agent import retrieve
+from tlv.agent.connect import Look
 from tlv.agent.inspect import (
     CheckedStep,
     Confirmed,
+    Moment,
     Rejected,
+    Rejection,
     Shown,
     StepSeen,
     Verdict,
     ask_verdicts,
+    check,
     heard_at,
     inspection_window,
     judge,
+    read_on_screen,
     read_verdict,
     unheard,
 )
@@ -296,3 +306,109 @@ def test_judge_clamps_reported_steps_into_the_window():
 )
 def test_a_step_to_be_heard_needs_the_index_to_have_heard_or_read_it(steps, senses, heard, text, expected):
     assert unheard(steps, senses, heard, text) == expected
+
+
+GRAPHIC = "LEBRON JAMES | 27 PTS 8/11 FG 8/9 FT"
+TEAM = "LOS ANGELES LAKERS | THIS SEASON 8-0 IN CLUTCH GAMES"
+NAME = set(retrieve.words("LeBron James"))
+# The index leaves out a frame repeating the text before it, so LeBron's graphic, on screen from 5:27.25
+# to 5:48.25, is one line, and the team graphic after it another.
+READ = [Line(327.25, 327.25, GRAPHIC), Line(349.25, 349.25, TEAM), Line(362.25, 362.25, "LAL 108 | 105")]
+
+
+@pytest.mark.parametrize(
+    ("lines", "start", "end", "expected"),
+    [
+        pytest.param(READ, 347.7, 359.8, (326.75, 348.75), id="a step over the graphic's end moves onto all of it"),
+        pytest.param(READ, 355.6, 369.5, None, id="a step whose frames never read the name"),
+        pytest.param(
+            [
+                Line(10.25, 10.25, GRAPHIC),
+                Line(11.25, 11.25, "LEBRON | 27"),
+                Line(12.25, 12.25, GRAPHIC),
+                Line(13.25, 13.25, TEAM),
+            ],
+            12.0,
+            13.0,
+            (9.75, 12.75),
+            id="one frame misread inside the graphic does not end it",
+        ),
+    ],
+)
+def test_a_step_read_on_screen_is_placed_where_the_name_is_on_screen(lines, start, end, expected):
+    assert read_on_screen(lines, NAME, start, end) == expected
+
+
+GAME = Video("v", "Game", "file", "/videos/game.mp4", 60.0)
+LOOK = Look("v", 20.0, 24.0)  # shown 17.0 to 27.0, frame n at 16.5 + n
+
+
+@pytest.fixture
+def game(tmp_path, monkeypatch):
+    """A private index holding a 60 s game with a small grey frame every second from 0.5 s."""
+    monkeypatch.setenv("TLV_HOME", str(tmp_path))
+    monkeypatch.delenv("TLV_INDEX", raising=False)
+    with closing(store.connect()) as db:
+        db.execute(
+            "INSERT INTO videos (video_id, title, source, local_path, duration, width, height, fps, added_at, status)"
+            " VALUES ('v', 'Game', 'file', '/videos/game.mp4', 60, 640, 360, 30, 0, 'ready')"
+        )
+        for second in range(60):
+            path = tmp_path / f"{second}.jpg"
+            Image.new("RGB", (64, 36), "grey").save(path)
+            db.execute("INSERT INTO frames (video_id, t, path) VALUES ('v', ?, ?)", (second + 0.5, str(path)))
+        db.commit()
+        yield db
+
+
+def seen_on(first, last):
+    return said(json.dumps(answer([[first, last]])))
+
+
+def test_a_claim_to_be_seen_needs_two_shown_frames(game):
+    model = Model([seen_on(5, 5), seen_on(5, 6)])
+    one, two = check(model, game, [(GAME, LOOK), (GAME, LOOK)], "LeBron James dunks", ["dunks"], ["sight"], 3.0, 0.6)
+    assert (isinstance(one, Rejection), isinstance(two, Moment)) == (True, True)
+
+
+def person(db, name, appearances):
+    """A named person whom the index sees in the game over each (start, end) given."""
+    blob = store.to_blob(np.ones(4, dtype=np.float32))
+    db.execute(
+        "INSERT INTO entities (entity_id, name, canonical_appearance, embedding, updated_at) VALUES (?, ?, ?, ?, 0)",
+        (f"e_{name}", name, f"{name}_0", blob),
+    )
+    for n, (start, end) in enumerate(appearances):
+        db.execute(
+            "INSERT INTO appearances (appearance_id, video_id, kind, start, end, best_t, box, crop_path, embedding)"
+            " VALUES (?, 'v', 'body', ?, ?, ?, '[0, 0, 0.1, 0.2]', 'crop.jpg', ?)",
+            (f"{name}_{n}", start, end, start, blob),
+        )
+        db.execute("INSERT INTO entity_members (appearance_id, entity_id) VALUES (?, ?)", (f"{name}_{n}", f"e_{name}"))
+
+
+@pytest.mark.parametrize(
+    ("appearances", "kept"),
+    [
+        pytest.param([(17.5, 18.5)], False, id="seen in the window, not where the claim is placed: rejected"),
+        pytest.param([(17.5, 18.5), (21.5, 22.5)], True, id="seen where the claim is placed"),
+        pytest.param([(40.0, 45.0)], True, id="seen nowhere in the window, which says nothing"),
+    ],
+)
+def test_a_named_person_seen_in_the_window_must_be_seen_where_the_claim_is_placed(game, appearances, kept):
+    person(game, "LeBron James", appearances)
+    (outcome,) = check(
+        Model([seen_on(5, 6)]), game, [(GAME, LOOK)], "LeBron James dunks", ["dunks"], ["sight"], 3.0, 0.6
+    )
+    assert isinstance(outcome, Moment) is kept
+
+
+def test_a_step_read_on_screen_moves_the_moment_onto_the_text_naming_the_person(game):
+    person(game, "LeBron James", [])
+    for t, text in [(17.5, GRAPHIC), (18.5, GRAPHIC), (19.5, GRAPHIC), (20.5, GRAPHIC), (21.5, TEAM)]:
+        game.execute(
+            "INSERT INTO ocr (video_id, t, text, x, y, w, h, conf) VALUES ('v', ?, ?, 0.1, 0.8, 0.5, 0.1, 1)", (t, text)
+        )
+    claim = "LeBron James's stat line is on screen"
+    (moment,) = check(Model([seen_on(3, 6)]), game, [(GAME, LOOK)], claim, [claim], ["text"], 3.0, 0.6)
+    assert (moment.start, moment.end) == (17.0, 21.0)

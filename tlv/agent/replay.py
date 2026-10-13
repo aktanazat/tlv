@@ -19,6 +19,10 @@ from tlv.agent.sources import Line
 REPLAY_WITHIN_S = 90.0
 # Two readings of one game clock this close are the same instant: OCR reads tenths at most.
 CLOCK_TOLERANCE_S = 1.0
+# Two moments sharing this much footage are one moment found twice, even when that is under half the
+# shorter: the model marks a long moment (an interview) over each look's whole window, and the windows of
+# two neighbouring looks share twice the pad, 6 s by default.
+REPEAT_SHARED_S = 3.0
 # A game clock is read next to the period it belongs to ("4TH 3:46", "6:11 3RD", "1ST :42.1"),
 # which tells it from the shot clock (":10") and from other numbers on screen.
 _PERIOD = re.compile(r"(?<![A-Za-z0-9])(?:([1-4])(?:ST|ND|RD|TH)|([1-4])Q|Q([1-4])|(\d?OT\d?))(?![A-Za-z0-9])", re.I)
@@ -59,15 +63,18 @@ class Moment(Protocol):
 
 
 def distinct_moments[M: Moment](moments: list[M]) -> tuple[list[M], list[tuple[M, M]]]:
-    """Drops confirmed moments that repeat one already kept: same video, overlapping by at least
-    half of the shorter one (not half the union: the same moment found from two candidates moves
-    by a second or two, which leaves repeats under half their union). The most confident stays,
-    the earlier on a tie. Returns the kept moments, most confident first, and each repeat with the
-    moment it repeats."""
+    """Drops confirmed moments that repeat one already kept or dropped: same video, overlapping by at
+    least half of the shorter one (not half the union: the same moment found from two candidates moves
+    by a second or two, which leaves repeats under half their union) or by REPEAT_SHARED_S. A long
+    moment found from three looks or more chains this way, each repeat counted as one of the moment its
+    neighbour repeats. The most confident stays, the earlier on a tie. Returns the kept moments, most
+    confident first, and each repeat with the moment it repeats."""
     kept: list[M] = []
     repeats: list[tuple[M, M]] = []
     for moment in sorted(moments, key=lambda m: (-m.confidence, m.start)):
         of = next((k for k in kept if _repeats(moment, k)), None)
+        if of is None:
+            of = next((root for repeat, root in repeats if _repeats(moment, repeat)), None)
         if of is None:
             kept.append(moment)
         else:
@@ -77,7 +84,8 @@ def distinct_moments[M: Moment](moments: list[M]) -> tuple[list[M], list[tuple[M
 
 def _repeats(a: Moment, b: Moment) -> bool:
     overlap = min(a.end, b.end) - max(a.start, b.start)
-    return a.video_id == b.video_id and overlap >= 0.5 * min(a.end - a.start, b.end - b.start)
+    shorter = min(a.end - a.start, b.end - b.start)
+    return a.video_id == b.video_id and overlap >= min(0.5 * shorter, REPEAT_SHARED_S)
 
 
 def _period(match: re.Match[str]) -> str:
@@ -109,8 +117,23 @@ def read_clock(lines: list[Line]) -> GameClock | None:
 
 
 def period_ended(lines: list[Line]) -> bool:
-    """Whether the game clock reads 0.0 in any of these lines, one line per frame: a period ended."""
-    return any((reading := read_clock([line])) is not None and reading.low == 0.0 for line in lines)
+    """Whether a period ends in these lines, one line per frame in time order: the game clock reads 0.0
+    and does not read above 0.0 again in that period, and the reading before it in that period, if any,
+    left no more time than has passed since. Under five seconds the shot clock shows tenths too, and some
+    score bugs put it right beside the period ("116 4TH 0.0"), so a 0.0 that time cannot have reached or
+    that the clock reads on after is the shot clock."""
+    readings = [(line.start, reading) for line in lines if (reading := read_clock([line])) is not None]
+    for t, zero in readings:
+        if zero.low != 0.0:
+            continue
+        running = [(s, r.low) for s, r in readings if r.periods & zero.periods and r.low > 0.0]
+        before = [(s, left) for s, left in running if s < t]
+        if before and before[-1][1] > t - before[-1][0] + CLOCK_TOLERANCE_S:
+            continue
+        if any(s > t for s, _ in running):
+            continue
+        return True
+    return False
 
 
 def same_clock(a: GameClock, b: GameClock) -> bool:

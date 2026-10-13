@@ -13,7 +13,7 @@ from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
 
-from tlv import store
+from tlv import entities, store
 from tlv.agent import plan, retrieve, sources
 from tlv.agent.connect import Ranged
 from tlv.agent.model import Question, Reply, Vlm, parse_json
@@ -30,6 +30,7 @@ FRAME_WIDTH = 448
 # to see (only heard or read) needs frames only to place it, so it gets the fewest.
 MIN_FRAMES, MAX_FRAMES = 8, 12
 FRAME_SPACING_S = 1.0  # about one frame per second of window, within the bounds above
+MIN_SEEN_FRAMES = 2  # frames a claim to be seen must cover: one frame shows a pose, not a play
 MIN_WINDOW_S = 6.0
 VERDICT_TOKENS = 200
 # Text on screen in one verdict prompt: arena ads read every second would otherwise outweigh the frames.
@@ -42,6 +43,10 @@ PAIR_FRAMES = 4  # frames of each moment shown when asking whether two moments a
 NO_MATCH = r'"match"\s*:\s*false'
 NOT_SAME = r'"same"\s*:\s*false'
 OCR_SPACING_S = 1.0  # on-screen text is read once a second
+# A step read on screen that names a known person stands on the frames whose text holds the name, and is
+# placed where that text is on screen: shown a window that a graphic fills only in part, the model marks the
+# whole window. The text is followed this far past the step's frames to find where it starts and ends.
+READ_AROUND_S = 30.0
 # A time a verdict names instead of a frame number, as stamped on the frames: h:mm:ss.s or m:ss.s.
 _STAMPED = re.compile(r"(?:(\d+):)?(\d+):(\d+(?:\.\d+)?)")
 
@@ -451,6 +456,65 @@ def unheard(steps: list[str], senses: list[Sense], heard: list[Line], text: list
     return next((i for i, (step, s) in pairs if s == "sound" and not found & set(retrieve.words(step))), None)
 
 
+def read_on_screen(lines: list[Line], words: set[str], start: float, end: float) -> tuple[float, float] | None:
+    """When text holding every one of `words` is on screen around start..end: the run of frames reading
+    them that reaches into start..end, from half a reading before its first frame to half a reading after
+    its last; None when no frame of start..end reads them. Each line holds until the next, as
+    sources.screen_text leaves out a frame repeating the one before it, and one frame missing the words
+    between two that read them (OCR misreads now and then) does not end a run."""
+    runs: list[tuple[float, float]] = []
+    last = None  # index of the last line that read the words
+    for i, line in enumerate(lines):
+        if not words <= set(retrieve.words(line.text)):
+            continue
+        until = lines[i + 1].start if i + 1 < len(lines) else line.start + OCR_SPACING_S
+        misread = last == i - 2 and line.start - lines[i - 1].start < 2 * OCR_SPACING_S
+        if runs and (last == i - 1 or misread):
+            runs[-1] = (runs[-1][0], until)
+        else:
+            runs.append((line.start, until))
+        last = i
+    half = OCR_SPACING_S / 2
+    reaching = [(a - half, b - half) for a, b in runs if a - half <= end and b - half >= start]
+    return max(reaching, key=lambda run: min(run[1], end) - max(run[0], start), default=None)
+
+
+def read_steps(
+    db: sqlite3.Connection, video_id: str, steps: tuple[CheckedStep, ...], senses: list[Sense]
+) -> tuple[CheckedStep, ...] | str:
+    """The steps, each read on screen that names a known person placed where text holding the name is on
+    screen, as `read_on_screen` finds it; or why one of them is not read there."""
+    people = [(name, set(retrieve.words(name))) for name in sources.person_names(db)]
+    placed = []
+    for i, (step, sense) in enumerate(zip(steps, senses, strict=True)):
+        said = set(retrieve.words(step.step))
+        named = [(name, words) for name, words in people if words and words <= said]
+        if sense != "text" or not named:
+            placed.append(step)
+            continue
+        words = set().union(*(words for _, words in named))
+        lines = sources.screen_text(db, video_id, step.start - READ_AROUND_S, step.end + READ_AROUND_S)
+        at = read_on_screen(lines, words, step.start, step.end)
+        if at is None:
+            names = " and ".join(name for name, _ in named)
+            return f"step {i + 1} is not read: no on-screen text in its frames names {names}"
+        placed.append(CheckedStep(step.step, *at))
+    return tuple(placed)
+
+
+def unseen(db: sqlite3.Connection, video_id: str, claim: str, window: Range, start: float, end: float) -> str | None:
+    """A person the claim names whom the index sees in the window but not from start to end, where the
+    model placed the claim: then the model gave the claim to someone else. None when there is none; one
+    the index sees nowhere in the window counts for nothing, as a player far from the camera often goes
+    unrecognized."""
+    named = entities.resolve(db, claim)
+    if not named:
+        return None
+    around = {p["entity_id"]: p["name"] for p in entities.present(db, video_id, window.start, window.end)}
+    there = {p["entity_id"] for p in entities.present(db, video_id, start, end)}
+    return next((around[e] or e for e in named if e in around and e not in there), None)
+
+
 def check(
     vlm: Vlm,
     db: sqlite3.Connection,
@@ -464,11 +528,14 @@ def check(
     """Shows the model each stretch's window, all in one batch, and judges its answers. A spoken step
     must be heard in the window, and takes the time it is heard whatever the model says of it; a step
     to be heard must have been heard or read by the index there, as `unheard` says, before the model
-    is asked."""
+    is asked. A step read on screen that names a known person takes the time text holding the name is
+    on screen, as `read_steps` says. A claim to be seen must cover MIN_SEEN_FRAMES shown frames, and a
+    person it names whom the index sees in the window must be seen where it is placed, as `unseen`
+    says."""
     ready = [show(db, video, look, claim, steps, senses, pad) for video, look in looks]
     verdicts = iter(ask_verdicts(vlm, [r for r in ready if isinstance(r, Shown)], steps))
     return [
-        r if isinstance(r, Rejection) else _judged(db, r, next(verdicts), len(steps), min_confidence) for r in ready
+        r if isinstance(r, Rejection) else _judged(db, r, next(verdicts), claim, senses, min_confidence) for r in ready
     ]
 
 
@@ -498,17 +565,32 @@ def show(
 
 
 def _judged(
-    db: sqlite3.Connection, shown: Shown, verdict: Verdict | str, step_count: int, min_confidence: float
+    db: sqlite3.Connection, shown: Shown, verdict: Verdict | str, claim: str, senses: list[Sense], min_confidence: float
 ) -> Moment | Rejection:
     video, look = shown.video, shown.look
+
+    def reject(reason: str) -> Rejection:
+        return Rejection(video.video_id, look.start, look.end, reason)
+
     if isinstance(verdict, str):
-        return Rejection(video.video_id, look.start, look.end, verdict)
+        return reject(verdict)
     spoken = shown.spoken
     seen = tuple(StepSeen(s.step, True, *spoken[i]) if i in spoken else s for i, s in enumerate(verdict.steps))
-    judgement = judge(replace(verdict, steps=seen), shown.window, look, step_count, min_confidence)
+    judgement = judge(replace(verdict, steps=seen), shown.window, look, len(senses), min_confidence)
     if isinstance(judgement, Rejected):
-        return Rejection(video.video_id, look.start, look.end, judgement.reason)
+        return reject(judgement.reason)
+    placed = read_steps(db, video.video_id, judgement.steps, senses)
+    if isinstance(placed, str):
+        return reject(placed)
     start, end = judgement.start, judgement.end
+    if placed != judgement.steps:
+        start, end = min(s.start for s in placed), max(s.end for s in placed)
+    if "sight" in senses:
+        if sum(start <= f.t <= end for f in shown.frames) < MIN_SEEN_FRAMES:
+            return reject(f"the claim covers fewer than {MIN_SEEN_FRAMES} of the frames shown")
+        missing = unseen(db, video.video_id, claim, shown.window, start, end)
+        if missing:
+            return reject(f"{missing} is seen in the window but not where the claim is placed")
     return Moment(
         video,
         start,
@@ -518,7 +600,7 @@ def _judged(
         verdict.evidence,
         verdict.replay or sources.mostly_replay(db, video.video_id, start, end),
         read_clock([line for line in shown.text if start <= line.start <= end]),
-        judgement.steps,
+        placed,
         tuple(zip(shown.frames, shown.stamped, strict=True)),
     )
 
