@@ -1,12 +1,12 @@
-"""Runs one search system's `find` over the eval queries and saves its raw outputs and timings.
+"""Runs `tlv find` over the eval queries and saves its raw outputs and timings.
 
-    uv run python eval/run.py twelvelabs            # every query
-    uv run python eval/run.py local curry-three     # only the named queries
+    uv run python eval/run.py                  # every query
+    uv run python eval/run.py curry-three      # only the named queries
 
-Results go to eval/results/<system>-<date>.json, rewritten after each query so an interrupted run
+Results go to eval/results/local-<date>.json, rewritten after each query so an interrupted run
 keeps what finished; running named queries again replaces just their records in today's file.
-`twelvelabs` is the old TypeScript tool kept as a yardstick in its own worktree, with the API key
-injected by mem-secret; `local` is this repository's `tlv`.
+eval/results/twelvelabs-2026-10-12.json is the yardstick: the same queries and flags run once
+through the Twelve Labs client this tool replaced, before that client was removed.
 """
 
 import argparse
@@ -20,33 +20,19 @@ from tlv.media import write_atomically
 
 EVAL = Path(__file__).resolve().parent
 REPO = EVAL.parent
-YARDSTICK = Path.home() / "Developer/tlv-yardstick"
 FLAGS = ["--max-candidates", "12", "--no-cut", "--json"]
-SYSTEMS = {
-    "twelvelabs": (
-        [
-            str(Path.home() / ".local/bin/mem-secret"),
-            *("run", "TWELVELABS_API_KEY", "--"),
-            str(Path.home() / ".bun/bin/bun"),
-            str(YARDSTICK / "src/cli.ts"),
-            "find",
-        ],
-        YARDSTICK,
-    ),
-    "local": (["uv", "run", "tlv", "find"], REPO),
-}
 
 
-def command(system: str, query: dict) -> list[str]:
+def command(query: dict) -> list[str]:
     then = [arg for step in query["then"] for arg in ("--then", step)]
-    return [*SYSTEMS[system][0], query["query"], *then, *FLAGS]
+    return ["uv", "run", "tlv", "find", query["query"], *then, *FLAGS]
 
 
-def run(system: str, query: dict) -> dict:
+def run(query: dict) -> dict:
     """One `find` call: its parsed JSON output (None when it failed), exit code, stderr and wall time."""
-    argv = command(system, query)
+    argv = command(query)
     started = time.monotonic()
-    done = subprocess.run(argv, cwd=SYSTEMS[system][1], capture_output=True, text=True)
+    done = subprocess.run(argv, cwd=REPO, capture_output=True, text=True)
     return {
         "id": query["id"],
         "query": query["query"],
@@ -61,7 +47,6 @@ def run(system: str, query: dict) -> dict:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("system", choices=SYSTEMS)
     parser.add_argument("ids", nargs="*", help="query ids to run (default: all)")
     args = parser.parse_args()
 
@@ -71,17 +56,17 @@ def main() -> None:
         parser.error(f"unknown query ids: {', '.join(sorted(unknown))}")
     chosen = [query for query in queries if not args.ids or query["id"] in args.ids]
 
-    path = EVAL / "results" / f"{args.system}-{datetime.date.today().isoformat()}.json"
+    path = EVAL / "results" / f"local-{datetime.date.today().isoformat()}.json"
     path.parent.mkdir(exist_ok=True)
     saved = json.loads(path.read_text())["runs"] if path.exists() else []
     runs = {record["id"]: record for record in saved}
     for query in chosen:
-        print(f"{args.system}: {query['id']}", flush=True)
-        runs[query["id"]] = run(args.system, query)
+        print(f"local: {query['id']}", flush=True)
+        runs[query["id"]] = run(query)
         record = runs[query["id"]]
         print(f"  exit {record['exit_code']} in {record['seconds']} s", flush=True)
         ordered = [runs[q["id"]] for q in queries if q["id"] in runs]
-        results = {"system": args.system, "flags": FLAGS, "runs": ordered}
+        results = {"system": "local", "flags": FLAGS, "runs": ordered}
         write_atomically(path, lambda partial, results=results: partial.write_text(json.dumps(results, indent=1)))
     print(path)
 

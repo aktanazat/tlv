@@ -76,8 +76,8 @@ Signatures below are the interface; each owner may add private helpers freely. `
 - `add_reference(db, name, images=(), frames=()) -> dict`: teach a person from image files or
   (video_id, t) frames, for `video_entity_add`.
 
-`tlv/agent/` (results are plain dicts shaped like the TypeScript `core.ts` results, so the
-CLI and MCP output stays familiar)
+`tlv/agent/` (results are plain dicts shaped like those of the Twelve Labs client it replaced,
+so the CLI and MCP output stays familiar)
 - `search(query, then=(), limit=10, video_ids=None, max_gap=12) -> SearchResult`
 - `find(query, then=(), max_candidates=8, pad=3, min_confidence=0.6, cut=True, video_ids=None,
   progress=None) -> FindResult`. Each confirmed observation adds `replays`: other angles of
@@ -87,5 +87,5 @@ CLI and MCP output stays familiar)
 - `answer(question, video_ids=None, progress=None) -> JockeyResult`: a collection-wide
   question answered by planning, calling the same tools, and citing clips.
 
-`tlv/cli.py`, `tlv/mcp_server.py`: the commands and MCP tools of the TypeScript tool, same
+`tlv/cli.py`, `tlv/mcp_server.py`: the commands and MCP tools of the Twelve Labs client, same
 names and flags, plus entity corrections.

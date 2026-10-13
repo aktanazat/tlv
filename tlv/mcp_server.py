@@ -1,8 +1,9 @@
 """The MCP server over stdio: one tool per tlv operation, with the tool names and input fields of
-the TypeScript tool, plus the entity corrections and the timeline. Each tool returns its result as
-structured content plus the short text rendering; video_cut and video_frames add the frame or
-contact sheet as an image. Long tools send progress notifications when the client passes a
-progress token. Operations run in worker threads, so a long one never blocks the others."""
+the Twelve Labs client it replaces, plus the entity corrections and the timeline. Each tool
+returns its result as structured content plus the short text rendering; video_cut and
+video_frames add the frame or contact sheet as an image. Long tools send progress notifications
+when the client passes a progress token. Operations run in worker threads, so a long one never
+blocks the others."""
 
 from __future__ import annotations
 

@@ -1,6 +1,6 @@
 """From ranked hits to candidates: one moment found twice is kept once, and the steps of an
-ordered query are linked in time order inside one video. Ported from the TypeScript search.ts;
-nothing here reads the store or runs a model."""
+ordered query are linked in time order inside one video. Nothing here reads the store or runs a
+model."""
 
 from __future__ import annotations
 

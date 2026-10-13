@@ -1,7 +1,7 @@
 """tlv: local video understanding for terminal agents. Each command runs one core operation;
 `tlv mcp` serves the same operations as MCP tools over stdio.
 
-The command line follows the TypeScript tool it replaces: every option parses anywhere on the
+The command line follows the Twelve Labs client it replaces: every option parses anywhere on the
 line, and a command given an option it does not take is a usage error (exit 2)."""
 
 from __future__ import annotations

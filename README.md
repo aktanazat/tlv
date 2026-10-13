@@ -106,6 +106,28 @@ timecodes (`1:23.4`, `00:01:23.4`). Progress goes to stderr.
 - `find` prefers a missed clip over a wrong one: a candidate is confirmed only when the frames
   show the claim with enough confidence and every step in order.
 
+## How it compares
+
+Eleven labeled queries over three NBA highlight videos, 23 events in all (`eval/`), run through
+`find --max-candidates 12` here and through the Twelve Labs client it replaced:
+
+| | Twelve Labs | tlv |
+|---|---|---|
+| events found | 15 of 23 | 17 of 23 |
+| clips returned | 52 | 42 |
+| wrong clips | 25 | 19 |
+| extra clips of an event already found | 6 | 2 |
+| precision (ambiguous clips left out) | 0.33 | 0.45 |
+| seconds per query | 42 | 47 |
+| cost | paid API | none |
+
+tlv ran on an M4 Pro with 24 GB that other work kept busy. To run the eval again and score both:
+
+```sh
+uv run python eval/run.py
+uv run python eval/score.py eval/results/local-<date>.json eval/results/twelvelabs-2026-10-12.json
+```
+
 ## Development
 
 ```sh
