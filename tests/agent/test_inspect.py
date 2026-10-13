@@ -371,6 +371,22 @@ def test_a_claim_to_be_seen_needs_two_shown_frames(game):
     assert (isinstance(one, Rejection), isinstance(two, Moment)) == (True, True)
 
 
+def image_tokens(path):
+    """The prompt tokens a shown frame costs the vision model: it reads the frame in 32 px squares
+    (16 px patches merged two by two), each side rounded to whole squares."""
+    with Image.open(path) as image:
+        return round(image.width / 32) * round(image.height / 32)
+
+
+def test_a_long_stretch_costs_the_model_ten_frames_of_tokens_at_most(game):
+    """Reading the prompt is most of a check's time, and the frames are most of the prompt: a long
+    stretch is shown in ten frames, 1120 image tokens, not the twelve (1344) it once was."""
+    model = Model([seen_on(5, 6)])
+    check(model, game, [(GAME, Look("v", 10.0, 40.0))], "LeBron James dunks", ["dunks"], ["sight"], 3.0, 0.6)
+    (question,) = model.asked
+    assert sum(image_tokens(path) for path in question.images) <= 1120
+
+
 def person(db, name, appearances):
     """A named person whom the index sees in the game over each (start, end) given."""
     blob = store.to_blob(np.ones(4, dtype=np.float32))

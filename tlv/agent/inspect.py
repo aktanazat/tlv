@@ -23,18 +23,22 @@ from tlv.agent.sources import Frame, Line, Video
 from tlv.media import Range
 
 # 448 px wide: 384 cut a check's prompt from 1620 to 1284 tokens (3.6 -> 3.1 s) but the eval lost
-# three events (recall 0.74 -> 0.61, precision 0.45 -> 0.36).
+# three events (recall 0.74 -> 0.61, precision 0.45 -> 0.36). 416 (91 tokens a frame, not 112) lost two of five
+# plays checked one by one.
 FRAME_WIDTH = 448
-# A check costs 4.4-5.3 s with 12 frames (1600 prompt tokens). With 8 the eval lost a buzzer and a third of a
-# second of placement (recall 0.61 -> 0.57, precision 0.42 -> 0.36), so seen claims keep 12. A claim with nothing
-# to see (only heard or read) needs frames only to place it, so it gets the fewest.
-MIN_FRAMES, MAX_FRAMES = 8, 12
+# Reading the prompt is most of a check, and each frame is 112 of its tokens. Seen claims get at most 10: on the
+# eval's checks that showed 9% fewer frames than 12 and took 5% less model time, finding the same 18 of 24 events
+# (local-frames10-2026-10-13.json). 9 and 11 each lost a play that 10 and 12 found; with 8 the eval lost a buzzer
+# and a third of a second of placement. A claim with nothing to see (only heard or read) needs frames only to
+# place it, so it gets the fewest.
+MIN_FRAMES, MAX_FRAMES = 8, 10
 FRAME_SPACING_S = 1.0  # about one frame per second of window, within the bounds above
 MIN_SEEN_FRAMES = 2  # frames a claim to be seen must cover: one frame shows a pose, not a play
 MIN_WINDOW_S = 6.0
 VERDICT_TOKENS = 200
-# Text on screen in one verdict prompt: arena ads read every second would otherwise outweigh the frames.
-# A claim read on screen gets all of it: there the text is the evidence.
+# Text on screen in one verdict prompt: arena ads read every second would otherwise outweigh the frames. Cutting it
+# to 400 characters, or leaving it out for a seen claim, lost plays. A claim read on screen gets all of it: there
+# the text is the evidence.
 VERDICT_TEXT_CHARS = 800
 SOUND_CHARS = 400  # sound labels in one verdict prompt, for a claim about something heard
 PAIR_FRAMES = 4  # frames of each moment shown when asking whether two moments are one play
