@@ -20,6 +20,7 @@ def _no_index_env(monkeypatch):
         ("add https://youtu.be/x", "add", {"source": "https://youtu.be/x", "wait": True}),
         ("list", "list", {}),
         ("status v1", "status", {"video_id": "v1"}),
+        ("remove v1", "remove", {"video_id": "v1"}),
         (
             "index v1 --stage speech --stage spans --force",
             "index",

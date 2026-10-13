@@ -155,6 +155,21 @@ def server(default_index: str) -> MCPServer:
         return _reply(result, core.status_text(result))
 
     @mcp.tool(
+        name="video_delete",
+        title="Delete a video",
+        description="Remove a video from the index: every indexed fact about it, the people seen only in it, and its "
+        "files on this Mac (local copy, frames, crops, clips), except files another index still uses. People also "
+        "seen in other videos keep those appearances and their names and corrections. Adding the same file again "
+        "indexes it anew.",
+        annotations=ToolAnnotations(
+            read_only_hint=False, destructive_hint=True, idempotent_hint=False, open_world_hint=False
+        ),
+    )
+    async def video_delete(ctx: Context, video_id: VideoId, index: Index = None) -> CallToolResult:
+        result = await _run(core.video_remove, ctx, index=pick(index), video_id=video_id)
+        return _reply(result, core.remove_text(result))
+
+    @mcp.tool(
         name="video_search",
         title="Search videos",
         description="Fast search over the indexed videos: captions, speech, on-screen text and frames. Returns likely "

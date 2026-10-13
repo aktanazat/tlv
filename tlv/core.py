@@ -41,7 +41,7 @@ INDEX_NAME = re.compile(r"[A-Za-z0-9][A-Za-z0-9._-]*")
 
 
 def default_index() -> str:
-    return os.environ.get("TLV_INDEX") or "tlv"
+    return store.index_name()
 
 
 def _r(seconds: float) -> float:
@@ -134,7 +134,12 @@ def _clamp(video: sqlite3.Row, start: float, end: float) -> Range:
 
 def _stem(video: sqlite3.Row, span: Range) -> str:
     """File name stem for media cut from a range of a video."""
-    return f"{media.slug(video['title'])}-{video['video_id'][-6:]}_{span.start:.1f}-{span.end:.1f}"
+    return f"{_cut_prefix(video['title'], video['video_id'])}{span.start:.1f}-{span.end:.1f}"
+
+
+def _cut_prefix(title: str, video_id: str) -> str:
+    """How the name of every clip and still cut from a video starts."""
+    return f"{media.slug(title)}-{video_id[-6:]}_"
 
 
 def _span(span: Range) -> dict[str, Any]:
@@ -242,6 +247,64 @@ def status_text(r: dict[str, Any]) -> str:
     lines.append(f"local: {r['local_path']}" + ("" if r["local_exists"] else " (missing)"))
     lines.append("stages: " + ", ".join(stage(name, s) for name, s in r["stages"].items()))
     lines.append("rows: " + ", ".join(f"{table} {n}" for table, n in r["counts"].items()))
+    return "\n".join(lines)
+
+
+# video_remove
+
+# Folders under frames/ where finds, asks and answers keep the stamped frames they looked at,
+# one subfolder per video and window, named "<video_id>_<start>-<end>".
+LOOKED_AT = ("checked", "asked", "answered")
+
+
+def video_remove(index: str, video_id: str, progress: Progress = None) -> dict[str, Any]:
+    """Removes a video from the index: its rows, the people seen only in it, and its files under
+    $TLV_HOME (tlv.index.pipeline.remove), then what tlv cut from it: clips, stills, the frames a
+    find, ask or answer looked at, and its index log. Cuts stay while another index holds the
+    same video. The index's last find goes too when it touched the video, so no follow-up returns
+    it. Adding the same file again indexes it anew."""
+    from tlv.index import pipeline
+
+    with _selected(index):
+        removed = pipeline.remove(video_id, progress=progress)
+    home = store.home()
+    cuts = [home / "work" / "logs" / f"{index}-{video_id}.log"]
+    if not removed["kept_for"]:
+        prefix = _cut_prefix(removed["title"], video_id)
+        cuts += [*(home / "clips").glob(f"{prefix}*"), *(home / "frames").glob(f"{prefix}*")]
+        cuts += [path for folder in LOOKED_AT for path in (home / "frames" / folder).glob(f"{video_id}_*")]
+    last = _last_find(index)
+    if last.exists() and video_id in _videos_of(json.loads(last.read_text())):
+        cuts.append(last)
+    gone = [path for path in cuts if path.exists()]
+    for path in gone:
+        if path.is_dir():
+            shutil.rmtree(path)
+        else:
+            path.unlink()
+    return {**removed, "index": index, "files": [*removed["files"], *map(str, gone)]}
+
+
+def _videos_of(session: dict[str, Any]) -> set[str]:
+    """Every video a kept find searched or returned: its clips, their replays, its rejections."""
+    result = session["result"]
+    clips = [*result["confirmed"], *result["rejected"]]
+    replays = [replay for clip in result["confirmed"] for replay in clip.get("replays", ())]
+    return {*(session["request"]["video_ids"] or ()), *(item["video_id"] for item in [*clips, *replays])}
+
+
+def remove_text(r: dict[str, Any]) -> str:
+    rows = ", ".join(f"{table} {n}" for table, n in r["rows"].items() if n)
+    people = r["people"]
+    lines = [
+        f'removed "{r["title"]}" video_id={r["video_id"]} from index "{r["index"]}"',
+        f"rows: {rows}",
+        f"people: {people['removed']} seen only in it removed, {people['kept']} also in other videos kept",
+        f"files: {len(r['files'])} removed",
+        *(f"  {path}" for path in r["files"]),
+    ]
+    if r["kept_for"]:
+        lines.append(f"its frames, crops and cuts stay: index {', '.join(r['kept_for'])} holds the same video")
     return "\n".join(lines)
 
 
@@ -580,7 +643,7 @@ def video_at(index: str, video_id: str, clock: str, cut: bool = False) -> dict[s
 def _at_media(video: sqlite3.Row, t: float, cut: bool) -> dict[str, str]:
     """The still at `t` and, with `cut`, an AT_CLIP_S clip around it."""
     source = _local_file(video)
-    still = store.data_dir("frames") / f"{media.slug(video['title'])}-{video['video_id'][-6:]}_{t:.1f}_at.jpg"
+    still = store.data_dir("frames") / f"{_cut_prefix(video['title'], video['video_id'])}{t:.1f}_at.jpg"
     media.still(source, t, still, STILL_WIDTH)
     if not cut:
         return {"frame_path": str(still)}

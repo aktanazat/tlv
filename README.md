@@ -66,9 +66,10 @@ holds downloads, `clips/` cut clips, `frames/` stills and contact sheets. `--ind
 
 `PATH` must reach `ffmpeg` and `ffprobe`; MCP clients often start servers with a bare `PATH`.
 
-Tools: `video_add`, `video_list`, `video_status`, `video_index`, `video_search`, `video_ask`,
-`video_find`, `video_cut`, `video_frames`, `video_timeline`, `video_entity_add`, `video_entities`,
-`video_entity_name`, `video_entity_same`, `video_entity_different`, `video_person`, `video_jockey`.
+Tools: `video_add`, `video_list`, `video_status`, `video_index`, `video_delete`, `video_search`,
+`video_ask`, `video_find`, `video_cut`, `video_frames`, `video_timeline`, `video_entity_add`,
+`video_entities`, `video_entity_name`, `video_entity_same`, `video_entity_different`,
+`video_person`, `video_jockey`.
 Results come back as structured content plus a short text summary; `video_cut`, `video_frames` and
 `video_person` also return the frame, contact sheet or filmstrip as an image. Long calls send
 progress notifications when the client passes a progress token.
@@ -89,6 +90,7 @@ tlv add ~/Movies/game.mp4 --title "Lakers at Celtics" --no-wait   # returns now,
 tlv index VIDEO_ID                 # finish or redo indexing; one stage with --stage S [--force]
 tlv list                           # video ids name the content (v_ and 10 hex digits)
 tlv status VIDEO_ID
+tlv remove VIDEO_ID                # take it out of the index, with its files
 
 # likely moments; an ordered action takes --then steps
 tlv search "steals the ball" --then "dunks" --then "celebrates" --max-gap 8
@@ -138,6 +140,12 @@ timecodes (`1:23.4`, `00:01:23.4`). Progress goes to stderr.
 ## Notes
 
 - `add` of a file already present (same content) returns the existing video.
+- `remove` deletes everything the index holds about a video in one step: its indexed rows, the
+  people seen only in it, its local copy, frames, face crops, working files, the clips and stills
+  cut from it, and the index's last `find` if that touched it. People also seen in other videos
+  stay, with the names and corrections you gave them, even ones given through the removed video.
+  A file another index still uses stays, since video ids name the content. Adding the same file
+  again indexes it anew.
 - `add` takes any video ffmpeg reads. One without a sound track, such as a screen recording,
   indexes with no speech and no sounds; one in a codec Apple's decoders refuse (VP9, AV1) is read
   from an H.264 copy made once under `$TLV_HOME/work/`.

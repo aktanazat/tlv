@@ -30,7 +30,8 @@ query ─▶ plan ─▶ retrieve ─▶ connect ─▶ inspect ─▶ answer (c
 
 - **Store**: `tlv/store.py` owns the schema. Each table names the module that writes it. Times
   are seconds from the start of the video. Embeddings are float16 blobs (`store.to_blob`),
-  normalized to unit length.
+  normalized to unit length. `store.transaction` inside another transaction is a savepoint of
+  it, so a writer's own transaction can run as one step of a larger one.
 - **Models**: every model runs through `tlv.guard.ModelProcess`, which hands the work to the
   model host (`tlv/host.py`): one background process per `$TLV_HOME` that runs one job at a
   time, a waiting job on a loaded model first (passing over another job at most three times),
@@ -57,6 +58,10 @@ Signatures below are the interface; each owner may add private helpers freely. `
   for spans. Vision reads the frame grid from the duration, not from frames. The entities stage
   calls `tlv.entities.index_video`.
 - `status(video_id) -> dict` with each stage's version and seconds, and row counts.
+- `remove(video_id, progress=None) -> RemoveResult` deletes the video's rows in one transaction
+  (the tables naming a video cascade from `videos`), inside `tlv.entities.leaving`, then its
+  files under `$TLV_HOME`: the media copy unless an index lists it for another video, and its
+  frames, crops and work folders unless another index holds the same video.
 
 `tlv/embed.py` (each call loads its model once under the guard; batch your inputs)
 - `images(paths) -> np.ndarray` unit image vectors (SigLIP 2), shape (n, d).
@@ -73,6 +78,9 @@ Signatures below are the interface; each owner may add private helpers freely. `
 `tlv/entities.py`
 - `index_video(db, video_id, progress)`: appearances for the video, then `recluster`.
 - `recluster(db, progress)`: clusters the whole collection, honoring every correction.
+- `leaving(db, video_id)`: a context manager for removing a video. Corrections given through its
+  appearances move to the same person's best remaining appearance (or go, when no one is left),
+  the caller deletes the video inside it, and everyone left is regrouped without the model.
 - `entities(db) -> list[dict]`: entity_id, name, appearance and video counts, crop path.
 - `resolve(db, text) -> list[str]`: entity ids a name or description in a query refers to
   ("LeBron James", "lebron", "@Coco", "number 23"), empty when unsure.

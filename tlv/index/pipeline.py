@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import contextlib
 import hashlib
+import json
 import queue
 import re
 import shutil
@@ -45,6 +46,20 @@ INPUTS: dict[str, tuple[str, ...]] = {
     "entities": ("shots", "frames", "speech", "vision", "sounds", "spans"),
 }
 URL = re.compile(r"https?://", re.I)
+# The tables with a row per video fact; deleting the video's row cascades to the rest.
+VIDEO_TABLES = (
+    "videos",
+    "stages",
+    "shots",
+    "frames",
+    "speech",
+    "ocr",
+    "detections",
+    "sounds",
+    "spans",
+    "appearances",
+    "observations",
+)
 
 
 class AddResult(TypedDict):
@@ -54,6 +69,15 @@ class AddResult(TypedDict):
     status: str
     local_path: str
     already_indexed: bool
+
+
+class RemoveResult(TypedDict):
+    video_id: str
+    title: str
+    rows: dict[str, int]  # rows deleted per table
+    people: dict[str, int]  # "removed": seen only in this video; "kept": also seen elsewhere
+    files: list[str]  # files and folders deleted
+    kept_for: list[str]  # other indexes holding the same video, whose files stay
 
 
 def add(source: str, title: str | None = None, wait: bool = True, progress: guard.Progress | None = None) -> AddResult:
@@ -158,6 +182,98 @@ def status(video_id: str) -> dict[str, Any]:
         "stages": stages,
         "counts": _counts(db, video_id),
     }
+
+
+def remove(video_id: str, progress: guard.Progress | None = None) -> RemoveResult:
+    """Removes a video from the index. One transaction deletes every row about it and the people
+    seen only in it; people also seen in other videos keep those appearances and the owner's
+    corrections (tlv.entities.leaving). Then its files under $TLV_HOME go: the media copy, unless
+    an index lists it for another video, and its frames, crops and work folders, unless another
+    index holds the same video (they are named by its content, so that index uses them too).
+    Adding the same file again indexes it anew."""
+    db = store.connect()
+
+    def say(message: str) -> None:
+        if progress:
+            progress(message)
+
+    with store.lock(f"index-{video_id}", waiting=lambda: say(f"waiting for the index run of {video_id} to end")):
+        video = _video(db, video_id)
+        rows = {
+            table: db.execute(f"SELECT count(*) FROM {table} WHERE video_id = ?", (video_id,)).fetchone()[0]
+            for table in VIDEO_TABLES
+        }
+        people = _people(db, video_id)
+        kept_for, media_used = _held_elsewhere(db, video)
+        with entities.leaving(db, video_id, waiting=lambda: say("waiting for another entities run")):
+            _drop_replays(db, video_id)
+            db.execute("DELETE FROM videos WHERE video_id = ?", (video_id,))
+        files = _files(video, kept_for, media_used)
+        for path in files:
+            if path.is_dir():
+                shutil.rmtree(path)
+            else:
+                path.unlink()
+    return RemoveResult(
+        video_id=video_id,
+        title=video["title"],
+        rows=rows,
+        people=people,
+        files=[str(path) for path in files],
+        kept_for=kept_for,
+    )
+
+
+def _people(db: sqlite3.Connection, video_id: str) -> dict[str, int]:
+    """How many people the video's appearances belong to: seen only in it, or also elsewhere."""
+    seen_in: dict[str, set[str | None]] = {}
+    for row in db.execute(
+        "SELECT m.entity_id, a.video_id FROM entity_members m JOIN appearances a USING (appearance_id)"
+    ):
+        seen_in.setdefault(row["entity_id"], set()).add(row["video_id"])
+    theirs = [videos for videos in seen_in.values() if video_id in videos]
+    only = sum(1 for videos in theirs if videos == {video_id})
+    return {"removed": only, "kept": len(theirs) - only}
+
+
+def _held_elsewhere(db: sqlite3.Connection, video: sqlite3.Row) -> tuple[list[str], bool]:
+    """The other indexes holding the same video, and whether any index lists its media file for
+    another video."""
+    video_id, local = video["video_id"], video["local_path"]
+    used = db.execute("SELECT 1 FROM videos WHERE local_path = ? AND video_id != ?", (local, video_id)).fetchone()
+    holding = []
+    for name in store.indexes():
+        if name == store.index_name():
+            continue
+        with contextlib.closing(store.connect(name)) as other:
+            if other.execute("SELECT 1 FROM videos WHERE video_id = ?", (video_id,)).fetchone():
+                holding.append(name)
+            used = used or other.execute("SELECT 1 FROM videos WHERE local_path = ?", (local,)).fetchone()
+    return holding, used is not None
+
+
+def _files(video: sqlite3.Row, kept_for: list[str], media_used: bool) -> list[Path]:
+    """The video's files and folders under $TLV_HOME that no other index or video uses."""
+    home, video_id = store.home(), video["video_id"]
+    local = Path(video["local_path"])
+    found = [local] if local.is_relative_to(home / "media") and not media_used else []
+    if not kept_for:
+        found += [home / "frames" / video_id, home / "crops" / video_id, home / "work" / video_id]
+        found.append(home / "work" / "entities" / video_id)
+    return [path for path in found if path.exists()]
+
+
+def _drop_replays(db: sqlite3.Connection, video_id: str) -> None:
+    """Takes the video out of the replays other videos' verified observations list."""
+    changes = []
+    for row in db.execute(
+        "SELECT obs_id, evidence FROM observations WHERE kind = 'verified' AND video_id != ?", (video_id,)
+    ):
+        evidence = json.loads(row["evidence"])
+        replays = [replay for replay in evidence.get("replays", []) if replay["video_id"] != video_id]
+        if replays != evidence.get("replays", []):
+            changes.append((json.dumps({**evidence, "replays": replays}, ensure_ascii=False), row["obs_id"]))
+    db.executemany("UPDATE observations SET evidence = ? WHERE obs_id = ?", changes)
 
 
 def _counts(db: sqlite3.Connection, video_id: str) -> dict[str, int]:
