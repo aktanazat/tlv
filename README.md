@@ -187,24 +187,37 @@ timecodes (`1:23.4`, `00:01:23.4`). Progress goes to stderr.
 ## How it compares
 
 Eleven labeled queries over three NBA highlight videos, 24 events in all (`eval/`), run through
-`find --max-candidates 12` here (`eval/results/local-fast-2026-10-12.json`) and through the
+`find --max-candidates 12` here (`eval/results/local-merged-2026-10-13.json`) and through the
 Twelve Labs client it replaced:
 
 | | Twelve Labs | tlv |
 |---|---|---|
 | events found | 15 of 24 | 18 of 24 |
-| clips returned | 52 | 31 |
-| wrong clips | 25 | 9 |
+| clips returned | 52 | 29 |
+| wrong clips | 25 | 8 |
 | extra clips of an event already found | 5 | 0 |
-| precision (ambiguous clips left out) | 0.33 | 0.67 |
-| seconds per query | 42 | 44 |
+| precision (ambiguous clips left out) | 0.33 | 0.69 |
+| seconds per query | 42 | 60 |
 | cost | paid API | none |
 
-tlv ran on an M4 Pro with 24 GB that other work kept busy. To run the eval again and score both:
+Outside sports, `eval/everyday/` holds twelve queries over six freely licensed videos (cooking,
+a lecture, a scripted coding session, a travel vlog, a 1924 film and a recorded meeting), 23
+moments in all, labeled from frames and captions before tlv saw them. Twelve Labs could not be
+run on them. tlv found 17 of 23 with 4 wrong clips and 3 extra clips of a found moment
+(`eval/results/everyday-merged-2026-10-13.json`); before the fixes it ran (spoken topics, joined
+pieces, people known only by sight) it found 12 with 4 wrong and 10 extra.
+
+tlv ran on an M4 Pro with 24 GB that other work kept busy. In the 60 s run, retrieval and model
+loading took 22 s per query against 9 s in an earlier run of the same queries at 44 s
+(`local-fast-2026-10-12.json`): swap stayed past 8 GB, so the model host let go of each model
+after its search, and other work shared the host. Checking took 37 s against 35 s. To run the
+evals again and score them:
 
 ```sh
 uv run python eval/run.py
 uv run python eval/score.py eval/results/local-<date>.json eval/results/twelvelabs-2026-10-12.json
+uv run python eval/run.py --set everyday
+uv run python eval/score.py --set everyday eval/results/everyday-local-<date>.json
 ```
 
 ## Development
