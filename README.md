@@ -1,35 +1,40 @@
 # tlv
 
-Video search for terminal agents, on TwelveLabs. `tlv` adds videos to a TwelveLabs index,
-finds moments in them, checks those moments with Pegasus, and cuts clips from the local
-copies. The same operations run as CLI commands and as MCP tools (`tlv mcp`).
+Local video understanding for terminal agents. `tlv` indexes videos on this Mac with open
+models, finds moments in them, checks each moment by looking at its frames, and cuts clips.
+Nothing leaves the machine and nothing costs money. Every answer points back to a video and an
+exact time range, with the frames, transcript and on-screen text behind it.
 
-- `search` is fast and cheap: Marengo returns likely moments with timecodes. Nothing is checked.
-- `find` is the verified clip finder: it searches, then Pegasus watches every candidate
-  window and confirms the claim, the person and the order of the steps. It is slower and
-  spends Pegasus minutes (each check bills the window length, at least 6 s).
-- `jockey` asks Jockey, TwelveLabs' research-preview agent, a question about the whole
-  collection. It answers in prose with citations; it does not cut clips.
+The same operations run as CLI commands and as MCP tools (`tlv mcp`). The commands and tool
+names are those of the earlier Twelve Labs client, so agents that used it need no changes.
+
+- `search` is fast: likely moments from captions, speech, on-screen text and frames. Nothing is
+  checked.
+- `find` is the verified clip finder: it searches, then looks at the frames of every candidate
+  with their true times and confirms the claim, the person and the order of the steps. Replays of
+  the same play come back as one clip with its other angles listed, not as separate results.
+- `timeline` shows the evidence for a range: speech word by word, on-screen text, sounds,
+  captions and who is visible.
+- `jockey` answers a question about the whole collection in prose, citing clips.
+
+How it works is in [DESIGN.md](DESIGN.md).
 
 ## Setup
 
-Needs [Bun](https://bun.sh), `ffmpeg`/`ffprobe` and `yt-dlp` on `PATH`
-(`brew install ffmpeg yt-dlp`).
+Needs Python 3.12 with [uv](https://docs.astral.sh/uv/), and `ffmpeg`/`ffprobe` on `PATH`
+(`brew install ffmpeg`). Apple Silicon: the models run on MLX.
 
 ```sh
-bun install
-bun link            # puts `tlv` on PATH (~/.bun/bin)
+uv sync
+uv run tlv --help
 ```
 
-The API key comes from `TWELVELABS_API_KEY`. Keep it in the vault and run through it:
+Model weights download from Hugging Face on first use into `~/.cache/huggingface`. Models run one
+at a time, each in a child process held to a memory cap, so indexing waits its turn on a busy Mac.
 
-```sh
-mem-secret run TWELVELABS_API_KEY -- tlv list
-```
-
-Files live under `$TLV_HOME` (default `~/.local/share/tlv`): `media/` holds downloads,
-`clips/` cut clips, `frames/` stills and contact sheets. The index is `tlv` unless
-`TLV_INDEX` or `--index` names another; it is created on the first `add`.
+Files live under `$TLV_HOME` (default `~/.local/share/tlv`): `tlv.db` is the index, `media/`
+holds downloads, `clips/` cut clips, `frames/` stills and contact sheets. `--index NAME` (or
+`TLV_INDEX`) selects another index, stored as `$TLV_HOME/NAME.db`.
 
 ## MCP
 
@@ -37,17 +42,17 @@ Files live under `$TLV_HOME` (default `~/.local/share/tlv`): `media/` holds down
 
 ```json
 {
-  "command": "mem-secret",
-  "args": ["run", "TWELVELABS_API_KEY", "--", "/Users/you/.bun/bin/bun", "/path/to/twelvelabs-tool/src/cli.ts", "mcp"],
+  "command": "/path/to/twelvelabs-tool/.venv/bin/tlv",
+  "args": ["mcp"],
   "env": { "PATH": "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin" }
 }
 ```
 
-`PATH` must reach `ffmpeg`, `ffprobe` and `yt-dlp`; MCP clients often start servers with a
-bare `PATH`.
+`PATH` must reach `ffmpeg` and `ffprobe`; MCP clients often start servers with a bare `PATH`.
 
-Tools: `video_add`, `video_list`, `video_status`, `video_search`, `video_ask`, `video_find`,
-`video_cut`, `video_frames`, `video_entity_add`, `video_entities`, `video_jockey`. Results come
+Tools: `video_add`, `video_list`, `video_status`, `video_index`, `video_search`, `video_ask`,
+`video_find`, `video_cut`, `video_frames`, `video_timeline`, `video_entity_add`, `video_entities`,
+`video_entity_name`, `video_entity_same`, `video_entity_different`, `video_jockey`. Results come
 back as structured content plus a short text summary; `video_cut` and `video_frames` also return
 the frame or contact sheet as an image. Long calls send progress notifications when the client
 passes a progress token.
@@ -55,26 +60,35 @@ passes a progress token.
 ## Examples
 
 ```sh
-# add a YouTube video (downloads at most 720p, uploads, indexes, waits)
+# add a YouTube video (downloads at most 720p, then indexes it here; minutes per video)
 tlv add "https://www.youtube.com/watch?v=VIDEO"
-tlv add ~/Movies/game.mp4 --title "Lakers at Celtics" --no-wait
-tlv list
-tlv status 6710c5b2e1
+tlv add ~/Movies/game.mp4 --title "Lakers at Celtics" --no-wait   # returns now, indexes in the background
+tlv index VIDEO_ID                 # finish or redo indexing; one stage with --stage S [--force]
+tlv list                           # video ids name the content (v_ and 10 hex digits)
+tlv status VIDEO_ID
 
 # likely moments; an ordered action takes --then steps
 tlv search "steals the ball" --then "dunks" --then "celebrates" --max-gap 8
 
-# teach a person, then refer to them with @Name (underscores or hyphens for spaces)
-tlv entity-add "LeBron James" --video 6710c5b2e1 --at 83.4 --at 412
-tlv find "@LeBron_James steals the ball" --then "he dunks"
+# verified clips, replays merged
+tlv find "lebron james scores" --then "celebrates"
 
-# look at a range, cut a clip
-tlv frames 6710c5b2e1 --from 1:20 --to 1:35
-tlv cut 6710c5b2e1 --from 1:23.4 --to 1:31 --frame sheet
+# people: found automatically; name them, fix mistakes, then refer to them by name in queries
+tlv entities
+tlv entity-name ENTITY_ID "LeBron James"
+tlv entity-same ENTITY_A ENTITY_B
+tlv entity-different ENTITY_A ENTITY_B
+tlv entity-add "LeBron James" --video VIDEO_ID --at 83.4 --at 412
+tlv find "LeBron James steals the ball" --then "he dunks"
 
-# ask Pegasus about one video, or Jockey about all of them
-tlv ask 6710c5b2e1 "Who wins the tip-off?" --from 0 --to 30
-tlv jockey "Which games end on a buzzer beater?"
+# look at a range, check it, cut it
+tlv frames VIDEO_ID --from 4:15 --to 4:22
+tlv timeline VIDEO_ID --from 4:15 --to 4:22
+tlv cut VIDEO_ID --from 4:15 --to 4:22 --frame sheet
+
+# ask about one video, or about all of them
+tlv ask VIDEO_ID "Who wins the tip-off?" --from 0 --to 30
+tlv jockey "Which plays end in a celebration?"
 tlv jockey "Show me the last one again" --session SESSION_ID
 ```
 
@@ -83,25 +97,20 @@ timecodes (`1:23.4`, `00:01:23.4`). Progress goes to stderr.
 
 ## Notes
 
-- The TwelveLabs index is the video registry: `title`, `source` and `local_path` live in each
-  video's metadata. Adding the same source again returns the existing video, and restores the
-  local copy if it was deleted. Parallel `add` runs take turns creating the index and the Jockey
-  store (a lock under `$TLV_HOME/locks`), since two creates at the same moment make two
-  indexes with one name.
-- `add` also puts each video in a Jockey knowledge store named after the index. A failure there
-  is reported in the result and retried by the next `add` of that source.
-- People live in the entity collection `tlv-people`, shared by all indexes. On the free plan only
-  one entity collection fits, and the sample collection counts.
-- `find` prefers a missed clip over a wrong one: a candidate is confirmed only when Pegasus
-  reports a match with enough confidence and saw every step, each starting no earlier than the
-  one before. Two confirmed clips of the same moment (one video, overlapping by at least half of
-  the shorter clip) come back once, the more confident; the other is listed as rejected.
-- Pegasus places steps to within a few seconds, so `find` cuts each clip 2 s wider on each side
-  and returns a contact sheet across it rather than a single frame.
+- `add` of a file already present (same content) returns the existing video.
+- `--modality` (visual, audio, transcription) limits which channels `search` matches against.
+- A `jockey` session is kept on disk under `$TLV_HOME/work/sessions/`; passing its `session_id`
+  answers the follow-up with the earlier questions and answers in view.
+- People belong to an index. Corrections are stored against the appearances they name, so they
+  survive re-clustering when new videos are added.
+- `find` prefers a missed clip over a wrong one: a candidate is confirmed only when the frames
+  show the claim with enough confidence and every step in order.
 
 ## Development
 
 ```sh
-bun test
-bunx tsc --noEmit
+uv run --group dev pytest -q
+uv run --group dev ruff check . && uv run --group dev ruff format --check .
 ```
+
+Tests that load a model are marked `slow` and skipped by default; `pytest -m slow` runs them.

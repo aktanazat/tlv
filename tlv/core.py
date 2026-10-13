@@ -1,0 +1,619 @@
+"""The tlv operations behind the CLI and the MCP server. Each operation takes the index name
+first and returns a JSON-ready dict; its *_text function renders that dict as a few short lines.
+
+list, status, cut, frames and timeline read the store and cut media here. The rest are thin
+calls into the indexer (tlv.index.pipeline), the people module (tlv.entities) and the agent
+(tlv.agent). Those are imported where used, so quick commands start without loading them.
+"""
+
+from __future__ import annotations
+
+import hashlib
+import json
+import os
+import re
+import shutil
+import sqlite3
+import subprocess
+import sys
+import threading
+import urllib.parse
+import urllib.request
+import uuid
+from collections.abc import Callable, Iterator
+from contextlib import AbstractContextManager, closing, contextmanager
+from pathlib import Path
+from typing import Any, Literal
+
+from tlv import media, store
+from tlv.media import Range
+from tlv.timecode import format_range, format_timecode
+
+Progress = Callable[[str], None] | None
+Frame = Literal["mid", "sheet", "none"]
+
+FRAMES: tuple[Frame, ...] = ("mid", "sheet", "none")
+MODALITIES = ("visual", "audio", "transcription")
+SHEET_FRAMES = 6
+STILL_WIDTH = 960
+INDEX_NAME = re.compile(r"[A-Za-z0-9][A-Za-z0-9._-]*")
+
+
+def default_index() -> str:
+    return os.environ.get("TLV_INDEX") or "tlv"
+
+
+def _r(seconds: float) -> float:
+    return round(seconds, 2)
+
+
+def _is_url(text: str) -> bool:
+    return re.match(r"https?://", text, re.I) is not None
+
+
+def _checked(index: str) -> str:
+    if not INDEX_NAME.fullmatch(index):
+        raise ValueError(f'"{index}" is not an index name: use letters, digits, ".", "_" and "-"')
+    return index
+
+
+class _IndexTurns:
+    """The indexer and the agent open the database with store.connect(), which reads $TLV_INDEX,
+    so the index is chosen process-wide: calls on one index run together, and a call on another
+    index waits until they finish."""
+
+    def __init__(self) -> None:
+        self._changed = threading.Condition()
+        self._name = ""
+        self._users = 0
+        self._saved: str | None = None
+
+    @contextmanager
+    def use(self, index: str) -> Iterator[None]:
+        with self._changed:
+            self._changed.wait_for(lambda: self._users == 0 or self._name == index)
+            if self._users == 0:
+                self._name, self._saved = index, os.environ.get("TLV_INDEX")
+                os.environ["TLV_INDEX"] = index
+            self._users += 1
+        try:
+            yield
+        finally:
+            with self._changed:
+                self._users -= 1
+                if self._users == 0:
+                    if self._saved is None:
+                        os.environ.pop("TLV_INDEX", None)
+                    else:
+                        os.environ["TLV_INDEX"] = self._saved
+                    self._changed.notify_all()
+
+
+_turns = _IndexTurns()
+
+
+def _selected(index: str) -> AbstractContextManager[None]:
+    """Makes `index` the database the indexer and the agent open, for the duration of a call."""
+    return _turns.use(_checked(index))
+
+
+@contextmanager
+def _db(index: str) -> Iterator[sqlite3.Connection]:
+    with closing(store.connect(_checked(index))) as db:
+        yield db
+
+
+def _video(db: sqlite3.Connection, video_id: str) -> sqlite3.Row:
+    row = db.execute("SELECT * FROM videos WHERE video_id = ?", (video_id,)).fetchone()
+    if row is None:
+        raise LookupError(f'No video "{video_id}" in this index. video_list (tlv list) shows the ids.')
+    return row
+
+
+def _local_file(video: sqlite3.Row) -> Path:
+    path = Path(video["local_path"])
+    if not path.exists():
+        raise FileNotFoundError(
+            f'The local file of "{video["title"]}" ({path}) is missing. '
+            f'Re-add its source to restore it: video_add source="{video["source"]}" (tlv add "{video["source"]}").'
+        )
+    return path
+
+
+def _clamp(video: sqlite3.Row, start: float, end: float) -> Range:
+    """The requested range inside the video; an empty range is an error."""
+    duration = video["duration"]
+    clamped = Range(max(0.0, start), min(end, duration) if duration > 0 else end)
+    if not clamped.end > clamped.start:
+        raise ValueError(
+            f'Empty range {format_range(start, end)} for "{video["title"]}" ({format_timecode(duration)} long)'
+        )
+    return clamped
+
+
+def _stem(video: sqlite3.Row, span: Range) -> str:
+    """File name stem for media cut from a range of a video."""
+    return f"{media.slug(video['title'])}-{video['video_id'][-6:]}_{span.start:.1f}-{span.end:.1f}"
+
+
+def _span(span: Range) -> dict[str, Any]:
+    return {"start": _r(span.start), "end": _r(span.end), "timecode": format_range(span.start, span.end)}
+
+
+# video_add and video_index
+
+
+def video_add(
+    index: str, source: str, title: str | None = None, wait: bool = True, progress: Progress = None
+) -> dict[str, Any]:
+    """Adds a video and indexes it. Without `wait` it returns once the video is recorded and a
+    detached `tlv index` process does the indexing, logging to `index_log`."""
+    from tlv.index import pipeline
+
+    with _selected(index):
+        result = pipeline.add(source, title=title, wait=wait, progress=progress)
+    if wait or result["already_indexed"]:
+        return dict(result)
+    return {**result, "index_log": str(_index_detached(index, result["video_id"]))}
+
+
+def _index_detached(index: str, video_id: str) -> Path:
+    """Starts `tlv index` for the video in its own session, so it outlives this call."""
+    log = store.data_dir("work") / "logs" / f"{index}-{video_id}.log"
+    log.parent.mkdir(exist_ok=True)
+    with log.open("ab") as out:
+        subprocess.Popen(
+            [sys.executable, "-m", "tlv.cli", "index", video_id, "--index", index],
+            stdin=subprocess.DEVNULL,
+            stdout=out,
+            stderr=subprocess.STDOUT,
+            start_new_session=True,
+        )
+    return log
+
+
+def add_text(r: dict[str, Any]) -> str:
+    lines = [
+        f'{"already indexed" if r["already_indexed"] else "added"}: "{r["title"]}" '
+        f"({format_timecode(r['duration'])}) video_id={r['video_id']} status={r['status']}",
+        f"local: {r['local_path']}",
+    ]
+    if "index_log" in r:
+        lines.append(f"indexing in the background (tlv status {r['video_id']}); log: {r['index_log']}")
+    return "\n".join(lines)
+
+
+def video_index(
+    index: str, video_id: str, stages: list[str] | None = None, force: bool = False, progress: Progress = None
+) -> dict[str, Any]:
+    from tlv.index import pipeline
+
+    with _selected(index):
+        pipeline.index(video_id, only=stages, force=force, progress=progress)
+    return video_status(index, video_id)
+
+
+# video_list and video_status
+
+
+def video_list(index: str) -> dict[str, Any]:
+    with _db(index) as db:
+        rows = db.execute("SELECT video_id, title, duration, status, local_path FROM videos ORDER BY added_at")
+        videos = [
+            {
+                "video_id": row["video_id"],
+                "title": row["title"],
+                "duration": _r(row["duration"]),
+                "status": row["status"],
+                "local_path": row["local_path"],
+                "local_exists": Path(row["local_path"]).exists(),
+            }
+            for row in rows
+        ]
+    return {"index": index, "videos": videos}
+
+
+def list_text(r: dict[str, Any]) -> str:
+    if not r["videos"]:
+        return f'no videos in index "{r["index"]}"'
+    return "\n".join(
+        f'{v["video_id"]}  {v["status"]}  {format_timecode(v["duration"])}  "{v["title"]}"'
+        + ("" if v["local_exists"] else "  (local file missing)")
+        for v in r["videos"]
+    )
+
+
+def video_status(index: str, video_id: str) -> dict[str, Any]:
+    """The video, each indexing stage's state, version and seconds, and its row counts."""
+    from tlv.index import pipeline
+
+    with _selected(index):
+        return pipeline.status(video_id)
+
+
+def status_text(r: dict[str, Any]) -> str:
+    def stage(name: str, s: dict[str, Any]) -> str:
+        return f"{name} {s['seconds']:.1f} s" if s["state"] == "done" else f"{name} ({s['state']})"
+
+    lines = [f'"{r["title"]}" video_id={r["video_id"]} index: {r["status"]} ({format_timecode(r["duration"])})']
+    if r["error"]:
+        lines.append(f"error: {r['error']}")
+    lines.append(f"local: {r['local_path']}" + ("" if r["local_exists"] else " (missing)"))
+    lines.append("stages: " + ", ".join(stage(name, s) for name, s in r["stages"].items()))
+    lines.append("rows: " + ", ".join(f"{table} {n}" for table, n in r["counts"].items()))
+    return "\n".join(lines)
+
+
+# video_search, video_ask and video_find
+
+
+def video_search(
+    index: str,
+    query: str,
+    then: list[str] = (),
+    modalities: list[str] | None = None,
+    max_gap: float = 12,
+    limit: int = 10,
+    video_ids: list[str] | None = None,
+) -> dict[str, Any]:
+    """`modalities` limits the channels searched: visual, audio, transcription (default all)."""
+    from tlv import agent
+
+    with _selected(index):
+        return agent.search(
+            query, then=list(then), limit=limit, video_ids=video_ids, max_gap=max_gap, modalities=modalities
+        )
+
+
+def search_text(r: dict[str, Any]) -> str:
+    asked = ", then ".join([r["query"], *r["then"]])
+    if not r["results"]:
+        return f'no results for "{asked}"'
+    lines = [f'{len(r["results"])} results for "{asked}":']
+    for i, hit in enumerate(r["results"], 1):
+        lines.append(
+            f'{i}. {hit["timecode"]}  "{hit["title"]}"  video_id={hit["video_id"]}  {hit["kind"]} score {hit["score"]}'
+        )
+        lines.extend(f"   {step['timecode']}  {step['step']} (rank {step['rank']})" for step in hit.get("steps", ()))
+    return "\n".join(lines)
+
+
+def video_ask(
+    index: str,
+    video_id: str,
+    question: str,
+    start: float | None = None,
+    end: float | None = None,
+    json_schema: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    from tlv import agent
+
+    with _selected(index):
+        return agent.ask(video_id, question, start=start, end=end, json_schema=json_schema)
+
+
+def ask_text(r: dict[str, Any]) -> str:
+    where = f'{r["timecode"]} of "{r["title"]}"' if r.get("timecode") else f'"{r["title"]}"'
+    body = json.dumps(r["json"], indent=2, ensure_ascii=False) if "json" in r else r.get("answer", "")
+    return f"{where}{' (answer cut off at the token limit)' if r['truncated'] else ''}:\n{body}"
+
+
+def video_find(
+    index: str,
+    query: str,
+    then: list[str] = (),
+    max_candidates: int = 8,
+    pad: float = 3,
+    min_confidence: float = 0.6,
+    cut: bool = True,
+    video_ids: list[str] | None = None,
+    progress: Progress = None,
+) -> dict[str, Any]:
+    from tlv import agent
+
+    with _selected(index):
+        return agent.find(
+            query,
+            then=list(then),
+            max_candidates=max_candidates,
+            pad=pad,
+            min_confidence=min_confidence,
+            cut=cut,
+            video_ids=video_ids,
+            progress=progress,
+        )
+
+
+def find_text(r: dict[str, Any]) -> str:
+    counts = r["counts"]
+    lines = [f'confirmed {counts["confirmed"]} of {counts["candidates"]} candidates for "{r["claim"]}"']
+    for o in r["confirmed"]:
+        lines.append(
+            f'{o["id"]}  {o["timecode"]}  "{o["title"]}"  video_id={o["video_id"]}  confidence {o["confidence"]}'
+        )
+        if o.get("who"):
+            lines.append(f"   who: {o['who']}")
+        evidence = o["evidence"]
+        lines.append(f"   evidence: {evidence['summary']}")
+        lines.extend(f'   said: {format_range(s["start"], s["end"])}  "{s["text"]}"' for s in evidence["transcript"])
+        lines.extend(f"   on screen: {format_timecode(t['t'])}  {t['text']}" for t in evidence["ocr"])
+        lines.extend(f"   heard: {format_range(s['start'], s['end'])}  {s['label']}" for s in evidence["sounds"])
+        lines.extend(f"   frame: {format_timecode(f['t'])}  {f['path']}" for f in evidence["frames"])
+        lines.extend(f"   {s['timecode']}  {s['step']}" for s in o["steps"])
+        lines.extend(
+            f"   replay: {p['timecode']}  video_id={p['video_id']}  {p['reason']}" for p in o.get("replays", ())
+        )
+        if o.get("clip_path"):
+            lines.append(f"   clip: {o['clip_path']}")
+        if o.get("frame_path"):
+            tiles = ", ".join(format_timecode(t) for t in o.get("frame_times", ()))
+            lines.append(f"   frames: {o['frame_path']} (tiles at {tiles})")
+        if o.get("cut_error"):
+            lines.append(f"   not cut: {o['cut_error']}")
+    lines.extend(
+        f"rejected {format_range(x['start'], x['end'])} video_id={x['video_id']}: {x['reason']}" for x in r["rejected"]
+    )
+    return "\n".join(lines)
+
+
+# video_cut, video_frames and video_timeline
+
+
+def video_cut(index: str, video_id: str, start: float, end: float, frame: Frame = "mid") -> dict[str, Any]:
+    """Cuts [start, end] from the local copy, with its middle frame or a contact sheet."""
+    with _db(index) as db:
+        video = _video(db, video_id)
+    span = _clamp(video, start, end)
+    source = _local_file(video)
+    stem = _stem(video, span)
+    clip_path = store.data_dir("clips") / f"{stem}.mp4"
+    media.cut(source, span, clip_path)
+    result = {"video_id": video_id, "title": video["title"], **_span(span), "clip_path": str(clip_path)}
+    if frame == "sheet":
+        sheet_path = store.data_dir("frames") / f"{stem}_sheet.jpg"
+        times = media.contact_sheet(source, span, SHEET_FRAMES, sheet_path)
+        return {**result, "frame_path": str(sheet_path), "frame_times": [_r(t) for t in times]}
+    if frame == "mid":
+        middle = (span.start + span.end) / 2
+        still_path = store.data_dir("frames") / f"{stem}_mid.jpg"
+        media.still(source, middle, still_path, STILL_WIDTH)
+        return {**result, "frame_path": str(still_path), "frame_times": [_r(middle)]}
+    return result
+
+
+def cut_text(r: dict[str, Any]) -> str:
+    lines = [f'{r["timecode"]} of "{r["title"]}"', f"clip: {r['clip_path']}"]
+    if r.get("frame_path"):
+        lines.append(f"frame: {r['frame_path']}")
+    return "\n".join(lines)
+
+
+def video_frames(index: str, video_id: str, start: float, end: float, count: int = SHEET_FRAMES) -> dict[str, Any]:
+    """A contact sheet of `count` evenly spaced frames of [start, end], without cutting a clip."""
+    if not 1 <= count <= 12:
+        raise ValueError(f"count must be a whole number from 1 to 12, got {count}")
+    with _db(index) as db:
+        video = _video(db, video_id)
+    span = _clamp(video, start, end)
+    sheet_path = store.data_dir("frames") / f"{_stem(video, span)}_sheet{count}.jpg"
+    times = media.contact_sheet(_local_file(video), span, count, sheet_path)
+    return {
+        "video_id": video_id,
+        "title": video["title"],
+        **_span(span),
+        "sheet_path": str(sheet_path),
+        "times": [_r(t) for t in times],
+    }
+
+
+def frames_text(r: dict[str, Any]) -> str:
+    return "\n".join(
+        [
+            f'{r["timecode"]} of "{r["title"]}"',
+            f"sheet: {r['sheet_path']}",
+            f"tiles (left to right, top to bottom): {', '.join(format_timecode(t) for t in r['times'])}",
+        ]
+    )
+
+
+def video_timeline(index: str, video_id: str, start: float, end: float) -> dict[str, Any]:
+    """Everything indexed about [start, end] of a video: what was said, written on screen and
+    heard, the captions of the spans it touches, and who is visible. The evidence behind a claim,
+    read the way the agent reads it."""
+    from tlv import entities
+    from tlv.agent import sources
+
+    with _db(index) as db:
+        video = _video(db, video_id)
+        span = _clamp(video, start, end)
+        between = (video_id, span.start, span.end)
+        sounds = db.execute(
+            "SELECT start, end, label, conf FROM sounds WHERE video_id = ? AND end > ? AND start < ? ORDER BY start",
+            between,
+        )
+        captions = db.execute(
+            "SELECT span_id, start, end, caption, replay FROM spans WHERE video_id = ? AND end > ? AND start < ? "
+            "AND caption IS NOT NULL ORDER BY start",
+            between,
+        )
+        return {
+            "video_id": video_id,
+            "title": video["title"],
+            **_span(span),
+            "speech": [{"start": _r(s.start), "end": _r(s.end), "text": s.text} for s in sources.speech(db, *between)],
+            "screen_text": [{"t": _r(line.start), "text": line.text} for line in sources.screen_text(db, *between)],
+            "sounds": [{**dict(row), "start": _r(row["start"]), "end": _r(row["end"])} for row in sounds],
+            "captions": [
+                {
+                    **dict(row),
+                    "start": _r(row["start"]),
+                    "end": _r(row["end"]),
+                    "replay": None if row["replay"] is None else bool(row["replay"]),
+                }
+                for row in captions
+            ],
+            "people": entities.present(db, *between),
+        }
+
+
+def _person(entity: dict[str, Any]) -> str:
+    return f"@{entity['name']}" if entity["name"] else f"(unnamed {entity['entity_id']})"
+
+
+def timeline_text(r: dict[str, Any]) -> str:
+    def section(title: str, items: list[str]) -> list[str]:
+        return [f"{title}:", *(f"  {item}" for item in items)] if items else [f"{title}: none"]
+
+    def at(item: dict[str, Any]) -> str:
+        return format_range(item["start"], item["end"])
+
+    def caption(c: dict[str, Any]) -> str:
+        replay = {True: "  (replay)", False: "", None: ""}[c["replay"]]
+        return f"{at(c)}  {c['caption']}{replay}"
+
+    return "\n".join(
+        [
+            f'{r["timecode"]} of "{r["title"]}" video_id={r["video_id"]}',
+            *section("speech", [f'{at(s)}  "{s["text"]}"' for s in r["speech"]]),
+            *section("on screen", [f"{format_timecode(t['t'])}  {t['text']}" for t in r["screen_text"]]),
+            *section("sounds", [f"{at(s)}  {s['label']} ({s['conf']:.2f})" for s in r["sounds"]]),
+            *section("captions", [caption(c) for c in r["captions"]]),
+            *section("people", [f"{at(p)}  {_person(p)}  {p['entity_id']}" for p in r["people"]]),
+        ]
+    )
+
+
+# People
+
+
+def _fetch_image(url: str) -> Path:
+    """Downloads a reference image URL once into work/references/."""
+    name = Path(urllib.parse.unquote(urllib.parse.urlparse(url).path)).name
+    folder = store.data_dir("work") / "references"
+    folder.mkdir(exist_ok=True)
+    path = folder / f"{hashlib.sha1(url.encode()).hexdigest()[:12]}{Path(name).suffix.lower() or '.jpg'}"
+    if not path.exists():
+
+        def fetch(partial: Path) -> None:
+            request = urllib.request.Request(url, headers={"User-Agent": media.USER_AGENT})
+            with urllib.request.urlopen(request) as response, partial.open("wb") as out:
+                shutil.copyfileobj(response, out)
+
+        media.write_atomically(path, fetch)
+    return path
+
+
+def entity_add(
+    index: str, name: str, images: list[str] = (), video_id: str | None = None, times: list[float] = ()
+) -> dict[str, Any]:
+    """Teaches a person from reference images (paths or URLs) or from frames of an indexed video."""
+    from tlv import entities
+
+    name = name.strip().removeprefix("@").strip()
+    if not name:
+        raise ValueError("An entity needs a name")
+    if not images and not times:
+        raise ValueError("Give reference images, or a video_id and times to grab frames from")
+    files = [Path(image).expanduser().resolve() for image in images if not _is_url(image)]
+    missing = [str(file) for file in files if not file.exists()]
+    if missing:
+        raise FileNotFoundError(f"Image not found: {', '.join(missing)}")
+    files += [_fetch_image(image) for image in images if _is_url(image)]
+    with _db(index) as db:
+        return entities.add_reference(db, name, images=files, frames=[(video_id, t) for t in times])
+
+
+def entity_add_text(r: dict[str, Any]) -> str:
+    return (
+        f"{'extended' if r['extended'] else 'created'} @{r['name']} ({r['entity_id']}) with {r['added_images']} "
+        f"images; now {r['appearances']} appearances in {r['videos']} videos"
+    )
+
+
+def video_entities(index: str) -> dict[str, Any]:
+    from tlv import entities
+
+    with _db(index) as db:
+        return {"index": index, "entities": entities.entities(db)}
+
+
+def _entity_line(e: dict[str, Any]) -> str:
+    return f"{_person(e)}  {e['entity_id']}  {e['appearances']} appearances in {e['videos']} videos  {e['crop_path']}"
+
+
+def entities_text(r: dict[str, Any]) -> str:
+    if not r["entities"]:
+        return f'no people in index "{r["index"]}" yet'
+    return "\n".join(_entity_line(e) for e in r["entities"])
+
+
+def entity_name(index: str, target: str, name: str) -> dict[str, Any]:
+    """Names the person an entity or appearance id belongs to; the name survives re-clustering."""
+    from tlv import entities
+
+    with _db(index) as db:
+        return {"entities": entities.name(db, target, name.strip().removeprefix("@").strip())}
+
+
+def entity_same(index: str, a: str, b: str) -> dict[str, Any]:
+    """Records that two entity or appearance ids are one person, and merges them."""
+    from tlv import entities
+
+    with _db(index) as db:
+        return {"entities": entities.same(db, a, b)}
+
+
+def entity_different(index: str, a: str, b: str) -> dict[str, Any]:
+    """Records that two entity or appearance ids are different people, and splits them."""
+    from tlv import entities
+
+    with _db(index) as db:
+        return {"entities": entities.different(db, a, b)}
+
+
+def corrected_text(r: dict[str, Any]) -> str:
+    return "\n".join(_entity_line(e) for e in r["entities"])
+
+
+# video_jockey
+
+
+def _session_path(index: str, session_id: str) -> Path:
+    folder = store.data_dir("work") / "sessions"
+    folder.mkdir(exist_ok=True)
+    return folder / f"{_checked(index)}-{session_id}.json"
+
+
+def video_jockey(
+    index: str,
+    question: str,
+    session_id: str | None = None,
+    video_ids: list[str] | None = None,
+    progress: Progress = None,
+) -> dict[str, Any]:
+    """Answers a question about the whole collection. A session keeps the earlier questions and
+    answers on disk, so a follow-up passing its session_id is answered with them in view."""
+    from tlv import agent
+
+    if session_id is None:
+        session_id, history = uuid.uuid4().hex[:12], []
+    else:
+        path = _session_path(index, session_id) if re.fullmatch(r"[0-9a-f]{12}", session_id) else None
+        if path is None or not path.exists():
+            raise ValueError(f'No session "{session_id}" in index "{index}": pass the session_id of an earlier answer')
+        history = json.loads(path.read_text())
+    with _selected(index):
+        result = agent.answer(question, video_ids=video_ids, progress=progress, history=history)
+    history.append({"question": question, "text": result["text"], "citations": result["citations"]})
+    path = _session_path(index, session_id)
+    media.write_atomically(path, lambda partial: partial.write_text(json.dumps(history, ensure_ascii=False)))
+    return {**result, "session_id": session_id}
+
+
+def jockey_text(r: dict[str, Any]) -> str:
+    lines = [r["text"]]
+    if r.get("incomplete_reason"):
+        lines.append(f"(answer incomplete: {r['incomplete_reason']})")
+    lines.extend(f'{c["marker"]} {c["timecode"]}  "{c["title"]}"  video_id={c["video_id"]}' for c in r["citations"])
+    lines.append(f"session: {r['session_id']}")
+    return "\n".join(lines)
