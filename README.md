@@ -36,8 +36,9 @@ A background model host, one per user, keeps the models loaded between searches,
 first search after a pause pays to load them. It lets a model go after 10 minutes unused
 (`TLV_MODEL_IDLE_S`), holds at most 8 GB (`TLV_HELD_MEMORY_GB`), and lets go of every model not
 in use when `~/memory/bin/host-headroom` reports less than 25% of memory free
-(`TLV_HOLD_MIN_FREE_PCT`). It exits once it holds nothing, and logs what it loads and lets go to
-`~/.local/share/tlv/run/models.log`, whatever `$TLV_HOME` says.
+(`TLV_HOLD_MIN_FREE_PCT`). After tlv's code changes, the next run loads a fresh copy of the
+model rather than reuse one running the old code. The host exits once it holds nothing, and logs
+what it loads and lets go to `~/.local/share/tlv/run/models.log`, whatever `$TLV_HOME` says.
 
 Files live under `$TLV_HOME` (default `~/.local/share/tlv`): `tlv.db` is the index, `media/`
 holds downloads, `clips/` cut clips, `frames/` stills and contact sheets. `--index NAME` (or

@@ -98,6 +98,13 @@ def test_a_model_stays_loaded_between_runs(hog):
     assert _run(hog)["pid"] == first
 
 
+def test_a_loaded_model_is_replaced_once_tlv_code_changes(hog):
+    """A child runs the code it started with; after an edit or update the next run gets a fresh one."""
+    first = _run(hog)["pid"]
+    os.utime(Path(guard.__file__).with_name("models") / "protocol.py")  # what saving the file does
+    assert _run(hog)["pid"] != first
+
+
 @pytest.mark.parametrize(
     ("setting", "job", "open_between", "let_go"),
     [

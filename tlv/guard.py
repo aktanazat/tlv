@@ -127,6 +127,12 @@ def socket_path() -> Path:
     return path
 
 
+def code_stamp() -> str:
+    """When tlv's source last changed on disk. A model child runs the code it started with, so the
+    host keys children by this and starts a fresh one after an edit or an update."""
+    return str(max(path.stat().st_mtime_ns for path in Path(__file__).parent.rglob("*.py")))
+
+
 class ModelProcess:
     """A model in the model host, answering JSON jobs one at a time.
 
@@ -148,6 +154,7 @@ class ModelProcess:
         self.cap = cap_bytes
         self.progress = progress
         self.env = {**{k: v for k, v in os.environ.items() if MODEL_VARIABLE.fullmatch(k)}, **(env or {})}
+        self.code = code_stamp()
         self._conn: socket.socket | None = None
         self._lines: TextIO | None = None
 
@@ -183,7 +190,14 @@ class ModelProcess:
     def _ask(self, job: dict[str, Any] | None) -> dict[str, Any]:
         if not self._conn or not self._lines:
             raise ModelError(f"{self.module} is not running")
-        request = {"module": self.module, "cap": self.cap, "env": self.env, "job": job}
+        request = {
+            "module": self.module,
+            "cap": self.cap,
+            "env": self.env,
+            "python": sys.executable,
+            "code": self.code,
+            "job": job,
+        }
         try:
             self._conn.sendall((json.dumps(request) + "\n").encode())
             for line in self._lines:
@@ -202,7 +216,7 @@ class ModelProcess:
 
 
 def _connect() -> socket.socket:
-    """A connection to this $TLV_HOME's model host, starting the host when none is running."""
+    """A connection to the model host, starting the host when none is running."""
     path = str(socket_path())
     started = False
     deadline = time.monotonic() + HOST_START_S
@@ -232,14 +246,18 @@ def _connect() -> socket.socket:
 
 
 class Child:
-    """One model loaded in a guarded child process (`python -m <module>`, which calls
-    tlv.models.protocol.serve), answering JSON jobs one at a time. Its watchdog stops it past
-    its cap, or when memory pressure stays critical while it holds real memory."""
+    """One model loaded in a guarded child process (`<python> -m <module>`, which calls
+    tlv.models.protocol.serve), answering JSON jobs one at a time. `python` is the caller's
+    interpreter, so the child runs the caller's checkout of tlv. Its watchdog stops it past its
+    cap, or when memory pressure stays critical while it holds real memory."""
 
-    def __init__(self, module: str, cap: int, env: dict[str, str], progress: Progress | None = None) -> None:
+    def __init__(
+        self, module: str, cap: int, env: dict[str, str], python: str, progress: Progress | None = None
+    ) -> None:
         self.module = module
         self.cap = cap
         self.env = env
+        self.python = python
         self.progress = progress
         self._child: subprocess.Popen[str] | None = None
         self._stopped: str | None = None
@@ -256,7 +274,7 @@ class Child:
         name = self.module.rsplit(".", 1)[-1]
         env = {**os.environ, **self.env, "TLV_MEMORY_LIMIT_BYTES": str(int(self.cap * 0.8))}
         self._child = subprocess.Popen(
-            [sys.executable, "-m", self.module],
+            [self.python, "-m", self.module],
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,

@@ -17,8 +17,10 @@ every $TLV_HOME shares one host and one memory budget. The host
    guard's watchdog still stops any model, open or not, when pressure turns critical;
 5. exits once it has held nothing and been asked nothing for TLV_MODEL_IDLE_S.
 
-A request is one JSON line, {"module", "cap", "env", "job"}, where a null job only loads the
-model. The replies are any number of {"progress": text}, then {"result": {...}} or
+A request is one JSON line, {"module", "cap", "env", "python", "code", "job"}, where a null job
+only loads the model. A child runs `python -m module`, the caller's interpreter, and is kept per
+code stamp (tlv.guard.code_stamp), so an edit or update to tlv gets a fresh child while the stale
+one idles out. The replies are any number of {"progress": text}, then {"result": {...}} or
 {"error": text, "kind": "model" | "headroom"}. A connection is one caller's session with one
 model: the model counts as open until the connection closes.
 """
@@ -51,7 +53,8 @@ HEADROOM_TIMEOUT_S = 20.0
 TICK_S = 0.5
 LOCK_WAIT_S = 5.0  # a host on its way out releases its lock well within this
 
-Key = tuple[str, int, tuple[tuple[str, str], ...]]  # module, cap, the caller's model variables
+# module, cap, the caller's model variables, its interpreter, its code stamp
+Key = tuple[str, int, tuple[tuple[str, str], ...], str, str]
 
 
 @dataclass
@@ -100,7 +103,13 @@ class Host:
             with conn, conn.makefile("r", encoding="utf-8") as lines:
                 for line in lines:
                     request = json.loads(line)
-                    key: Key = (request["module"], int(request["cap"]), tuple(sorted(request["env"].items())))
+                    key: Key = (
+                        request["module"],
+                        int(request["cap"]),
+                        tuple(sorted(request["env"].items())),
+                        request["python"],
+                        request["code"],
+                    )
                     if held is None:
                         held = key
                         with self.state:
@@ -176,11 +185,11 @@ class Host:
         if resident and resident.child.alive():
             return resident
         self.residents.pop(key, None)
-        module, cap, env = key
+        module, cap, env, python, _ = key
         while self.residents and (reason := guard.headroom(cap)):
             self._unload(self._least_recent(), f"loading {_name(key)} needs memory, and {reason}")
         guard.wait_for_headroom(cap, say)
-        child = guard.Child(module, cap, dict(env), say)
+        child = guard.Child(module, cap, dict(env), python, say)
         began = time.monotonic()
         child.start()
         child.progress = None
