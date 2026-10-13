@@ -18,7 +18,10 @@ from pathlib import Path
 
 from tlv import store
 
-YT_DLP_FORMAT = "bv*[height<=720][ext=mp4]+ba[ext=m4a]/b[height<=720][ext=mp4]/b"
+# H.264 first: every decoder reads it, so Apple Vision needs no re-encoded copy (tlv.index.vision).
+YT_DLP_FORMAT = (
+    "bv*[height<=720][vcodec^=avc1]+ba[ext=m4a]/bv*[height<=720][ext=mp4]+ba[ext=m4a]/b[height<=720][ext=mp4]/b"
+)
 # URL paths that name a media file are fetched as-is; anything else goes through yt-dlp.
 DIRECT_MEDIA_PATH = re.compile(r"\.(mp4|m4v|mov|webm|mkv|avi|mpe?g|3gp)$", re.I)
 # Contact sheets stay within this width so they can go back to an agent as one image.
@@ -150,6 +153,47 @@ def has_audio(path: Path) -> bool:
         ["ffprobe", "-v", "error", "-select_streams", "a", "-show_entries", "stream=index", "-of", "csv=p=0", str(path)]
     )
     return bool(stdout.strip())
+
+
+def video_codec(path: Path) -> str:
+    """The codec of a media file's first video stream: "h264", "hevc", "vp9" ..."""
+    stdout = run(
+        [
+            "ffprobe",
+            "-v",
+            "error",
+            "-select_streams",
+            "v:0",
+            "-show_entries",
+            "stream=codec_name",
+            "-of",
+            "csv=p=0",
+            str(path),
+        ]
+    )
+    return stdout.strip()
+
+
+def to_h264(source: Path, output: Path) -> None:
+    """The video track of `source` re-encoded as H.264 at its own size, without sound."""
+    ffmpeg(
+        [
+            "-i",
+            str(source),
+            "-map",
+            "0:v:0",
+            "-an",
+            "-c:v",
+            "libx264",
+            "-preset",
+            "veryfast",
+            "-crf",
+            "18",
+            "-pix_fmt",
+            "yuv420p",
+        ],
+        output,
+    )
 
 
 def cut(source: Path, span: Range, output: Path) -> None:

@@ -1,6 +1,6 @@
 """On-screen text read by Apple Vision comes back in top-left normalized image coordinates, the
 frame every consumer of the ocr table crops and draws in, and a video is read from its file alone,
-on the frames' half-second grid."""
+on the frames' half-second grid, whatever its codec."""
 
 import subprocess
 
@@ -30,12 +30,14 @@ def test_text_boxes_are_normalized_from_the_top_left(tmp_path):
     }
 
 
-def test_a_video_is_read_on_its_own_with_text_once_a_second(db, video, tmp_path):
+# VP9 is what YouTube and browsers' screen recorders often hand over; Apple's decoders refuse it.
+@pytest.mark.parametrize("codec", ["libx264", "libvpx-vp9"])
+def test_a_video_is_read_on_its_own_with_text_once_a_second(db, video, tmp_path, codec):
     still = tmp_path / "score.png"
     image = Image.new("RGB", (WIDTH, HEIGHT), "white")
     ImageDraw.Draw(image).text((64, 36), "LAKERS 102", font=ImageFont.load_default(size=64), fill="black")
     image.save(still)
-    encode = ["-t", str(video["duration"]), "-r", "30", "-pix_fmt", "yuv420p", video["local_path"]]
+    encode = ["-t", str(video["duration"]), "-r", "30", "-c:v", codec, "-pix_fmt", "yuv420p", video["local_path"]]
     subprocess.run(["ffmpeg", "-loglevel", "error", "-loop", "1", "-i", str(still), *encode], check=True)
     vision.run(db, video, None)
     read = [(row["t"], row["text"]) for row in db.execute("SELECT t, text FROM ocr ORDER BY t")]

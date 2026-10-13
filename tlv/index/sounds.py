@@ -31,14 +31,9 @@ class Event:
 
 def run(db: sqlite3.Connection, video: sqlite3.Row, progress: guard.Progress | None) -> None:
     video_id = video["video_id"]
-    job = {
-        "path": str(speech.audio_file(video)),
-        "window": WINDOW_S,
-        "overlap": OVERLAP,
-        "top": TOP_LABELS,
-        "min_conf": MIN_CONF,
-    }
-    events = merge(vision.run_helper("sounds", job))
+    audio = speech.audio_file(video)
+    job = {"path": str(audio), "window": WINDOW_S, "overlap": OVERLAP, "top": TOP_LABELS, "min_conf": MIN_CONF}
+    events = merge(vision.run_helper("sounds", job)) if audio else []
     with store.transaction(db):
         db.execute("DELETE FROM sounds WHERE video_id = ?", (video_id,))
         db.executemany(

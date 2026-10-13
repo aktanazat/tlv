@@ -26,6 +26,9 @@ BINARY = SOURCE.parent / ".build" / "tlv-vision"
 # Text is read on every second sampled frame, once a second: on-screen text stays up for seconds.
 TEXT_EVERY = 2
 FACE_KEYS = ("landmarks", "roll", "yaw", "quality")
+# Codecs the helper's AVFoundation decodes on any Apple silicon Mac; others (VP9, AV1 ...) are
+# read from an H.264 copy.
+APPLE_CODECS = frozenset({"h264", "hevc", "prores"})
 
 Box = tuple[float, float, float, float]
 
@@ -70,7 +73,7 @@ def run(db: sqlite3.Connection, video: sqlite3.Row, progress: guard.Progress | N
     samples = [{"t": t, "text": i % TEXT_EVERY == 0, "detect": True} for i, t in enumerate(times)]
     ocr: list[tuple[Any, ...]] = []
     detections: list[tuple[Any, ...]] = []
-    for done, seen in enumerate(run_helper("video", {"path": video["local_path"], "samples": samples}), 1):
+    for done, seen in enumerate(run_helper("video", {"path": str(decodable(video)), "samples": samples}), 1):
         t = seen["t"]
         ocr += [(video_id, t, line.text, *line.box, line.conf) for line in _lines(seen)]
         detections += [
@@ -87,6 +90,20 @@ def run(db: sqlite3.Connection, video: sqlite3.Row, progress: guard.Progress | N
             "INSERT INTO detections (video_id, t, kind, x, y, w, h, conf, extra) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
             detections,
         )
+
+
+def decodable(video: sqlite3.Row) -> Path:
+    """The video's file when the helper can decode it, else an H.264 copy under work/<video_id>/,
+    made once."""
+    source = Path(video["local_path"])
+    if media.video_codec(source) in APPLE_CODECS:
+        return source
+    path = store.data_dir("work") / video["video_id"] / "h264.mp4"
+    with store.lock(f"h264-{video['video_id']}"):
+        if not path.exists():
+            path.parent.mkdir(exist_ok=True)
+            media.to_h264(source, path)
+    return path
 
 
 def run_helper(mode: str, job: dict[str, Any]) -> Iterator[dict[str, Any]]:
