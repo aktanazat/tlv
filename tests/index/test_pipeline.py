@@ -1,8 +1,10 @@
-"""Indexing bookkeeping: a stage reruns when its version changes or a stage it stands on reran, a
-video is ready only when every stage is current, and one file is one video."""
+"""Indexing bookkeeping: a stage reruns when its version changes or a stage it stands on reran,
+starts once those are done, runs beside the stages it does not stand on, a video is ready only
+when every stage is current, and one file is one video."""
 
 import shutil
 import subprocess
+import threading
 
 import pytest
 
@@ -23,7 +25,7 @@ def ran(monkeypatch):
     ("bumped", "kwargs", "expected"),
     [
         (None, {}, []),
-        ("frames", {}, ["frames", "vision", "spans", "entities"]),
+        ("frames", {}, ["frames", "spans", "entities"]),
         ("speech", {}, ["speech", "spans", "entities"]),
         ("entities", {}, ["entities"]),
         (None, {"only": "sounds", "force": True}, ["sounds"]),
@@ -37,7 +39,26 @@ def test_reindexing_reruns_changed_stages_and_those_built_on_them(video, ran, mo
     if bumped:
         monkeypatch.setattr(pipeline.MODULES[bumped], "VERSION", pipeline.MODULES[bumped].VERSION + 1)
     pipeline.index("v_test", **kwargs)
-    assert ran == expected
+    assert sorted(ran) == sorted(expected)
+
+
+def test_a_stage_starts_only_once_the_stages_it_stands_on_are_done(video, ran):
+    said = []
+    pipeline.index("v_test", progress=said.append)
+    started = {line.split(":")[0]: i for i, line in enumerate(said) if line.endswith(": running")}
+    done = {line.split(":")[0]: i for i, line in enumerate(said) if ": done in " in line}
+    assert {name: [need for need in pipeline.INPUTS[name] if done[need] > started[name]] for name in started} == {
+        name: [] for name in pipeline.STAGES
+    }
+
+
+def test_stages_that_stand_on_nothing_run_at_the_same_time(video, ran, monkeypatch):
+    # Each waits for the other three; run one at a time, the first gives up and fails the run.
+    together = threading.Barrier(4, timeout=10)
+    for name in ("shots", "speech", "vision", "sounds"):
+        monkeypatch.setattr(pipeline.MODULES[name], "run", lambda *args, **kwargs: together.wait())
+    pipeline.index("v_test")
+    assert pipeline.status("v_test")["status"] == "ready"
 
 
 @pytest.mark.parametrize(
@@ -62,7 +83,7 @@ def test_a_video_is_ready_only_when_every_stage_is_current(video, ran, runs, exp
 @pytest.mark.parametrize(
     ("only", "message"),
     [
-        ("vision", "Run frames first"),
+        ("frames", "Run shots first"),
         (["spans", "vision"], "Run frames, shots, sounds, speech first"),
         ("faces", "Unknown stage faces"),
     ],

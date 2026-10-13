@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import bisect
+import math
 import sqlite3
 from pathlib import Path
 
@@ -27,3 +28,9 @@ def run(db: sqlite3.Connection, video: sqlite3.Row, progress: guard.Progress | N
     with store.transaction(db):
         db.execute("DELETE FROM frames WHERE video_id = ?", (video_id,))
         db.executemany("INSERT INTO frames (video_id, t, path, shot_idx, embedding) VALUES (?, ?, ?, ?, ?)", rows)
+
+
+def times(duration: float) -> list[float]:
+    """The middle of every EVERY_S slot of a video `duration` seconds long: the grid `run` samples
+    on, given without decoding the video."""
+    return [round((i + 0.5) * EVERY_S, 3) for i in range(math.ceil(duration / EVERY_S - 0.5))]

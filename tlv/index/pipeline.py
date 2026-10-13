@@ -1,5 +1,5 @@
-"""Adding videos and indexing them: stages run in order, and each is redone only when its version
-changes or a stage it stands on reran.
+"""Adding videos and indexing them: each stage starts once the stages it stands on are done, and
+is redone only when its version changes or a stage it stands on reran.
 
 A stage replaces its own rows for the video in one transaction and is recorded in `stages` only
 after it finishes, so an interrupted run leaves every stage either done or pending.
@@ -7,10 +7,13 @@ after it finishes, so an interrupted run leaves every stage either done or pendi
 
 from __future__ import annotations
 
+import contextlib
 import hashlib
+import queue
 import re
 import shutil
 import sqlite3
+import threading
 import time
 from collections.abc import Iterable
 from pathlib import Path
@@ -20,7 +23,7 @@ from typing import Any, TypedDict
 from tlv import entities, guard, media, store
 from tlv.index import frames, shots, sounds, spans, speech, vision
 
-# The stages, in the order they run.
+# The stages, in an order that puts every stage after those it stands on.
 MODULES: dict[str, ModuleType] = {
     "shots": shots,
     "frames": frames,
@@ -36,7 +39,7 @@ INPUTS: dict[str, tuple[str, ...]] = {
     "shots": (),
     "frames": ("shots",),
     "speech": (),
-    "vision": ("frames",),
+    "vision": (),
     "sounds": (),
     "spans": ("shots", "frames", "speech", "vision", "sounds"),
     "entities": ("shots", "frames", "speech", "vision", "sounds", "spans"),
@@ -93,8 +96,8 @@ def add(source: str, title: str | None = None, wait: bool = True, progress: guar
 def index(
     video_id: str, only: str | Iterable[str] | None = None, force: bool = False, progress: guard.Progress | None = None
 ) -> None:
-    """Runs the stages in order (all, or those named in `only`), skipping any already current
-    unless `force`."""
+    """Runs the stages (all, or those named in `only`), skipping any already current unless
+    `force`; a stage built on one that reruns reruns too."""
     wanted = _wanted(only)
     db = store.connect()
 
@@ -108,16 +111,13 @@ def index(
         missing = sorted(need for need in missing if not _current(db, video_id, need))
         if missing:
             raise ValueError(f"Run {', '.join(missing)} first: the stages asked for are built on them")
+        todo: list[str] = []
+        for name in STAGES:
+            if name in wanted and (force or not _current(db, video_id, name) or set(INPUTS[name]) & set(todo)):
+                todo.append(name)
         _set_status(db, video_id, "indexing")
         try:
-            for name in STAGES:
-                if name not in wanted or (not force and _current(db, video_id, name)):
-                    continue
-                say(f"{name}: running")
-                began = time.monotonic()
-                _run(name, db, video, progress, force)
-                _record(db, video_id, name, time.monotonic() - began)
-                say(f"{name}: done in {time.monotonic() - began:.1f} s")
+            _run_stages(db, video, todo, progress, force)
         except Exception as error:
             _set_status(db, video_id, "failed", f"{type(error).__name__}: {error}")
             raise
@@ -223,6 +223,49 @@ def _wanted(only: str | Iterable[str] | None) -> set[str]:
 def _current(db: sqlite3.Connection, video_id: str, name: str) -> bool:
     row = db.execute("SELECT version FROM stages WHERE video_id = ? AND stage = ?", (video_id, name)).fetchone()
     return row is not None and row["version"] == MODULES[name].VERSION
+
+
+def _run_stages(
+    db: sqlite3.Connection, video: sqlite3.Row, todo: list[str], progress: guard.Progress | None, force: bool
+) -> None:
+    """Runs each stage of `todo` in a thread of its own as soon as the stages it stands on have
+    finished, so stages that use different parts of the Mac overlap: ffmpeg on the CPU, Apple
+    Vision on the Neural Engine, the models on the GPU (the model host runs one job at a time).
+    A stage is recorded as it finishes. After a failure no stage starts; those running finish
+    and are recorded, and the first error is raised. The threads are daemons, so an interrupt
+    ends the run at once, as it did when one stage ran in the foreground."""
+    finished: queue.SimpleQueue[tuple[str, float, BaseException | None]] = queue.SimpleQueue()
+
+    def run(name: str) -> None:
+        began = time.monotonic()
+        try:
+            with contextlib.closing(store.connect()) as own:
+                _run(name, own, video, progress, force)
+        except BaseException as error:
+            finished.put((name, time.monotonic() - began, error))
+        else:
+            finished.put((name, time.monotonic() - began, None))
+
+    waiting, running = list(todo), set()
+    failure: BaseException | None = None
+    while running or (waiting and failure is None):
+        if failure is None:
+            for name in [name for name in waiting if not set(INPUTS[name]) & {*waiting, *running}]:
+                waiting.remove(name)
+                running.add(name)
+                if progress:
+                    progress(f"{name}: running")
+                threading.Thread(target=run, args=(name,), name=f"tlv-index-{name}", daemon=True).start()
+        name, seconds, error = finished.get()
+        running.remove(name)
+        if error is not None:
+            failure = failure or error
+            continue
+        _record(db, video["video_id"], name, seconds)
+        if progress:
+            progress(f"{name}: done in {seconds:.1f} s")
+    if failure is not None:
+        raise failure
 
 
 def _run(name: str, db: sqlite3.Connection, video: sqlite3.Row, progress: guard.Progress | None, force: bool) -> None:

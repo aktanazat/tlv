@@ -18,6 +18,7 @@ from pathlib import Path
 from typing import Any, Literal
 
 from tlv import guard, media, store
+from tlv.index import frames
 
 VERSION = 1
 SOURCE = Path(__file__).resolve().parents[2] / "swift" / "tlv-vision.swift"
@@ -62,9 +63,10 @@ def detect(paths: Sequence[str | Path]) -> list[list[Detection]]:
 
 def run(db: sqlite3.Connection, video: sqlite3.Row, progress: guard.Progress | None) -> None:
     """Reads text once a second and finds faces and bodies twice a second, on full-resolution
-    frames at exactly the times tlv.index.frames sampled, so every row joins a stored frame by t."""
+    frames on the grid tlv.index.frames samples on. It needs no other stage's rows, so it runs on
+    the Neural Engine while the stages before the captions use the CPU and the GPU."""
     video_id = video["video_id"]
-    times = [row["t"] for row in db.execute("SELECT t FROM frames WHERE video_id = ? ORDER BY t", (video_id,))]
+    times = frames.times(video["duration"])
     samples = [{"t": t, "text": i % TEXT_EVERY == 0, "detect": True} for i, t in enumerate(times)]
     ocr: list[tuple[Any, ...]] = []
     detections: list[tuple[Any, ...]] = []

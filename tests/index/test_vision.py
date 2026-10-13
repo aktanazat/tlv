@@ -1,5 +1,8 @@
 """On-screen text read by Apple Vision comes back in top-left normalized image coordinates, the
-frame every consumer of the ocr table crops and draws in."""
+frame every consumer of the ocr table crops and draws in, and a video is read from its file alone,
+on the frames' half-second grid."""
+
+import subprocess
 
 import pytest
 from PIL import Image, ImageDraw, ImageFont
@@ -25,3 +28,15 @@ def test_text_boxes_are_normalized_from_the_top_left(tmp_path):
     assert {line.text: line.box for line in lines} == {
         text: pytest.approx(box, abs=0.02) for text, box in expected.items()
     }
+
+
+def test_a_video_is_read_on_its_own_with_text_once_a_second(db, video, tmp_path):
+    still = tmp_path / "score.png"
+    image = Image.new("RGB", (WIDTH, HEIGHT), "white")
+    ImageDraw.Draw(image).text((64, 36), "LAKERS 102", font=ImageFont.load_default(size=64), fill="black")
+    image.save(still)
+    encode = ["-t", str(video["duration"]), "-r", "30", "-pix_fmt", "yuv420p", video["local_path"]]
+    subprocess.run(["ffmpeg", "-loglevel", "error", "-loop", "1", "-i", str(still), *encode], check=True)
+    vision.run(db, video, None)
+    read = [(row["t"], row["text"]) for row in db.execute("SELECT t, text FROM ocr ORDER BY t")]
+    assert read == [(second + 0.25, "LAKERS 102") for second in range(int(video["duration"]))]

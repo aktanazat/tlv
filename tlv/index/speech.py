@@ -27,9 +27,10 @@ def run(db: sqlite3.Connection, video: sqlite3.Row, progress: guard.Progress | N
 
 def audio_file(video: sqlite3.Row) -> Path:
     """The video's audio as a 16 kHz mono WAV under work/<video_id>/, extracted once and shared
-    by speech and sounds."""
+    by speech and sounds, which run at the same time."""
     path = store.data_dir("work") / video["video_id"] / "audio.wav"
-    if not path.exists():
-        path.parent.mkdir(exist_ok=True)
-        media.audio(Path(video["local_path"]), path)
+    with store.lock(f"audio-{video['video_id']}"):
+        if not path.exists():
+            path.parent.mkdir(exist_ok=True)
+            media.audio(Path(video["local_path"]), path)
     return path
