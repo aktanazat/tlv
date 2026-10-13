@@ -50,9 +50,11 @@ Signatures below are the interface; each owner may add private helpers freely. `
 - `add(source, title=None, wait=True, progress=None) -> AddResult` downloads or copies, probes,
   inserts the video, and indexes it when `wait`. Adding a file already present (same content)
   returns the existing video with `already_indexed`.
-- `index(video_id, only=None, force=False, progress=None)` runs the stages in order, skipping
-  any whose recorded version is current: shots, frames, speech, vision, sounds, spans,
-  entities. The entities stage calls `tlv.entities.index_video`.
+- `index(video_id, only=None, force=False, progress=None)` runs the stages, skipping any whose
+  recorded version is current, each as soon as the stages it reads are done: shots, speech,
+  vision and sounds start together, frames follows shots, spans waits for all five, and entities
+  for spans. Vision reads the frame grid from the duration, not from frames. The entities stage
+  calls `tlv.entities.index_video`.
 - `status(video_id) -> dict` with each stage's version and seconds, and row counts.
 
 `tlv/embed.py` (each call loads its model once under the guard; batch your inputs)
