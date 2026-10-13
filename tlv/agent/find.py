@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import sqlite3
 import time
 from collections.abc import Callable, Mapping, Sequence
@@ -13,10 +14,10 @@ from contextlib import closing
 from pathlib import Path
 from typing import Any
 
-from tlv import entities, media, store
+from tlv import entities, judge, media, store
 from tlv.agent import plan, retrieve, sources
 from tlv.agent.connect import LONGEST_LOOK_S, Candidate, Clip, looks, rank_clips, rank_steps
-from tlv.agent.inspect import Moment, Rejection, check, hear, same_play
+from tlv.agent.inspect import Moment, Rejection, check, clock, hear, same_play
 from tlv.agent.model import Vlm
 from tlv.agent.plan import Sense
 from tlv.agent.replay import Play, distinct_moments, merge_replays
@@ -32,6 +33,7 @@ Within = Mapping[str, Sequence[tuple[float, float]]]
 CHAIN_DEPTH = 40  # clips of each step tried in chains
 CLIP_MARGIN_S = 1.0  # step times land within a second, so a cut clip keeps a second more each side
 SHEET_FRAMES = 6
+CREDIT_AROUND_S = 4.0  # commentary this far each side of a confirmed clip goes to Jev with it
 
 
 def observation_id(video_id: str, start: float, end: float) -> str:
@@ -48,6 +50,40 @@ def _r(seconds: float) -> float:
 def _say(progress: Progress, message: str) -> None:
     if progress:
         progress(message)
+
+
+def credited(
+    db: sqlite3.Connection, plays: list[Play[Moment]], claim: str, progress: Progress
+) -> tuple[list[Play[Moment]], list[Play[Moment]]]:
+    """The plays Jev does not credit to another player, and those it does. The vision model can give a
+    play to the player the claim names though the call names the one who made it; the commentary
+    settles that. Only with TYPESAFE_API_KEY in the environment: without it nothing leaves the Mac, and
+    when Jev cannot answer every play stays."""
+    if not plays or "TYPESAFE_API_KEY" not in os.environ:
+        return plays, []
+    states = [
+        {
+            "claim": claim,
+            "clip": f"{clock(m.start)}-{clock(m.end)}",
+            "speech": [
+                f"[{clock(line.start)}] {line.text}"
+                for line in sources.speech(db, m.video_id, m.start - CREDIT_AROUND_S, m.end + CREDIT_AROUND_S)
+            ],
+        }
+        for m in (play.moment for play in plays)
+    ]
+    try:
+        answers = judge.bools(judge.CREDIT, states)
+    except judge.JudgeError as error:
+        _say(progress, f"kept every clip unjudged: {error}")
+        return plays, []
+    kept = [play for play, yes in zip(plays, answers, strict=True) if yes < judge.CREDIT_VETO]
+    vetoed = [play for play, yes in zip(plays, answers, strict=True) if yes >= judge.CREDIT_VETO]
+    for play in vetoed:
+        m = play.moment
+        where = f'{clock(m.start)}-{clock(m.end)} of "{m.video.title}"'
+        _say(progress, f"dropped {where}: the commentary credits another player")
+    return kept, vetoed
 
 
 def plain_texts(db: sqlite3.Connection, texts: list[str]) -> list[str]:
@@ -192,6 +228,7 @@ def find(
             # A replay shows a play again, but what is said over it is said anew: a spoken moment stands alone.
             plays = [Play(m) for m in kept]
             loaded, model_seconds = searched, 0.0
+            vetoed: list[Play[Moment]] = []
         else:
             with Vlm(progress) as vlm:
                 loaded = time.monotonic()
@@ -201,6 +238,7 @@ def find(
                 kept, repeats = distinct_moments([o for o in outcomes if isinstance(o, Moment)])
                 plays = merge_replays(kept, lambda a, b: same_play(vlm, a, b))
                 model_seconds = vlm.seconds
+            plays, vetoed = credited(db, plays, claim, progress)
         checked = time.monotonic()
         plays.sort(key=lambda p: (-p.moment.confidence, p.moment.video_id, p.moment.start))
         rejected = [
@@ -216,6 +254,15 @@ def find(
                 "reason": f"same moment as {observation_id(of.video_id, of.start, of.end)}",
             }
             for m, of in repeats
+        ]
+        rejected += [
+            {
+                "video_id": p.moment.video_id,
+                "start": _r(p.moment.start),
+                "end": _r(p.moment.end),
+                "reason": "credited to another player",
+            }
+            for p in vetoed
         ]
         confirmed = [_observation(db, play, claim) for play in plays]
         _save(db, confirmed, claim)
