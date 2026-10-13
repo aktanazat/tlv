@@ -20,7 +20,8 @@ import re
 import shutil
 import sqlite3
 from collections import Counter, defaultdict
-from collections.abc import Callable, Iterable, Sequence
+from collections.abc import Callable, Iterable, Iterator, Sequence
+from contextlib import contextmanager
 from dataclasses import dataclass
 from functools import partial
 from pathlib import Path
@@ -347,22 +348,74 @@ def recluster(db: sqlite3.Connection, progress: guard.Progress | None = None, vi
 
 def _regroup(db: sqlite3.Connection, say: guard.Progress, ask: bool, new_video: str | None = None) -> None:
     with store.lock("entities", lambda: say("waiting for another entities run")):
-        _refresh_names(db)
-        apps, fixes, verdicts = _appearances(db), _corrections(db), _verdicts(db)
-        grouped = cluster(apps, fixes, verdicts, new_video)
-        if ask and grouped.gray:
-            answers = _ask(db, [(a, b) for a, b, _ in grouped.gray[:MAX_QUESTIONS]], say)
-            if answers:
-                verdicts |= answers
-                grouped = cluster(apps, fixes, verdicts, new_video)
-        if ask and new_video and grouped.leads:
-            (minutes,) = db.execute("SELECT duration / 60.0 FROM videos WHERE video_id = ?", (new_video,)).fetchone()
-            answers = _ask_leads(db, _within(grouped.leads, math.ceil(LEADS_PER_MINUTE * minutes)), say)
-            if answers:
-                grouped = cluster(apps, fixes, verdicts | answers)
-        _save(db, apps, fixes, grouped.groups)
-        _link_observations(db)
+        _group(db, say, ask, new_video)
+
+
+def _group(db: sqlite3.Connection, say: guard.Progress, ask: bool, new_video: str | None = None) -> None:
+    """`_regroup` for a caller holding the entities lock."""
+    _refresh_names(db)
+    apps, fixes, verdicts = _appearances(db), _corrections(db), _verdicts(db)
+    grouped = cluster(apps, fixes, verdicts, new_video)
+    if ask and grouped.gray:
+        answers = _ask(db, [(a, b) for a, b, _ in grouped.gray[:MAX_QUESTIONS]], say)
+        if answers:
+            verdicts |= answers
+            grouped = cluster(apps, fixes, verdicts, new_video)
+    if ask and new_video and grouped.leads:
+        (minutes,) = db.execute("SELECT duration / 60.0 FROM videos WHERE video_id = ?", (new_video,)).fetchone()
+        answers = _ask_leads(db, _within(grouped.leads, math.ceil(LEADS_PER_MINUTE * minutes)), say)
+        if answers:
+            grouped = cluster(apps, fixes, verdicts | answers)
+    _save(db, apps, fixes, grouped.groups)
+    _link_observations(db)
     say(f"{len(grouped.groups)} people")
+
+
+@contextmanager
+def leaving(db: sqlite3.Connection, video_id: str, waiting: Callable[[], None] | None = None) -> Iterator[None]:
+    """Takes a video's people out of the collection while the caller deletes the video, all in one
+    transaction under the entities lock. Before the caller's block, each correction given through
+    one of the video's appearances moves to the appearance its person is best known by among those
+    left (cluster.describe's canonical one), so a person also seen in other videos keeps the names,
+    joins and splits the owner gave them; a correction about someone seen only in this video goes.
+    Corrections on the appearances left stay as they are: a moved name goes only to an appearance
+    the owner has not named. The block deletes the video, and with it its appearances; everyone left
+    is then regrouped without asking the model, so people seen only in this video are gone."""
+    with store.lock("entities", waiting), store.transaction(db):
+        _hand_down(db, video_id)
+        yield
+        _group(db, _quiet, ask=False)
+
+
+def _hand_down(db: sqlite3.Connection, video_id: str) -> None:
+    apps = _appearances(db)
+    by_id = {a.id: a for a in apps}
+    gone = {a.id for a in apps if a.video_id == video_id}
+    entity_of = {row[0]: row[1] for row in db.execute("SELECT appearance_id, entity_id FROM entity_members")}
+    members: dict[str, list[str]] = defaultdict(list)
+    for appearance_id, entity_id in entity_of.items():
+        if appearance_id not in gone:
+            members[entity_id].append(appearance_id)
+    heirs: dict[str, str | None] = {}
+    for appearance_id in gone:
+        left = members.get(entity_of.get(appearance_id, ""), [])
+        heirs[appearance_id] = describe([by_id[i] for i in left]).canonical if left else None
+    named = {row[0] for row in db.execute("SELECT a FROM corrections WHERE kind = 'name'") if row[0] not in gone}
+    moved, dropped = [], []
+    for row in db.execute("SELECT id, kind, a, b FROM corrections ORDER BY created_at DESC, id DESC").fetchall():
+        if row["a"] not in gone and row["b"] not in gone:
+            continue
+        a = heirs[row["a"]] if row["a"] in gone else row["a"]
+        b = heirs[row["b"]] if row["b"] in gone else row["b"]
+        if row["kind"] == "name" and a is not None and a not in named:
+            named.add(a)
+            moved.append((a, b, row["id"]))
+        elif row["kind"] != "name" and a is not None and b is not None and a != b:
+            moved.append((a, b, row["id"]))
+        else:
+            dropped.append((row["id"],))
+    db.executemany("UPDATE corrections SET a = ?, b = ? WHERE id = ?", moved)
+    db.executemany("DELETE FROM corrections WHERE id = ?", dropped)
 
 
 def _appearances(db: sqlite3.Connection) -> list[Appearance]:

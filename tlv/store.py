@@ -209,10 +209,20 @@ def data_dir(sub: Sub) -> Path:
     return path
 
 
+def index_name(index: str | None = None) -> str:
+    """The index a call means: the one named, else $TLV_INDEX, else "tlv"."""
+    return index or os.environ.get("TLV_INDEX") or "tlv"
+
+
+def indexes() -> list[str]:
+    """The names of the indexes in $TLV_HOME, one per database file."""
+    return sorted(path.stem for path in home().glob("*.db"))
+
+
 def connect(index: str | None = None) -> sqlite3.Connection:
-    """Opens the index's database ($TLV_HOME/<index>.db; the index defaults to $TLV_INDEX, else "tlv"),
-    creating the schema on first use. Safe across processes (WAL)."""
-    path = home() / f"{index or os.environ.get('TLV_INDEX') or 'tlv'}.db"
+    """Opens the index's database ($TLV_HOME/<index>.db; see index_name), creating the schema on
+    first use. Safe across processes (WAL)."""
+    path = home() / f"{index_name(index)}.db"
     path.parent.mkdir(parents=True, exist_ok=True)
     db = sqlite3.connect(path, timeout=60, isolation_level=None)
     db.row_factory = sqlite3.Row
@@ -225,7 +235,18 @@ def connect(index: str | None = None) -> sqlite3.Connection:
 
 @contextmanager
 def transaction(db: sqlite3.Connection) -> Iterator[sqlite3.Connection]:
-    """BEGIN IMMEDIATE ... COMMIT, rolled back on any error."""
+    """BEGIN IMMEDIATE ... COMMIT, rolled back on any error. Inside another transaction it is a
+    savepoint of that one: its writes are undone on its own error and commit with the outer one."""
+    if db.in_transaction:
+        db.execute("SAVEPOINT nested")
+        try:
+            yield db
+        except BaseException:
+            db.execute("ROLLBACK TO nested")
+            db.execute("RELEASE nested")
+            raise
+        db.execute("RELEASE nested")
+        return
     db.execute("BEGIN IMMEDIATE")
     try:
         yield db

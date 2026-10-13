@@ -26,6 +26,7 @@ TS_TOOLS = {
     "video_jockey",
 }
 NEW_TOOLS = {
+    "video_delete",
     "video_index",
     "video_timeline",
     "video_entity_name",

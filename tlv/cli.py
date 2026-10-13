@@ -31,6 +31,8 @@ commands:
       --stage S                only this stage (repeatable): shots, frames, speech, vision,
                                sounds, spans, entities
       --force                  redo the stages even when they are current
+  remove <video_id>            remove a video from the index: its rows, the people seen only
+                               in it, and its files (kept while another index uses them)
   search <query>               fast search: likely moments, not verified
       --then STEP              next step of an ordered action (repeatable)
       --modality M             visual, audio or transcription (repeatable; default all)
@@ -364,6 +366,9 @@ COMMANDS: dict[str, Command] = {
     ),
     "list": Command("tlv list", (), _list, core.video_list, core.list_text),
     "status": Command("tlv status <video_id>", (), _video_id, core.video_status, core.status_text),
+    "remove": Command(
+        "tlv remove <video_id>", (), _video_id, core.video_remove, core.remove_text, reports_progress=True
+    ),
     "index": Command(
         "tlv index <video_id> [--stage S]... [--force]",
         ("stage", "force"),
