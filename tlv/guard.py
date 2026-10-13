@@ -4,7 +4,8 @@ Every model (vision-language, speech, embeddings, faces) runs in a guarded child
 (`Child`) owned by the model host (tlv.host), one host per user shared by every tlv process,
 agent and $TLV_HOME. Callers reach it through `ModelProcess`, which starts the host on first
 use. The host runs one job at a time and keeps models loaded between runs; tlv.host says when it
-lets them go.
+lets them go. Jobs sent inside `background()`, as indexing's are, wait until no job someone is
+waiting on, such as a search's, is left.
 Before a model loads, the host waits until the kernel's memory pressure allows it: never at
 critical, and at warn only when the reclaimable memory covers the cap. While a child lives, its
 watchdog reads the child's physical footprint (the number Activity Monitor shows, GPU buffers
@@ -18,6 +19,7 @@ caches before the watchdog has to act.
 
 from __future__ import annotations
 
+import contextvars
 import ctypes
 import json
 import os
@@ -28,7 +30,8 @@ import sys
 import threading
 import time
 from collections import deque
-from collections.abc import Callable
+from collections.abc import Callable, Iterator
+from contextlib import contextmanager
 from pathlib import Path
 from typing import Any, TextIO
 
@@ -50,11 +53,25 @@ MODEL_VARIABLE = re.compile(r"TLV_\w+_MODEL")
 OWN_CODE = {"PYTHONSAFEPATH": "1"}
 
 Progress = Callable[[str], None]
+# True inside background(): the jobs sent then go after every job someone is waiting on.
+_background: contextvars.ContextVar[bool] = contextvars.ContextVar("tlv_background", default=False)
 
 _libc = ctypes.CDLL(None)
 _libproc = ctypes.CDLL("/usr/lib/libproc.dylib")
 _RUSAGE_INFO_V2 = 2
 _PHYS_FOOTPRINT_OFFSET = 72  # struct rusage_info_v2: uuid[16] then 7 uint64 before ri_phys_footprint
+
+
+@contextmanager
+def background() -> Iterator[None]:
+    """Marks the model jobs sent inside it as work nobody is waiting on, such as indexing: the host
+    runs every waiting job sent outside it first. It covers this thread, and a thread it starts
+    only when that thread runs in a copy of this one's context (contextvars.copy_context)."""
+    token = _background.set(True)
+    try:
+        yield
+    finally:
+        _background.reset(token)
 
 
 class HeadroomError(RuntimeError):
@@ -205,6 +222,7 @@ class ModelProcess:
             "python": sys.executable,
             "code": self.code,
             "job": job,
+            "background": _background.get(),
         }
         try:
             self._conn.sendall((json.dumps(request) + "\n").encode())

@@ -1,13 +1,19 @@
 """Indexing bookkeeping: a stage reruns when its version changes or a stage it stands on reran,
 starts once those are done, runs beside the stages it does not stand on, a video is ready only
-when every stage is current, and one file is one video."""
+when every stage is current, one file is one video, and indexing's model jobs are background
+work."""
 
+import json
 import shutil
+import socket
 import subprocess
+import tempfile
 import threading
+from pathlib import Path
 
 import pytest
 
+from tlv import guard
 from tlv.index import pipeline
 
 
@@ -19,6 +25,57 @@ def ran(monkeypatch):
         attribute = "index_video" if name == "entities" else "run"
         monkeypatch.setattr(module, attribute, lambda *args, name=name, **kwargs: names.append(name))
     return names
+
+
+@pytest.fixture
+def model_requests(monkeypatch):
+    """The requests a stand-in model host receives; it answers each with an empty result. Its
+    folder is short because a Unix socket path holds at most 104 bytes."""
+    run = Path(tempfile.mkdtemp(prefix="tlv-"))
+    monkeypatch.setenv("TLV_MODEL_HOST", str(run / "models.sock"))
+    requests = []
+    stop = threading.Event()
+
+    def answer(conn):
+        with conn, conn.makefile("r", encoding="utf-8") as lines:
+            for line in lines:
+                requests.append(json.loads(line))
+                conn.sendall(b'{"result": {}}\n')
+
+    def serve(server):
+        while not stop.is_set():
+            try:
+                conn, _ = server.accept()
+            except TimeoutError:
+                continue
+            conn.settimeout(None)
+            threading.Thread(target=answer, args=(conn,), daemon=True).start()
+
+    with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as server:
+        server.bind(str(run / "models.sock"))
+        server.listen(16)
+        server.settimeout(0.1)
+        serving = threading.Thread(target=serve, args=(server,))
+        serving.start()
+        yield requests
+        stop.set()
+        serving.join()
+    shutil.rmtree(run)
+
+
+def test_every_stage_sends_its_model_jobs_as_background_work(video, model_requests, monkeypatch):
+    """The model host runs a job someone is waiting on, such as a search's, before background
+    work. Each stage runs in a thread of its own, and every one of them must say so."""
+
+    def stage(*args, **kwargs):
+        with guard.ModelProcess("tlv.models.stand_in") as model:
+            model.call({})
+
+    for name, module in pipeline.MODULES.items():
+        monkeypatch.setattr(module, "index_video" if name == "entities" else "run", stage)
+    pipeline.index("v_test")
+    # each stage loads its model, then sends one job
+    assert [request.get("background") for request in model_requests] == [True] * 2 * len(pipeline.STAGES)
 
 
 @pytest.mark.parametrize(

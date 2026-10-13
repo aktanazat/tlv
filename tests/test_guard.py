@@ -242,9 +242,11 @@ def test_runs_wait_their_turn(hog):
 
 
 def _queued_behind_a_running_job(hog, monkeypatch, tmp_path, order):
-    """Runs one job per letter of `order` on model a or b, queued in that order while a job on a
-    holds the host, with the held-memory cap fitting one model; returns their results in order."""
+    """Runs one job per item of `order`, queued in that order while an index job on model a holds
+    the host, with the held-memory cap fitting one model; returns their results in order. An item
+    names the model, a or b, of a job someone waits on, or reads "index a" for an index job."""
     monkeypatch.setenv("TLV_HELD_MEMORY_GB", "0.3")
+    monkeypatch.setenv("TLV_SESSION_HOLD_S", "0")  # each caller here sends one job, never a next
     a = {**hog, "HOG_LOAD_MB": "200"}  # about 0.22 GB a model, so two are over the cap
     envs = {"a": a, "b": {**a, "TLV_OTHER": "another model"}}
     hold = tmp_path / "hold"
@@ -258,8 +260,11 @@ def _queued_behind_a_running_job(hog, monkeypatch, tmp_path, order):
 
         return progress
 
-    def call(i, model):
-        results[i] = model.call({})
+    def call(model, job, index, i=None):
+        with guard.background() if index else contextlib.nullcontext():
+            result = model.call(job)
+        if i is not None:
+            results[i] = result
 
     with contextlib.ExitStack() as stack:
 
@@ -268,20 +273,80 @@ def _queued_behind_a_running_job(hog, monkeypatch, tmp_path, order):
             return stack.enter_context(model)
 
         holder = open_model("a")
-        callers = [open_model(name, waiting(event)) for name, event in zip(order, queued, strict=True)]
-        threads = [threading.Thread(target=holder.call, args=({"hold": str(hold)},))]
+        callers = [open_model(item.split()[-1], waiting(event)) for item, event in zip(order, queued, strict=True)]
+        threads = [threading.Thread(target=call, args=(holder, {"hold": str(hold)}, True))]
         threads[0].start()
         deadline = time.monotonic() + 10
         while not hold.exists() and time.monotonic() < deadline:
             time.sleep(0.01)
-        for i, caller in enumerate(callers):
-            threads.append(threading.Thread(target=call, args=(i, caller)))
+        for i, (item, caller) in enumerate(zip(order, callers, strict=True)):
+            threads.append(threading.Thread(target=call, args=(caller, {}, item.startswith("index"), i)))
             threads[-1].start()
             assert queued[i].wait(10), f"job {i} ran instead of waiting behind the held job"
         hold.unlink()
         for thread in threads:
             thread.join()
     return results
+
+
+@pytest.mark.parametrize(
+    ("order", "began"),
+    [
+        pytest.param(["index a", "a"], [1, 0], id="a search behind an index job on its model"),
+        pytest.param(["index a", "b"], [1, 0], id="a search on a model that is not loaded"),
+        pytest.param(["a", "index a", "a"], [0, 2, 1], id="two searches keep their order"),
+    ],
+)
+def test_a_job_someone_waits_on_runs_before_waiting_index_jobs(hog, monkeypatch, tmp_path, order, began):
+    """2026-10-13: searches on the shared host waited 55 to 169 s while two runs indexed, behind
+    index jobs that each caption eight spans."""
+    results = _queued_behind_a_running_job(hog, monkeypatch, tmp_path, order)
+    assert sorted(range(len(order)), key=lambda i: results[i]["began"]) == began
+
+
+def test_a_search_keeps_the_host_between_its_jobs_until_it_closes(hog, monkeypatch, tmp_path):
+    """A search sends its jobs one after another: its model's load, then two embeddings. On
+    2026-10-13 an index job of up to 48 s started in each gap, so one search waited behind three.
+    Indexing goes on as soon as the search closes, long before the hold would run out."""
+    monkeypatch.setenv("TLV_SESSION_HOLD_S", "60")
+    hold = tmp_path / "hold"
+    began = {}
+    queued = {"index": threading.Event(), "search": threading.Event()}
+
+    def model(name=None):
+        def progress(message):
+            if message.startswith("waiting for another model run"):
+                queued[name].set()
+
+        return guard.ModelProcess("hog", cap_bytes=600 * MB, env=hog, progress=progress if name else None)
+
+    def index(process, job, name=None):
+        with guard.background():
+            result = process.call(job)
+        if name:
+            began[name] = result["began"]
+
+    def search():
+        with model("search") as process:
+            began["search 1"] = process.call({})["began"]
+            began["search 2"] = process.call({})["began"]
+
+    with guard.background(), model() as holder, model("index") as indexer:  # loads as indexing's do
+        threads = [threading.Thread(target=index, args=(holder, {"hold": str(hold)}), daemon=True)]
+        threads[0].start()
+        deadline = time.monotonic() + 10
+        while not hold.exists() and time.monotonic() < deadline:
+            time.sleep(0.01)
+        threads.append(threading.Thread(target=index, args=(indexer, {}, "index"), daemon=True))
+        threads[-1].start()
+        assert queued["index"].wait(10), "the index job ran instead of waiting behind the held job"
+        threads.append(threading.Thread(target=search, daemon=True))
+        threads[-1].start()
+        assert queued["search"].wait(10), "the search ran instead of waiting behind the held job"
+        hold.unlink()
+        for thread in threads:
+            thread.join(10)  # far short of the 60 s hold
+        assert sorted(began, key=began.get) == ["search 1", "search 2", "index"]
 
 
 def test_queued_jobs_on_a_loaded_model_go_first_so_models_are_not_reloaded_in_turn(hog, monkeypatch, tmp_path):

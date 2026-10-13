@@ -6,9 +6,14 @@ every $TLV_HOME shares one host and one memory budget. The host
 
 1. runs one job at a time across every tlv process and agent, loading a model in a guarded child
    (tlv.guard.Child) the first time it is asked for, and tells a caller who has to wait. Next it
-   runs the longest-waiting job whose model is loaded, else the longest-waiting one, so callers on
+   runs a job someone is waiting on before any background job (one sent inside
+   tlv.guard.background(), as indexing's are). After someone's job it keeps background jobs
+   waiting until that caller sends its next job, closes its connection, or lets
+   TLV_SESSION_HOLD_S (default 2 s) pass, so a search's several jobs run back to back and it
+   waits at most for the one job already running when it asked. Among jobs of one kind it runs
+   the longest-waiting job whose model is loaded, else the longest-waiting one, so callers on
    different models do not each unload the other's model in turn; a job lets at most
-   MAX_OVERTAKEN later ones go first;
+   MAX_OVERTAKEN later ones of its kind go first;
 2. keeps a model loaded until it has gone unused for TLV_MODEL_IDLE_S (default 600 s);
 3. holds at most TLV_HELD_MEMORY_GB (default 8) in the models it keeps: after every job it
    unloads the least recently used ones until the rest fit;
@@ -22,10 +27,11 @@ every $TLV_HOME shares one host and one memory budget. The host
    watchdog still stops any model, open or not, when pressure turns critical;
 5. exits once it has held nothing and been asked nothing for TLV_MODEL_IDLE_S.
 
-A request is one JSON line, {"module", "cap", "env", "python", "code", "job"}, where a null job
-only loads the model. A child runs `python -m module`, the caller's interpreter, and is kept per
-code stamp (tlv.guard.code_stamp), so an edit or update to tlv gets a fresh child while the stale
-one idles out. The replies are any number of {"progress": text}, then {"result": {...}} or
+A request is one JSON line, {"module", "cap", "env", "python", "code", "job", "background"},
+where a null job only loads the model and a request without "background" is someone's. A child
+runs `python -m module`, the caller's interpreter, and is kept per code stamp
+(tlv.guard.code_stamp), so an edit or update to tlv gets a fresh child while the stale one idles
+out. The replies are any number of {"progress": text}, then {"result": {...}} or
 {"error": text, "kind": "model" | "headroom"}. A connection is one caller's session with one
 model: the model counts as open until the connection closes.
 """
@@ -60,9 +66,13 @@ HEADROOM_CMD = os.environ.get("TLV_HEADROOM_CMD") or str(Path.home() / "memory/b
 HEADROOM_TIMEOUT_S = 20.0
 TICK_S = 0.5
 LOCK_WAIT_S = 5.0  # a host on its way out releases its lock well within this
-# A waiting job lets later jobs on an already loaded model go first at most this many times, so a
-# caller needing another model waits a few jobs longer, never for the whole queue.
+# A waiting job lets later jobs of its kind on an already loaded model go first at most this many
+# times, so a caller needing another model waits a few jobs longer, never for the whole queue.
 MAX_OVERTAKEN = 3
+# After a job someone is waiting on, background jobs wait this long for the same caller's next
+# job. A search sends three in a row (its model's load, then two embeddings), and on 2026-10-13
+# an index job of up to 48 s started in each gap between them.
+SESSION_HOLD_S = float(os.environ.get("TLV_SESSION_HOLD_S", "2"))
 
 # module, cap, the caller's model variables, its interpreter, its code stamp
 Key = tuple[str, int, tuple[tuple[str, str], ...], str, str]
@@ -74,10 +84,12 @@ class Resident:
     used: float  # time.monotonic() when it last loaded or finished a job
 
 
-@dataclass
-class Waiter:
+@dataclass(eq=False)  # a request is itself, whatever another holds
+class Request:
     key: Key
-    overtaken: int = 0  # later jobs that went first
+    background: bool  # nobody is waiting on it, see tlv.guard.background
+    caller: object  # the connection that sent it
+    overtaken: int = 0  # later jobs of its kind that went first
     turn: bool = False  # set when the host picks it to run next
 
 
@@ -95,9 +107,11 @@ def _send(conn: socket.socket, message: dict[str, Any]) -> None:
 
 class Host:
     def __init__(self) -> None:
-        self.turns = threading.Condition()  # guards `busy` and `waiting`
+        self.turns = threading.Condition()  # guards `busy`, `waiting` and `kept_*`
         self.busy = False  # a load, job or unload is under way; it stays True while jobs wait
-        self.waiting: list[Waiter] = []  # oldest first
+        self.waiting: list[Request] = []  # oldest first
+        self.kept_for: object | None = None  # the caller background jobs wait on, see SESSION_HOLD_S
+        self.kept_until = 0.0  # time.monotonic() when they stop waiting on it
         self.residents: dict[Key, Resident] = {}  # changed only by the job or tick that has the turn
         self.state = threading.Lock()  # guards the counts below
         self.clients = 0
@@ -115,6 +129,7 @@ class Host:
     def serve(self, conn: socket.socket) -> None:
         """Answers one connection's requests in order until it closes."""
         held: Key | None = None
+        caller = object()
 
         def say(message: str) -> None:
             with contextlib.suppress(OSError):  # the caller left; the job still finishes
@@ -135,7 +150,8 @@ class Host:
                         held = key
                         with self.state:
                             self.open[key] += 1
-                    _send(conn, self.answer(key, request["job"], say))
+                    asked = Request(key, bool(request.get("background")), caller)
+                    _send(conn, self.answer(asked, request["job"], say))
         except OSError:
             pass  # the caller went away
         finally:
@@ -143,10 +159,11 @@ class Host:
                 self.clients -= 1
                 if held is not None:
                     self.open[held] -= 1
+            self._left(caller)
 
-    def answer(self, key: Key, job: dict[str, Any] | None, say: guard.Progress) -> dict[str, Any]:
+    def answer(self, request: Request, job: dict[str, Any] | None, say: guard.Progress) -> dict[str, Any]:
         try:
-            return {"result": self.run(key, job, say)}
+            return {"result": self.run(request, job, say)}
         except guard.HeadroomError as error:
             return {"error": str(error), "kind": "headroom"}
         except guard.ModelError as error:
@@ -155,8 +172,9 @@ class Host:
             log(traceback.format_exc())
             return {"error": f"the model host failed: {type(error).__name__}: {error}", "kind": "model"}
 
-    def run(self, key: Key, job: dict[str, Any] | None, say: guard.Progress) -> dict[str, Any]:
-        self._begin(key, say)
+    def run(self, request: Request, job: dict[str, Any] | None, say: guard.Progress) -> dict[str, Any]:
+        key = request.key
+        self._begin(request, say)
         try:
             with self.state:
                 self.asked = time.monotonic()
@@ -173,37 +191,56 @@ class Host:
                     del self.residents[key]
                 self._fit(key)
         finally:
-            self._end()
+            self._end(request)
 
-    def _begin(self, key: Key, say: guard.Progress) -> None:
+    def _begin(self, request: Request, say: guard.Progress) -> None:
         """Returns at once when the host is free, else once _end picks this job."""
         with self.turns:
-            if not self.busy:
+            if not self.busy and not (request.background and self._kept()):
                 self.busy = True
                 return
-            waiter = Waiter(key)
-            self.waiting.append(waiter)
-        say(f"waiting for another model run to finish before {_name(key)}")
+            self.waiting.append(request)
+        say(f"waiting for another model run to finish before {_name(request.key)}")
         with self.turns:
-            self.turns.wait_for(lambda: waiter.turn)
+            self.turns.wait_for(lambda: request.turn)
 
-    def _end(self) -> None:
-        """Hands the host to the longest-waiting job whose model is loaded, unless that passes over
-        a job already passed over MAX_OVERTAKEN times; then, or when none is loaded, to the
-        longest-waiting. Passing a job over passes every older one too, so the oldest has always
-        been passed over the most."""
+    def _kept(self) -> bool:
+        """Whether background jobs still wait on the caller of the last job someone waited on."""
+        return time.monotonic() < self.kept_until
+
+    def _left(self, caller: object) -> None:
+        """A connection closed: background jobs no longer wait on it."""
         with self.turns:
-            if not self.waiting:
+            if self.kept_for is caller:
+                self.kept_until = 0.0
+            if self.busy or not self.waiting:
+                return
+            self.busy = True
+        self._end(None)
+
+    def _end(self, finished: Request | None) -> None:
+        """Hands the host on after `finished`, or after a tick or a caller leaving when None: to a
+        job someone is waiting on if any waits, else to a background job unless they still wait on
+        a caller (see SESSION_HOLD_S). Among those it picks the longest-waiting job whose model is
+        loaded, unless that passes over a job already passed over MAX_OVERTAKEN times; then, or
+        when none is loaded, the longest-waiting. Passing a job over passes every older one of its
+        kind too, so the oldest has always been passed over the most."""
+        with self.turns:
+            if finished is not None and not finished.background:
+                self.kept_for, self.kept_until = finished.caller, time.monotonic() + SESSION_HOLD_S
+            kind = [w for w in self.waiting if not w.background]
+            if not kind and not self._kept():
+                kind = self.waiting
+            if not kind:
                 self.busy = False
                 return
-            oldest = self.waiting[0]
+            oldest = kind[0]
             chosen = oldest
             if oldest.overtaken < MAX_OVERTAKEN:
-                chosen = next((w for w in self.waiting if w.key in self.residents), oldest)
-            at = self.waiting.index(chosen)
-            for passed in self.waiting[:at]:
+                chosen = next((w for w in kind if w.key in self.residents), oldest)
+            for passed in kind[: kind.index(chosen)]:
                 passed.overtaken += 1
-            del self.waiting[at]
+            self.waiting.remove(chosen)
             chosen.turn = True
             self.turns.notify_all()
 
@@ -231,7 +268,7 @@ class Host:
                 self._unload(key, short)
             return not self.residents and clients == 0 and now - asked >= IDLE_S
         finally:
-            self._end()
+            self._end(None)
 
     def _load(self, key: Key, say: guard.Progress) -> Resident:
         resident = self.residents.get(key)

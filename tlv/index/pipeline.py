@@ -8,6 +8,7 @@ after it finishes, so an interrupted run leaves every stage either done or pendi
 from __future__ import annotations
 
 import contextlib
+import contextvars
 import hashlib
 import json
 import queue
@@ -121,7 +122,8 @@ def index(
     video_id: str, only: str | Iterable[str] | None = None, force: bool = False, progress: guard.Progress | None = None
 ) -> None:
     """Runs the stages (all, or those named in `only`), skipping any already current unless
-    `force`; a stage built on one that reruns reruns too."""
+    `force`; a stage built on one that reruns reruns too. Its model jobs run in the background:
+    the model host runs any job someone is waiting on, such as a search's, first."""
     wanted = _wanted(only)
     db = store.connect()
 
@@ -129,7 +131,10 @@ def index(
         if progress:
             progress(message)
 
-    with store.lock(f"index-{video_id}", waiting=lambda: say(f"waiting for another index run of {video_id}")):
+    with (
+        guard.background(),
+        store.lock(f"index-{video_id}", waiting=lambda: say(f"waiting for another index run of {video_id}")),
+    ):
         video = _video(db, video_id)
         missing = {need for name in wanted for need in INPUTS[name] if need not in wanted}
         missing = sorted(need for need in missing if not _current(db, video_id, need))
@@ -349,7 +354,8 @@ def _run_stages(
     Vision on the Neural Engine, the models on the GPU (the model host runs one job at a time).
     A stage is recorded as it finishes. After a failure no stage starts; those running finish
     and are recorded, and the first error is raised. The threads are daemons, so an interrupt
-    ends the run at once, as it did when one stage ran in the foreground."""
+    ends the run at once, as it did when one stage ran in the foreground. Each runs in a copy of
+    the caller's context, so its model jobs stay in the background."""
     finished: queue.SimpleQueue[tuple[str, float, BaseException | None]] = queue.SimpleQueue()
 
     def run(name: str) -> None:
@@ -371,7 +377,9 @@ def _run_stages(
                 running.add(name)
                 if progress:
                     progress(f"{name}: running")
-                threading.Thread(target=run, args=(name,), name=f"tlv-index-{name}", daemon=True).start()
+                threading.Thread(
+                    target=contextvars.copy_context().run, args=(run, name), name=f"tlv-index-{name}", daemon=True
+                ).start()
         name, seconds, error = finished.get()
         running.remove(name)
         if error is not None:

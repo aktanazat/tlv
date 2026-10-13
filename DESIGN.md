@@ -33,10 +33,16 @@ query ─▶ plan ─▶ retrieve ─▶ connect ─▶ inspect ─▶ answer (c
   normalized to unit length. `store.transaction` inside another transaction is a savepoint of
   it, so a writer's own transaction can run as one step of a larger one.
 - **Models**: every model runs through `tlv.guard.ModelProcess`, which hands the work to the
-  model host (`tlv/host.py`): one background process per `$TLV_HOME` that runs one job at a
-  time, a waiting job on a loaded model first (passing over another job at most three times),
-  keeps models loaded between runs and lets them go when idle, over its held-memory cap
-  or when the Mac is short of memory. Each model is held to its own memory cap (6 GB default).
+  model host (`tlv/host.py`): one background process per user, shared by every `$TLV_HOME`,
+  that runs one job at a time. A job someone is waiting on (a search, find, ask or follow-up)
+  runs before any waiting index job; `tlv.index.pipeline.index` runs inside `guard.background()`,
+  which marks every job it sends, stage threads included. After someone's job, index jobs also
+  wait for that caller's next job, until it closes or 2 s pass, so a search's load and two
+  embeddings run back to back and it waits at most for the one index job already running.
+  Among jobs of one kind, a waiting job on a loaded model goes first (passing over another job
+  at most three times). The host keeps
+  models loaded between runs and lets them go when idle, over its held-memory cap or when the
+  Mac is short of memory. Each model is held to its own memory cap (6 GB default).
   A model worker is a module under `tlv/models/` that calls `tlv.models.protocol.serve(load)`.
   Never import MLX, torch or onnxruntime in the parent process. Load a model once per batch of
   work, not once per item.
