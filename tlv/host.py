@@ -9,12 +9,14 @@ every $TLV_HOME shares one host and one memory budget. The host
 2. keeps a model loaded until it has gone unused for TLV_MODEL_IDLE_S (default 600 s);
 3. holds at most TLV_HELD_MEMORY_GB (default 8) in the models it keeps: after every job it
    unloads the least recently used ones until the rest fit;
-4. backs off when the Mac is short of memory. Every model no caller has open is unloaded when
-   ~/memory/bin/host-headroom (TLV_HEADROOM_CMD), read every TLV_PRESSURE_CHECK_S (default 30 s)
-   while such a model is loaded, puts the share of free memory under TLV_HOLD_MIN_FREE_PCT
-   (default 25); when it cannot be read, the kernel's pressure level decides. Before loading a
-   model the host unloads the others rather than wait for memory it holds itself, and the
-   guard's watchdog still stops any model, open or not, when pressure turns critical;
+4. backs off when the Mac is short of memory: ~/memory/bin/host-headroom (TLV_HEADROOM_CMD),
+   read at most every TLV_PRESSURE_CHECK_S (default 30 s), puts swap in use at
+   TLV_HOLD_MAX_SWAP_GB (default 8) or more, or the share of free memory under
+   TLV_HOLD_MIN_FREE_PCT (default 25); when it cannot be read, the kernel's pressure level
+   decides. While short, every model no caller has open is unloaded, and a model about to load
+   first lets go of those, so runs hold one model at a time. Before loading a model the host
+   also unloads the others rather than wait for memory it holds itself, and the guard's
+   watchdog still stops any model, open or not, when pressure turns critical;
 5. exits once it has held nothing and been asked nothing for TLV_MODEL_IDLE_S.
 
 A request is one JSON line, {"module", "cap", "env", "python", "code", "job"}, where a null job
@@ -48,6 +50,9 @@ IDLE_S = float(os.environ.get("TLV_MODEL_IDLE_S", "600"))
 HELD_BYTES = int(float(os.environ.get("TLV_HELD_MEMORY_GB", "8")) * guard.GB)
 PRESSURE_CHECK_S = float(os.environ.get("TLV_PRESSURE_CHECK_S", "30"))
 MIN_FREE_PCT = float(os.environ.get("TLV_HOLD_MIN_FREE_PCT", "25"))
+# Swap in use at or past this means the Mac is already paging others out for memory; on 2026-10-12
+# swap reached 12.3 of 13.3 GB with 101 MB free while the free share above still read 33%.
+MAX_SWAP_MB = float(os.environ.get("TLV_HOLD_MAX_SWAP_GB", "8")) * 1024
 HEADROOM_CMD = os.environ.get("TLV_HEADROOM_CMD") or str(Path.home() / "memory/bin/host-headroom")
 HEADROOM_TIMEOUT_S = 20.0
 TICK_S = 0.5
@@ -84,6 +89,7 @@ class Host:
         self.open: Counter[Key] = Counter()  # connections holding each model
         self.asked = time.monotonic()
         self.next_check = 0.0
+        self.shortage: str | None = None  # the last memory reading's verdict, see _short
         self.headroom_unreadable = False
 
     def accepted(self) -> None:
@@ -164,15 +170,15 @@ class Host:
         try:
             now = time.monotonic()
             with self.state:
-                open_keys = {key for key, n in self.open.items() if n > 0}
                 clients, asked = self.clients, self.asked
+            closed = self._closed()
             for key, resident in list(self.residents.items()):
                 if not resident.child.alive():
                     del self.residents[key]
                     log(f"dropped {_name(key)}: its process had stopped")
-                elif key not in open_keys and now - resident.used >= IDLE_S:
+                elif key in closed and now - resident.used >= IDLE_S:
                     self._unload(key, f"unused for {IDLE_S:g} s")
-            closed = [key for key in self.residents if key not in open_keys]
+            closed = self._closed()
             short = self._short(now) if closed else None
             for key in closed if short else ():
                 self._unload(key, short)
@@ -186,6 +192,10 @@ class Host:
             return resident
         self.residents.pop(key, None)
         module, cap, env, python, _ = key
+        closed = self._closed()
+        if closed and (short := self._short(time.monotonic())):
+            for other in closed:
+                self._unload(other, f"loading {_name(key)} while {short}")
         while self.residents and (reason := guard.headroom(cap)):
             self._unload(self._least_recent(), f"loading {_name(key)} needs memory, and {reason}")
         guard.wait_for_headroom(cap, say)
@@ -208,6 +218,11 @@ class Host:
     def _least_recent(self) -> Key:
         return min(self.residents, key=lambda k: self.residents[k].used)
 
+    def _closed(self) -> list[Key]:
+        """The loaded models no connection holds open."""
+        with self.state:
+            return [key for key in self.residents if self.open[key] <= 0]
+
     def _unload(self, key: Key, why: str) -> None:
         resident = self.residents.pop(key)
         held = guard.footprint(resident.child.pid)
@@ -215,10 +230,14 @@ class Host:
         log(f"unloaded {_name(key)} ({held / guard.GB:.1f} GB): {why}")
 
     def _short(self, now: float) -> str | None:
-        """Why the Mac is too short of memory to keep idle models, or None."""
-        if now < self.next_check:
-            return None
-        self.next_check = now + PRESSURE_CHECK_S
+        """Why the Mac is too short of memory to keep models no caller has open, or None. It is
+        read at most every PRESSURE_CHECK_S, and the answer holds until the next reading."""
+        if now >= self.next_check:
+            self.next_check = now + PRESSURE_CHECK_S
+            self.shortage = self._read_shortage()
+        return self.shortage
+
+    def _read_shortage(self) -> str | None:
         try:
             out = subprocess.run(
                 [HEADROOM_CMD, "--json", "--sample", "0"],
@@ -227,12 +246,15 @@ class Host:
                 check=True,
                 timeout=HEADROOM_TIMEOUT_S,
             ).stdout
-            free = float(json.loads(out)["host"]["pressure_free_pct"])
+            host = json.loads(out)["host"]
+            swap_mb, free = float(host["swap_used_mb"]), float(host["pressure_free_pct"])
         except (OSError, subprocess.SubprocessError, ValueError, KeyError, TypeError) as error:
             if not self.headroom_unreadable:
                 log(f"cannot read {HEADROOM_CMD} ({type(error).__name__}: {error}); using kernel pressure instead")
                 self.headroom_unreadable = True
             return "the kernel reports memory pressure" if guard.pressure_level() >= guard.WARN else None
+        if swap_mb >= MAX_SWAP_MB:
+            return f"host-headroom puts swap in use at {swap_mb / 1024:.1f} GB, at or over {MAX_SWAP_MB / 1024:g} GB"
         if free < MIN_FREE_PCT:
             return f"host-headroom puts free memory at {free:g}%, under {MIN_FREE_PCT:g}%"
         return None

@@ -37,11 +37,13 @@ at a time, each in a child process held to a memory cap, so indexing waits its t
 
 A background model host, one per user, keeps the models loaded between searches, so only the
 first search after a pause pays to load them. It lets a model go after 10 minutes unused
-(`TLV_MODEL_IDLE_S`), holds at most 8 GB (`TLV_HELD_MEMORY_GB`), and lets go of every model not
-in use when `~/memory/bin/host-headroom` reports less than 25% of memory free
-(`TLV_HOLD_MIN_FREE_PCT`). After tlv's code changes, the next run loads a fresh copy of the
-model rather than reuse one running the old code. The host exits once it holds nothing, and logs
-what it loads and lets go to `~/.local/share/tlv/run/models.log`, whatever `$TLV_HOME` says.
+(`TLV_MODEL_IDLE_S`) and holds at most 8 GB (`TLV_HELD_MEMORY_GB`). When
+`~/memory/bin/host-headroom` shows the Mac short of memory, with 8 GB or more of swap in use
+(`TLV_HOLD_MAX_SWAP_GB`) or less than 25% of memory free (`TLV_HOLD_MIN_FREE_PCT`), it lets go
+of every model not in use, so searches load one model at a time and keep nothing between them.
+After tlv's code changes, the next run loads a fresh copy of the model rather than reuse one
+running the old code. The host exits once it holds nothing, and logs what it loads and lets go to
+`~/.local/share/tlv/run/models.log`, whatever `$TLV_HOME` says.
 
 Files live under `$TLV_HOME` (default `~/.local/share/tlv`): `tlv.db` is the index, `media/`
 holds downloads, `clips/` cut clips, `frames/` stills and contact sheets. `--index NAME` (or

@@ -44,8 +44,9 @@ HOG = textwrap.dedent(
 MB = 1024 * 1024
 
 
-def _headroom_script(path, free_pct):
-    path.write_text(f'#!/bin/sh\necho \'{{"host": {{"pressure_free_pct": "{free_pct}"}}}}\'\n')
+def _headroom_script(path, free_pct, swap_mb=0):
+    host = f'{{"pressure_free_pct": "{free_pct}", "swap_used_mb": {swap_mb}}}'
+    path.write_text(f"#!/bin/sh\necho '{{\"host\": {host}}}'\n")
     path.chmod(0o755)
     return str(path)
 
@@ -111,17 +112,19 @@ def test_a_loaded_model_is_replaced_once_tlv_code_changes(hog):
         pytest.param({"TLV_MODEL_IDLE_S": "1"}, {}, False, True, id="unused past the idle time"),
         pytest.param({"TLV_MODEL_IDLE_S": "1"}, {}, True, False, id="idle but held open by its caller"),
         pytest.param({"TLV_HELD_MEMORY_GB": "0.25"}, {"mb": 300}, False, True, id="over the held-memory cap"),
-        pytest.param({"free_pct": 10}, {}, False, True, id="free memory under the floor"),
-        pytest.param({"free_pct": 10}, {}, True, False, id="short of memory but held open by its caller"),
-        pytest.param({"free_pct": 60}, {}, False, False, id="ample free memory"),
+        pytest.param({"headroom": (10, 0)}, {}, False, True, id="free memory under the floor"),
+        pytest.param({"headroom": (10, 0)}, {}, True, False, id="short of memory but held open by its caller"),
+        # 2026-10-12 9:20pm: swap at 12.3 of 13.3 GB, yet host-headroom's free share read 33%
+        pytest.param({"headroom": (33, 12600)}, {}, False, True, id="swap past 8 GB while free memory reads fine"),
+        pytest.param({"headroom": (60, 7000)}, {}, False, False, id="ample free memory and swap under 8 GB"),
     ],
 )
 def test_models_are_let_go_when_idle_over_the_cap_or_short_of_memory(
     hog, monkeypatch, tmp_path, setting, job, open_between, let_go
 ):
     for name, value in setting.items():
-        if name == "free_pct":
-            monkeypatch.setenv("TLV_HEADROOM_CMD", _headroom_script(tmp_path / "headroom", value))
+        if name == "headroom":
+            monkeypatch.setenv("TLV_HEADROOM_CMD", _headroom_script(tmp_path / "headroom", *value))
         else:
             monkeypatch.setenv(name, value)
     with guard.ModelProcess("hog", cap_bytes=600 * MB, env=hog) as model:
@@ -133,6 +136,18 @@ def test_models_are_let_go_when_idle_over_the_cap_or_short_of_memory(
         time.sleep(2.5)
         again = _run(hog)["pid"]
     assert (again != first) == let_go
+
+
+def test_while_memory_is_short_runs_hold_one_model_at_a_time(hog, monkeypatch, tmp_path):
+    """The last memory reading holds until the next one, so between readings a model its run has
+    closed is let go before another loads rather than staying beside it."""
+    monkeypatch.setenv("TLV_HEADROOM_CMD", _headroom_script(tmp_path / "headroom", 33, 12600))
+    monkeypatch.setenv("TLV_PRESSURE_CHECK_S", "600")  # one reading for the whole test
+    _run(hog)
+    kept = _run(hog)["pid"]
+    _run({**hog, "TLV_OTHER": "another model"})
+    with pytest.raises(ProcessLookupError):
+        os.kill(kept, 0)
 
 
 def test_an_idle_host_exits(hog, monkeypatch):
