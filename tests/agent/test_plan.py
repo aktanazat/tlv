@@ -87,5 +87,16 @@ def test_a_step_is_perceived_by_the_sense_its_words_name(step, expected):
     assert sense(step) == expected
 
 
-def test_the_topic_of_a_spoken_step_is_what_is_said():
-    assert topic("the commentators talk about jordi fernandez") == "the jordi fernandez"
+@pytest.mark.parametrize(
+    ("step", "expected"),
+    [
+        pytest.param(
+            "the commentators talk about jordi fernandez", "jordi fernandez", id="what commentators talk about"
+        ),
+        pytest.param("when did they talk about pricing", "pricing", id="a question about what was said"),
+        pytest.param("when did they talk about the summit", "summit", id="a question with an article"),
+        pytest.param("where does she say the garlic is burning?", "garlic burning?", id="what someone says"),
+    ],
+)
+def test_the_topic_of_a_spoken_step_is_only_the_words_that_carry_it(step, expected):
+    assert topic(step) == expected

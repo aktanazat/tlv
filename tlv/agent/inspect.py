@@ -51,6 +51,9 @@ OCR_SPACING_S = 1.0  # on-screen text is read once a second
 # placed where that text is on screen: shown a window that a graphic fills only in part, the model marks the
 # whole window. The text is followed this far past the step's frames to find where it starts and ends.
 READ_AROUND_S = 30.0
+# The words of one spoken step count as said together when they are said within this many seconds, about a
+# sentence: a topic said across the edge of the window is still heard there.
+SAID_TOGETHER_S = 8.0
 # A time a verdict names instead of a frame number, as stamped on the frames: h:mm:ss.s or m:ss.s.
 _STAMPED = re.compile(r"(?:(\d+):)?(\d+):(\d+(?:\.\d+)?)")
 
@@ -381,18 +384,25 @@ def _verdict(reply: Reply, steps: list[str], shown: Shown) -> Verdict | str:
     return read_verdict(parse_json(reply.text), steps, [f.t for f in shown.frames], shown.window)
 
 
-def heard_at(words: list[Line], keys: list[str]) -> tuple[float, float] | None:
-    """The shortest run of spoken words holding a word that sounds like each key, or None when some
-    key is not heard (or there are none)."""
-    wanted = set(keys)
-    hits = [(word, key) for word in words if (key := retrieve.sound_key(word.text)) in wanted]
+def heard_at(words: list[Line], said: list[str], window: Range) -> tuple[float, float] | None:
+    """The shortest run of spoken words, at most SAID_TOGETHER_S long and overlapping the window,
+    holding a word that sounds like each word of `said`; or None when no such run is heard (or `said`
+    is empty)."""
+    wanted = set(said)
+    hits = [
+        (word, asked)
+        for word in words
+        if (asked := next((w for w in said if retrieve.sounds_like(word.text, w)), None)) is not None
+    ]
     best: tuple[float, float] | None = None
     for i, (first, _) in enumerate(hits):
         found: set[str] = set()
-        for last, key in hits[i:]:
-            found.add(key)
-            if found == wanted:
-                if best is None or last.end - first.start < best[1] - best[0]:
+        for last, asked in hits[i:]:
+            if last.end - first.start > SAID_TOGETHER_S:
+                break
+            found.add(asked)
+            if found == wanted and last.end > window.start:
+                if first.start < window.end and (best is None or last.end - first.start < best[1] - best[0]):
                     best = (first.start, last.end)
                 break
     return best
@@ -401,12 +411,13 @@ def heard_at(words: list[Line], keys: list[str]) -> tuple[float, float] | None:
 def _spoken(
     db: sqlite3.Connection, video: Video, window: Range, steps: list[str], senses: list[Sense]
 ) -> dict[int, tuple[float, float]] | str:
-    """When each spoken step is heard in the window, by step index; or which one is not heard."""
-    words = sources.spoken_words(db, video.video_id, window.start, window.end)
+    """When each spoken step is heard in the window (its words said together, perhaps across the
+    window's edge), by step index; or which one is not heard."""
+    near = sources.spoken_words(db, video.video_id, window.start - SAID_TOGETHER_S, window.end + SAID_TOGETHER_S)
     spoken = {}
     for i, (step, sense) in enumerate(zip(steps, senses, strict=True)):
         if sense == "speech":
-            at = heard_at(words, retrieve.sound_keys(plan.topic(step)))
+            at = heard_at(near, retrieve.said_words(plan.topic(step)), window)
             if at is None:
                 return f"step {i + 1} is not heard in the speech"
             spoken[i] = at

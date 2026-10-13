@@ -24,6 +24,7 @@ from tlv.agent.inspect import (
     Verdict,
     ask_verdicts,
     check,
+    hear,
     heard_at,
     inspection_window,
     judge,
@@ -32,7 +33,7 @@ from tlv.agent.inspect import (
     unheard,
 )
 from tlv.agent.model import Reply
-from tlv.agent.retrieve import sound_keys
+from tlv.agent.retrieve import said_words
 from tlv.agent.sources import Frame, Line, Video
 from tlv.media import Range
 
@@ -205,6 +206,7 @@ def test_only_unreadable_answers_of_a_batch_are_asked_again_each_with_its_own_st
 
 SAID = [
     Line(1.0, 1.5, "Jordi"),
+    Line(3.0, 3.4, "sandy,"),
     Line(8.0, 8.4, "talking"),
     Line(8.4, 8.6, "to"),
     Line(9.0, 9.5, "Fernandes"),
@@ -219,10 +221,11 @@ SAID = [
         pytest.param("fernandez", (9.0, 9.5), id="one name"),
         pytest.param("jordi embiid", None, id="a name not heard"),
         pytest.param("the", None, id="nothing to hear"),
+        pytest.param("summit", None, id="a word that only shares a sound key"),
     ],
 )
 def test_a_spoken_step_is_heard_where_its_words_are_said(words, expected):
-    assert heard_at(SAID, sound_keys(words)) == expected
+    assert heard_at(SAID, said_words(words), Range(0, 10)) == expected
 
 
 def verdict(steps=((101, 103), (105, 108)), match=True, confidence=0.9):
@@ -428,3 +431,38 @@ def test_a_step_read_on_screen_moves_the_moment_onto_the_text_naming_the_person(
     claim = "LeBron James's stat line is on screen"
     (moment,) = check(Model([seen_on(3, 6)]), game, [(GAME, LOOK)], claim, [claim], ["text"], 3.0, 0.6)
     assert (moment.start, moment.end) == (17.0, 21.0)
+
+
+def speak(db, said):
+    """One transcript segment of (word, start) pairs, each word half a second long."""
+    words = [{"w": w, "s": s, "e": s + 0.5} for w, s in said]
+    db.execute(
+        "INSERT INTO speech (video_id, start, end, text, words) VALUES ('v', ?, ?, ?, ?)",
+        (words[0]["s"], words[-1]["e"], " ".join(w for w, _ in said), json.dumps(words)),
+    )
+
+
+@pytest.mark.parametrize(
+    ("step", "said", "expected"),
+    [
+        pytest.param(
+            "when did they talk about pricing",
+            [("our", 21.0), ("pricing", 21.5), ("for", 22.0), ("tiers", 22.5)],
+            (21.5, 22.0),
+            id="a question about what was said listens for its topic alone",
+        ),
+        pytest.param(
+            "they mention pricing tiers",
+            [("tiers", 25.0), ("pricing", 29.0)],
+            (25.0, 29.5),
+            id="a topic said across the edge of the window",
+        ),
+        pytest.param(
+            "they mention pricing tiers", [("tiers", 25.0), ("pricing", 34.0)], None, id="a topic said too far apart"
+        ),
+    ],
+)
+def test_a_spoken_claim_is_heard_where_its_topic_is_said(game, step, said, expected):
+    speak(game, said)
+    outcome = hear(game, GAME, LOOK, [step], 3.0)
+    assert (None if isinstance(outcome, Rejection) else (outcome.start, outcome.end)) == expected

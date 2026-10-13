@@ -14,6 +14,7 @@ from bisect import bisect_left
 from collections import Counter
 from collections.abc import Iterable
 from dataclasses import dataclass
+from difflib import SequenceMatcher
 
 import numpy as np
 
@@ -127,9 +128,27 @@ def sound_key(word: str) -> str:
     return (letters[0] + "".join(digits) + "000")[:4]
 
 
+def said_words(text: str) -> list[str]:
+    """The words of a text listened for in speech: lowercase, without stop words, each with a sound key."""
+    return [word for word in re.findall(r"[a-z0-9]+", text.lower()) if word not in _STOP and sound_key(word)]
+
+
 def sound_keys(text: str) -> list[str]:
     """The sound key of each word of a text that is not a stop word."""
-    return [key for word in re.findall(r"[a-z0-9]+", text.lower()) if word not in _STOP and (key := sound_key(word))]
+    return [sound_key(word) for word in said_words(text)]
+
+
+# A heard word is a word listened for when the two share a sound key and at least this share of their letters
+# line up: the transcriber spells a name it does not know by ear ("Jordy" for "Jordi", 0.8), but "sand" is not
+# "summit" (0.2), though both are S530.
+SPELLED_ALIKE = 0.5
+
+
+def sounds_like(heard: str, word: str) -> bool:
+    """Whether a heard word is the word listened for, perhaps spelled by ear: the same sound key, and
+    spelled alike."""
+    heard = "".join(re.findall(r"[a-z0-9]+", heard.lower()))
+    return sound_key(heard) == sound_key(word) and SequenceMatcher(None, heard, word).ratio() >= SPELLED_ALIKE
 
 
 def channels(senses: list[Sense], modalities: list[str] | None) -> frozenset[str]:
