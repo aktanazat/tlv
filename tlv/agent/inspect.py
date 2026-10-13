@@ -22,6 +22,8 @@ from tlv.agent.replay import GameClock, period_ended, read_clock
 from tlv.agent.sources import Frame, Line, Video
 from tlv.media import Range
 
+# 448 px wide: 384 cut a check's prompt from 1620 to 1284 tokens (3.6 -> 3.1 s) but the eval lost
+# three events (recall 0.74 -> 0.61, precision 0.45 -> 0.36).
 FRAME_WIDTH = 448
 # A check costs 4.4-5.3 s with 12 frames (1600 prompt tokens). With 8 the eval lost a buzzer and a third of a
 # second of placement (recall 0.61 -> 0.57, precision 0.42 -> 0.36), so seen claims keep 12. A claim with nothing

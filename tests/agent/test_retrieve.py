@@ -1,4 +1,4 @@
-"""Ranking spans: word stems, rank ties, reciprocal-rank fusion and BM25."""
+"""Ranking spans: word stems, rank ties, fusing channel ranks and BM25."""
 
 from collections import Counter
 
@@ -46,10 +46,24 @@ def test_competition_ranks(scores, expected):
     assert competition_ranks(np.array(scores)) == expected
 
 
-def test_fusion_favors_a_span_ranked_well_by_several_channels():
-    looks = [(7, 1), (3, 2), (5, 3)]
-    words_ = [(3, 1), (5, 2)]
-    assert fuse([looks, words_]) == [3, 5, 7]
+@pytest.mark.parametrize(
+    ("rankings", "expected"),
+    [
+        pytest.param(
+            [[(1, 1), (2, 2)], [(3, 1), (2, 2)], [(4, 1), (2, 2)]],
+            [1, 3, 4, 2],
+            id="one channel's first comes before a span every channel ranks second",
+        ),
+        pytest.param(
+            [[(7, 1), (3, 2), (5, 3)], [(3, 1), (5, 2)]],
+            [3, 7, 5],
+            id="equal best ranks: the span more channels rank comes first",
+        ),
+        pytest.param([[(9, 3)], []], [9], id="a span no channel ranks is left out"),
+    ],
+)
+def test_fusion_orders_spans_by_their_best_rank_in_any_channel(rankings, expected):
+    assert fuse(rankings) == expected
 
 
 def test_bm25_weighs_a_rare_word_over_a_common_one():
