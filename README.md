@@ -138,6 +138,9 @@ timecodes (`1:23.4`, `00:01:23.4`). Progress goes to stderr.
 ## Notes
 
 - `add` of a file already present (same content) returns the existing video.
+- `add` takes any video ffmpeg reads. One without a sound track, such as a screen recording,
+  indexes with no speech and no sounds; one in a codec Apple's decoders refuse (VP9, AV1) is read
+  from an H.264 copy made once under `$TLV_HOME/work/`.
 - `--modality` (visual, audio, transcription) limits which channels `search` matches against.
 - A `jockey` session is kept on disk under `$TLV_HOME/work/sessions/`; passing its `session_id`
   answers the follow-up with the earlier questions and answers in view.
@@ -167,17 +170,18 @@ timecodes (`1:23.4`, `00:01:23.4`). Progress goes to stderr.
 
 ## How it compares
 
-Eleven labeled queries over three NBA highlight videos, 23 events in all (`eval/`), run through
-`find --max-candidates 12` here and through the Twelve Labs client it replaced:
+Eleven labeled queries over three NBA highlight videos, 24 events in all (`eval/`), run through
+`find --max-candidates 12` here (`eval/results/local-fast-2026-10-12.json`) and through the
+Twelve Labs client it replaced:
 
 | | Twelve Labs | tlv |
 |---|---|---|
-| events found | 15 of 23 | 17 of 23 |
-| clips returned | 52 | 42 |
-| wrong clips | 25 | 18 |
-| extra clips of an event already found | 5 | 2 |
-| precision (ambiguous clips left out) | 0.33 | 0.46 |
-| seconds per query | 42 | 47 |
+| events found | 15 of 24 | 18 of 24 |
+| clips returned | 52 | 31 |
+| wrong clips | 25 | 9 |
+| extra clips of an event already found | 5 | 0 |
+| precision (ambiguous clips left out) | 0.33 | 0.67 |
+| seconds per query | 42 | 44 |
 | cost | paid API | none |
 
 tlv ran on an M4 Pro with 24 GB that other work kept busy. To run the eval again and score both:
