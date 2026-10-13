@@ -55,6 +55,16 @@ commands:
                                finds again for that person
   cut <video_id> --from T --to T [--frame mid|sheet|none]
                                cut a clip from the local copy
+  reel <query>                 cut a find's clips into one video, on the beat of a song
+      --music FILE             the song (default: none; the clips keep their own sound)
+      --bpm N                  the song's tempo, when its beat is hard to find
+      --order O                found (default), game (by period and clock) or video
+      --max-clips N            most clips (default 12)
+      --mute-video             the song alone, without the clips' own sound
+      --out FILE               the mp4 to write (default: in $TLV_HOME/clips)
+      --from FILE              cut a saved find: tlv find --json, or eval results with <query>
+                               naming the run
+      --then STEP, --max-candidates N, --video ID   as for find
   frames <video_id> --from T --to T [--count N]
                                contact sheet of a range
   timeline <video_id> --from T --to T
@@ -91,6 +101,8 @@ TEXT_OPTIONS += ("clock",)
 LIST_OPTIONS = ("then", "modality", "video", "image", "at", "stage")
 FLAG_OPTIONS = ("json", "no-wait", "no-cut", "force", "strip")
 FLAG_OPTIONS += ("cut",)
+TEXT_OPTIONS += ("music", "bpm", "order", "max-clips", "out")
+FLAG_OPTIONS += ("mute-video",)
 COMMON_OPTIONS = ("index", "json", "help")
 
 
@@ -266,6 +278,24 @@ def _cut(args: list[str], v: Values) -> dict[str, Any]:
     return _present(**_range(args, v), frame=None if frame is None else _one_of(frame, core.FRAMES, "frame"))
 
 
+def _reel(args: list[str], v: Values) -> dict[str, Any]:
+    saved = v.get("from")
+    order = v.get("order")
+    return _present(
+        query=(" ".join(args).strip() or None) if saved is not None else _words(args, "a query"),
+        then=v.get("then"),
+        music=v.get("music"),
+        bpm=_number(v.get("bpm"), "bpm"),
+        order=None if order is None else _one_of(order, core.REEL_ORDERS, "order"),
+        max_clips=_whole(v.get("max-clips"), "max-clips"),
+        mute_video=v.get("mute-video"),
+        out=v.get("out"),
+        from_file=saved,
+        max_candidates=_whole(v.get("max-candidates"), "max-candidates"),
+        video_ids=v.get("video"),
+    )
+
+
 def _frames(args: list[str], v: Values) -> dict[str, Any]:
     return _present(**_range(args, v), count=_whole(v.get("count"), "count"))
 
@@ -379,6 +409,15 @@ COMMANDS: dict[str, Command] = {
         _cut,
         core.video_cut,
         core.cut_text,
+    ),
+    "reel": Command(
+        "tlv reel <query> [--music FILE [--bpm N]] [--order found|game|video] [--max-clips N] [--mute-video]"
+        " [--out FILE] [--from FILE] [--then STEP]... [--max-candidates N] [--video ID]...",
+        ("music", "bpm", "order", "max-clips", "mute-video", "out", "from", "then", "max-candidates", "video"),
+        _reel,
+        core.video_reel,
+        core.reel_text,
+        reports_progress=True,
     ),
     "frames": Command(
         "tlv frames <video_id> --from T --to T [--count N]",

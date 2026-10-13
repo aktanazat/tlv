@@ -122,5 +122,17 @@ so the CLI and MCP output stays familiar)
 - The last find of each index is kept in `$TLV_HOME/work/sessions/find-<index>.json` with what
   was asked, so `tlv more` and `video_more` follow up on it and each follow-up on the one before.
 
+`tlv/reel.py` (reads the index and a find result; no model runs)
+- `beats(song, bpm=None) -> Beats`: the song's tempo, from the lag at which its onset strength
+  repeats, and its first beat; a song without a steady beat raises, so the caller passes `bpm`.
+- `plan(moments, videos, grid, order) -> list[Cut]`: each clip a second either side of its
+  moment, its edges moved onto camera cuts within 0.5 s, lasting whole beats, in found,
+  game-clock or video order. A moment's game clock is the scoreboard the index read nearest its
+  middle in the frames its clip shows.
+- `make(db, claim, confirmed, rows, song, out, order, bpm, mute_video, progress) -> dict`:
+  renders each clip in its own ffmpeg process on the hardware encoder, three at a time and to an
+  exact frame count, joins them without re-encoding, lays the song from its first beat over the
+  game's sound, and writes `.sources.md` and `.sources.json` beside the mp4.
+
 `tlv/cli.py`, `tlv/mcp_server.py`: the commands and MCP tools of the Twelve Labs client, same
 names and flags, plus entity corrections.

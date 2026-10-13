@@ -936,3 +936,78 @@ def jockey_text(r: dict[str, Any]) -> str:
     lines.extend(f'{c["marker"]} {c["timecode"]}  "{c["title"]}"  video_id={c["video_id"]}' for c in r["citations"])
     lines.append(f"session: {r['session_id']}")
     return "\n".join(lines)
+
+
+# video_reel
+
+REEL_ORDERS = ("found", "game", "video")
+
+
+def video_reel(
+    index: str,
+    query: str | None = None,
+    then: list[str] = (),
+    music: str | None = None,
+    bpm: float | None = None,
+    order: str = "found",
+    max_clips: int = 12,
+    mute_video: bool = False,
+    out: str | None = None,
+    from_file: str | None = None,
+    max_candidates: int = 8,
+    video_ids: list[str] | None = None,
+    progress: Progress = None,
+) -> dict[str, Any]:
+    """Cuts the confirmed clips of a find into one mp4 on the beat of `music`, each clip opening with
+    a lower third, with a sources file beside it. `from_file` cuts a saved find (the JSON of `tlv
+    find --json`, or an eval results file with `query` naming its run) instead of running one."""
+    from tlv import reel
+
+    if bpm is not None and music is None:
+        raise ValueError("bpm is the tempo of the music: pass music too")
+    if bpm is not None and not 60 <= bpm <= 200:
+        raise ValueError(f"bpm must be from 60 to 200, got {bpm:g}")
+    if max_clips < 1:
+        raise ValueError(f"max_clips must be at least 1, got {max_clips}")
+    if music is not None and not Path(music).is_file():
+        raise FileNotFoundError(f"No music file at {music}")
+    if from_file is not None:
+        if then:
+            raise ValueError("then shapes a new find, not one saved in from_file")
+        found = reel.saved_find(Path(from_file), query)
+    elif query is not None:
+        found = video_find(index, query, then, max_candidates, cut=False, video_ids=video_ids, progress=progress)
+    else:
+        raise ValueError("Name what to find, or pass a saved find as from_file")
+    confirmed = [o for o in found["confirmed"] if video_ids is None or o["video_id"] in video_ids][:max_clips]
+    if not confirmed:
+        raise ValueError(f'nothing found to cut for "{found["claim"]}"')
+    with _db(index) as db:
+        rows = {o["video_id"]: _video(db, o["video_id"]) for o in confirmed}
+        for row in rows.values():
+            _local_file(row)
+        return reel.make(
+            db,
+            found["claim"],
+            confirmed,
+            rows,
+            Path(music) if music else None,
+            Path(out) if out else None,
+            order,
+            bpm,
+            mute_video,
+            progress,
+        )
+
+
+def reel_text(r: dict[str, Any]) -> str:
+    tempo = f" at {r['bpm']} bpm" if r["bpm"] else ""
+    lines = [
+        f'reel of "{r["claim"]}": {r["path"]}',
+        f"{len(r['cuts'])} clips, {format_timecode(r['duration'])}{tempo}, rendered in {r['seconds']} s",
+    ]
+    lines.extend(
+        f'{c["reel_timecode"]}  {c["timecode"]} of "{c["title"]}"  video_id={c["video_id"]}' for c in r["cuts"]
+    )
+    lines.append(f"sources: {r['sources_path']}")
+    return "\n".join(lines)

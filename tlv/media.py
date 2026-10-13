@@ -144,6 +144,14 @@ def probe(path: Path) -> Probe:
     return Probe(float(info["format"]["duration"]), int(stream["width"]), int(stream["height"]), fps)
 
 
+def has_audio(path: Path) -> bool:
+    """Whether a media file has a sound track."""
+    stdout = run(
+        ["ffprobe", "-v", "error", "-select_streams", "a", "-show_entries", "stream=index", "-of", "csv=p=0", str(path)]
+    )
+    return bool(stdout.strip())
+
+
 def cut(source: Path, span: Range, output: Path) -> None:
     """Re-encodes [start, end] of a video into an mp4 that starts playing before it fully loads."""
     ffmpeg(

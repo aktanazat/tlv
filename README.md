@@ -18,6 +18,9 @@ names are those of the earlier Twelve Labs client, so agents that used it need n
 - `person` follows one person across every video with no reference photo: each stretch they are
   on screen, their seconds on screen, where their name is said or shown, the moments `find`
   verified about them, and a filmstrip still of their clearest crops.
+- `reel` cuts the clips of a find into one video on the beat of a song: each clip starts on a
+  camera cut, lasts whole beats and opens with a caption saying what happens, who and when in the
+  game, and a sources file beside it names each clip's video and time range.
 - `jockey` answers a question about the whole collection in prose, citing clips.
 
 How it works is in [DESIGN.md](DESIGN.md).
@@ -74,6 +77,9 @@ progress notifications when the client passes a progress token.
 `video_more` follows up on the last `video_find`, and `video_search` and `video_find` take a `clock`
 window.
 
+`video_reel` cuts the confirmed clips of a find, new or saved, into a reel on the beat of a song
+and writes its sources beside it.
+
 ## Examples
 
 ```sh
@@ -111,6 +117,10 @@ tlv more "now only fourth quarter"
 tlv more "without the replays"
 tlv more "same but steph"                           # finds again with Stephen Curry instead
 
+# a reel of a find's clips on the beat of a song, in game-clock order, with its sources beside it
+tlv reel "stephen curry makes a three pointer" --music ~/Music/beat.m4a --order game
+tlv reel curry-three --from eval/results/local-fast-2026-10-12.json --music ~/Music/beat.m4a --out curry.mp4
+
 # look at a range, check it, cut it
 tlv frames VIDEO_ID --from 4:15 --to 4:22
 tlv timeline VIDEO_ID --from 4:15 --to 4:22
@@ -146,6 +156,14 @@ timecodes (`1:23.4`, `00:01:23.4`). Progress goes to stderr.
   by game clock, video, replays or clip id without a model or a new search, or finds again with
   another person in place of the one searched; each follow-up builds on the one before. The rules
   read the usual phrasings and the model reads the rest.
+- `reel --from` cuts a saved find (`find --json`, or an eval results file and a run name) and runs
+  no model. `--order game` sorts the clips by the scoreboard each one shows, read from the
+  on-screen text indexing stored; clips that show none go last. The song's tempo and first beat
+  are found from the song itself; pass `--bpm` for a song without a steady beat. A song shorter
+  than the reel loops on whole bars. Each clip renders on the hardware video encoder, three at a
+  time, so a reel of eight clips takes seconds and leaves the CPU and GPU to searches. Without
+  `--music` the clips keep their own sound; `--mute-video` plays the song alone. The mp4 and its
+  `.sources.md` and `.sources.json` go to `--out`, or to `$TLV_HOME/clips/`.
 
 ## How it compares
 

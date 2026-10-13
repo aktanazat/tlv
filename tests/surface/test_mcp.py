@@ -34,6 +34,7 @@ NEW_TOOLS = {
     "video_person",
 }
 NEW_TOOLS |= {"video_at", "video_more"}
+NEW_TOOLS |= {"video_reel"}
 
 
 def test_stdio_server_lists_the_tools_and_answers_video_list(video, home):

@@ -1,8 +1,8 @@
 """The MCP server over stdio: one tool per tlv operation, with the tool names and input fields of
 the Twelve Labs client it replaces, plus the entity corrections, the timeline, a person's
-timeline, the game clock and follow-ups to a find. Each tool returns its result as structured
-content plus the short text rendering; video_cut, video_frames, video_person and video_at add the
-frame, contact sheet, filmstrip or still as an image.
+timeline, the game clock, follow-ups to a find and a highlight reel of one. Each tool returns its
+result as structured content plus the short text rendering; video_cut, video_frames, video_person
+and video_at add the frame, contact sheet, filmstrip or still as an image.
 Long tools send progress notifications when the client passes a progress token. Operations run in
 worker threads, so a long one never blocks the others."""
 
@@ -291,6 +291,58 @@ def server(default_index: str) -> MCPServer:
     ) -> CallToolResult:
         result = await _run(core.video_cut, index=pick(index), video_id=video_id, start=start, end=end, frame=frame)
         return _reply(result, core.cut_text(result), result.get("frame_path"))
+
+    @mcp.tool(
+        name="video_reel",
+        title="Cut a highlight reel",
+        description="Cut the confirmed clips of a find into one mp4 on the beat of a song: each clip starts on a "
+        "camera cut, lasts whole beats and opens with a lower third (what happens, who, the game clock, the video), "
+        "with the song over the game's own sound. Writes .sources.md and .sources.json beside the mp4, naming each "
+        "clip's video and range. Runs video_find first, unless from_file names a saved find.",
+        annotations=ToolAnnotations(read_only_hint=False, destructive_hint=False, open_world_hint=False),
+    )
+    async def video_reel(
+        ctx: Context,
+        query: Annotated[
+            str | None, Field(min_length=1, description="What happens, as for video_find; with from_file, the run")
+        ] = None,
+        then: Then = None,
+        music: Annotated[str | None, Field(min_length=1, description="Song file to cut to (default none)")] = None,
+        bpm: Annotated[
+            float | None, Field(ge=60, le=200, description="The song's tempo, when its beat is hard to find")
+        ] = None,
+        order: Annotated[
+            Literal["found", "game", "video"],
+            Field(description="found (default), game (by period and game clock) or video (by video and time)"),
+        ] = "found",
+        max_clips: Annotated[int, Field(ge=1, le=50, description="Most clips (default 12)")] = 12,
+        mute_video: Annotated[bool, Field(description="The song alone, without the clips' own sound")] = False,
+        out: Annotated[str | None, Field(min_length=1, description="The mp4 to write (default: in clips/)")] = None,
+        from_file: Annotated[
+            str | None,
+            Field(min_length=1, description="A saved find to cut instead: tlv find --json output, or eval results"),
+        ] = None,
+        max_candidates: Annotated[int, Field(ge=1, le=50, description="Candidates a new find checks (default 8)")] = 8,
+        video_ids: VideoIds = None,
+        index: Index = None,
+    ) -> CallToolResult:
+        result = await _run(
+            core.video_reel,
+            ctx,
+            index=pick(index),
+            query=query,
+            then=then or [],
+            music=music,
+            bpm=bpm,
+            order=order,
+            max_clips=max_clips,
+            mute_video=mute_video,
+            out=out,
+            from_file=from_file,
+            max_candidates=max_candidates,
+            video_ids=video_ids,
+        )
+        return _reply(result, core.reel_text(result))
 
     @mcp.tool(
         name="video_frames",
