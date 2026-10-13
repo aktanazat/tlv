@@ -14,7 +14,7 @@ from pathlib import Path
 
 import pytest
 
-from tlv import guard
+from tlv import guard, host
 
 HOG = textwrap.dedent(
     """
@@ -26,6 +26,9 @@ HOG = textwrap.dedent(
     held = []
 
     def load():
+        for _ in range(int(os.environ.get("HOG_LOAD_MB", "0")) // 50):
+            held.append(np.ones(50 * 1024 * 1024, dtype=np.uint8))
+
         def handle(job):
             began = time.time()
             for _ in range(job.get("mb", 0) // 50):
@@ -34,6 +37,10 @@ HOG = textwrap.dedent(
             if job.get("fail"):
                 raise ValueError("bad frame")
             time.sleep(job.get("sleep", 0))
+            if job.get("hold"):  # runs until the test deletes this file
+                open(job["hold"], "w").close()
+                while os.path.exists(job["hold"]):
+                    time.sleep(0.01)
             return {"held_mb": 50 * len(held), "pid": os.getpid(), "began": began, "ended": time.time()}
         return handle
 
@@ -172,3 +179,61 @@ def test_runs_wait_their_turn(hog):
     thread.join()
     assert second["began"] >= results["first"]["ended"]
     assert any("waiting for another model run" in w for w in waits)
+
+
+def _queued_behind_a_running_job(hog, monkeypatch, tmp_path, order):
+    """Runs one job per letter of `order` on model a or b, queued in that order while a job on a
+    holds the host, with the held-memory cap fitting one model; returns their results in order."""
+    monkeypatch.setenv("TLV_HELD_MEMORY_GB", "0.3")
+    a = {**hog, "HOG_LOAD_MB": "200"}  # about 0.22 GB a model, so two are over the cap
+    envs = {"a": a, "b": {**a, "TLV_OTHER": "another model"}}
+    hold = tmp_path / "hold"
+    results = [{}] * len(order)
+    queued = [threading.Event() for _ in order]
+
+    def waiting(event):
+        def progress(message):
+            if message.startswith("waiting for another model run"):
+                event.set()
+
+        return progress
+
+    def call(i, model):
+        results[i] = model.call({})
+
+    with contextlib.ExitStack() as stack:
+
+        def open_model(name, progress=None):
+            model = guard.ModelProcess("hog", cap_bytes=600 * MB, env=envs[name], progress=progress)
+            return stack.enter_context(model)
+
+        holder = open_model("a")
+        callers = [open_model(name, waiting(event)) for name, event in zip(order, queued, strict=True)]
+        threads = [threading.Thread(target=holder.call, args=({"hold": str(hold)},))]
+        threads[0].start()
+        deadline = time.monotonic() + 10
+        while not hold.exists() and time.monotonic() < deadline:
+            time.sleep(0.01)
+        for i, caller in enumerate(callers):
+            threads.append(threading.Thread(target=call, args=(i, caller)))
+            threads[-1].start()
+            assert queued[i].wait(10), f"job {i} ran instead of waiting behind the held job"
+        hold.unlink()
+        for thread in threads:
+            thread.join()
+    return results
+
+
+def test_queued_jobs_on_a_loaded_model_go_first_so_models_are_not_reloaded_in_turn(hog, monkeypatch, tmp_path):
+    """2026-10-13: callers on different models took turns, and with room for one model each turn
+    unloaded the other's. Each process that ran a job is one load of its model."""
+    order = "ab" * 6
+    results = _queued_behind_a_running_job(hog, monkeypatch, tmp_path, order)
+    loads = len({result["pid"] for result in results})
+    assert loads <= 1 + len(order) // (host.MAX_OVERTAKEN + 1), f"{loads} loads for {len(order)} jobs"
+
+
+def test_a_job_on_another_model_is_passed_over_at_most_a_few_times(hog, monkeypatch, tmp_path):
+    results = _queued_behind_a_running_job(hog, monkeypatch, tmp_path, "b" + "a" * 5)
+    ahead = sum(result["began"] < results[0]["began"] for result in results[1:])
+    assert ahead <= host.MAX_OVERTAKEN, f"{ahead} later jobs went ahead of the first"

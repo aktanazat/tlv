@@ -5,7 +5,10 @@ TLV_MODEL_HOST) and starts it when none is running; it logs to models.log beside
 every $TLV_HOME shares one host and one memory budget. The host
 
 1. runs one job at a time across every tlv process and agent, loading a model in a guarded child
-   (tlv.guard.Child) the first time it is asked for, and tells a caller who has to wait;
+   (tlv.guard.Child) the first time it is asked for, and tells a caller who has to wait. Next it
+   runs the longest-waiting job whose model is loaded, else the longest-waiting one, so callers on
+   different models do not each unload the other's model in turn; a job lets at most
+   MAX_OVERTAKEN later ones go first;
 2. keeps a model loaded until it has gone unused for TLV_MODEL_IDLE_S (default 600 s);
 3. holds at most TLV_HELD_MEMORY_GB (default 8) in the models it keeps: after every job it
    unloads the least recently used ones until the rest fit;
@@ -57,6 +60,9 @@ HEADROOM_CMD = os.environ.get("TLV_HEADROOM_CMD") or str(Path.home() / "memory/b
 HEADROOM_TIMEOUT_S = 20.0
 TICK_S = 0.5
 LOCK_WAIT_S = 5.0  # a host on its way out releases its lock well within this
+# A waiting job lets later jobs on an already loaded model go first at most this many times, so a
+# caller needing another model waits a few jobs longer, never for the whole queue.
+MAX_OVERTAKEN = 3
 
 # module, cap, the caller's model variables, its interpreter, its code stamp
 Key = tuple[str, int, tuple[tuple[str, str], ...], str, str]
@@ -66,6 +72,13 @@ Key = tuple[str, int, tuple[tuple[str, str], ...], str, str]
 class Resident:
     child: guard.Child
     used: float  # time.monotonic() when it last loaded or finished a job
+
+
+@dataclass
+class Waiter:
+    key: Key
+    overtaken: int = 0  # later jobs that went first
+    turn: bool = False  # set when the host picks it to run next
 
 
 def log(message: str) -> None:
@@ -82,8 +95,10 @@ def _send(conn: socket.socket, message: dict[str, Any]) -> None:
 
 class Host:
     def __init__(self) -> None:
-        self.jobs = threading.Lock()  # held for every load, job and unload
-        self.residents: dict[Key, Resident] = {}  # changed only under `jobs`
+        self.turns = threading.Condition()  # guards `busy` and `waiting`
+        self.busy = False  # a load, job or unload is under way; it stays True while jobs wait
+        self.waiting: list[Waiter] = []  # oldest first
+        self.residents: dict[Key, Resident] = {}  # changed only by the job or tick that has the turn
         self.state = threading.Lock()  # guards the counts below
         self.clients = 0
         self.open: Counter[Key] = Counter()  # connections holding each model
@@ -141,9 +156,7 @@ class Host:
             return {"error": f"the model host failed: {type(error).__name__}: {error}", "kind": "model"}
 
     def run(self, key: Key, job: dict[str, Any] | None, say: guard.Progress) -> dict[str, Any]:
-        if not self.jobs.acquire(blocking=False):
-            say(f"waiting for another model run to finish before {_name(key)}")
-            self.jobs.acquire()
+        self._begin(key, say)
         try:
             with self.state:
                 self.asked = time.monotonic()
@@ -160,13 +173,47 @@ class Host:
                     del self.residents[key]
                 self._fit(key)
         finally:
-            self.jobs.release()
+            self._end()
+
+    def _begin(self, key: Key, say: guard.Progress) -> None:
+        """Returns at once when the host is free, else once _end picks this job."""
+        with self.turns:
+            if not self.busy:
+                self.busy = True
+                return
+            waiter = Waiter(key)
+            self.waiting.append(waiter)
+        say(f"waiting for another model run to finish before {_name(key)}")
+        with self.turns:
+            self.turns.wait_for(lambda: waiter.turn)
+
+    def _end(self) -> None:
+        """Hands the host to the longest-waiting job whose model is loaded, unless that passes over
+        a job already passed over MAX_OVERTAKEN times; then, or when none is loaded, to the
+        longest-waiting. Passing a job over passes every older one too, so the oldest has always
+        been passed over the most."""
+        with self.turns:
+            if not self.waiting:
+                self.busy = False
+                return
+            oldest = self.waiting[0]
+            chosen = oldest
+            if oldest.overtaken < MAX_OVERTAKEN:
+                chosen = next((w for w in self.waiting if w.key in self.residents), oldest)
+            at = self.waiting.index(chosen)
+            for passed in self.waiting[:at]:
+                passed.overtaken += 1
+            del self.waiting[at]
+            chosen.turn = True
+            self.turns.notify_all()
 
     def tick(self) -> bool:
         """Lets go of models that are idle, stopped, or held while memory is short. True once the
         host has held nothing and been asked nothing for IDLE_S."""
-        if not self.jobs.acquire(blocking=False):
-            return False  # a job is running
+        with self.turns:
+            if self.busy:
+                return False  # a job is running or waiting
+            self.busy = True
         try:
             now = time.monotonic()
             with self.state:
@@ -184,7 +231,7 @@ class Host:
                 self._unload(key, short)
             return not self.residents and clients == 0 and now - asked >= IDLE_S
         finally:
-            self.jobs.release()
+            self._end()
 
     def _load(self, key: Key, say: guard.Progress) -> Resident:
         resident = self.residents.get(key)

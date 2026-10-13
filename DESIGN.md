@@ -33,7 +33,8 @@ query ─▶ plan ─▶ retrieve ─▶ connect ─▶ inspect ─▶ answer (c
   normalized to unit length.
 - **Models**: every model runs through `tlv.guard.ModelProcess`, which hands the work to the
   model host (`tlv/host.py`): one background process per `$TLV_HOME` that runs one job at a
-  time, keeps models loaded between runs and lets them go when idle, over its held-memory cap
+  time, a waiting job on a loaded model first (passing over another job at most three times),
+  keeps models loaded between runs and lets them go when idle, over its held-memory cap
   or when the Mac is short of memory. Each model is held to its own memory cap (6 GB default).
   A model worker is a module under `tlv/models/` that calls `tlv.models.protocol.serve(load)`.
   Never import MLX, torch or onnxruntime in the parent process. Load a model once per batch of
