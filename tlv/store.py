@@ -122,18 +122,22 @@ CREATE TABLE IF NOT EXISTS spans (
 );
 CREATE INDEX IF NOT EXISTS spans_by_time ON spans (video_id, start);
 
--- tlv.entities: one appearance is one person seen continuously inside one shot.
+-- tlv.entities: one appearance is one person seen continuously inside one shot, as a face or a
+-- body. A face sitting on a body through the same frames is that body's person: `body` links them.
+-- A reference image taught with add_reference has no video (video_id NULL, times 0).
 CREATE TABLE IF NOT EXISTS appearances (
   appearance_id TEXT PRIMARY KEY,
-  video_id      TEXT NOT NULL REFERENCES videos ON DELETE CASCADE,
+  video_id      TEXT REFERENCES videos ON DELETE CASCADE,
   kind          TEXT NOT NULL CHECK (kind IN ('face', 'body')),
   start         REAL NOT NULL,
   end           REAL NOT NULL,
   best_t        REAL NOT NULL,           -- the clearest frame
   box           TEXT NOT NULL,           -- JSON [x, y, w, h] at best_t
   crop_path     TEXT NOT NULL,
-  embedding     BLOB NOT NULL,
-  clues         TEXT NOT NULL DEFAULT '[]'  -- JSON [{"kind": "jersey"|"spoken_name"|"ocr_name", "value", "t"}]
+  embedding     BLOB NOT NULL,           -- ArcFace for a face; a body's jersey colors (entities.crops.colors)
+  clues         TEXT NOT NULL DEFAULT '[]', -- JSON [{"kind", "value", "t"}]; jersey|spoken_name|ocr_name|caption_name
+  body          TEXT REFERENCES appearances ON DELETE SET NULL CHECK (body IS NULL OR kind = 'face'),
+  quality       REAL CHECK ((quality IS NULL) = (kind = 'body')) -- a face's Vision capture quality where embedded
 );
 CREATE INDEX IF NOT EXISTS appearances_by_video ON appearances (video_id, start);
 
@@ -141,6 +145,7 @@ CREATE INDEX IF NOT EXISTS appearances_by_video ON appearances (video_id, start)
 CREATE TABLE IF NOT EXISTS entities (
   entity_id            TEXT PRIMARY KEY,
   name                 TEXT,
+  name_evidence        TEXT NOT NULL DEFAULT '[]', -- JSON: the correction, or the agreeing clues, that gave the name
   canonical_appearance TEXT NOT NULL,
   embedding            BLOB NOT NULL,
   updated_at           REAL NOT NULL
@@ -161,6 +166,16 @@ CREATE TABLE IF NOT EXISTS corrections (
   created_at REAL NOT NULL
 );
 
+-- tlv.entities: the vision-language model's answer to "same person?" for two appearances (a < b),
+-- kept so re-clustering never asks twice.
+CREATE TABLE IF NOT EXISTS verdicts (
+  a          TEXT NOT NULL REFERENCES appearances ON DELETE CASCADE,
+  b          TEXT NOT NULL REFERENCES appearances ON DELETE CASCADE,
+  same       INTEGER,                    -- 1 same, 0 different, NULL unsure
+  created_at REAL NOT NULL,
+  PRIMARY KEY (a, b)
+);
+
 -- tlv.agent and tlv.index.spans: a fact tied to a source video and a time range, with paths back
 -- to the evidence. kind 'caption' comes from indexing; 'verified' from a checked find.
 CREATE TABLE IF NOT EXISTS observations (
@@ -172,7 +187,9 @@ CREATE TABLE IF NOT EXISTS observations (
   kind       TEXT NOT NULL CHECK (kind IN ('caption', 'verified')),
   text       TEXT NOT NULL,
   confidence REAL NOT NULL,
-  evidence   TEXT NOT NULL,              -- JSON {"frames": [path], "transcript": str, "ocr": [str], "sounds": [str]}
+  -- evidence: JSON {"frames": [path], "transcript": str, "ocr": [str], "sounds": [str]};
+  -- verified rows add "summary", "who", "steps", "replays"
+  evidence   TEXT NOT NULL,
   query      TEXT,
   created_at REAL NOT NULL
 );
@@ -192,9 +209,10 @@ def data_dir(sub: Sub) -> Path:
     return path
 
 
-def connect() -> sqlite3.Connection:
-    """Opens the database, creating the schema on first use. Safe across processes (WAL)."""
-    path = home() / "tlv.db"
+def connect(index: str | None = None) -> sqlite3.Connection:
+    """Opens the index's database ($TLV_HOME/<index>.db; the index defaults to $TLV_INDEX, else "tlv"),
+    creating the schema on first use. Safe across processes (WAL)."""
+    path = home() / f"{index or os.environ.get('TLV_INDEX') or 'tlv'}.db"
     path.parent.mkdir(parents=True, exist_ok=True)
     db = sqlite3.connect(path, timeout=60, isolation_level=None)
     db.row_factory = sqlite3.Row
