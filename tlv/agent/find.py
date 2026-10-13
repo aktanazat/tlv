@@ -1,7 +1,8 @@
 """search and find. search ranks moments that may match a query; find checks each of the best
-by looking at it, joins the pieces of one moment that neighbouring looks found, keeps one result per
-play with its replays listed under it, and records every confirmed moment as a verified observation
-tied to its video, time range and evidence."""
+by looking at it, joins the pieces of one moment that neighbouring looks found (for a question about
+what was said, the mentions in one stretch of talk), keeps one result per play with its replays listed
+under it, and records every confirmed moment as a verified observation tied to its video, time range
+and evidence."""
 
 from __future__ import annotations
 
@@ -18,7 +19,7 @@ from typing import Any
 from tlv import entities, judge, media, store
 from tlv.agent import plan, retrieve, sources
 from tlv.agent.connect import LONGEST_LOOK_S, Candidate, Clip, looks, rank_clips, rank_steps
-from tlv.agent.inspect import Moment, Rejection, check, clock, hear, joined, same_play
+from tlv.agent.inspect import Moment, Rejection, check, clock, hear, join_discussions, joined, same_play
 from tlv.agent.model import Vlm
 from tlv.agent.plan import Sense
 from tlv.agent.replay import Play, distinct_moments, join_pieces, merge_replays
@@ -227,7 +228,7 @@ def find(
             outcomes = [hear(db, by_id[s.video_id], s, steps, pad) for s in stretches]
             kept, repeats = distinct_moments([o for o in outcomes if isinstance(o, Moment)])
             # A replay shows a play again, but what is said over it is said anew: a spoken moment stands alone.
-            plays = [Play(m) for m in join_pieces(kept, joined)]
+            plays = [Play(m) for m in join_discussions(db, kept)]
             loaded, model_seconds = searched, 0.0
             vetoed: list[Play[Moment]] = []
         else:

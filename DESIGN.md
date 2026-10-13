@@ -105,9 +105,11 @@ so the CLI and MCP output stays familiar)
 - `search(query, then=(), limit=10, video_ids=None, max_gap=12) -> SearchResult`
 - `find(query, then=(), max_candidates=8, pad=3, min_confidence=0.6, cut=True, video_ids=None,
   progress=None) -> FindResult`. Pieces of one moment found by neighbouring looks, at most 2 s
-  apart, come back as one clip. Each confirmed observation adds `replays`: other angles of
-  the same moment, `[{video_id, start, end, timecode, reason}]`, merged into it rather than
-  listed as separate clips.
+  apart, come back as one clip; for a question about what was said, so do mentions in one
+  stretch of talk (no pause over 2.5 s, each within 30 s of the last). Each confirmed
+  observation adds `replays`: other angles of the same moment,
+  `[{video_id, start, end, timecode, reason}]`, merged into it rather than listed as separate
+  clips.
 - `ask(video_id, question, start=None, end=None, json_schema=None) -> AskResult`
 - `answer(question, video_ids=None, progress=None) -> JockeyResult`: a collection-wide
   question answered by planning, calling the same tools, and citing clips.

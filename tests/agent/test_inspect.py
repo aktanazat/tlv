@@ -27,6 +27,7 @@ from tlv.agent.inspect import (
     hear,
     heard_at,
     inspection_window,
+    join_discussions,
     joined,
     judge,
     read_on_screen,
@@ -209,6 +210,7 @@ def test_only_unreadable_answers_of_a_batch_are_asked_again_each_with_its_own_st
 SAID = [
     Line(1.0, 1.5, "Jordi"),
     Line(3.0, 3.4, "sandy,"),
+    Line(4.0, 4.5, "something"),
     Line(8.0, 8.4, "talking"),
     Line(8.4, 8.6, "to"),
     Line(9.0, 9.5, "Fernandes"),
@@ -228,6 +230,21 @@ SAID = [
 )
 def test_a_spoken_step_is_heard_where_its_words_are_said(words, expected):
     assert heard_at(SAID, said_words(words), Range(0, 10)) == expected
+
+
+FORMS = [Line(1.0, 1.5, "pricing"), Line(2.0, 2.5, "summit."), Line(3.0, 3.5, "talk")]
+
+
+@pytest.mark.parametrize(
+    ("words", "expected"),
+    [
+        pytest.param("price", (1.0, 1.5), id="a noun heard as a verb's ing form"),
+        pytest.param("summits", (2.0, 2.5), id="a plural heard in the singular"),
+        pytest.param("talked", (3.0, 3.5), id="a past tense heard in the present"),
+    ],
+)
+def test_a_spoken_word_is_heard_in_another_form(words, expected):
+    assert heard_at(FORMS, said_words(words), Range(0, 4)) == expected
 
 
 def verdict(steps=((101, 103), (105, 108)), match=True, confidence=0.9):
@@ -468,6 +485,37 @@ def test_a_spoken_claim_is_heard_where_its_topic_is_said(game, step, said, expec
     speak(game, said)
     outcome = hear(game, GAME, LOOK, [step], 3.0)
     assert (None if isinstance(outcome, Rejection) else (outcome.start, outcome.end)) == expected
+
+
+def mention(start):
+    """A moment a spoken claim about the summit was heard, half a second long."""
+    step = CheckedStep("when did they talk about the summit", start, start + 0.5)
+    return Moment(GAME, start, start + 0.5, 1.0, "", 'heard "summit"', False, None, (step,), ())
+
+
+@pytest.mark.parametrize(
+    ("times", "mentioned", "expected"),
+    [
+        pytest.param([10 + i for i in range(21)], [10, 30], [(10, 30.5)], id="talk running on is one discussion"),
+        pytest.param(
+            [*(10 + i for i in range(6)), *(17.5 + i for i in range(8))],
+            [10, 24.5],
+            [(10, 25.0)],
+            id="a two second pause between sentences",
+        ),
+        pytest.param(
+            [*(10 + i for i in range(6)), *(19 + i for i in range(7))],
+            [10, 25],
+            [(10, 10.5), (25, 25.5)],
+            id="a long pause ends the talk",
+        ),
+        pytest.param([5 + i for i in range(41)], [5, 45], [(5, 5.5), (45, 45.5)], id="mentions too far apart"),
+    ],
+)
+def test_mentions_in_one_stretch_of_talk_are_one_moment(game, times, mentioned, expected):
+    speak(game, [("summit" if t in mentioned else "and", t) for t in times])
+    moments = join_discussions(game, [mention(t) for t in mentioned])
+    assert [(m.start, m.end) for m in moments] == expected
 
 
 def piece(start, end, confidence, summary, times, clock):

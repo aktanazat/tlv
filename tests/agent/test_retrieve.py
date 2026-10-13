@@ -126,3 +126,9 @@ def test_each_step_searches_the_channels_of_its_sense(step, found):
     text = topic(step) if heard_by == "speech" else step
     [clips] = rank(None, CORPUS, [Query(text, (), channels([heard_by], None))])
     assert [(c.start, c.end) for c in clips] == found
+
+
+def test_a_spoken_step_finds_a_span_saying_another_form_of_its_words():
+    said = corpus(screen=["", ""], spoken=["the weather today", "our pricing for tiers"])
+    [clips] = rank(None, said, [Query("price", (), channels(["speech"], None))])
+    assert [(c.start, c.end) for c in clips] == [(5, 10)]

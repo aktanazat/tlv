@@ -18,7 +18,7 @@ from tlv.agent import plan, retrieve, sources
 from tlv.agent.connect import Ranged
 from tlv.agent.model import Question, Reply, Vlm, parse_json
 from tlv.agent.plan import Sense
-from tlv.agent.replay import GameClock, period_ended, read_clock
+from tlv.agent.replay import GameClock, join_pieces, period_ended, read_clock
 from tlv.agent.sources import Frame, Line, Video
 from tlv.media import Range
 
@@ -54,6 +54,12 @@ READ_AROUND_S = 30.0
 # The words of one spoken step count as said together when they are said within this many seconds, about a
 # sentence: a topic said across the edge of the window is still heard there.
 SAID_TOGETHER_S = 8.0
+# A question about what was said asks for the talk about it, not each word: mentions of its topic are one
+# discussion while the talk runs on between them, with no pause longer than LONG_PAUSE_S, and the next comes
+# within MENTIONS_WITHIN_S. In the everyday eval's meeting, mentions of one topic came 15 to 27 s apart with
+# pauses of 1.9 s at most between; sports commentary naming a coach about two plays 27 s apart paused 3.2 s.
+LONG_PAUSE_S = 2.5
+MENTIONS_WITHIN_S = 30.0
 # A time a verdict names instead of a frame number, as stamped on the frames: h:mm:ss.s or m:ss.s.
 _STAMPED = re.compile(r"(?:(\d+):)?(\d+):(\d+(?:\.\d+)?)")
 
@@ -478,6 +484,21 @@ def hear(db: sqlite3.Connection, video: Video, look: Ranged, steps: list[str], p
         tuple(CheckedStep(step, a, b) for step, (a, b) in zip(steps, times, strict=True)),
         tuple((frame, frame.path) for frame in sources.frames(db, video.video_id, start, end)),
     )
+
+
+def join_discussions(db: sqlite3.Connection, moments: list[Moment]) -> list[Moment]:
+    """Joins the moments a spoken claim was heard into one moment for each stretch of talk."""
+    return join_pieces(moments, joined, lambda earlier, later: _one_discussion(db, earlier, later))
+
+
+def _one_discussion(db: sqlite3.Connection, earlier: Moment, later: Moment) -> bool:
+    """Whether `later` is heard in the same stretch of talk as `earlier`: same video, at most
+    MENTIONS_WITHIN_S after it, and no pause longer than LONG_PAUSE_S in the words said between."""
+    if earlier.video_id != later.video_id or later.start - earlier.end > MENTIONS_WITHIN_S:
+        return False
+    between = sources.spoken_words(db, earlier.video_id, earlier.end, later.start)
+    edges = [earlier.end, *(t for word in between for t in (word.start, word.end)), later.start]
+    return all(resume - stop <= LONG_PAUSE_S for stop, resume in zip(edges[::2], edges[1::2], strict=True))
 
 
 def _game_clock(db: sqlite3.Connection, video_id: str, t: float) -> str:
