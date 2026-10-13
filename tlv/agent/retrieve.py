@@ -87,22 +87,23 @@ _STOP = frozenset(
 )
 
 
+def stem(word: str) -> str:
+    """A lowercase word's stem: plural s, then ing, ion or ed, then a final e ("pricing" and "price"
+    are both "pric")."""
+    if len(word) > 3 and word.endswith("s") and not word.endswith("ss"):
+        word = word[:-1]
+    for suffix in ("ing", "ion", "ed"):
+        if len(word) > len(suffix) + 2 and word.endswith(suffix):
+            word = word[: -len(suffix)]
+            break
+    if len(word) > 3 and word.endswith("e"):
+        word = word[:-1]
+    return word
+
+
 def words(text: str) -> list[str]:
-    """Lowercase word stems without stop words: plural s, then ing, ion or ed, then a final e."""
-    stems = []
-    for word in re.findall(r"[a-z0-9]+", text.lower()):
-        if word in _STOP:
-            continue
-        if len(word) > 3 and word.endswith("s") and not word.endswith("ss"):
-            word = word[:-1]
-        for suffix in ("ing", "ion", "ed"):
-            if len(word) > len(suffix) + 2 and word.endswith(suffix):
-                word = word[: -len(suffix)]
-                break
-        if len(word) > 3 and word.endswith("e"):
-            word = word[:-1]
-        stems.append(word)
-    return stems
+    """Lowercase word stems without stop words."""
+    return [stem(word) for word in re.findall(r"[a-z0-9]+", text.lower()) if word not in _STOP]
 
 
 # Letters that sound alike share a digit (American Soundex); vowels, h, w and y have none.
@@ -134,20 +135,20 @@ def said_words(text: str) -> list[str]:
 
 
 def sound_keys(text: str) -> list[str]:
-    """The sound key of each word of a text that is not a stop word."""
-    return [sound_key(word) for word in said_words(text)]
+    """The sound key of the stem of each word of a text that is not a stop word."""
+    return [sound_key(stem(word)) for word in said_words(text)]
 
 
-# A heard word is a word listened for when the two share a sound key and at least this share of their letters
-# line up: the transcriber spells a name it does not know by ear ("Jordy" for "Jordi", 0.8), but "sand" is not
-# "summit" (0.2), though both are S530.
-SPELLED_ALIKE = 0.5
+# A heard word is a word listened for when their stems share a sound key and at least this share of the stems'
+# letters line up: the transcriber spells a name it does not know by ear ("Jordy" for "Jordi", 0.8; "Stef" for
+# "Steph", 0.67), but "sand" is not "summit" (0.2) nor "something" ("someth", 0.5), though all are S530.
+SPELLED_ALIKE = 0.6
 
 
 def sounds_like(heard: str, word: str) -> bool:
-    """Whether a heard word is the word listened for, perhaps spelled by ear: the same sound key, and
-    spelled alike."""
-    heard = "".join(re.findall(r"[a-z0-9]+", heard.lower()))
+    """Whether a heard word is the word listened for, in any form and perhaps spelled by ear: their
+    stems have the same sound key and are spelled alike."""
+    heard, word = stem("".join(re.findall(r"[a-z0-9]+", heard.lower()))), stem(word)
     return sound_key(heard) == sound_key(word) and SequenceMatcher(None, heard, word).ratio() >= SPELLED_ALIKE
 
 

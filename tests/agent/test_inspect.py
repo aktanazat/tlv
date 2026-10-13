@@ -209,6 +209,7 @@ def test_only_unreadable_answers_of_a_batch_are_asked_again_each_with_its_own_st
 SAID = [
     Line(1.0, 1.5, "Jordi"),
     Line(3.0, 3.4, "sandy,"),
+    Line(4.0, 4.5, "something"),
     Line(8.0, 8.4, "talking"),
     Line(8.4, 8.6, "to"),
     Line(9.0, 9.5, "Fernandes"),
@@ -228,6 +229,21 @@ SAID = [
 )
 def test_a_spoken_step_is_heard_where_its_words_are_said(words, expected):
     assert heard_at(SAID, said_words(words), Range(0, 10)) == expected
+
+
+FORMS = [Line(1.0, 1.5, "pricing"), Line(2.0, 2.5, "summit."), Line(3.0, 3.5, "talk")]
+
+
+@pytest.mark.parametrize(
+    ("words", "expected"),
+    [
+        pytest.param("price", (1.0, 1.5), id="a noun heard as a verb's ing form"),
+        pytest.param("summits", (2.0, 2.5), id="a plural heard in the singular"),
+        pytest.param("talked", (3.0, 3.5), id="a past tense heard in the present"),
+    ],
+)
+def test_a_spoken_word_is_heard_in_another_form(words, expected):
+    assert heard_at(FORMS, said_words(words), Range(0, 4)) == expected
 
 
 def verdict(steps=((101, 103), (105, 108)), match=True, confidence=0.9):
