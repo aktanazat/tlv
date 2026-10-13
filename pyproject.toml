@@ -40,3 +40,6 @@ select = ["E", "F", "W", "I", "B", "UP", "SIM", "RUF"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["."]
+markers = ["slow: loads a real model under the guard; run with -m slow"]
+addopts = "-m 'not slow'"

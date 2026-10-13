@@ -57,6 +57,8 @@ Signatures below are the interface; each owner may add private helpers freely. `
 - `image_queries(texts) -> np.ndarray` SigLIP 2 text vectors in the same space as `images`.
 - `sentences(texts, query=False) -> np.ndarray` unit text vectors for captions, speech and
   on-screen text; `query=True` applies the model's query instruction.
+- `queries(texts) -> (np.ndarray, np.ndarray)` `image_queries(texts)` and `sentences(texts, query=True)`
+  from one child holding both models, so a search starts one model process, not two.
 
 `tlv/index/vision.py`
 - `read_text(paths) -> list[list[TextLine]]` Apple Vision text recognition on image files.
