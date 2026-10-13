@@ -1,0 +1,291 @@
+{
+  "method": "Labeled by hand from the six local files before tlv indexed any of them: contact sheets of every video at 2-3 s steps, 1 fps sheets across every event boundary (0.25 s steps for the two-second plot in the lecture), and full-resolution stills wherever a frame had to be read: terminal text, slide plots, faces in the movie, the bridge on the horizon in the vlog. Times are m:ss.s from the start of the local file; each file is a cut of its source, given as 'segment'. YouTube's automatic captions, shifted to each cut, were used to find spoken moments, and where an event's edge is a spoken line its caption time sets it. Three queries ask what is said (lecture-backprop, meeting-pricing, meeting-summit): for those the captions give the words, the frames confirm the speaker and whatever is shown with the words (the backprop slide, the shared pricing page), and each event runs from the first to the last caption line on the topic. tlv's output was not read before these labels were written. Each event lists its main range first, then any range where the same moment is on screen again (in the coding session the build error comes back when the editor closes). 'ambiguous' holds moments the labels could not settle; a clip there is neither credited nor penalized. vlog-golden-gate counts a moment only when the narrator names the bridge while it is on screen or the camera zooms in on it; the bridge in the background of other shots is ambiguous. movie-coco counts the scenes the girl (Kathryn McGuire) is in; 'coco' is the name tlv is given for her with one entity-add at 6:02 of the movie, a close-up inside a labelled event. The coding video is synthetic: a terminal session scripted and rendered with vhs for this eval, not a recording of anyone's screen. After the first run every wrong clip and every miss was checked against the frames. That check found one omission, now fixed: the bridge in the background of the vlog at 3:37-3:47 and 4:04-4:17 was missing from vlog-golden-gate's ambiguous moments, which the rule above puts it in. No other label changed.",
+  "videos": {
+    "v_0bf46a8e27": {
+      "title": "Delicious Vegetarian Lasagna With Homemade Marinara Sauce",
+      "duration": "7:59.9",
+      "source": "https://www.youtube.com/watch?v=hP49BwHcvfk",
+      "license": "Creative Commons Attribution (CC BY), Rockin Robin Cooks",
+      "segment": "3:31 to the end (11:30.9) of the upload"
+    },
+    "v_bb19a1082c": {
+      "title": "Intro to Neural Networks",
+      "duration": "7:59.9",
+      "source": "https://www.youtube.com/watch?v=wUcAqJAmdbU",
+      "license": "Creative Commons Attribution (CC BY), Cynthia Rudin",
+      "segment": "1:42 to the end (9:41.9) of the upload"
+    },
+    "v_c59f6af7ec": {
+      "title": "Discover the Hidden Waterfront Treasure! | Crissy Field",
+      "duration": "7:44.2",
+      "source": "https://www.youtube.com/watch?v=ul9IKAWSXc0",
+      "license": "Creative Commons Attribution (CC BY), Jonathan",
+      "segment": "the whole upload (VP9 video, as downloaded)"
+    },
+    "v_d227f77eae": {
+      "title": "GitLab AMA of July 6th",
+      "duration": "7:41.0",
+      "source": "https://www.youtube.com/watch?v=GYSCuDSBkFw",
+      "license": "Creative Commons Attribution (CC BY), GitLab",
+      "segment": "10:50-18:31 of the 29:24 upload"
+    },
+    "v_407081314f": {
+      "title": "Sherlock Jr. (1924)",
+      "duration": "7:58.0",
+      "source": "https://archive.org/details/sherlockjr1924_201909",
+      "license": "Public Domain Mark 1.0",
+      "segment": "36:08-44:06 of the 44:33.8 film"
+    },
+    "v_568bc3351c": {
+      "title": "greeter: a scripted terminal session",
+      "duration": "4:10.7",
+      "source": "synthetic: a terminal session scripted and rendered with vhs for this eval, not a recording of anyone's screen",
+      "license": "made for this eval",
+      "segment": "the whole render (no sound track, as vhs writes it)"
+    }
+  },
+  "queries": {
+    "cooking-garlic": {
+      "events": [
+        {
+          "video": "v_0bf46a8e27",
+          "ranges": [["1:09.0", "1:33.0"]],
+          "note": "'Time to add that garlic' (1:08.9); she tips a bowl of minced garlic into the pot (1:14-1:16) and stirs it in until 1:32."
+        }
+      ],
+      "ambiguous": [],
+      "notes": "Not events: the white wine (0:20-0:30) and the herbs and basil (0:46-0:56) going into the pot before the garlic. 'I wish you could smell this' (about 1:21) falls inside the garlic event."
+    },
+    "cooking-taste": {
+      "events": [
+        {
+          "video": "v_0bf46a8e27",
+          "ranges": [["1:59.0", "2:10.0"]],
+          "note": "She takes a spoonful of the sauce and lifts it out of frame (2:05.5-2:08.5): 'we'll give it a taste... oh lordy lordy that is good'."
+        },
+        {
+          "video": "v_0bf46a8e27",
+          "ranges": [["7:28.5", "7:40.0"]],
+          "note": "A forkful from the plated slice (7:29-7:30), then her verdict, 'best lasagna...' (7:30.5-7:39)."
+        }
+      ],
+      "ambiguous": [],
+      "notes": "Her face is above the frame, so the tasting itself is never seen; each event is the spoon or fork leaving the frame and her verdict. Not events: 'a little bit for taste' (about 4:55) is about adding mozzarella, and 7:02-7:11 shows the plated slice before she cuts into it."
+    },
+    "lecture-backprop": {
+      "events": [
+        {
+          "video": "v_bb19a1082c",
+          "ranges": [["6:49.5", "7:59.8"]],
+          "note": "'That is what the back propagation algorithm is for' (6:49.9-6:56.5), the bullets on why it is needed (7:00-7:21), then the backpropagation slide from 7:24 to the end of the file."
+        }
+      ],
+      "ambiguous": [],
+      "notes": "Earlier slides are not events: the manifold surface plot (0:00-0:41), the neuron diagram (0:41-2:38), the AND neuron and its truth table (2:39-5:10), the activation function and the sigmoid (5:11-5:50), 'neuron 100' (5:51-6:35) and the error slide before backpropagation is named (6:36-6:49)."
+    },
+    "lecture-chart": {
+      "events": [
+        {
+          "video": "v_bb19a1082c",
+          "ranges": [["0:00.0", "0:41.0"]],
+          "note": "A 3D surface plot, a colored mesh with sample images on it, drawn to show the manifold of natural images; on screen from the start of the file to 0:41."
+        },
+        {
+          "video": "v_bb19a1082c",
+          "ranges": [["5:47.0", "5:49.4"]],
+          "note": "A line plot of the sigmoid (x from -10 to 10, y from 0 to 1) appears on the activation-function slide at 5:47.0 and goes when the slide changes at 5:49.4; 'there's a picture of it' (5:48)."
+        }
+      ],
+      "ambiguous": [],
+      "notes": "A chart here is a plotted graph. Not events: the truth tables (2:39-5:10), which are tables, and the neuron drawings, which are diagrams."
+    },
+    "vlog-golden-gate": {
+      "events": [
+        {
+          "video": "v_c59f6af7ec",
+          "ranges": [["1:05.0", "1:15.5"]],
+          "note": "'Magnificent Golden Gate Bridge in the distance' (1:04-1:08), with the bridge on the horizon."
+        },
+        {
+          "video": "v_c59f6af7ec",
+          "ranges": [["2:40.0", "2:49.0"]],
+          "note": "From the footbridge: 'right over there is the Golden Gate Bridge' (2:45-2:48), pointing at it (2:47-2:48)."
+        },
+        {
+          "video": "v_c59f6af7ec",
+          "ranges": [["4:21.0", "4:45.5"]],
+          "note": "The camera zooms in on the bridge (4:22-4:37), then holds a wide beach shot with the bridge in view."
+        }
+      ],
+      "ambiguous": [
+        {
+          "video": "v_c59f6af7ec",
+          "ranges": [["1:16.0", "1:31.0"]],
+          "note": "'Behind this little hill': hidden, with only a tower tip showing at 1:27-1:30."
+        },
+        {
+          "video": "v_c59f6af7ec",
+          "ranges": [["2:20.0", "2:24.0"]],
+          "note": "Small, behind the dog walker."
+        },
+        {
+          "video": "v_c59f6af7ec",
+          "ranges": [["3:20.0", "3:30.0"]],
+          "note": "Named (3:23-3:27) but not in frame."
+        },
+        {
+          "video": "v_c59f6af7ec",
+          "ranges": [["3:37.0", "3:47.0"], ["4:04.0", "4:17.0"], ["5:00.0", "5:59.0"], ["6:08.0", "6:35.0"], ["7:20.0", "7:25.0"], ["7:38.0", "7:43.0"]],
+          "note": "In the background, neither named nor zoomed on. 3:37-3:47 and 4:04-4:17 were added after the first run (see method)."
+        }
+      ],
+      "notes": "'We're just on a bridge' (2:39-2:42) means the footbridge he is standing on, not the Golden Gate. Not an event: the ducks at 7:26-7:36, between two background views, with no bridge in frame."
+    },
+    "vlog-dogs": {
+      "events": [
+        {
+          "video": "v_c59f6af7ec",
+          "ranges": [["2:20.0", "2:35.5"]],
+          "note": "A dog walker passes with eight dogs on leashes."
+        }
+      ],
+      "ambiguous": [],
+      "notes": "These are the only dogs in the video. 'Bring your dog' (1:25) is said over a shot with no dog; full-resolution frames at 0:50-0:56 and 4:38-4:44 show no dog."
+    },
+    "meeting-pricing": {
+      "events": [
+        {
+          "video": "v_d227f77eae",
+          "ranges": [["3:34.5", "4:29.0"]],
+          "note": "The price tiers: a 'Four tiers' page is shared on screen (about 3:51-4:25) while they go through the plans."
+        }
+      ],
+      "ambiguous": [
+        {
+          "video": "v_d227f77eae",
+          "ranges": [["2:06.0", "2:19.5"]],
+          "note": "Customers asking for trial licenses of the top paid plan (Ultimate): about the plans, not their prices."
+        }
+      ],
+      "notes": "Not an event: 'just as expensive' (6:52-6:58) is about what the summit costs, not product pricing."
+    },
+    "meeting-summit": {
+      "events": [
+        {
+          "video": "v_d227f77eae",
+          "ranges": [["0:00.0", "1:14.5"]],
+          "note": "The company summit, from the start of the file."
+        },
+        {
+          "video": "v_d227f77eae",
+          "ranges": [["4:29.0", "5:48.5"]],
+          "note": "Turning the summit into a conference."
+        },
+        {
+          "video": "v_d227f77eae",
+          "ranges": [["6:27.0", "7:01.0"]],
+          "note": "Exotic places against San Francisco for the summit, and what it costs."
+        }
+      ],
+      "ambiguous": [
+        {
+          "video": "v_d227f77eae",
+          "ranges": [["3:08.5", "3:34.5"]],
+          "note": "The DevOps Enterprise Summit, an outside conference."
+        },
+        {
+          "video": "v_d227f77eae",
+          "ranges": [["7:19.5", "7:41.0"]],
+          "note": "'Please no Vegas', which may be about where to hold the summit."
+        }
+      ],
+      "notes": "The topics in between are not events: worries (1:15-2:28), the cat camera (2:33-3:08), the price tiers (3:34-4:29), ice cream (6:03-6:27) and spirit animals (7:02-7:19). Sid Sijbrandij is on camera nearly throughout, so the frames do not separate the topics; the edges are the first and last caption lines on each."
+    },
+    "coding-build-fail": {
+      "events": [
+        {
+          "video": "v_568bc3351c",
+          "ranges": [["0:26.5", "0:44.8"], ["1:03.5", "1:08.8"]],
+          "note": "First build: error E0308, mismatched types (0:27-0:44); the same error is back on screen when vim closes (1:04-1:08), before the rebuild."
+        },
+        {
+          "video": "v_568bc3351c",
+          "ranges": [["2:28.5", "2:46.8"], ["3:01.5", "3:06.8"]],
+          "note": "Second build: error E0609, no field 'nmae' (2:29-2:46); back on screen when vim closes (3:02-3:06), before the rebuild."
+        }
+      ],
+      "ambiguous": [],
+      "notes": "Not events: the three builds that pass (1:09-1:15, 3:07-3:12 and the release build at 3:47-3:56) and the editor screens between the failures, which show source code, not build output."
+    },
+    "coding-settings": {
+      "events": [
+        {
+          "video": "v_568bc3351c",
+          "ranges": [["1:25.0", "1:47.9"]],
+          "note": "'nano settings.toml' is typed (1:25-1:27) and the file is open in nano (1:28-1:47) while the name and the count are changed."
+        },
+        {
+          "video": "v_568bc3351c",
+          "ranges": [["3:24.5", "3:41.9"]],
+          "note": "'nano settings.toml' is typed (3:25-3:27) and the file is open in nano (3:28-3:41) while the count is lowered."
+        }
+      ],
+      "ambiguous": [
+        {
+          "video": "v_568bc3351c",
+          "ranges": [["1:48.0", "1:51.9"], ["3:42.0", "3:46.9"]],
+          "note": "Nano has closed, but the command that opened the file is still on screen."
+        }
+      ],
+      "notes": "Not events: vim on src/main.rs (0:45-1:03, 2:03-2:22, 2:47-3:01), whose top line is 'struct Settings'; 'cat src/main.rs' (0:09-0:24), which prints load(\"settings.toml\"); and 'ls' (0:03-0:08), which lists settings.toml."
+    },
+    "movie-car-chase": {
+      "events": [
+        {
+          "video": "v_407081314f",
+          "ranges": [["3:22.5", "4:19.0"]],
+          "note": "The getaway car pulls away from the shack with the girl and Buster (3:23-3:25); the gang follows in a second car (3:37-3:47) and Buster throws a billiard-ball bomb (3:53-3:59); the car runs into the lake (4:15-4:19)."
+        }
+      ],
+      "ambiguous": [],
+      "notes": "Not events: the motorcycle ride (0:00-3:06), with Buster on the handlebars weaving through traffic and the gang driving off from the shack at 0:12-0:18, and the car floating and sinking in the lake after the chase (4:19-5:28)."
+    },
+    "movie-coco": {
+      "events": [
+        {
+          "video": "v_407081314f",
+          "ranges": [["2:52.5", "3:01.5"], ["3:11.5", "3:25.0"]],
+          "note": "The shack: the villain holds her (2:53-3:01); Buster crashes in (3:12-3:14) and she climbs out of the window into the car (3:15-3:25)."
+        },
+        {
+          "video": "v_407081314f",
+          "ranges": [["3:29.5", "4:19.0"]],
+          "note": "The car chase, with her beside Buster in the car (close shots 3:50-3:52 and 4:09-4:13)."
+        },
+        {
+          "video": "v_407081314f",
+          "ranges": [["4:19.0", "5:28.5"]],
+          "note": "The car in the lake: floating, sinking and swimming (close shot 4:21-4:24)."
+        },
+        {
+          "video": "v_407081314f",
+          "ranges": [["5:47.5", "7:58.0"]],
+          "note": "The projection booth: she arrives (5:48-5:53) and stays with Buster to the end of the file; her close-up at 6:02."
+        }
+      ],
+      "ambiguous": [
+        {
+          "video": "v_407081314f",
+          "ranges": [["3:01.5", "3:11.5"]],
+          "note": "Buster arriving at the shack, cut into her scene while she is off screen."
+        },
+        {
+          "video": "v_407081314f",
+          "ranges": [["3:25.0", "3:29.5"]],
+          "note": "The villains at the shack window after the car has left with her."
+        }
+      ],
+      "notes": "Coco is the girl (Kathryn McGuire), named for tlv with one entity-add at 6:02, a close-up in the booth. Her look changes: a cloche hat and a patterned coat in the dream (shack, chase, lake), long curly hair in the booth. Not events: the motorcycle ride (0:00-2:52), including the gang at the shack (0:12-0:18), and Buster waking alone in the booth (5:29-5:47). The heroine on the film screen during the booth scene falls inside the booth event either way."
+    }
+  }
+}

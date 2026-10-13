@@ -1,6 +1,7 @@
 """Scores saved `find` runs against the hand-labeled truth in eval/truth.json.
 
     uv run python eval/score.py eval/results/twelvelabs-2026-10-12.json
+    uv run python eval/score.py --set everyday eval/results/everyday-local-<date>.json  # eval/everyday/truth.json
 
 A returned clip matches a labeled event when it is on the event's video and overlaps one of the
 event's ranges (the live play or any replay of the same moment) by at least half of the shorter
@@ -10,9 +11,9 @@ unpaired is "ambiguous" (ignored) when it matches a moment the labels could not 
 the same moment), and "false" otherwise.
 """
 
+import argparse
 import json
 import re
-import sys
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -184,10 +185,15 @@ def table(scored: list[Scored]) -> str:
 
 
 def main() -> None:
-    truth = json.loads((EVAL / "truth.json").read_text())
-    for path in sys.argv[1:]:
-        results = json.loads(Path(path).read_text())
-        print(f"## {results['system']} ({Path(path).name})\n")
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("results", nargs="*", type=Path, help="results files saved by eval/run.py")
+    parser.add_argument("--set", metavar="NAME", help="score against eval/NAME/truth.json instead of eval/truth.json")
+    args = parser.parse_args()
+
+    truth = json.loads(((EVAL / args.set if args.set else EVAL) / "truth.json").read_text())
+    for path in args.results:
+        results = json.loads(path.read_text())
+        print(f"## {results['system']} ({path.name})\n")
         print(table(score(truth, results)))
         print()
 

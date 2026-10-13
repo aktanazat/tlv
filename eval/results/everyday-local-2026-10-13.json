@@ -1,0 +1,5239 @@
+{
+ "system": "local",
+ "flags": [
+  "--max-candidates",
+  "12",
+  "--no-cut",
+  "--json"
+ ],
+ "runs": [
+  {
+   "id": "cooking-garlic",
+   "query": "when does she add the garlic",
+   "then": [],
+   "argv": [
+    "uv",
+    "run",
+    "tlv",
+    "--index",
+    "everyday",
+    "find",
+    "when does she add the garlic",
+    "--max-candidates",
+    "12",
+    "--no-cut",
+    "--json"
+   ],
+   "seconds": 52.1,
+   "exit_code": 0,
+   "output": {
+    "claim": "when does she add the garlic",
+    "confirmed": [
+     {
+      "id": "obs_d79e22ec72",
+      "video_id": "v_0bf46a8e27",
+      "title": "Delicious Vegetarian Lasagna With Homemade Marinara Sauce",
+      "source": "/private/var/tmp/akyl/Everyday/final/cooking.mp4",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/cooking-0bf46a8e27.mp4",
+      "start": 72.75,
+      "end": 79.41,
+      "timecode": "00:01:12.8 -> 00:01:19.4",
+      "claim": "when does she add the garlic",
+      "who": "person in pink apron",
+      "entity_id": null,
+      "confidence": 0.95,
+      "evidence": {
+       "summary": "adds garlic to pan",
+       "frames": [
+        {
+         "t": 73.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_0bf46a8e27_66.3-79.4/07.jpg"
+        },
+        {
+         "t": 74.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_0bf46a8e27_66.3-79.4/08.jpg"
+        },
+        {
+         "t": 75.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_0bf46a8e27_66.3-79.4/09.jpg"
+        },
+        {
+         "t": 76.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_0bf46a8e27_66.3-79.4/10.jpg"
+        },
+        {
+         "t": 77.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_0bf46a8e27_66.3-79.4/11.jpg"
+        },
+        {
+         "t": 78.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_0bf46a8e27_66.3-79.4/12.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 72.66,
+         "end": 75.96,
+         "text": "and just get that nice and mixed in."
+        },
+        {
+         "start": 76.84,
+         "end": 79.6,
+         "text": "Let those flavors cook up"
+        }
+       ],
+       "ocr": [],
+       "sounds": [
+        {
+         "start": 61.5,
+         "end": 76.5,
+         "label": "speech"
+        },
+        {
+         "start": 71.5,
+         "end": 73.0,
+         "label": "cutlery_silverware"
+        },
+        {
+         "start": 71.5,
+         "end": 73.0,
+         "label": "dishes_pots_pans"
+        },
+        {
+         "start": 72.5,
+         "end": 77.5,
+         "label": "music"
+        },
+        {
+         "start": 72.5,
+         "end": 73.5,
+         "label": "saxophone"
+        },
+        {
+         "start": 73.5,
+         "end": 75.0,
+         "label": "frying_food"
+        },
+        {
+         "start": 74.5,
+         "end": 76.0,
+         "label": "plucked_string_instrument"
+        },
+        {
+         "start": 75.5,
+         "end": 77.0,
+         "label": "boiling"
+        },
+        {
+         "start": 75.5,
+         "end": 76.5,
+         "label": "frying_food"
+        },
+        {
+         "start": 76.0,
+         "end": 77.0,
+         "label": "drum_kit"
+        },
+        {
+         "start": 76.5,
+         "end": 78.0,
+         "label": "cutlery_silverware"
+        },
+        {
+         "start": 76.5,
+         "end": 78.0,
+         "label": "dishes_pots_pans"
+        },
+        {
+         "start": 77.0,
+         "end": 78.5,
+         "label": "speech"
+        },
+        {
+         "start": 77.5,
+         "end": 78.5,
+         "label": "boiling"
+        },
+        {
+         "start": 77.5,
+         "end": 79.0,
+         "label": "brass_instrument"
+        },
+        {
+         "start": 78.0,
+         "end": 91.5,
+         "label": "music"
+        },
+        {
+         "start": 78.0,
+         "end": 79.0,
+         "label": "saxophone"
+        },
+        {
+         "start": 78.5,
+         "end": 79.5,
+         "label": "plucked_string_instrument"
+        },
+        {
+         "start": 79.0,
+         "end": 96.0,
+         "label": "speech"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "when does she add the garlic",
+        "start": 72.75,
+        "end": 79.41,
+        "timecode": "00:01:12.8 -> 00:01:19.4"
+       }
+      ],
+      "replays": []
+     }
+    ],
+    "rejected": [
+     {
+      "video_id": "v_0bf46a8e27",
+      "start": 135.3,
+      "end": 139.84,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_0bf46a8e27",
+      "start": 78.21,
+      "end": 85.32,
+      "reason": "the claim covers fewer than 2 of the frames shown"
+     },
+     {
+      "video_id": "v_0bf46a8e27",
+      "start": 19.55,
+      "end": 22.05,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_0bf46a8e27",
+      "start": 202.44,
+      "end": 205.07,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_0bf46a8e27",
+      "start": 346.86,
+      "end": 351.28,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_0bf46a8e27",
+      "start": 152.22,
+      "end": 156.44,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_0bf46a8e27",
+      "start": 190.29,
+      "end": 195.09,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_0bf46a8e27",
+      "start": 113.58,
+      "end": 118.58,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_0bf46a8e27",
+      "start": 54.59,
+      "end": 61.06,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_0bf46a8e27",
+      "start": 39.64,
+      "end": 47.28,
+      "reason": "no match"
+     }
+    ],
+    "counts": {
+     "candidates": 12,
+     "checked": 11,
+     "confirmed": 1,
+     "rejected": 10
+    },
+    "seconds": {
+     "search": 7.01,
+     "load": 6.82,
+     "check": 37.89
+    }
+   },
+   "stderr": "tlv: searching 6 videos for 1 steps\ntlv: checking 11 stretches\ntlv: found 1 in 52 s: 7 s searching, 7 s loading the model, 38 s checking (38 s of it answering)\n"
+  },
+  {
+   "id": "cooking-taste",
+   "query": "show every time she tastes it",
+   "then": [],
+   "argv": [
+    "uv",
+    "run",
+    "tlv",
+    "--index",
+    "everyday",
+    "find",
+    "show every time she tastes it",
+    "--max-candidates",
+    "12",
+    "--no-cut",
+    "--json"
+   ],
+   "seconds": 69.5,
+   "exit_code": 0,
+   "output": {
+    "claim": "show every time she tastes it",
+    "confirmed": [],
+    "rejected": [
+     {
+      "video_id": "v_d227f77eae",
+      "start": 453.18,
+      "end": 461.0,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_0bf46a8e27",
+      "start": 118.58,
+      "end": 124.19,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_407081314f",
+      "start": 177.64,
+      "end": 180.39,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_d227f77eae",
+      "start": 296.73,
+      "end": 304.55,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_0bf46a8e27",
+      "start": 156.44,
+      "end": 160.66,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_407081314f",
+      "start": 404.74,
+      "end": 409.66,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_568bc3351c",
+      "start": 15.67,
+      "end": 23.5,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_d227f77eae",
+      "start": 0.56,
+      "end": 7.54,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_0bf46a8e27",
+      "start": 330.14,
+      "end": 336.29,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_d227f77eae",
+      "start": 7.54,
+      "end": 14.52,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_568bc3351c",
+      "start": 7.83,
+      "end": 15.67,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_0bf46a8e27",
+      "start": 78.21,
+      "end": 85.32,
+      "reason": "no match"
+     }
+    ],
+    "counts": {
+     "candidates": 12,
+     "checked": 12,
+     "confirmed": 0,
+     "rejected": 12
+    },
+    "seconds": {
+     "search": 10.67,
+     "load": 7.58,
+     "check": 49.93
+    }
+   },
+   "stderr": "tlv: searching 6 videos for 1 steps\ntlv: waiting for another model run to finish before vlm\ntlv: checking 12 stretches\ntlv: found 0 in 68 s: 11 s searching, 8 s loading the model, 50 s checking (49 s of it answering)\n"
+  },
+  {
+   "id": "lecture-backprop",
+   "query": "where does she explain backprop",
+   "then": [],
+   "argv": [
+    "uv",
+    "run",
+    "tlv",
+    "--index",
+    "everyday",
+    "find",
+    "where does she explain backprop",
+    "--max-candidates",
+    "12",
+    "--no-cut",
+    "--json"
+   ],
+   "seconds": 74.7,
+   "exit_code": 0,
+   "output": {
+    "claim": "where does she explain backprop",
+    "confirmed": [
+     {
+      "id": "obs_8f50c825d1",
+      "video_id": "v_bb19a1082c",
+      "title": "Intro to Neural Networks",
+      "source": "/private/var/tmp/akyl/Everyday/final/lecture.mp4",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/lecture-bb19a1082c.mp4",
+      "start": 453.28,
+      "end": 467.15,
+      "timecode": "00:07:33.3 -> 00:07:47.1",
+      "claim": "where does she explain backprop",
+      "who": "speaker",
+      "entity_id": null,
+      "confidence": 1.0,
+      "evidence": {
+       "summary": "backpropagation definition and explanation",
+       "frames": [
+        {
+         "t": 453.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_bb19a1082c_453.3-467.1/01.jpg"
+        },
+        {
+         "t": 455.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_bb19a1082c_453.3-467.1/02.jpg"
+        },
+        {
+         "t": 456.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_bb19a1082c_453.3-467.1/03.jpg"
+        },
+        {
+         "t": 457.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_bb19a1082c_453.3-467.1/04.jpg"
+        },
+        {
+         "t": 458.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_bb19a1082c_453.3-467.1/05.jpg"
+        },
+        {
+         "t": 459.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_bb19a1082c_453.3-467.1/06.jpg"
+        },
+        {
+         "t": 460.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_bb19a1082c_453.3-467.1/07.jpg"
+        },
+        {
+         "t": 461.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_bb19a1082c_453.3-467.1/08.jpg"
+        },
+        {
+         "t": 463.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_bb19a1082c_453.3-467.1/09.jpg"
+        },
+        {
+         "t": 464.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_bb19a1082c_453.3-467.1/10.jpg"
+        },
+        {
+         "t": 465.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_bb19a1082c_453.3-467.1/11.jpg"
+        },
+        {
+         "t": 466.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_bb19a1082c_453.3-467.1/12.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 453.88,
+         "end": 457.12,
+         "text": "Okay, so backprop is an algorithm that trains the weights of a neural network."
+        },
+        {
+         "start": 457.28,
+         "end": 463.4,
+         "text": "It requires us to propagate information backwards through the network and then forwards and then backwards and then forwards."
+        },
+        {
+         "start": 463.6,
+         "end": 467.24,
+         "text": "So we're propagating gradients backward and then we're making predictions as"
+        }
+       ],
+       "ocr": [
+        {
+         "t": 454.25,
+         "text": "Backpropagation | \u2022 An algorithm that trains the weights of a neural network"
+        }
+       ],
+       "sounds": [
+        {
+         "start": 452.5,
+         "end": 453.5,
+         "label": "music"
+        },
+        {
+         "start": 453.5,
+         "end": 468.5,
+         "label": "speech"
+        },
+        {
+         "start": 454.0,
+         "end": 455.0,
+         "label": "blender"
+        },
+        {
+         "start": 456.0,
+         "end": 457.0,
+         "label": "music"
+        },
+        {
+         "start": 457.0,
+         "end": 458.0,
+         "label": "finger_snapping"
+        },
+        {
+         "start": 457.0,
+         "end": 458.0,
+         "label": "wind_instrument"
+        },
+        {
+         "start": 458.0,
+         "end": 464.0,
+         "label": "music"
+        },
+        {
+         "start": 458.5,
+         "end": 459.5,
+         "label": "bell"
+        },
+        {
+         "start": 459.0,
+         "end": 460.0,
+         "label": "saxophone"
+        },
+        {
+         "start": 459.5,
+         "end": 461.0,
+         "label": "zipper"
+        },
+        {
+         "start": 460.5,
+         "end": 461.5,
+         "label": "brass_instrument"
+        },
+        {
+         "start": 462.0,
+         "end": 463.0,
+         "label": "trombone"
+        },
+        {
+         "start": 462.5,
+         "end": 463.5,
+         "label": "zipper"
+        },
+        {
+         "start": 464.0,
+         "end": 465.0,
+         "label": "zipper"
+        },
+        {
+         "start": 464.5,
+         "end": 465.5,
+         "label": "brass_instrument"
+        },
+        {
+         "start": 464.5,
+         "end": 466.5,
+         "label": "music"
+        },
+        {
+         "start": 465.5,
+         "end": 466.5,
+         "label": "zipper"
+        },
+        {
+         "start": 467.0,
+         "end": 470.5,
+         "label": "music"
+        },
+        {
+         "start": 467.0,
+         "end": 468.0,
+         "label": "zipper"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "where does she explain backprop",
+        "start": 453.28,
+        "end": 467.15,
+        "timecode": "00:07:33.3 -> 00:07:47.1"
+       }
+      ],
+      "replays": []
+     },
+     {
+      "id": "obs_3acd4c8643",
+      "video_id": "v_bb19a1082c",
+      "title": "Intro to Neural Networks",
+      "source": "/private/var/tmp/akyl/Everyday/final/lecture.mp4",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/lecture-bb19a1082c.mp4",
+      "start": 411.75,
+      "end": 419.92,
+      "timecode": "00:06:51.8 -> 00:06:59.9",
+      "claim": "where does she explain backprop",
+      "who": "speaker",
+      "entity_id": null,
+      "confidence": 0.95,
+      "evidence": {
+       "summary": "backprop explanation in speech",
+       "frames": [
+        {
+         "t": 412.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_bb19a1082c_406.0-419.9/06.jpg"
+        },
+        {
+         "t": 413.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_bb19a1082c_406.0-419.9/07.jpg"
+        },
+        {
+         "t": 414.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_bb19a1082c_406.0-419.9/08.jpg"
+        },
+        {
+         "t": 415.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_bb19a1082c_406.0-419.9/09.jpg"
+        },
+        {
+         "t": 417.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_bb19a1082c_406.0-419.9/10.jpg"
+        },
+        {
+         "t": 418.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_bb19a1082c_406.0-419.9/11.jpg"
+        },
+        {
+         "t": 419.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_bb19a1082c_406.0-419.9/12.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 411.74,
+         "end": 416.92,
+         "text": "how are we going to learn from it and that is what the back propagation algorithm"
+        },
+        {
+         "start": 416.92,
+         "end": 420.24,
+         "text": "is for. Now in a brain the synapse"
+        }
+       ],
+       "ocr": [
+        {
+         "t": 412.25,
+         "text": "Single Layer | 099 | W99,100 | 9100 | \u2192 E==(X-0100)} | W98,100 | 098 | Error on one | observation"
+        },
+        {
+         "t": 413.25,
+         "text": "Single Layer | 099 | W99,100 | 0100 | \u2192E={(-0\u043e} | W\u044d8,\u201a100 | 098"
+        },
+        {
+         "t": 416.25,
+         "text": "Single Layer | 099 | W99,100 | 0100 | \u2192\u0415==(\u0445-0\u221e) | \u2022\u0415==(\u0423-9\u221e) | \u2265 | W98,100 | 098"
+        },
+        {
+         "t": 417.25,
+         "text": "Single Layer | 099 | W99,100 | 0100 | \u2192E=](\u0443-9\u221e) | \u2265 | W\u044d8\u201a100 | 098"
+        },
+        {
+         "t": 419.25,
+         "text": "Single Layer | 099 | W99,100 | \u041eQ\u2192E==(-\u0430\u0430) | W\u044d8\u201a100 | 098 | In a brain, the synapses strengthen and weaken in order to learn."
+        }
+       ],
+       "sounds": [
+        {
+         "start": 409.5,
+         "end": 425.0,
+         "label": "speech"
+        },
+        {
+         "start": 411.0,
+         "end": 416.5,
+         "label": "music"
+        },
+        {
+         "start": 415.5,
+         "end": 416.5,
+         "label": "brass_instrument"
+        },
+        {
+         "start": 416.0,
+         "end": 417.0,
+         "label": "zipper"
+        },
+        {
+         "start": 417.5,
+         "end": 418.5,
+         "label": "liquid_dripping"
+        },
+        {
+         "start": 418.5,
+         "end": 419.5,
+         "label": "music"
+        },
+        {
+         "start": 419.0,
+         "end": 420.0,
+         "label": "humming"
+        },
+        {
+         "start": 419.0,
+         "end": 420.0,
+         "label": "singing"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "where does she explain backprop",
+        "start": 411.75,
+        "end": 419.92,
+        "timecode": "00:06:51.8 -> 00:06:59.9"
+       }
+      ],
+      "replays": []
+     },
+     {
+      "id": "obs_c1a9aea0ae",
+      "video_id": "v_bb19a1082c",
+      "title": "Intro to Neural Networks",
+      "source": "/private/var/tmp/akyl/Everyday/final/lecture.mp4",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/lecture-bb19a1082c.mp4",
+      "start": 444.5,
+      "end": 451.41,
+      "timecode": "00:07:24.5 -> 00:07:31.4",
+      "claim": "where does she explain backprop",
+      "who": "speaker",
+      "entity_id": null,
+      "confidence": 0.95,
+      "evidence": {
+       "summary": "speech mentions backpropagation",
+       "frames": [
+        {
+         "t": 445.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_bb19a1082c_437.5-451.4/07.jpg"
+        },
+        {
+         "t": 446.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_bb19a1082c_437.5-451.4/08.jpg"
+        },
+        {
+         "t": 447.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_bb19a1082c_437.5-451.4/09.jpg"
+        },
+        {
+         "t": 448.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_bb19a1082c_437.5-451.4/10.jpg"
+        },
+        {
+         "t": 449.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_bb19a1082c_437.5-451.4/11.jpg"
+        },
+        {
+         "t": 450.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_bb19a1082c_437.5-451.4/12.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 445.42,
+         "end": 449.02,
+         "text": "Okay, so let's talk about back propagation, which is the way that we"
+        },
+        {
+         "start": 449.02,
+         "end": 451.46,
+         "text": "essentially do gradient descent on that"
+        }
+       ],
+       "ocr": [
+        {
+         "t": 445.25,
+         "text": "Backpropagation"
+        }
+       ],
+       "sounds": [
+        {
+         "start": 445.0,
+         "end": 446.0,
+         "label": "cough"
+        },
+        {
+         "start": 445.5,
+         "end": 446.5,
+         "label": "click"
+        },
+        {
+         "start": 445.5,
+         "end": 452.5,
+         "label": "speech"
+        },
+        {
+         "start": 446.0,
+         "end": 447.0,
+         "label": "cutlery_silverware"
+        },
+        {
+         "start": 446.0,
+         "end": 447.0,
+         "label": "zipper"
+        },
+        {
+         "start": 446.5,
+         "end": 447.5,
+         "label": "hair_dryer"
+        },
+        {
+         "start": 447.5,
+         "end": 448.5,
+         "label": "music"
+        },
+        {
+         "start": 449.0,
+         "end": 450.0,
+         "label": "liquid_dripping"
+        },
+        {
+         "start": 449.5,
+         "end": 450.5,
+         "label": "music"
+        },
+        {
+         "start": 449.5,
+         "end": 450.5,
+         "label": "zipper"
+        },
+        {
+         "start": 451.0,
+         "end": 452.0,
+         "label": "hair_dryer"
+        },
+        {
+         "start": 451.0,
+         "end": 452.0,
+         "label": "music"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "where does she explain backprop",
+        "start": 444.5,
+        "end": 451.41,
+        "timecode": "00:07:24.5 -> 00:07:31.4"
+       }
+      ],
+      "replays": []
+     },
+     {
+      "id": "obs_9156e2dc59",
+      "video_id": "v_bb19a1082c",
+      "title": "Intro to Neural Networks",
+      "source": "/private/var/tmp/akyl/Everyday/final/lecture.mp4",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/lecture-bb19a1082c.mp4",
+      "start": 468.25,
+      "end": 471.5,
+      "timecode": "00:07:48.2 -> 00:07:51.5",
+      "claim": "where does she explain backprop",
+      "who": "speaker",
+      "entity_id": null,
+      "confidence": 0.95,
+      "evidence": {
+       "summary": "propagate backwards = chain rule",
+       "frames": [
+        {
+         "t": 468.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_bb19a1082c_461.1-475.0/07.jpg"
+        },
+        {
+         "t": 469.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_bb19a1082c_461.1-475.0/08.jpg"
+        },
+        {
+         "t": 470.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_bb19a1082c_461.1-475.0/09.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 469.32,
+         "end": 471.82,
+         "text": "Now propagating backward is exactly equal"
+        }
+       ],
+       "ocr": [
+        {
+         "t": 469.25,
+         "text": "Backpropagation"
+        }
+       ],
+       "sounds": [
+        {
+         "start": 453.5,
+         "end": 468.5,
+         "label": "speech"
+        },
+        {
+         "start": 467.0,
+         "end": 470.5,
+         "label": "music"
+        },
+        {
+         "start": 469.0,
+         "end": 470.0,
+         "label": "brass_instrument"
+        },
+        {
+         "start": 469.0,
+         "end": 470.0,
+         "label": "saxophone"
+        },
+        {
+         "start": 469.5,
+         "end": 470.5,
+         "label": "frying_food"
+        },
+        {
+         "start": 469.5,
+         "end": 477.0,
+         "label": "speech"
+        },
+        {
+         "start": 470.5,
+         "end": 471.5,
+         "label": "zipper"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "where does she explain backprop",
+        "start": 468.25,
+        "end": 471.5,
+        "timecode": "00:07:48.2 -> 00:07:51.5"
+       }
+      ],
+      "replays": []
+     }
+    ],
+    "rejected": [
+     {
+      "video_id": "v_bb19a1082c",
+      "start": 472.02,
+      "end": 479.89,
+      "reason": "the claim covers fewer than 2 of the frames shown"
+     },
+     {
+      "video_id": "v_568bc3351c",
+      "start": 94.02,
+      "end": 101.86,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_407081314f",
+      "start": 185.77,
+      "end": 186.98,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_407081314f",
+      "start": 57.27,
+      "end": 64.56,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_407081314f",
+      "start": 172.59,
+      "end": 175.22,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_568bc3351c",
+      "start": 148.87,
+      "end": 156.7,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_568bc3351c",
+      "start": 211.54,
+      "end": 219.38,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_bb19a1082c",
+      "start": 452.25,
+      "end": 459.28,
+      "reason": "same moment as obs_8f50c825d1"
+     }
+    ],
+    "counts": {
+     "candidates": 12,
+     "checked": 12,
+     "confirmed": 4,
+     "rejected": 8
+    },
+    "seconds": {
+     "search": 8.56,
+     "load": 10.78,
+     "check": 54.5
+    }
+   },
+   "stderr": "tlv: searching 6 videos for 1 steps\ntlv: waiting for another model run to finish before vlm\ntlv: checking 12 stretches\ntlv: found 4 in 74 s: 9 s searching, 11 s loading the model, 54 s checking (54 s of it answering)\n"
+  },
+  {
+   "id": "lecture-chart",
+   "query": "the slide with the chart",
+   "then": [],
+   "argv": [
+    "uv",
+    "run",
+    "tlv",
+    "--index",
+    "everyday",
+    "find",
+    "the slide with the chart",
+    "--max-candidates",
+    "12",
+    "--no-cut",
+    "--json"
+   ],
+   "seconds": 59.6,
+   "exit_code": 0,
+   "output": {
+    "claim": "the slide with the chart",
+    "confirmed": [
+     {
+      "id": "obs_bac7df71e7",
+      "video_id": "v_bb19a1082c",
+      "title": "Intro to Neural Networks",
+      "source": "/private/var/tmp/akyl/Everyday/final/lecture.mp4",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/lecture-bb19a1082c.mp4",
+      "start": 0.0,
+      "end": 10.82,
+      "timecode": "00:00:00.0 -> 00:00:10.8",
+      "claim": "the slide with the chart",
+      "who": "speaker",
+      "entity_id": null,
+      "confidence": 1.0,
+      "evidence": {
+       "summary": "slide with chart and speaker",
+       "frames": [
+        {
+         "t": 0.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_bb19a1082c_0.0-10.8/01.jpg"
+        },
+        {
+         "t": 1.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_bb19a1082c_0.0-10.8/02.jpg"
+        },
+        {
+         "t": 2.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_bb19a1082c_0.0-10.8/03.jpg"
+        },
+        {
+         "t": 3.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_bb19a1082c_0.0-10.8/04.jpg"
+        },
+        {
+         "t": 4.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_bb19a1082c_0.0-10.8/05.jpg"
+        },
+        {
+         "t": 5.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_bb19a1082c_0.0-10.8/06.jpg"
+        },
+        {
+         "t": 7.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_bb19a1082c_0.0-10.8/07.jpg"
+        },
+        {
+         "t": 8.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_bb19a1082c_0.0-10.8/08.jpg"
+        },
+        {
+         "t": 9.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_bb19a1082c_0.0-10.8/09.jpg"
+        },
+        {
+         "t": 10.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_bb19a1082c_0.0-10.8/10.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 0.0,
+         "end": 8.4,
+         "text": "of natural images. And so anyway, that's the kind of problem that neural networks are really good"
+        },
+        {
+         "start": 8.4,
+         "end": 10.96,
+         "text": "for, where the data lie along these thin manifolds"
+        }
+       ],
+       "ocr": [],
+       "sounds": [
+        {
+         "start": 0.0,
+         "end": 5.0,
+         "label": "music"
+        },
+        {
+         "start": 0.0,
+         "end": 37.5,
+         "label": "speech"
+        },
+        {
+         "start": 0.5,
+         "end": 1.5,
+         "label": "brass_instrument"
+        },
+        {
+         "start": 2.0,
+         "end": 3.0,
+         "label": "hair_dryer"
+        },
+        {
+         "start": 2.5,
+         "end": 3.5,
+         "label": "synthesizer"
+        },
+        {
+         "start": 3.0,
+         "end": 4.0,
+         "label": "drawer_open_close"
+        },
+        {
+         "start": 7.0,
+         "end": 8.0,
+         "label": "hair_dryer"
+        },
+        {
+         "start": 7.0,
+         "end": 8.0,
+         "label": "zipper"
+        },
+        {
+         "start": 7.5,
+         "end": 12.5,
+         "label": "music"
+        },
+        {
+         "start": 9.5,
+         "end": 10.5,
+         "label": "brass_instrument"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "the slide with the chart",
+        "start": 0.0,
+        "end": 10.82,
+        "timecode": "00:00:00.0 -> 00:00:10.8"
+       }
+      ],
+      "replays": []
+     },
+     {
+      "id": "obs_6c846838a5",
+      "video_id": "v_bb19a1082c",
+      "title": "Intro to Neural Networks",
+      "source": "/private/var/tmp/akyl/Everyday/final/lecture.mp4",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/lecture-bb19a1082c.mp4",
+      "start": 138.42,
+      "end": 152.29,
+      "timecode": "00:02:18.4 -> 00:02:32.3",
+      "claim": "the slide with the chart",
+      "who": "speaker",
+      "entity_id": null,
+      "confidence": 1.0,
+      "evidence": {
+       "summary": "slide with chart shown",
+       "frames": [
+        {
+         "t": 139.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_bb19a1082c_138.4-152.3/01.jpg"
+        },
+        {
+         "t": 140.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_bb19a1082c_138.4-152.3/02.jpg"
+        },
+        {
+         "t": 141.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_bb19a1082c_138.4-152.3/03.jpg"
+        },
+        {
+         "t": 143.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_bb19a1082c_138.4-152.3/04.jpg"
+        },
+        {
+         "t": 144.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_bb19a1082c_138.4-152.3/05.jpg"
+        },
+        {
+         "t": 146.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_bb19a1082c_138.4-152.3/06.jpg"
+        },
+        {
+         "t": 147.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_bb19a1082c_138.4-152.3/07.jpg"
+        },
+        {
+         "t": 148.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_bb19a1082c_138.4-152.3/08.jpg"
+        },
+        {
+         "t": 150.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_bb19a1082c_138.4-152.3/09.jpg"
+        },
+        {
+         "t": 151.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_bb19a1082c_138.4-152.3/10.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 138.18,
+         "end": 140.86,
+         "text": "functions do not look exactly like step functions."
+        },
+        {
+         "start": 141.0,
+         "end": 146.08,
+         "text": "In reality, they look like they can be all different things, and I'll talk about that"
+        },
+        {
+         "start": 146.08,
+         "end": 146.3,
+         "text": "later."
+        },
+        {
+         "start": 146.82,
+         "end": 152.54,
+         "text": "But in any case, let's just go with the biological perspective here,"
+        }
+       ],
+       "ocr": [
+        {
+         "t": 139.25,
+         "text": "McCulloch-Pitts \"Neuron\" | \u017bWj.me\u00b0j | \u041e\u0442e =\u0424 | W1,me | W2,me | 02 | W | me,27 | Step | O me | Function | N | me,29 | Input | Output | Activation | function | Function"
+        },
+        {
+         "t": 141.25,
+         "text": "McCulloch-Pitts \"Neuron\" | ZWj.me9j| | \u041e\u0442e =\u0424 | W1,me | W2,me | 02 | W | me,27 | Step | O me | Function | me,29 | Input | Output | Activation | function | Function"
+        },
+        {
+         "t": 142.25,
+         "text": "McCulloch-Pitts \"Neuron\" | \u017bWj.me\u00b0j | \u041e\u0442e =\u0424 | W1,me | W2,me | 02 | W | me,27 | Step | O me | Function | N | me,29 | Input | Output | Activation | function | Function"
+        },
+        {
+         "t": 143.25,
+         "text": "McCulloch-Pitts \"Neuron\" | \u017bWj.me\u00b0j | \u041e\u0442e =\u0424 | W1,me | W2,me | 02 | W | me,27 | Step | O me | Function | me,29 | Input | Output | Activation | function | Function"
+        },
+        {
+         "t": 144.25,
+         "text": "McCulloch-Pitts \"Neuron\" | \u017bWj.me\u00b0j | \u041e\u0442e =\u0424 | W1,me | W2,me | 02 | W | me,27 | Step | O me | Function | W | me,29 | Input | Output | Activation | function | Function"
+        },
+        {
+         "t": 146.25,
+         "text": "McCulloch-Pitts \"Neuron\" | \u017bWj.me\u00b0j | \u041e\u0442e =\u0424 | W1,me | W2,me | 02 | W | me,27 | Step | Ome | Function | W | me,29 | Input | Output | Activation | function | Function"
+        },
+        {
+         "t": 147.25,
+         "text": "McCulloch-Pitts \"Neuron\" | \u017bWj.me\u00b0j | \u041e\u0442e =\u0424 | W1,me | W2,me | 02 | W | me,27 | Step | O me | Function | W | me,29 | Input | Output | Activation | function | Function"
+        },
+        {
+         "t": 148.25,
+         "text": "McCulloch-Pitts \"Neuron\" | \u017bWj.me\u00b0j | Ome =9 | W1,me | W2,me | 02 | W | me,27 | Step | Ome | Function | N | me,29 | Input | Output | Activation | function | Function"
+        },
+        {
+         "t": 149.25,
+         "text": "McCulloch-Pitts \"Neuron\" | LW.me9j | Ome =\u00d8 | W1,me | W2,me | 02 | W | me,27 | Step | Ome | Function | N | me,29 | Input | Output | Activation | function | Function"
+        },
+        {
+         "t": 150.25,
+         "text": "McCulloch-Pitts \"Neuron\" | LW.m9j | Ome =\u00d8 | W1,me | W2,me | 02 | W | me,27 | Step | Ome | Function | N | me,29 | Input | Output | Activation | function | Function"
+        },
+        {
+         "t": 151.25,
+         "text": "McCulloch-Pitts \"Neuron\" | LWj.me\u00ae; | Ome =9 | W1,me | W2,me | 02 | W | me,27 | Step | Ome | Function | N | me,29 | Input | Output | Activation | function | Function"
+        },
+        {
+         "t": 152.25,
+         "text": "McCulloch-Pitts \"Neuron\" | \u00bfW;.me\u00b0j | \u041e\u0442e =\u0424 | W1,me | W2,me | 02 | W | me,27 | Step | Ome | Function | W | me,29 | Input | Output | Activation | function | Function"
+        }
+       ],
+       "sounds": [
+        {
+         "start": 106.0,
+         "end": 153.0,
+         "label": "speech"
+        },
+        {
+         "start": 138.0,
+         "end": 139.5,
+         "label": "zipper"
+        },
+        {
+         "start": 138.5,
+         "end": 142.5,
+         "label": "music"
+        },
+        {
+         "start": 140.0,
+         "end": 141.0,
+         "label": "brass_instrument"
+        },
+        {
+         "start": 143.5,
+         "end": 144.5,
+         "label": "music"
+        },
+        {
+         "start": 145.5,
+         "end": 146.5,
+         "label": "zipper"
+        },
+        {
+         "start": 146.5,
+         "end": 147.5,
+         "label": "click"
+        },
+        {
+         "start": 147.0,
+         "end": 148.0,
+         "label": "frying_food"
+        },
+        {
+         "start": 147.0,
+         "end": 148.0,
+         "label": "zipper"
+        },
+        {
+         "start": 148.0,
+         "end": 149.0,
+         "label": "air_horn"
+        },
+        {
+         "start": 148.0,
+         "end": 149.0,
+         "label": "nose_blowing"
+        },
+        {
+         "start": 148.5,
+         "end": 149.5,
+         "label": "music"
+        },
+        {
+         "start": 149.5,
+         "end": 150.5,
+         "label": "humming"
+        },
+        {
+         "start": 150.0,
+         "end": 151.0,
+         "label": "music"
+        },
+        {
+         "start": 150.0,
+         "end": 151.0,
+         "label": "singing"
+        },
+        {
+         "start": 151.5,
+         "end": 153.0,
+         "label": "zipper"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "the slide with the chart",
+        "start": 138.42,
+        "end": 152.29,
+        "timecode": "00:02:18.4 -> 00:02:32.3"
+       }
+      ],
+      "replays": []
+     },
+     {
+      "id": "obs_b17089bc80",
+      "video_id": "v_d227f77eae",
+      "title": "GitLab AMA of July 6th",
+      "source": "/private/var/tmp/akyl/Everyday/final/meeting.mp4",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/meeting-d227f77eae.mp4",
+      "start": 235.85,
+      "end": 248.5,
+      "timecode": "00:03:55.8 -> 00:04:08.5",
+      "claim": "the slide with the chart",
+      "who": "speaker",
+      "entity_id": null,
+      "confidence": 1.0,
+      "evidence": {
+       "summary": "speaker highlights chart",
+       "frames": [
+        {
+         "t": 236.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_d227f77eae_235.8-248.5/01.jpg"
+        },
+        {
+         "t": 237.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_d227f77eae_235.8-248.5/02.jpg"
+        },
+        {
+         "t": 239.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_d227f77eae_235.8-248.5/03.jpg"
+        },
+        {
+         "t": 240.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_d227f77eae_235.8-248.5/04.jpg"
+        },
+        {
+         "t": 241.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_d227f77eae_235.8-248.5/05.jpg"
+        },
+        {
+         "t": 242.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_d227f77eae_235.8-248.5/06.jpg"
+        },
+        {
+         "t": 244.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_d227f77eae_235.8-248.5/07.jpg"
+        },
+        {
+         "t": 245.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_d227f77eae_235.8-248.5/08.jpg"
+        },
+        {
+         "t": 246.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_d227f77eae_235.8-248.5/09.jpg"
+        },
+        {
+         "t": 247.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_d227f77eae_235.8-248.5/10.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 235.26,
+         "end": 238.72,
+         "text": "the DevOps maturity,"
+        },
+        {
+         "start": 238.72,
+         "end": 241.72,
+         "text": "I don't think is a great one."
+        },
+        {
+         "start": 241.96,
+         "end": 244.78,
+         "text": "I think it's knowing who the champion is."
+        },
+        {
+         "start": 245.72,
+         "end": 248.66,
+         "text": "And I think like what it then"
+        }
+       ],
+       "ocr": [
+        {
+         "t": 236.25,
+         "text": "Sytse | &DIC | GitLab | Product Pricing | Install Community Blog Contact | Explore GitLab.com | Sign In/Register | Prsing anects procuet mar\u043aeunk ana saies inerevore general prioingaccistons are maae by tne ceva | On this page | Product makes most decisions on a day to day basis about what feature should go in what plan based on | the paid tiers. Therefore this pricing page is in the product handbook. | \u2022 Departments | \u2022 Why have | \u2022 Type of sell | Four tiers | Combining features in plars | We have four pricing tiers. How we make decisions on a day to day basis are specified in what goes in | \u2022 True-up pricing | what version. | \u2022 Price difference between self-hosted and | Ultimate | Premium | \u2022 When is a dollar not a dollar? | tier | Value creation | Gold | GitLab.com Free | Bronze | Silver | \u2022 DevOps score is not maturity | Per user | S4 | $19 | $99 | Scaling | * DevOps | Personal/Evaluating Adopting | Optimizing | Champion | Individual | Engineering Director of IT/Operations, | CIO, CTO, CISO, | lead | Chief Risk Officer | contributor | Helps with | Advanced Kubernetes | Value streams, Risk, | Automation | management, Progressive | Compliance, | delivery, Availability | Security, | Governance | Main | None | Atlassian | GitHub | Collabnet | competitor | Type of sell No sell | Benefit/solution | Feature | Transformation | Progressive delivery: | \u2022 Canary deploys | \u2022 Incremental rollouts | \u2022 Feature flags | \u2022 Targeted deployments | Auto remediate | Advanced Kubernetes management: | \u2022 Monitorng | \u2022 Routing to clusters | Stateful workloads / data | Why have | Type of sell | ut, Afesturs sell means that pogeleaent to buy the extra features. This can be done self-serve."
+        },
+        {
+         "t": 237.25,
+         "text": "Sytse | &DIC | GitLab | Product Pricing | Install Community Blog Contact | Explore GitLab.com | Sign In/Register | Prsiny anects procuet markeuns ana sales inerevore genersl prioingaccistons are maae by tne ceva | On this page | Product makes most decisions on a day to day basis about what feature should go in what plan based on | the paid tiers. Therefore this pricing page is in the product handbook. | \u2022 Departments | POLTTC | \u2022 Why have | \u2022 Type of sell | Four tiers | Combining features in plars | We have four pricing tiers. How we make decisions on a day to day basis are specified in what goes in | \u2022 True-up pricing | what version. | \u2022 Price difference between self-hosted and | Ultimate | \u2022 When is a dollar not a dollar? | Value creation | Gold | GitLab.com | Free | Bronze | Silver | \u2022 DevOps score is not maturity | SO | $19 | $99 | Scaling | Personal/Evaluating Adopting | Optimizing | Champion | Individual | Engineering | Director of IT/Operations, | CIO, CTO, CISO, | Chief Risk Officer | contributor | Helps with | Value streams, Risk, | Automation | management, Progressive | Compliance, | Security, | ceivvery, Avallabibty | Governance | Main | None | Atlassian | GitHub | Collabnet | competitor | Type of sell No sell | Transformation | Progressive delivery: | \u2022 Canary deploys | \u2022 Feature flags | \u2022 Targeted deployments | Auto remediate | Advanced Kubernetes management: | \u2022 Monitonng | \u2022 Routing to clusters | \u2022 Stateful workloads / data | Why have | Type of sell | \u2022 A feature sell means that people want to buy the extra features. This can be done self-serve."
+        },
+        {
+         "t": 238.25,
+         "text": "Sytse | @ Secure https://about.gitlab.com/handbook/product/pricing/ | MMail M MOffline B | &DIC | GitLab | Product Pricing | Install Community Blog Contact | Explore GitLab.com | Sign In/Register | Prsiny anects procuct markeuns ana sales inererore genersl prioingaccistons are made by tne ceva | On this page | Product makes most decisions on a day to day basis about what feature should go in what plan based on | the paid tiers. Therefore this pricing page is in the product handbook. | \u2022 Departments | POLTTC | \u2022 Why have | \u2022 Type of sell | Four tiers | Combining features in plars | We have four pricing tiers. How we make decisions on a day to day basis are specified in what goes in | \u2022 True-up pricing | what version. | \u2022 Price difference between self-hosted and | Self-hosted Core | Ultimate | Premium | \u2022 When is a dollar not a dollar? | tier | GitLab.com Free | Bronze | Silver | Gold | \u2022 DevOps score is not maturity | Per user | $4 | $19 | $99 | Scaling | DevOps | Personal/Evaluating Adopting | Optimizing | Champion | Individual | Engineering | Director of IT/Operations, | CIO, CTO, CISO, | Chief Risk Officer | contributor | Helps with | Value streams, Risk, | Automation | management, Progressive | Compliance, | delivery, Availability | Security, | Governance | Main | None | Atlassian | GitHub | Collabnet | competitor | Type ofsell No sell | Feature | Transformation | Progressive delivery: | \u2022 Canary deploys | \u2022 Incremental rollouts | \u2022 Feature flags | \u2022 Targeted deployments | Auto remediate | Advanced Kubernetes management: | \u2022 Monitorng | \u2022 Routing to clusters | Stateful workloads / data | Why have | Type of sell | \u2022 A feature sell means that people want to buy the extra features. This can be done self-serve."
+        },
+        {
+         "t": 239.25,
+         "text": "Sytse | @ Secure https://about.gitlab.com/handbook/product/pricing/ | MMail M MOffline B | &DIC | GitLab | Product Pricing | Install Community Blog Contact | Explore GitLab.com | Sign In/Register | Prsiny anects procuct markeuns ana sales inererore genersl prioingaccistons are made by tne ceva | On this page | Product makes most decisions on a day to day basis about what feature should go in what plan based on | the paid tiers. Therefore this pricing page is in the product handbook. | \u2022 Departments | \u2022 Why have | \u2022 Type of sell | Four tiers | Combining features in plans | We have four pricing tiers. How we make decisions on a day to day basis are specified in what goes in | \u2022 True-up pricing | what version. | \u2022 Price difference between self-hosted and | Self-hosted Core | Ultimate | Premium | \u2022 When is a dollar not a dollar? | tier | GitLab.com Free | Bronze | Silver | Gold | \u2022 DevOps score is not maturity | Per user | $4 | $19 | $99 | Scaling | DevOps | Personal/Evaluating Adopting | Optimizing | Champion | Individual | Engineering | Director of IT/Operations, | CIO, CTO, CISO, | lead | Chief Risk Officer | contributor | Helps with | Prioritization, Advanced Kubernetes | Value streams, Risk, | Automation | management, Progressive | Compliance, | delivery, Availability | Security, | Governance | Collaenet | Main | None | Atlassian | GitHub | competitor | Type ofsell No sell | Feature | Transformation | Progressive delivery: | \u2022 Canary deploys | \u2022 Feature flags | \u2022 Targeted deployments | Auto remediate | Advanced Kubernetes management: | \u2022 Monitorng | \u2022 Routing to clusters | Stateful workloads / data | Why have | Type of sell | \u2022 A feature sell means that people want to buy the extra features. This can be done self-serve."
+        },
+        {
+         "t": 240.25,
+         "text": "Sytse | @ Secure https://about.gitlab.com/handbook/product/pricing/ | MMail M MOffline B | &DIC | GitLab | Product Pricing | Install Community Blog Contact | Explore GitLab.com | Sign In/Register | Prsiny anects procuct markeuns ana sales inererore genersl prioingaccistons are made by tne ceva | On this page | Product makes most decisions on a day to day basis about what feature should go in what plan based on | the paid tiers. Therefore this pricing page is in the product handbook. | \u2022 Why have | \u2022 Type of sell | Four tiers | Combining features in plans | We have four pricing tiers. How we make decisions on a day to day basis are specified in what goes in | \u2022 True-up pricing | what version. | \u2022 Price difference between self-hosted and | Self-hosted Core | Ultimate | Premium | \u2022 When is a dollar not a dollar? | tier | GitLab.com Free | Bronze | Silver | Gold | \u2022 DevOps score is not maturity | Per user | $4 | $19 | $99 | DevOps | Personal/Evaluating Adopting | Scaling | Optimizing | Champion | Individual | Engineering | Director of IT/Operations, | CIO, CTO, CISO, | lead | Chief Risk Officer | contributor | Helps with | Prioritization, Advanced Kubernetes | Value streams, Risk, | Automation | management, Progressive | Compliance, | Security, | ceinery, Avallabibty | Governance d | Main | None | Atlassian | GitHub | Collabnet | competitor | Type of sell No sell | Feature | Transformation | Progressive delivery: | \u2022 Canary deploys | \u2022 Feature flags | \u2022 Targeted deployments | Auto remediate | Advanced Kubernetes management: | \u2022 Monitorng | \u2022 Routing to clusters | \u2022 Stateful workloads / data | Why have | Type of sell | \u2022 A feature sell means that people want to buy the extra features. This can be done self-serve."
+        },
+        {
+         "t": 241.25,
+         "text": "Sytse | M Mail | GitLab | Product Pricing | Install Community Blog Contact | Explore GitLab.com | Sign In/Register | Prsing anects procuct markeuns ana sales inererore genersl prioingaccistons are made by tne ceva | On this page | Product makes most decisions on a day to day basis about what feature should go in what plan based on | the paid tiers. Therefore this pricing page is in the product handbook. | POLTTC | Why have | Type of sell | Four tiers | Combining features in plars | We have four pricing tiers. How we make decisions on a day to day basis are specified in what goes in | \u2022 True-up pricing | what version. | \u2022 Price difference between self-hosted and | Self-hosted Core | Ultimate | \u2022 When is a dollar not a dollar? | tier | \u2022 Value creation | GitLab.com Free | Bronze | Silver | Gold | \u2022 DevOps score is not maturity | Per user | $4 | $19 | $99 | Scaling | DevOps | Personal/Evaluating Adopting | Optimizing | Champion | Engineering | Director of IT/Operations, | CIO, CTO, CISO, | Chief Risk Officer | contributor | Helps with | Advanced Kubernetes | Value streams, Risk, | Automation | management, Progressive | Compliance, | Security,. | ceinvery, avallabiety | Governance | None | Main | Atlassian | GitHub | Collabnet | competitor | Type of sell No sell | Benefit/solution | Transformation | Progressive delivery: | \u2022 Canary deploys | \u2022 Feature flags | \u2022 Targeted deployments | Auto remediate | Advanced Kubernetes management: | \u2022 Monitorng | \u2022 Routing to clusters | \u2022 Stateful workloads / data | Why have | Type of sell | \u2022 A feature sell means that people want to buy the extra features. This can be done self-serve."
+        },
+        {
+         "t": 242.25,
+         "text": "Sytse | DIG | GitLab | Product Pricing | Install Community Blog Contact | Explore GitLab.com | Sign In/Register | Prciny snects procuet mar\u043aeuns ana sales inerevore seneral priongaccistons are msae by tne ceva | On this page | Product makes most decisions on a day to day basis about what feature should go in what plan based on | the paid tiers. Therefore this pricing page is in the product handbook. | \u2022 Departments | \u2022 Type of sell | Four tiers | Combining features in plans | We have four pricing tiers. How we make decisions on a day to day basis are specified in what goes in | \u2022 True-up pricing | what version. | \u2022 Price difference between self-hosted and | Ultimate | Premium | \u2022 When is a dollar not a dollar? | tier | GitLab.com Free | Bronze | Silver | Gold | \u2022 DevOps score is not maturity | Per user | S4 | $19 | $99 | Scaling | DevOps | Personal/Evaluating Adopting | Optimizing | CIO, CTO, CISO, | \u2022Champion | Individual | Engineering | Director of IT/Operations, | Chief Risk Officer | COTL HOLCO | Advanced Kubernetes | Value streams, Risk, | Automation | management, Progressive | Compliance, | Security, | Governance | Collabnet | Main | None | Atlassian | GitHub | competitor | Type of sell No sell | Benefit/solution | Transformation | Progressive delivery: | \u2022 Canary deploys | \u2022 Incremental rollouts | \u2022 Feature flags | \u2022 Targeted deployments | Auto remediate | Advanced Kubernetes management: | Monitorng | Routing to clusters | Stateful workloads / data | Why have | Type of sell | A feature sell means that people want to buy the extra features. This can be done self-serve."
+        },
+        {
+         "t": 243.25,
+         "text": "Sytse | DIG | GitLab | Product Pricing | Install Community Blog Contact | Explore GitLab.com | Sign In/Register | Prciny sects procuet mar\u043aeuns ana sales inerevore seneral priongaccistons are msae by tne ceva | On this page | Product makes most decisions on a day to day basis about what feature should go in what plan based on | the paid tiers. Therefore this pricing page is in the product handbook. | \u2022 Departments | \u2022 Type of sell | Four tiers | Combining features in plans | We have four pricing tiers. How we make decisions on a day to day basis are specified in what goes in | \u2022 True-up pricing | what version. | \u2022 Price difference between self-hosted and | Ultimate | Premium | \u2022 When is a dollar not a dollar? | tier | GitLab.com Free | Bronze | Silver | Gold | \u2022 DevOps score is not maturity | Per user | S4 | $19 | $99 | Scaling | DevOps | Personal/Evaluating Adopting | Optimizing | Champiorg\u00e0 | Engineering | Director of IT/Operations, | CIO, CTO, CISO, | Chief Risk Officer | contributor | Advanced Kubernetes | Value streams, Risk, | Automation | management, Progressive | Compliance, | Security, | Governance | Collabnet | Main | None | Atlassian | GitHub | competitor | Type of sell No sell | Benefit/solution | Transformation | Progressive delivery: | \u2022 Canary deploys | \u2022 Incremental rollouts | \u2022 Feature flags | \u2022 Targeted deployments | Auto remediate | Advanced Kubernetes management: | Monitoring | Routing to clusters | Stateful workloads / data | Why have | Type of sell | \u2022 A feature sell means that people want to buy the extra features. This can be done self-serve."
+        },
+        {
+         "t": 244.25,
+         "text": "Sytse | \u2022 Secure https://about.oitlab.com/handbook/product/pricing/ | &DIC | GitLab | Product Pricing | Install Community Blog Contact | Explore GitLab.com | Sign In/Register | Prciny sects procuet mar\u043aeuns ana sales inerevore seneral priongaccistons are msae by tne ceva | On this page | Product makes most decisions on a day to day basis about what feature should go in what plan based on | the paid tiers. Therefore this pricing page is in the product handbook. | \u2022 Departments | \u2022 Why have | \u2022 Type of sell | Four tiers | Combining features in plans | We have four pricing tiers. How we make decisions on a day to day basis are specified in what goes in | \u2022 True-up pricing | what version. | \u2022 Price difference between self-hosted and | Ultimate | Premium | \u2022 When is a dollar not a dollar? | tier | GitLab.com Free | Bronze | Silver | Gold | \u2022 DevOps score is not maturity | Per user | S4 | $19 | $99 | Scaling | DevOps | Personal/Evaluating Adopting | Optimizing | CIO, CTO, CISO, | Engineering | Director of IT/Operations. | Chief Risk Officer | contributor | Value streams, Risk, | Automation | management, Progressive | Compliance, | Security, | ceinvery, Avallabtuty | Governance | None | Main | Atlassian | GitHub | Collabnet | competitor | Type of sell No sell | Benefit/solution | Transformation | Feature | Progressive delivery: | \u2022 Canary deploys | \u2022 Feature flags | \u2022 Targeted deployments | Auto remediate | Advanced Kubernetes management: | \u2022 Monitoring | Routing to clusters | \u2022 Stateful workloads / data | Why have | Type of sell | \u2022 A feature sell means that people want to buy the extra features. This can be done self-serve."
+        },
+        {
+         "t": 245.25,
+         "text": "Sytse | \u2022 Secure https://about.oitlab.com/handbook/product/pricing/ | ADIC | GitLab | Product Pricing | Install Community Blog Contact | Explore GitLab.com | Sign In/Register | Prciny sects procuet mar\u043aeuns ana sales inerevore seneral priongaccistons are msae by tne ceva | On this page | Product makes most decisions on a day to day basis about what feature should go in what plan based on | the paid tiers. Therefore this pricing page is in the product handbook. | \u2022 Departments | \u2022 Why have | \u2022 Type of sell | Four tiers | Combining features in plans | We have four pricing tiers. How we make decisions on a day to day basis are specified in what goes in | \u2022 True-up pricing | what version. | \u2022 Price difference between self-hosted and | Ultimate | \u2022 When is a dollar not a dollar? | tier | GitLab.com Free | Bronze | Silver | Gold | \u2022 DevOps score is not maturity | Per user | S4 | $19 | $99 | Scaling | DevOps | Personal/Evaluating Adopting | Optimizing | CIO, CTO, CISO, | Engineering | Director of IT/Operations. | Chief Risk Officer | contributor | Value streams, Risk, | Automation | management, Progressive | Compliance, | Security, | ceinvery, Avallabtuty | Governance | None | Main | Atlassian | GitHub | Collabnet | competitor | Type of sell No sell | Benefit/solution | Transformation | Feature | Progressive delivery: | \u2022 Canary deploys | \u2022 Feature flags | \u2022 Targeted deployments | Auto remediate | Advanced Kubernetes management: | \u2022 Monitoring | Routing to clusters | \u2022 Stateful workloads / data | Why have | Type of sell | \u2022 A feature sell means that people want to buy the extra features. This can be done self-serve."
+        },
+        {
+         "t": 246.25,
+         "text": "Sytse | \u2022 Secure https://about.oitlab.com/handbook/product/pricing/ | DIG | GitLab | Product Pricing | Install Community Blog Contact | Explore GitLab.com Sign In/Register | Prciny sects procuet mar\u043aeuns ana sales inerevore seneral priongaccistons are msae by tne ceva | On this page | Product makes most decisions on a day to day basis about what feature should go in what plan based on | the paid tiers. Therefore this pricing page is in the product handbook. | \u2022 Departments | \u2022 Why have | \u2022 Type of sell | Four tiers | Combining features in plans | We have four pricing tiers. How we make decisions on a day to day basis are specified in what goes in | \u2022 True-up pricing | what version. | \u2022 Price difference between self-hosted and | Ultimate | Premium | \u2022 When is a dollar not a dollar? | tier | GitLab.com Free | Bronze | Silver | Gold | \u2022 DevOps score is not maturity | Per user | S4 | $19 | $99 | Scaling | DevOps | Personal/Evaluating Adopting | Optimizing | CIO, CTO, CISO, | Champion | Individual | Engineering | Director of IT/Operations, | Chief Risk Officer | contributor | Helps with | Advanced Kubernetes | Value streams, Risk, | Compliance, | Automation | management, Progressive | Security, | ceinvery, avanlabibty | Governance | None | Main | Atlassian | GitHub | Collabnet | competitor | Type of sell No sell | Benefit/solution | Transformation | Progressive delivery: | \u2022 Canary deploys | \u2022 Feature flags | \u2022 Targeted deployments | Auto remediate | Advanced Kubernetes management: | \u2022 Monitonng | \u2022 Routing to clusters | \u2022 Stateful workloads / data | Why have | Type of sell | \u2022 A feature sell means that people want to buy the extra features. This can be done self-serve."
+        },
+        {
+         "t": 247.25,
+         "text": "Sytse | \u2022 Secure https://about.oitlab.com/handbook/product/pricing/ | &DIC | GitLab | Product Pricing | Install Community Blog Contact | Explore GitLab.com Sign In/Register | Prciny sects procuet mar\u043aeuns ana sales inerevore seneral priongaccistons are msae by tne ceva | On this page | Product makes most decisions on a day to day basis about what feature should go in what plan based on | the paid tiers. Therefore this pricing page is in the product handbook. | \u2022 Departments | \u2022 Type of sell | Four tiers | Combining features in plans | We have four pricing tiers. How we make decisions on a day to day basis are specified in what goes in | \u2022 True-up pricing | what version. | \u2022 Price difference between self-hosted and | Ultimate | Premium | \u2022 When is a dollar not a dollar? | tier | GitLab.com Free | Bronze | Silver | Gold | \u2022 DevOps score is not maturity | Per user | $4 | $19 | $99 | Scaling | DevOps | Personal/Evaluating Adopting | Optimizing | Champion | Engineering | Director of IT/Operations, | CIO, CTO, CISO, | Chief Risk Officer | contributor | Advanced Kubernetes | Value streams, Risk, | Helps with | Automation | management, Progressive | Compliance, | Security, | ceinvery, avanabibty | Governance | None | Collabnet | Main | Atlassian | GitHub | competitor | Type of sell No sell | Benefit/solution | Transformation | Feature | Progressive delivery: | \u2022 Canary deploys | \u2022 Incremental rollouts | \u2022 Feature flags | \u2022 Targeted deployments | Auto remediate | Advanced Kubernetes management: | \u2022 Monitoring | \u2022 Routing to clusters | \u2022 Stateful workloads / data | Why have | Type of sell | \u2022 A feature sell means that people want to buy the extra features. This can be done self-serve."
+        },
+        {
+         "t": 248.25,
+         "text": "Sytse | \u2022 Secure https://about.oitlab.com/handbook/product/pricing/ | &DIC | GitLab | Product Pricing | Install Community Blog Contact | Explore GitLab.com Sign In/Register | Prciny sects procuet mar\u043aeuns ana sales inerevore seneral priongaccistons are msae by tne ceva | On this page | Product makes most decisions on a day to day basis about what feature should go in what plan based on | the paid tiers. Therefore this pricing page is in the product handbook. | \u2022 Departments | \u2022 Type of sell | Four tiers | Combining features in plans | We have four pricing tiers. How we make decisions on a day to day basis are specified in what goes in | \u2022 True-up pricing | what version. | \u2022 Price difference between self-hosted and | Ultimate | \u2022 When is a dollar not a dollar? | tier | GitLab.com Free | Bronze | Silver | Gold | \u2022 DevOps score is not maturity | Per user | $4 | $19 | $99 | Scaling | DevOps | Personal/Evaluating Adopting | Optimizing | Champion | Engineering | Director of IT/Operations, | CIO, CTO, CISO, | Chief Risk Officer | contributor | Haips with | Advanced Kubernetes | Value streams, Risk, | Automation | management, Progressive | Compliance, | Security, | ceinvery, avanabibty | Governance | None | Collabnet | Main | Atlassian | GitHub | competitor | Type of sell No sell | Benefit/solution | Transformation | Feature | Progressive delivery: | \u2022 Canary deploys | \u2022 Incremental rollouts | \u2022 Feature flags | \u2022 Targeted deployments | Auto remediate | Advanced Kubernetes management: | \u2022 Monitoring | \u2022 Routing to clusters | \u2022 Stateful workloads / data | Why have | Type of sell | \u2022 A feature sell means that people want to buy the extra features. This can be done self-serve."
+        }
+       ],
+       "sounds": [
+        {
+         "start": 234.0,
+         "end": 239.5,
+         "label": "speech"
+        },
+        {
+         "start": 235.0,
+         "end": 236.0,
+         "label": "music"
+        },
+        {
+         "start": 238.5,
+         "end": 239.5,
+         "label": "music"
+        },
+        {
+         "start": 239.5,
+         "end": 240.5,
+         "label": "insect"
+        },
+        {
+         "start": 239.5,
+         "end": 240.5,
+         "label": "mosquito_buzz"
+        },
+        {
+         "start": 240.0,
+         "end": 241.0,
+         "label": "click"
+        },
+        {
+         "start": 240.0,
+         "end": 254.5,
+         "label": "speech"
+        },
+        {
+         "start": 241.0,
+         "end": 242.0,
+         "label": "insect"
+        },
+        {
+         "start": 241.0,
+         "end": 242.0,
+         "label": "mosquito_buzz"
+        },
+        {
+         "start": 241.5,
+         "end": 242.5,
+         "label": "music"
+        },
+        {
+         "start": 242.0,
+         "end": 244.0,
+         "label": "click"
+        },
+        {
+         "start": 242.0,
+         "end": 244.5,
+         "label": "writing"
+        },
+        {
+         "start": 244.5,
+         "end": 245.5,
+         "label": "bird"
+        },
+        {
+         "start": 245.0,
+         "end": 246.0,
+         "label": "music"
+        },
+        {
+         "start": 245.5,
+         "end": 246.5,
+         "label": "gunshot_gunfire"
+        },
+        {
+         "start": 245.5,
+         "end": 246.5,
+         "label": "sneeze"
+        },
+        {
+         "start": 247.5,
+         "end": 248.5,
+         "label": "writing"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "the slide with the chart",
+        "start": 235.85,
+        "end": 248.5,
+        "timecode": "00:03:55.8 -> 00:04:08.5"
+       }
+      ],
+      "replays": []
+     },
+     {
+      "id": "obs_ffab0ab91f",
+      "video_id": "v_d227f77eae",
+      "title": "GitLab AMA of July 6th",
+      "source": "/private/var/tmp/akyl/Everyday/final/meeting.mp4",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/meeting-d227f77eae.mp4",
+      "start": 249.14,
+      "end": 261.79,
+      "timecode": "00:04:09.1 -> 00:04:21.8",
+      "claim": "the slide with the chart",
+      "who": "speaker",
+      "entity_id": null,
+      "confidence": 1.0,
+      "evidence": {
+       "summary": "slide with chart visible",
+       "frames": [
+        {
+         "t": 249.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_d227f77eae_249.1-261.8/01.jpg"
+        },
+        {
+         "t": 251.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_d227f77eae_249.1-261.8/02.jpg"
+        },
+        {
+         "t": 252.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_d227f77eae_249.1-261.8/03.jpg"
+        },
+        {
+         "t": 253.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_d227f77eae_249.1-261.8/04.jpg"
+        },
+        {
+         "t": 254.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_d227f77eae_249.1-261.8/05.jpg"
+        },
+        {
+         "t": 256.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_d227f77eae_249.1-261.8/06.jpg"
+        },
+        {
+         "t": 257.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_d227f77eae_249.1-261.8/07.jpg"
+        },
+        {
+         "t": 258.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_d227f77eae_249.1-261.8/08.jpg"
+        },
+        {
+         "t": 259.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_d227f77eae_249.1-261.8/09.jpg"
+        },
+        {
+         "t": 261.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_d227f77eae_249.1-261.8/10.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 249.42,
+         "end": 251.76,
+         "text": "So our tiers are going to be focused around"
+        },
+        {
+         "start": 252.16,
+         "end": 258.6,
+         "text": "are we selling to and I think that's great and I think we're gonna get rid of"
+        },
+        {
+         "start": 258.6,
+         "end": 261.82,
+         "text": "the maturity because even companies just starting on"
+        }
+       ],
+       "ocr": [
+        {
+         "t": 249.25,
+         "text": "Sytse | \u2022 Secure https://about.oitlab.com/handbook/product/pricing/ | \u2022\u0412O\u0412\u0454 MMA\u0457 \u041c MOmi \u2022 \u0410 | &DIC | GitLab | Product Pricing | Install Community Blog Contact | Explore GitLab.com Sign In/Register | Prciny sects procuet mar\u043aeuns ana sales inerevore seneral priongaccistons are msae by tne ceva | On this page | Product makes most decisions on a day to day basis about what feature should go in what plan based on | the paid tiers. Therefore this pricing page is in the product handbook. | \u2022 Departments | \u2022 Type of sell | Four tiers | Combining features in plans | We have four pricing tiers. How we make decisions on a day to day basis are specified in what goes in | \u2022 True-up pricing | what version. | \u2022 Price difference between self-hosted and | Ultimate | Premium | \u2022 When is a dollar not a dollar? | tier | GitLab.com Free | Bronze | Silver | Gold | \u2022 DevOps score is not maturity | Per user | SO | $4 | $19 | $99 | DevOps | Personal/Evaluating Adopting | Scaling | Optimizing | Champion | Engineering Director of IT/Operations, | CIO, CTO, CISO, | Chief Risk Officer | COL OLO | Helfs with | Value streams, Risk, | Automation | management, Progressive | Compliance, | delivery, Availability | Security, | Governance | Main | None | Atlassian | GitHub | Collabnet | competitor | Type of sell No sell | Benefit/solution | Transformation | Feature | Progressive delivery: | \u2022 Canary deploys | \u2022 Feature flags | \u2022 Targeted deployments | Auto remediate | Advanced Kubernetes management: | \u2022 Monitoring | \u2022 Routing to clusters | \u2022 Stateful workloads / data | Why have | Type of sell | \u2022 A feature sell means that people want to buy the extra features. This can be done self-serve."
+        },
+        {
+         "t": 250.25,
+         "text": "Sytse | \u2022 Secure https://about.oitlab.com/handbook/product/pricing/ | \u2022\u0412O\u0412\u0454 MMA\u0457 \u041c MOmi \u2022 \u0430 | &DIC | GitLab | Product Pricing | Install Community Blog Contact | Explore GitLab.com Sign In/Register | Prciny sects procuet mar\u043aeuns ana sales inerevore seneral priongaccistons are msae by tne ceva | On this page | Product makes most decisions on a day to day basis about what feature should go in what plan based on | the paid tiers. Therefore this pricing page is in the product handbook. | \u2022 Departments | \u2022 Why have | \u2022 Type of sell | Four tiers | Combining features in plans | We have four pricing tiers. How we make decisions on a day to day basis are specified in what goes in | \u2022 True-up pricing | what version. | \u2022 Price difference between self-hosted and | Ultimate | Premium | \u2022 When is a dollar not a dollar? | tier | GitLab.com Free | Bronze | Silver | Gold | \u2022 DevOps score is not maturity | Per user | SO | $4 | $19 | $99 | DevOps | Personal/Evaluating Adopting | Scaling | Optimizing | Champion | Engineering | Director of IT/Operations, | CIO, CTO, CISO, | Nead | Chief Risk Officer | Advanced Kubernetes | Value streams, Risk, | Automation | management, Progressive | Compliance, | delivery, Availability | Security, | Governance | None | Main | Atlassian | GitHub | Collabnet | competitor | Type of sell No sell | Benefit/solution | Transformation | Feature | Progressive delivery: | \u2022 Canary deploys | \u2022 Feature flags | \u2022 Targeted deployments | Auto remediate | Advanced Kubernetes management: | \u2022 Monitoring | \u2022 Routing to clusters | \u2022 Stateful workloads / data | Why have | Type of sell | \u2022 A feature sell means that people want to buy the extra features. This can be done self-serve."
+        },
+        {
+         "t": 251.25,
+         "text": "Sytse | \u2022 Secure https://about.oitlab.com/handbook/product/pricing/ | &DIC | GitLab | Product Pricing | Install Community Blog Contact | Explore GitLab.com | Sign In/Register | Prciny sects procuet mar\u043aeuns ana sales inerevore seneral priongaccistons are msae by tne ceva | On this page | Product makes most decisions on a day to day basis about what feature should go in what plan based on | the paid tiers. Therefore this pricing page is in the product handbook. | \u2022 Departments | \u2022 Why have | \u2022 Type of sell | Four tiers | Combining features in plans | We have four pricing tiers. How we make decisions on a day to day basis are specified in what goes in | \u2022 True-up pricing | what version. | \u2022 Price difference between self-hosted and | Ultimate | Premium | \u2022 When is a dollar not a dollar? | tier | GitLab.com Free | Bronze | Silver | Gold | \u2022 DevOps score is not maturity | Per user | SO | $4 | $19 | $99 | Scaling | DevOps | Personal/Evaluating Adopting | Optimizing | CIO, CTO, CISO, | Champion | Engineering | Director of IT/Operations, | Chief Risk Officer \u2022 | contributor | Advanced Kubernetes | Value streams, Risk, | Automation | management, Progressive | Compliance, | Security, | ceinery, avallabiuty | Governance | None | Main | Atlassian | GitHub | Collabnet | competitor | Type of sell No sell | Transformation | Progressive delivery: | \u2022 Canary deploys | \u2022 Feature flags | \u2022 Targeted deployments | Auto remediate | Advanced Kubernetes management: | \u2022 Monitonng | Routing to clusters | \u2022 Stateful workloads / data | Why have | Type of sell | \u2022 A feature sell means that people want to buy the extra features. This can be done self-serve."
+        },
+        {
+         "t": 252.25,
+         "text": "Sytse | @ Secure https://about.oitlab.com/handbook/product/pricing/ | GitLab | Product Pricing | Install Community Blog Contact | Explore GitLab.com | Sign In/Register | Prciny \u0430nects procuet mar\u043aeuns ana sales inerevore seneral priongaccistons are made by tne ceva | On this page | Product makes most decisions on a day to day basis about what feature should go in what plan based on | the paid tiers. Therefore this pricing page is in the product handbook. | \u2022 Departments | \u2022 Why have | \u2022 Type of sell | Four tiers | Combining features in plans | We have four pricing tiers. How we make decisions on a day to day basis are specified in what goes in | \u2022 True-up pricing | what version. | \u2022 Price difference between self-hosted and | Ultimate | Premium | \u2022 When is a dollar not a dollar? | tier | GitLab.com Free | Bronze | Silver | Gold | \u2022 DevOps score is not maturity | Per user | S4 | $19 | $99 | Scaling | Personal/Evaluating Adopting | Optimizing | CIO, CTO, CISO, | Champion | Engineering | Director of IT/Operations, | ChiefRisk Offcer \u2022 | contributor | Value streams, Risk, | Compliance, | Automation | management, Progressive | delivery, Availability | Security, | Governance | Main | None | Atlassian | GitHub | Collabnet | competitor | Type of sell No sell | Benefit/solution | Transformation | Feature | Progressive delivery: | \u2022 Canary deploys | \u2022 Incremental rollouts | \u2022 Feature flags | \u2022 Targeted deployments | Auto remediate | Advanced Kubernetes management: | Monitoring | Routing to clusters | Stateful workloads / data | Why have | Type of sell | A feature sell means that people want to buy the extra features. This can be done self-serve."
+        },
+        {
+         "t": 253.25,
+         "text": "Sytse | @ Secure https://about.oitlab.com/handbook/product/pricing/ | GitLab | Product Pricing | Install Community Blog Contact | Explore GitLab.com | Sign In/Register | Prciny \u0430nects procuet mar\u043aeuns ana sales inerevore seneral priongaccistons are made by tne ceva | On this page | Product makes most decisions on a day to day basis about what feature should go in what plan based on | the paid tiers. Therefore this pricing page is in the product handbook. | \u2022 Departments | \u2022 Why have | \u2022 Type of sell | Four tiers | Combining features in plans | We have four pricing tiers. How we make decisions on a day to day basis are specified in what goes in | \u2022 True-up pricing | what version. | \u2022 Price difference between self-hosted and | Ultimate | Premium | \u2022 When is a dollar not a dollar? | tier | GitLab.com Free | Bronze | Silver | Gold | \u2022 DevOps score is not maturity | Per user | $4 | $19 | $99 | Scaling | Personal/Evaluating Adopting | Optimizing | CIO, CTO, CISO, | Champion | Engineering | Director of IT/Operations, | ChiefRisk Offcer \u2022 | contributor | Value streams, Risk, | Compliance, | Automation | management, Progressive | delivery, Availability | Security, | Governance | Main | None | Atlassian | GitHub | Collabnet | competitor | Type of sell No sell | Benefit/solution | Transformation | Feature | Progressive delivery: | \u2022 Canary deploys | \u2022 Incremental rollouts | \u2022 Feature flags | \u2022 Targeted deployments | Auto remediate | Advanced Kubernetes management: | Monitoring | Routing to clusters | Stateful workloads / data | Why have | Type of sell | A feature sell means that people want to buy the extra features. This can be done self-serve."
+        },
+        {
+         "t": 257.25,
+         "text": "Sytse | @ Secure https://about.oitlab.com/handbook/product/pricing/ | GitLab | Product Pricing | Install Community Blog Contact | Explore GitLab.com | Sign In/Register | Prciny \u0430nects procuet mar\u043aeuns ana sales inerevore seneral priongaccistons are made by tne ceva | On this page | Product makes most decisions on a day to day basis about what feature should go in what plan based on | the paid tiers. Therefore this pricing page is in the product handbook. | \u2022 Departments | \u2022 Why have | \u2022 Type of sell | Four tiers | Combining features in plans | We have four pricing tiers. How we make decisions on a day to day basis are specified in what goes in | \u2022 True-up pricing | what version. | \u2022 Price difference between self-hosted and | Ultimate | Premium | \u2022 When is a dollar not a dollar? | tier | GitLab.com Free | Bronze | Silver | Gold | \u2022 DevOps score is not maturity | Per user | $4 | $19 | $99 | Scaling | Personal/Evaluating Adopting | Optimizing | CIO, CTO, CISO, | Champion | Engineering | Director of IT/Operations, | Chief Risk Officer | contributor | lead | Value streams, Risk, | Compliance, | Automation | management, Progressive | delivery, Availability | Security, | Governance | Collabnet | Main | None | Atlassian | GitHub | competitor | Type of sell No sell | Benefit/solution | Transformation | Progressive delivery. | \u2022 Canary deploys | \u2022 Incremental rollouts | \u2022 Feature flags | \u2022 Targeted deployments | Auto remediate | Advanced Kubernetes management: | Monitorng | Routing to clusters | Stateful workloads / data | Why have | Type of sell | A feature sell means that people want to buy the extra features. This can be done self-serve."
+        },
+        {
+         "t": 258.25,
+         "text": "Sytse | DIG | GitLab | Product Pricing | Install Community Blog Contact | Explore GitLab.com | Sign In/Register | Prciny \u0430nects procuet mar\u043aeuns ana sales inerevore seneral priongaccistons are made by tne ceva | On this page | Product makes most decisions on a day to day basis about what feature should go in what plan based on | the paid tiers. Therefore this pricing page is in the product handbook. | \u2022 Departments | \u2022 Why have | \u2022 Type of sell | Four tiers | Combining features in plans | We have four pricing tiers. How we make decisions on a day to day basis are specified in what goes in | \u2022 True-up pricing | what version. | \u2022 Price difference between self-hosted and | Ultimate | Premium | \u2022 When is a dollar not a dollar? | tier | GitLab.com Free | Bronze | Silver | Gold | \u2022 DevOps score is not maturity | Per user | $4 | $19 | $99 | Optimbing | Scaling | Personal/Evaluating \u2022 Adopting | CIO, CTO, CISO, | Champion | Engineering | Director of IT/Operations, | Chief Risk Officer | Complete DevOps | Value streams, Risk, | Automation | management, Progressive | Compliance, | delivery, Availability | Security, | Governance | Collabnet | Main | None | Atlassian | GitHub | competitor | Type of sell No sell | Benefit/solution | Transformation | Progressive delivery: | \u2022 Canary deploys | \u2022 Incremental rollouts | \u2022 Feature flags | \u2022 Targeted deployments | Auto remediate | Advanced Kubernetes management: | Monitoring | Routing to clusters | Stateful workloads / data | Why have | Type of sell | A feature sell means that people want to buy the extra features. This can be done self-serve."
+        },
+        {
+         "t": 259.25,
+         "text": "Sytse | \u2022 Securehttps://about.gitlab.com/handbook/product/pricing/ | ... | &DIC | GitLab | Product Pricing | Install Community Blog Contact | Explore GitLab.com | Sign In/Register | Prciny \u0430nects procuet mar\u043aeuns ana sales inerevore seneral priongaccistons are made by tne ceva | On this page | Product makes most decisions on a day to day basis about what feature should go in what plan based on | the paid tiers. Therefore this pricing page is in the product handbook. | \u2022 Departments | \u2022 Why have | \u2022 Type of sell | Four tiers | Combining features in plans | We have four pricing tiers. How we make decisions on a day to day basis are specified in what goes in | \u2022 True-up pricing | what version. | \u2022 Price difference between self-hosted and | Ultimate | \u2022 When is a dollar not a dollar? | tier | GitLab.com Free | Bronze | Silver | Gold | \u2022 DevOps score is not maturity | Per user | $4 | $19 | $99 | Personal/Evaluating | Adopting | Scaling | Optimizing | CIO, CTO, CISO, | Champion | Engineering | Director of IT/Operations, | Chief Risk Officer | contributor | Value streams, Risk, | Automation | management, Progressive | Compliance, | delivery, Availability | Security, | Governance | Main | None | Atlassian | GitHub | Collabnet | competitor | Type ofsell No sell | Benefit/solution | Transformation | Feature | Progressive delivery: | \u2022 Canary deploys | \u2022 Feature flags | \u2022 Targeted deployments | Auto remediate | Advanced Kubernetes management: | \u2022 Monitoring | \u2022 Routing to clusters | \u2022 Stateful workloads / data | Why have | Type of sell | hy the extra features. This can be done self-serve."
+        },
+        {
+         "t": 260.25,
+         "text": "Sytse | @ Secure https://about.oitlab.com/handbook/product/pricing/ | &DIC | GitLab | Product Pricing | Install Community Blog Contact | Explore GitLab.com | Sign In/Register | Prciny \u0430nects procuet mar\u043aeuns ana sales inerevore seneral priongaccistons are made by tne ceva | On this page | Product makes most decisions on a day to day basis about what feature should go in what plan based on | the paid tiers. Therefore this pricing page is in the product handbook. | \u2022 Departments | \u2022 Type of sell | Four tiers | Combining features in plans | We have four pricing tiers. How we make decisions on a day to day basis are specified in what goes in | \u2022 True-up pricing | what version. | \u2022 Price difference between self-hosted and | Ultimate | Premium | \u2022 When is a dollar not a dollar? | tier | GitLab.com Free | Bronze | Silver | Gold | \u2022 DevOps score is not maturity | Per user | $4 | $19 | $99 | Personal/Evaluating | Adopting | Scaling | Optimizing | CIO, CTO, CISO, | Champion | Engineering | Director of IT/Operations, | Chief Risk Officer | contributor | Value streams, Risk, | Automation | management, Progressive | Compliance, | delivery, Availability | Security, | Governance | Main | None | Atlassian | GitHub | Collabnet | competitor | Type of sell No sell | Benefit/solution | Transformation | Progressive delivery: | \u2022 Canary deploys | \u2022 Feature flags | \u2022 Targeted deployments | Auto remediate | Advanced Kubernetes management: | \u2022 Monitoring | \u2022 Routing to clusters | \u2022 Stateful workloads / data | Why have | Type of sell | \u2022 A feature sell means that people want to buy the extra features. This can be done self-serve."
+        },
+        {
+         "t": 261.25,
+         "text": "Sytse | @ Secure https://about.oitlab.com/handbook/product/pricing/ | &DIC | GitLab | Product Pricing | Install Community Blog Contact | Explore GitLab.com | Sign In/Register | Prciny \u0430nects procuet mar\u043aeuns ana sales inerevore seneral priongaccistons are made by tne ceva | On this page | Product makes most decisions on a day to day basis about what feature should go in what plan based on | the paid tiers. Therefore this pricing page is in the product handbook. | \u2022 Departments | \u2022 Type of sell | Four tiers | Combining features in plans | We have four pricing tiers. How we make decisions on a day to day basis are specified in what goes in | \u2022 True-up pricing | what version. | \u2022 Price difference between self-hosted and | Ultimate | Premium | \u2022 When is a dollar not a dollar? | tier | GitLab.com Free | Bronze | Silver | Gold | \u2022 DevOps score is not maturity | Per user | $4 | $19 | $99 | Personal/Evaluating Adopting | Optimizing | CIO, CTO, CISO, | Champion | Engineering | Director of IT/Operations, | Chief Risk Officer | contributor | Value streams, Risk, | Automation | management, Progressive | Compliance, | delivery, Availability | Security, | Governance | Main | None | Atlassian | GitHub | Collabnet | competitor | Type ofsell No sell | Benefit/solution | Transformation | Feature | Progressive delivery: | \u2022 Canary deploys | \u2022 Feature flags | \u2022 Targeted deployments | Auto remediate | Advanced Kubernetes management: | \u2022 Monitoring | \u2022 Routing to clusters | \u2022 Stateful workloads / data | Why have | Type of sell | \u2022 A feature sell means that people want to buy the extra features. This can be done self-serve."
+        }
+       ],
+       "sounds": [
+        {
+         "start": 240.0,
+         "end": 254.5,
+         "label": "speech"
+        },
+        {
+         "start": 248.5,
+         "end": 249.5,
+         "label": "music"
+        },
+        {
+         "start": 249.0,
+         "end": 250.5,
+         "label": "click"
+        },
+        {
+         "start": 250.0,
+         "end": 251.0,
+         "label": "typing"
+        },
+        {
+         "start": 250.5,
+         "end": 252.0,
+         "label": "music"
+        },
+        {
+         "start": 253.0,
+         "end": 254.0,
+         "label": "click"
+        },
+        {
+         "start": 253.5,
+         "end": 254.5,
+         "label": "typing"
+        },
+        {
+         "start": 254.0,
+         "end": 255.0,
+         "label": "burp"
+        },
+        {
+         "start": 254.5,
+         "end": 255.5,
+         "label": "cough"
+        },
+        {
+         "start": 254.5,
+         "end": 255.5,
+         "label": "sneeze"
+        },
+        {
+         "start": 256.0,
+         "end": 257.5,
+         "label": "click"
+        },
+        {
+         "start": 256.0,
+         "end": 257.0,
+         "label": "finger_snapping"
+        },
+        {
+         "start": 256.0,
+         "end": 264.5,
+         "label": "speech"
+        },
+        {
+         "start": 256.5,
+         "end": 257.5,
+         "label": "typing"
+        },
+        {
+         "start": 257.5,
+         "end": 259.5,
+         "label": "music"
+        },
+        {
+         "start": 259.5,
+         "end": 261.5,
+         "label": "click"
+        },
+        {
+         "start": 259.5,
+         "end": 261.0,
+         "label": "typing"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "the slide with the chart",
+        "start": 249.14,
+        "end": 261.79,
+        "timecode": "00:04:09.1 -> 00:04:21.8"
+       }
+      ],
+      "replays": []
+     }
+    ],
+    "rejected": [
+     {
+      "video_id": "v_bb19a1082c",
+      "start": 330.33,
+      "end": 338.21,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_bb19a1082c",
+      "start": 314.59,
+      "end": 322.46,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_407081314f",
+      "start": 40.67,
+      "end": 45.59,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_bb19a1082c",
+      "start": 4.82,
+      "end": 18.64,
+      "reason": "same moment as obs_bac7df71e7"
+     },
+     {
+      "video_id": "v_bb19a1082c",
+      "start": 12.64,
+      "end": 26.45,
+      "reason": "same moment as obs_bac7df71e7"
+     },
+     {
+      "video_id": "v_bb19a1082c",
+      "start": 20.45,
+      "end": 34.27,
+      "reason": "same moment as obs_bac7df71e7"
+     },
+     {
+      "video_id": "v_bb19a1082c",
+      "start": 28.27,
+      "end": 39.5,
+      "reason": "same moment as obs_bac7df71e7"
+     },
+     {
+      "video_id": "v_bb19a1082c",
+      "start": 36.09,
+      "end": 39.0,
+      "reason": "same moment as obs_bac7df71e7"
+     }
+    ],
+    "counts": {
+     "candidates": 12,
+     "checked": 12,
+     "confirmed": 4,
+     "rejected": 8
+    },
+    "seconds": {
+     "search": 7.39,
+     "load": 6.51,
+     "check": 45.21
+    }
+   },
+   "stderr": "tlv: searching 6 videos for 1 steps\ntlv: waiting for another model run to finish before vlm\ntlv: checking 12 stretches\ntlv: found 4 in 59 s: 7 s searching, 7 s loading the model, 45 s checking (45 s of it answering)\n"
+  },
+  {
+   "id": "vlog-golden-gate",
+   "query": "the golden gate bridge",
+   "then": [],
+   "argv": [
+    "uv",
+    "run",
+    "tlv",
+    "--index",
+    "everyday",
+    "find",
+    "the golden gate bridge",
+    "--max-candidates",
+    "12",
+    "--no-cut",
+    "--json"
+   ],
+   "seconds": 46.7,
+   "exit_code": 0,
+   "output": {
+    "claim": "the golden gate bridge",
+    "confirmed": [
+     {
+      "id": "obs_24c6566d78",
+      "video_id": "v_c59f6af7ec",
+      "title": "Discover the Hidden Waterfront Treasure! | Crissy Field",
+      "source": "/private/var/tmp/akyl/Everyday/final/vlog.mp4",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/vlog-c59f6af7ec.mp4",
+      "start": 166.75,
+      "end": 169.0,
+      "timecode": "00:02:46.8 -> 00:02:49.0",
+      "claim": "the golden gate bridge",
+      "who": "man",
+      "entity_id": null,
+      "confidence": 1.0,
+      "evidence": {
+       "summary": "man points to bridge in frames 4-5",
+       "frames": [
+        {
+         "t": 167.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_163.1-175.0/04.jpg"
+        },
+        {
+         "t": 168.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_163.1-175.0/05.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 166.58,
+         "end": 168.24,
+         "text": "is the Golden Gate Bridge."
+        }
+       ],
+       "ocr": [],
+       "sounds": [
+        {
+         "start": 165.0,
+         "end": 167.5,
+         "label": "wind"
+        },
+        {
+         "start": 165.0,
+         "end": 167.5,
+         "label": "wind_noise_microphone"
+        },
+        {
+         "start": 166.0,
+         "end": 169.0,
+         "label": "speech"
+        },
+        {
+         "start": 167.0,
+         "end": 168.0,
+         "label": "boat_water_vehicle"
+        },
+        {
+         "start": 167.5,
+         "end": 169.0,
+         "label": "keyboard_musical"
+        },
+        {
+         "start": 167.5,
+         "end": 172.0,
+         "label": "music"
+        },
+        {
+         "start": 168.5,
+         "end": 169.5,
+         "label": "eruption"
+        },
+        {
+         "start": 168.5,
+         "end": 169.5,
+         "label": "skiing"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "the golden gate bridge",
+        "start": 166.75,
+        "end": 169.0,
+        "timecode": "00:02:46.8 -> 00:02:49.0"
+       }
+      ],
+      "replays": []
+     },
+     {
+      "id": "obs_91c769ecff",
+      "video_id": "v_c59f6af7ec",
+      "title": "Discover the Hidden Waterfront Treasure! | Crissy Field",
+      "source": "/private/var/tmp/akyl/Everyday/final/vlog.mp4",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/vlog-c59f6af7ec.mp4",
+      "start": 200.97,
+      "end": 213.71,
+      "timecode": "00:03:21.0 -> 00:03:33.7",
+      "claim": "the golden gate bridge",
+      "who": "speaker",
+      "entity_id": null,
+      "confidence": 1.0,
+      "evidence": {
+       "summary": "bridge visible in all frames",
+       "frames": [
+        {
+         "t": 201.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_201.0-213.7/01.jpg"
+        },
+        {
+         "t": 202.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_201.0-213.7/02.jpg"
+        },
+        {
+         "t": 204.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_201.0-213.7/03.jpg"
+        },
+        {
+         "t": 205.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_201.0-213.7/04.jpg"
+        },
+        {
+         "t": 206.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_201.0-213.7/05.jpg"
+        },
+        {
+         "t": 207.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_201.0-213.7/06.jpg"
+        },
+        {
+         "t": 209.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_201.0-213.7/07.jpg"
+        },
+        {
+         "t": 210.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_201.0-213.7/08.jpg"
+        },
+        {
+         "t": 211.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_201.0-213.7/09.jpg"
+        },
+        {
+         "t": 213.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_201.0-213.7/10.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 201.56,
+         "end": 208.4,
+         "text": "As you can see, look at all this lupine just growing beautifully right here in front of the Golden Gate Bridge."
+        }
+       ],
+       "ocr": [],
+       "sounds": [
+        {
+         "start": 193.5,
+         "end": 209.0,
+         "label": "speech"
+        },
+        {
+         "start": 200.0,
+         "end": 201.0,
+         "label": "music"
+        },
+        {
+         "start": 202.0,
+         "end": 205.0,
+         "label": "wind"
+        },
+        {
+         "start": 202.0,
+         "end": 205.0,
+         "label": "wind_noise_microphone"
+        },
+        {
+         "start": 204.5,
+         "end": 207.0,
+         "label": "music"
+        },
+        {
+         "start": 205.5,
+         "end": 206.5,
+         "label": "wind"
+        },
+        {
+         "start": 206.5,
+         "end": 207.5,
+         "label": "air_horn"
+        },
+        {
+         "start": 206.5,
+         "end": 207.5,
+         "label": "fowl"
+        },
+        {
+         "start": 207.0,
+         "end": 208.0,
+         "label": "truck"
+        },
+        {
+         "start": 208.0,
+         "end": 210.5,
+         "label": "keyboard_musical"
+        },
+        {
+         "start": 208.0,
+         "end": 227.0,
+         "label": "music"
+        },
+        {
+         "start": 208.5,
+         "end": 209.5,
+         "label": "piano"
+        },
+        {
+         "start": 209.0,
+         "end": 210.0,
+         "label": "brass_instrument"
+        },
+        {
+         "start": 209.0,
+         "end": 210.0,
+         "label": "trombone"
+        },
+        {
+         "start": 209.5,
+         "end": 210.5,
+         "label": "synthesizer"
+        },
+        {
+         "start": 210.0,
+         "end": 211.0,
+         "label": "glockenspiel"
+        },
+        {
+         "start": 210.0,
+         "end": 211.0,
+         "label": "mallet_percussion"
+        },
+        {
+         "start": 210.5,
+         "end": 211.5,
+         "label": "brass_instrument"
+        },
+        {
+         "start": 211.0,
+         "end": 212.5,
+         "label": "keyboard_musical"
+        },
+        {
+         "start": 211.0,
+         "end": 212.5,
+         "label": "piano"
+        },
+        {
+         "start": 212.0,
+         "end": 213.0,
+         "label": "mallet_percussion"
+        },
+        {
+         "start": 212.0,
+         "end": 213.0,
+         "label": "vibraphone"
+        },
+        {
+         "start": 212.5,
+         "end": 214.0,
+         "label": "brass_instrument"
+        },
+        {
+         "start": 212.5,
+         "end": 213.5,
+         "label": "gong"
+        },
+        {
+         "start": 213.0,
+         "end": 215.0,
+         "label": "piano"
+        },
+        {
+         "start": 213.5,
+         "end": 214.5,
+         "label": "ukulele"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "the golden gate bridge",
+        "start": 200.97,
+        "end": 213.71,
+        "timecode": "00:03:21.0 -> 00:03:33.7"
+       }
+      ],
+      "replays": []
+     },
+     {
+      "id": "obs_e3709b4b56",
+      "video_id": "v_c59f6af7ec",
+      "title": "Discover the Hidden Waterfront Treasure! | Crissy Field",
+      "source": "/private/var/tmp/akyl/Everyday/final/vlog.mp4",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/vlog-c59f6af7ec.mp4",
+      "start": 244.49,
+      "end": 257.6,
+      "timecode": "00:04:04.5 -> 00:04:17.6",
+      "claim": "the golden gate bridge",
+      "who": "null",
+      "entity_id": null,
+      "confidence": 1.0,
+      "evidence": {
+       "summary": "bridge visible in all frames",
+       "frames": [
+        {
+         "t": 245.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_244.5-257.6/01.jpg"
+        },
+        {
+         "t": 246.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_244.5-257.6/02.jpg"
+        },
+        {
+         "t": 247.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_244.5-257.6/03.jpg"
+        },
+        {
+         "t": 249.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_244.5-257.6/04.jpg"
+        },
+        {
+         "t": 250.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_244.5-257.6/05.jpg"
+        },
+        {
+         "t": 251.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_244.5-257.6/06.jpg"
+        },
+        {
+         "t": 253.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_244.5-257.6/07.jpg"
+        },
+        {
+         "t": 254.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_244.5-257.6/08.jpg"
+        },
+        {
+         "t": 255.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_244.5-257.6/09.jpg"
+        },
+        {
+         "t": 256.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_244.5-257.6/10.jpg"
+        }
+       ],
+       "transcript": [],
+       "ocr": [],
+       "sounds": [
+        {
+         "start": 237.5,
+         "end": 248.5,
+         "label": "music"
+        },
+        {
+         "start": 240.5,
+         "end": 245.5,
+         "label": "wind"
+        },
+        {
+         "start": 243.5,
+         "end": 244.5,
+         "label": "brass_instrument"
+        },
+        {
+         "start": 243.5,
+         "end": 245.0,
+         "label": "trombone"
+        },
+        {
+         "start": 244.5,
+         "end": 245.5,
+         "label": "wind_noise_microphone"
+        },
+        {
+         "start": 245.0,
+         "end": 247.0,
+         "label": "brass_instrument"
+        },
+        {
+         "start": 245.0,
+         "end": 246.0,
+         "label": "wind_instrument"
+        },
+        {
+         "start": 245.5,
+         "end": 247.0,
+         "label": "trombone"
+        },
+        {
+         "start": 246.5,
+         "end": 247.5,
+         "label": "wind"
+        },
+        {
+         "start": 247.5,
+         "end": 248.5,
+         "label": "brass_instrument"
+        },
+        {
+         "start": 247.5,
+         "end": 248.5,
+         "label": "trombone"
+        },
+        {
+         "start": 248.0,
+         "end": 253.5,
+         "label": "wind"
+        },
+        {
+         "start": 248.0,
+         "end": 251.0,
+         "label": "wind_noise_microphone"
+        },
+        {
+         "start": 249.0,
+         "end": 250.0,
+         "label": "trombone"
+        },
+        {
+         "start": 250.5,
+         "end": 251.5,
+         "label": "brass_instrument"
+        },
+        {
+         "start": 250.5,
+         "end": 252.0,
+         "label": "music"
+        },
+        {
+         "start": 250.5,
+         "end": 251.5,
+         "label": "trombone"
+        },
+        {
+         "start": 251.5,
+         "end": 252.5,
+         "label": "air_horn"
+        },
+        {
+         "start": 251.5,
+         "end": 252.5,
+         "label": "fly_buzz"
+        },
+        {
+         "start": 251.5,
+         "end": 252.5,
+         "label": "insect"
+        },
+        {
+         "start": 252.0,
+         "end": 253.0,
+         "label": "wind_noise_microphone"
+        },
+        {
+         "start": 252.5,
+         "end": 263.0,
+         "label": "music"
+        },
+        {
+         "start": 253.0,
+         "end": 255.0,
+         "label": "brass_instrument"
+        },
+        {
+         "start": 253.0,
+         "end": 254.0,
+         "label": "trombone"
+        },
+        {
+         "start": 253.5,
+         "end": 254.5,
+         "label": "guitar"
+        },
+        {
+         "start": 253.5,
+         "end": 254.5,
+         "label": "plucked_string_instrument"
+        },
+        {
+         "start": 254.5,
+         "end": 256.5,
+         "label": "door"
+        },
+        {
+         "start": 254.5,
+         "end": 256.0,
+         "label": "piano"
+        },
+        {
+         "start": 255.5,
+         "end": 258.0,
+         "label": "keyboard_musical"
+        },
+        {
+         "start": 256.5,
+         "end": 258.0,
+         "label": "piano"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "the golden gate bridge",
+        "start": 244.49,
+        "end": 257.6,
+        "timecode": "00:04:04.5 -> 00:04:17.6"
+       }
+      ],
+      "replays": []
+     },
+     {
+      "id": "obs_11ceb5b8a8",
+      "video_id": "v_c59f6af7ec",
+      "title": "Discover the Hidden Waterfront Treasure! | Crissy Field",
+      "source": "/private/var/tmp/akyl/Everyday/final/vlog.mp4",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/vlog-c59f6af7ec.mp4",
+      "start": 267.88,
+      "end": 281.44,
+      "timecode": "00:04:27.9 -> 00:04:41.4",
+      "claim": "the golden gate bridge",
+      "who": "unknown",
+      "entity_id": null,
+      "confidence": 1.0,
+      "evidence": {
+       "summary": "golden gate bridge visible throughout",
+       "frames": [
+        {
+         "t": 268.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_267.9-281.4/01.jpg"
+        },
+        {
+         "t": 269.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_267.9-281.4/02.jpg"
+        },
+        {
+         "t": 271.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_267.9-281.4/03.jpg"
+        },
+        {
+         "t": 272.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_267.9-281.4/04.jpg"
+        },
+        {
+         "t": 273.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_267.9-281.4/05.jpg"
+        },
+        {
+         "t": 275.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_267.9-281.4/06.jpg"
+        },
+        {
+         "t": 276.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_267.9-281.4/07.jpg"
+        },
+        {
+         "t": 278.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_267.9-281.4/08.jpg"
+        },
+        {
+         "t": 279.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_267.9-281.4/09.jpg"
+        },
+        {
+         "t": 280.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_267.9-281.4/10.jpg"
+        }
+       ],
+       "transcript": [],
+       "ocr": [],
+       "sounds": [
+        {
+         "start": 267.5,
+         "end": 269.0,
+         "label": "speech"
+        },
+        {
+         "start": 271.0,
+         "end": 274.0,
+         "label": "rail_transport"
+        },
+        {
+         "start": 271.0,
+         "end": 272.0,
+         "label": "train"
+        },
+        {
+         "start": 271.0,
+         "end": 274.0,
+         "label": "train_horn"
+        },
+        {
+         "start": 271.5,
+         "end": 274.5,
+         "label": "keyboard_musical"
+        },
+        {
+         "start": 271.5,
+         "end": 273.0,
+         "label": "music"
+        },
+        {
+         "start": 271.5,
+         "end": 272.5,
+         "label": "wind_instrument"
+        },
+        {
+         "start": 273.0,
+         "end": 274.0,
+         "label": "train"
+        },
+        {
+         "start": 273.5,
+         "end": 287.5,
+         "label": "music"
+        },
+        {
+         "start": 273.5,
+         "end": 274.5,
+         "label": "piano"
+        },
+        {
+         "start": 274.0,
+         "end": 280.0,
+         "label": "bassoon"
+        },
+        {
+         "start": 274.0,
+         "end": 275.0,
+         "label": "wind_instrument"
+        },
+        {
+         "start": 274.5,
+         "end": 275.5,
+         "label": "fly_buzz"
+        },
+        {
+         "start": 275.0,
+         "end": 276.0,
+         "label": "mallet_percussion"
+        },
+        {
+         "start": 275.5,
+         "end": 284.5,
+         "label": "wind_instrument"
+        },
+        {
+         "start": 276.5,
+         "end": 277.5,
+         "label": "rail_transport"
+        },
+        {
+         "start": 276.5,
+         "end": 277.5,
+         "label": "railroad_car"
+        },
+        {
+         "start": 278.0,
+         "end": 279.0,
+         "label": "didgeridoo"
+        },
+        {
+         "start": 279.5,
+         "end": 280.5,
+         "label": "keyboard_musical"
+        },
+        {
+         "start": 280.0,
+         "end": 281.0,
+         "label": "fly_buzz"
+        },
+        {
+         "start": 280.0,
+         "end": 281.0,
+         "label": "mallet_percussion"
+        },
+        {
+         "start": 280.5,
+         "end": 281.5,
+         "label": "bassoon"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "the golden gate bridge",
+        "start": 267.88,
+        "end": 281.44,
+        "timecode": "00:04:27.9 -> 00:04:41.4"
+       }
+      ],
+      "replays": []
+     },
+     {
+      "id": "obs_085bbdab59",
+      "video_id": "v_c59f6af7ec",
+      "title": "Discover the Hidden Waterfront Treasure! | Crissy Field",
+      "source": "/private/var/tmp/akyl/Everyday/final/vlog.mp4",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/vlog-c59f6af7ec.mp4",
+      "start": 440.75,
+      "end": 446.0,
+      "timecode": "00:07:20.8 -> 00:07:26.0",
+      "claim": "the golden gate bridge",
+      "who": "none",
+      "entity_id": null,
+      "confidence": 1.0,
+      "evidence": {
+       "summary": "golden gate bridge appears from frame 5",
+       "frames": [
+        {
+         "t": 441.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_435.5-448.7/05.jpg"
+        },
+        {
+         "t": 442.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_435.5-448.7/06.jpg"
+        },
+        {
+         "t": 444.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_435.5-448.7/07.jpg"
+        },
+        {
+         "t": 445.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_435.5-448.7/08.jpg"
+        }
+       ],
+       "transcript": [],
+       "ocr": [],
+       "sounds": [
+        {
+         "start": 430.5,
+         "end": 441.0,
+         "label": "music"
+        },
+        {
+         "start": 441.5,
+         "end": 444.5,
+         "label": "music"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "the golden gate bridge",
+        "start": 440.75,
+        "end": 446.0,
+        "timecode": "00:07:20.8 -> 00:07:26.0"
+       }
+      ],
+      "replays": []
+     },
+     {
+      "id": "obs_fcc9fdcebf",
+      "video_id": "v_c59f6af7ec",
+      "title": "Discover the Hidden Waterfront Treasure! | Crissy Field",
+      "source": "/private/var/tmp/akyl/Everyday/final/vlog.mp4",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/vlog-c59f6af7ec.mp4",
+      "start": 458.25,
+      "end": 464.17,
+      "timecode": "00:07:38.2 -> 00:07:44.2",
+      "claim": "the golden gate bridge",
+      "who": "man",
+      "entity_id": null,
+      "confidence": 1.0,
+      "evidence": {
+       "summary": "golden gate bridge visible",
+       "frames": [
+        {
+         "t": 458.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_454.6-464.2/05.jpg"
+        },
+        {
+         "t": 459.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_454.6-464.2/06.jpg"
+        },
+        {
+         "t": 460.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_454.6-464.2/07.jpg"
+        },
+        {
+         "t": 461.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_454.6-464.2/08.jpg"
+        },
+        {
+         "t": 462.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_454.6-464.2/09.jpg"
+        },
+        {
+         "t": 463.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_454.6-464.2/10.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 458.54,
+         "end": 463.78,
+         "text": "Cursing Field is a fabulous place, full of beauty, full of nature."
+        }
+       ],
+       "ocr": [],
+       "sounds": [
+        {
+         "start": 448.5,
+         "end": 459.0,
+         "label": "music"
+        },
+        {
+         "start": 457.0,
+         "end": 464.0,
+         "label": "speech"
+        },
+        {
+         "start": 459.5,
+         "end": 460.5,
+         "label": "music"
+        },
+        {
+         "start": 459.5,
+         "end": 460.5,
+         "label": "singing"
+        },
+        {
+         "start": 460.0,
+         "end": 461.5,
+         "label": "fly_buzz"
+        },
+        {
+         "start": 460.0,
+         "end": 461.5,
+         "label": "insect"
+        },
+        {
+         "start": 461.0,
+         "end": 464.0,
+         "label": "music"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "the golden gate bridge",
+        "start": 458.25,
+        "end": 464.17,
+        "timecode": "00:07:38.2 -> 00:07:44.2"
+       }
+      ],
+      "replays": []
+     },
+     {
+      "id": "obs_1cfe8ef8d6",
+      "video_id": "v_c59f6af7ec",
+      "title": "Discover the Hidden Waterfront Treasure! | Crissy Field",
+      "source": "/private/var/tmp/akyl/Everyday/final/vlog.mp4",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/vlog-c59f6af7ec.mp4",
+      "start": 65.0,
+      "end": 72.17,
+      "timecode": "00:01:05.0 -> 00:01:12.2",
+      "claim": "the golden gate bridge",
+      "who": "unknown",
+      "entity_id": null,
+      "confidence": 0.95,
+      "evidence": {
+       "summary": "bridge visible from frame 5 onwards",
+       "frames": [
+        {
+         "t": 65.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_60.3-72.2/05.jpg"
+        },
+        {
+         "t": 66.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_60.3-72.2/06.jpg"
+        },
+        {
+         "t": 68.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_60.3-72.2/07.jpg"
+        },
+        {
+         "t": 69.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_60.3-72.2/08.jpg"
+        },
+        {
+         "t": 70.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_60.3-72.2/09.jpg"
+        },
+        {
+         "t": 71.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_60.3-72.2/10.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 65.2,
+         "end": 69.0,
+         "text": "Magnificent Golden Gate Bridge in the distance over there, which connects Marin Headlands"
+        },
+        {
+         "start": 69.0,
+         "end": 69.98,
+         "text": "to San Francisco."
+        },
+        {
+         "start": 70.5,
+         "end": 72.24,
+         "text": "So we're going to head down that way"
+        }
+       ],
+       "ocr": [],
+       "sounds": [
+        {
+         "start": 50.0,
+         "end": 68.5,
+         "label": "music"
+        },
+        {
+         "start": 63.0,
+         "end": 65.5,
+         "label": "keyboard_musical"
+        },
+        {
+         "start": 64.5,
+         "end": 70.0,
+         "label": "speech"
+        },
+        {
+         "start": 67.0,
+         "end": 68.0,
+         "label": "didgeridoo"
+        },
+        {
+         "start": 67.5,
+         "end": 68.5,
+         "label": "brass_instrument"
+        },
+        {
+         "start": 68.0,
+         "end": 72.0,
+         "label": "wind"
+        },
+        {
+         "start": 68.0,
+         "end": 71.5,
+         "label": "wind_noise_microphone"
+        },
+        {
+         "start": 69.5,
+         "end": 71.0,
+         "label": "music"
+        },
+        {
+         "start": 70.5,
+         "end": 92.5,
+         "label": "speech"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "the golden gate bridge",
+        "start": 65.0,
+        "end": 72.17,
+        "timecode": "00:01:05.0 -> 00:01:12.2"
+       }
+      ],
+      "replays": []
+     },
+     {
+      "id": "obs_b0fd693ffa",
+      "video_id": "v_c59f6af7ec",
+      "title": "Discover the Hidden Waterfront Treasure! | Crissy Field",
+      "source": "/private/var/tmp/akyl/Everyday/final/vlog.mp4",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/vlog-c59f6af7ec.mp4",
+      "start": 159.5,
+      "end": 166.5,
+      "timecode": "00:02:39.5 -> 00:02:46.5",
+      "claim": "the golden gate bridge",
+      "who": "man",
+      "entity_id": null,
+      "confidence": 0.95,
+      "evidence": {
+       "summary": "man points to bridge in frames 9-10",
+       "frames": [
+        {
+         "t": 160.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_155.6-169.1/04.jpg"
+        },
+        {
+         "t": 161.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_155.6-169.1/05.jpg"
+        },
+        {
+         "t": 163.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_155.6-169.1/06.jpg"
+        },
+        {
+         "t": 164.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_155.6-169.1/07.jpg"
+        },
+        {
+         "t": 165.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_155.6-169.1/08.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 159.24,
+         "end": 166.58,
+         "text": "wonders. We're just on a bridge right now heading this way. Over there"
+        }
+       ],
+       "ocr": [],
+       "sounds": [
+        {
+         "start": 154.0,
+         "end": 160.5,
+         "label": "music"
+        },
+        {
+         "start": 159.0,
+         "end": 160.5,
+         "label": "eruption"
+        },
+        {
+         "start": 159.0,
+         "end": 160.0,
+         "label": "keyboard_musical"
+        },
+        {
+         "start": 159.5,
+         "end": 164.5,
+         "label": "wind"
+        },
+        {
+         "start": 160.0,
+         "end": 163.5,
+         "label": "speech"
+        },
+        {
+         "start": 160.0,
+         "end": 164.5,
+         "label": "wind_noise_microphone"
+        },
+        {
+         "start": 161.5,
+         "end": 163.0,
+         "label": "music"
+        },
+        {
+         "start": 163.0,
+         "end": 164.0,
+         "label": "eruption"
+        },
+        {
+         "start": 163.0,
+         "end": 164.0,
+         "label": "thunder"
+        },
+        {
+         "start": 163.0,
+         "end": 164.0,
+         "label": "thunderstorm"
+        },
+        {
+         "start": 163.5,
+         "end": 164.5,
+         "label": "foghorn"
+        },
+        {
+         "start": 164.0,
+         "end": 165.0,
+         "label": "speech"
+        },
+        {
+         "start": 164.5,
+         "end": 165.5,
+         "label": "eruption"
+        },
+        {
+         "start": 164.5,
+         "end": 165.5,
+         "label": "thunder"
+        },
+        {
+         "start": 164.5,
+         "end": 165.5,
+         "label": "thunderstorm"
+        },
+        {
+         "start": 165.0,
+         "end": 166.0,
+         "label": "music"
+        },
+        {
+         "start": 165.0,
+         "end": 167.5,
+         "label": "wind"
+        },
+        {
+         "start": 165.0,
+         "end": 167.5,
+         "label": "wind_noise_microphone"
+        },
+        {
+         "start": 166.0,
+         "end": 169.0,
+         "label": "speech"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "the golden gate bridge",
+        "start": 159.5,
+        "end": 166.5,
+        "timecode": "00:02:39.5 -> 00:02:46.5"
+       }
+      ],
+      "replays": []
+     }
+    ],
+    "rejected": [
+     {
+      "video_id": "v_c59f6af7ec",
+      "start": 261.71,
+      "end": 270.88,
+      "reason": "expected 1 steps, got 10"
+     },
+     {
+      "video_id": "v_c59f6af7ec",
+      "start": 177.88,
+      "end": 183.75,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_c59f6af7ec",
+      "start": 442.71,
+      "end": 446.25,
+      "reason": "same moment as obs_085bbdab59"
+     }
+    ],
+    "counts": {
+     "candidates": 12,
+     "checked": 11,
+     "confirmed": 8,
+     "rejected": 3
+    },
+    "seconds": {
+     "search": 6.13,
+     "load": 4.96,
+     "check": 34.86
+    }
+   },
+   "stderr": "tlv: searching 6 videos for 1 steps\ntlv: checking 11 stretches\ntlv: found 8 in 46 s: 6 s searching, 5 s loading the model, 35 s checking (35 s of it answering)\n"
+  },
+  {
+   "id": "vlog-dogs",
+   "query": "when the dogs show up",
+   "then": [],
+   "argv": [
+    "uv",
+    "run",
+    "tlv",
+    "--index",
+    "everyday",
+    "find",
+    "when the dogs show up",
+    "--max-candidates",
+    "12",
+    "--no-cut",
+    "--json"
+   ],
+   "seconds": 47.4,
+   "exit_code": 0,
+   "output": {
+    "claim": "when the dogs show up",
+    "confirmed": [
+     {
+      "id": "obs_89a51df2d5",
+      "video_id": "v_c59f6af7ec",
+      "title": "Discover the Hidden Waterfront Treasure! | Crissy Field",
+      "source": "/private/var/tmp/akyl/Everyday/final/vlog.mp4",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/vlog-c59f6af7ec.mp4",
+      "start": 148.06,
+      "end": 155.0,
+      "timecode": "00:02:28.1 -> 00:02:35.0",
+      "claim": "when the dogs show up",
+      "who": "man",
+      "entity_id": null,
+      "confidence": 1.0,
+      "evidence": {
+       "summary": "dogs appear with man",
+       "frames": [
+        {
+         "t": 148.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_148.1-161.6/01.jpg"
+        },
+        {
+         "t": 150.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_148.1-161.6/02.jpg"
+        },
+        {
+         "t": 151.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_148.1-161.6/03.jpg"
+        },
+        {
+         "t": 152.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_148.1-161.6/04.jpg"
+        },
+        {
+         "t": 154.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_148.1-161.6/05.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 147.66,
+         "end": 150.72,
+         "text": "time right on"
+        },
+        {
+         "start": 150.72,
+         "end": 155.18,
+         "text": "have a great day friends so yeah a great place to come on out"
+        }
+       ],
+       "ocr": [],
+       "sounds": [
+        {
+         "start": 139.0,
+         "end": 152.0,
+         "label": "speech"
+        },
+        {
+         "start": 147.0,
+         "end": 149.0,
+         "label": "air_horn"
+        },
+        {
+         "start": 147.5,
+         "end": 148.5,
+         "label": "bicycle"
+        },
+        {
+         "start": 148.0,
+         "end": 149.5,
+         "label": "wind_noise_microphone"
+        },
+        {
+         "start": 148.5,
+         "end": 149.5,
+         "label": "wind"
+        },
+        {
+         "start": 149.0,
+         "end": 150.0,
+         "label": "brass_instrument"
+        },
+        {
+         "start": 149.0,
+         "end": 150.0,
+         "label": "trombone"
+        },
+        {
+         "start": 149.5,
+         "end": 150.5,
+         "label": "cow_moo"
+        },
+        {
+         "start": 149.5,
+         "end": 150.5,
+         "label": "cowbell"
+        },
+        {
+         "start": 151.0,
+         "end": 152.0,
+         "label": "fly_buzz"
+        },
+        {
+         "start": 151.0,
+         "end": 152.0,
+         "label": "insect"
+        },
+        {
+         "start": 151.5,
+         "end": 152.5,
+         "label": "car_horn"
+        },
+        {
+         "start": 151.5,
+         "end": 152.5,
+         "label": "music"
+        },
+        {
+         "start": 151.5,
+         "end": 152.5,
+         "label": "saxophone"
+        },
+        {
+         "start": 152.0,
+         "end": 153.5,
+         "label": "belly_laugh"
+        },
+        {
+         "start": 152.0,
+         "end": 153.5,
+         "label": "giggling"
+        },
+        {
+         "start": 152.0,
+         "end": 153.5,
+         "label": "laughter"
+        },
+        {
+         "start": 153.0,
+         "end": 154.0,
+         "label": "cow_moo"
+        },
+        {
+         "start": 153.0,
+         "end": 154.0,
+         "label": "sheep_bleat"
+        },
+        {
+         "start": 153.0,
+         "end": 159.5,
+         "label": "speech"
+        },
+        {
+         "start": 153.5,
+         "end": 154.5,
+         "label": "person_walking"
+        },
+        {
+         "start": 154.0,
+         "end": 160.5,
+         "label": "music"
+        },
+        {
+         "start": 154.5,
+         "end": 155.5,
+         "label": "boat_water_vehicle"
+        },
+        {
+         "start": 154.5,
+         "end": 156.0,
+         "label": "wind"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "when the dogs show up",
+        "start": 148.06,
+        "end": 155.0,
+        "timecode": "00:02:28.1 -> 00:02:35.0"
+       }
+      ],
+      "replays": []
+     },
+     {
+      "id": "obs_ac23a356ca",
+      "video_id": "v_c59f6af7ec",
+      "title": "Discover the Hidden Waterfront Treasure! | Crissy Field",
+      "source": "/private/var/tmp/akyl/Everyday/final/vlog.mp4",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/vlog-c59f6af7ec.mp4",
+      "start": 138.5,
+      "end": 146.53,
+      "timecode": "00:02:18.5 -> 00:02:26.5",
+      "claim": "when the dogs show up",
+      "who": "dog walker",
+      "entity_id": null,
+      "confidence": 0.9,
+      "evidence": {
+       "summary": "dogs appear on path",
+       "frames": [
+        {
+         "t": 139.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_133.0-146.5/05.jpg"
+        },
+        {
+         "t": 140.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_133.0-146.5/06.jpg"
+        },
+        {
+         "t": 141.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_133.0-146.5/07.jpg"
+        },
+        {
+         "t": 143.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_133.0-146.5/08.jpg"
+        },
+        {
+         "t": 144.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_133.0-146.5/09.jpg"
+        },
+        {
+         "t": 145.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_c59f6af7ec_133.0-146.5/10.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 135.16,
+         "end": 143.52,
+         "text": "this is a serious dog Walker here I'm impressed how many"
+        },
+        {
+         "start": 143.52,
+         "end": 146.68,
+         "text": "dogs you got only eight today they look very"
+        }
+       ],
+       "ocr": [],
+       "sounds": [
+        {
+         "start": 134.5,
+         "end": 139.5,
+         "label": "music"
+        },
+        {
+         "start": 136.5,
+         "end": 139.5,
+         "label": "brass_instrument"
+        },
+        {
+         "start": 138.0,
+         "end": 139.0,
+         "label": "keyboard_musical"
+        },
+        {
+         "start": 138.0,
+         "end": 139.0,
+         "label": "piano"
+        },
+        {
+         "start": 139.0,
+         "end": 152.0,
+         "label": "speech"
+        },
+        {
+         "start": 139.0,
+         "end": 141.0,
+         "label": "wind"
+        },
+        {
+         "start": 139.5,
+         "end": 141.5,
+         "label": "eruption"
+        },
+        {
+         "start": 139.5,
+         "end": 140.5,
+         "label": "wind_noise_microphone"
+        },
+        {
+         "start": 140.5,
+         "end": 141.5,
+         "label": "artillery_fire"
+        },
+        {
+         "start": 141.0,
+         "end": 142.0,
+         "label": "brass_instrument"
+        },
+        {
+         "start": 141.0,
+         "end": 142.0,
+         "label": "music"
+        },
+        {
+         "start": 141.5,
+         "end": 142.5,
+         "label": "fowl"
+        },
+        {
+         "start": 141.5,
+         "end": 147.0,
+         "label": "wind"
+        },
+        {
+         "start": 141.5,
+         "end": 147.0,
+         "label": "wind_noise_microphone"
+        },
+        {
+         "start": 142.5,
+         "end": 144.5,
+         "label": "music"
+        },
+        {
+         "start": 144.5,
+         "end": 145.5,
+         "label": "eruption"
+        },
+        {
+         "start": 145.5,
+         "end": 147.5,
+         "label": "music"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "when the dogs show up",
+        "start": 138.5,
+        "end": 146.53,
+        "timecode": "00:02:18.5 -> 00:02:26.5"
+       }
+      ],
+      "replays": []
+     }
+    ],
+    "rejected": [
+     {
+      "video_id": "v_407081314f",
+      "start": 45.59,
+      "end": 47.84,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_407081314f",
+      "start": 181.89,
+      "end": 185.77,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_407081314f",
+      "start": 237.74,
+      "end": 241.2,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_c59f6af7ec",
+      "start": 83.04,
+      "end": 90.79,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_c59f6af7ec",
+      "start": 172.0,
+      "end": 177.88,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_c59f6af7ec",
+      "start": 451.65,
+      "end": 457.58,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_c59f6af7ec",
+      "start": 23.12,
+      "end": 26.92,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_bb19a1082c",
+      "start": 196.52,
+      "end": 204.39,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_407081314f",
+      "start": 202.2,
+      "end": 210.0,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_c59f6af7ec",
+      "start": 140.53,
+      "end": 154.06,
+      "reason": "same moment as obs_89a51df2d5"
+     }
+    ],
+    "counts": {
+     "candidates": 12,
+     "checked": 12,
+     "confirmed": 2,
+     "rejected": 10
+    },
+    "seconds": {
+     "search": 6.77,
+     "load": 4.42,
+     "check": 35.63
+    }
+   },
+   "stderr": "tlv: searching 6 videos for 1 steps\ntlv: waiting for another model run to finish before vlm\ntlv: checking 12 stretches\ntlv: found 2 in 47 s: 7 s searching, 4 s loading the model, 36 s checking (35 s of it answering)\n"
+  },
+  {
+   "id": "meeting-pricing",
+   "query": "when did they talk about pricing",
+   "then": [],
+   "argv": [
+    "uv",
+    "run",
+    "tlv",
+    "--index",
+    "everyday",
+    "find",
+    "when did they talk about pricing",
+    "--max-candidates",
+    "12",
+    "--no-cut",
+    "--json"
+   ],
+   "seconds": 0.6,
+   "exit_code": 0,
+   "output": {
+    "claim": "when did they talk about pricing",
+    "confirmed": [],
+    "rejected": [
+     {
+      "video_id": "v_d227f77eae",
+      "start": 215.43,
+      "end": 223.15,
+      "reason": "step 1 is not heard in the speech"
+     },
+     {
+      "video_id": "v_0bf46a8e27",
+      "start": 462.39,
+      "end": 464.86,
+      "reason": "step 1 is not heard in the speech"
+     },
+     {
+      "video_id": "v_bb19a1082c",
+      "start": 7.82,
+      "end": 15.64,
+      "reason": "step 1 is not heard in the speech"
+     },
+     {
+      "video_id": "v_0bf46a8e27",
+      "start": 346.86,
+      "end": 351.28,
+      "reason": "step 1 is not heard in the speech"
+     },
+     {
+      "video_id": "v_0bf46a8e27",
+      "start": 19.55,
+      "end": 22.05,
+      "reason": "step 1 is not heard in the speech"
+     },
+     {
+      "video_id": "v_0bf46a8e27",
+      "start": 64.77,
+      "end": 69.29,
+      "reason": "step 1 is not heard in the speech"
+     },
+     {
+      "video_id": "v_bb19a1082c",
+      "start": 31.27,
+      "end": 39.09,
+      "reason": "step 1 is not heard in the speech"
+     },
+     {
+      "video_id": "v_c59f6af7ec",
+      "start": 177.88,
+      "end": 183.75,
+      "reason": "step 1 is not heard in the speech"
+     },
+     {
+      "video_id": "v_0bf46a8e27",
+      "start": 135.3,
+      "end": 139.84,
+      "reason": "step 1 is not heard in the speech"
+     },
+     {
+      "video_id": "v_d227f77eae",
+      "start": 107.25,
+      "end": 114.97,
+      "reason": "step 1 is not heard in the speech"
+     },
+     {
+      "video_id": "v_d227f77eae",
+      "start": 184.52,
+      "end": 192.24,
+      "reason": "step 1 is not heard in the speech"
+     },
+     {
+      "video_id": "v_bb19a1082c",
+      "start": 330.33,
+      "end": 338.21,
+      "reason": "step 1 is not heard in the speech"
+     }
+    ],
+    "counts": {
+     "candidates": 12,
+     "checked": 12,
+     "confirmed": 0,
+     "rejected": 12
+    },
+    "seconds": {
+     "search": 0.12,
+     "load": 0.0,
+     "check": 0.0
+    }
+   },
+   "stderr": "tlv: searching 6 videos for 1 steps\ntlv: listening to 12 stretches\ntlv: found 0 in 0 s: 0 s searching, 0 s loading the model, 0 s checking (0 s of it answering)\n"
+  },
+  {
+   "id": "meeting-summit",
+   "query": "when did they talk about the summit",
+   "then": [],
+   "argv": [
+    "uv",
+    "run",
+    "tlv",
+    "--index",
+    "everyday",
+    "find",
+    "when did they talk about the summit",
+    "--max-candidates",
+    "12",
+    "--no-cut",
+    "--json"
+   ],
+   "seconds": 0.3,
+   "exit_code": 0,
+   "output": {
+    "claim": "when did they talk about the summit",
+    "confirmed": [],
+    "rejected": [
+     {
+      "video_id": "v_0bf46a8e27",
+      "start": 462.39,
+      "end": 464.86,
+      "reason": "step 1 is not heard in the speech"
+     },
+     {
+      "video_id": "v_d227f77eae",
+      "start": 37.7,
+      "end": 45.43,
+      "reason": "step 1 is not heard in the speech"
+     },
+     {
+      "video_id": "v_c59f6af7ec",
+      "start": 313.96,
+      "end": 321.6,
+      "reason": "step 1 is not heard in the speech"
+     },
+     {
+      "video_id": "v_bb19a1082c",
+      "start": 7.82,
+      "end": 15.64,
+      "reason": "step 1 is not heard in the speech"
+     },
+     {
+      "video_id": "v_0bf46a8e27",
+      "start": 346.86,
+      "end": 351.28,
+      "reason": "step 1 is not heard in the speech"
+     },
+     {
+      "video_id": "v_0bf46a8e27",
+      "start": 19.55,
+      "end": 22.05,
+      "reason": "step 1 is not heard in the speech"
+     },
+     {
+      "video_id": "v_0bf46a8e27",
+      "start": 64.77,
+      "end": 69.29,
+      "reason": "step 1 is not heard in the speech"
+     },
+     {
+      "video_id": "v_d227f77eae",
+      "start": 273.26,
+      "end": 281.08,
+      "reason": "step 1 is not heard in the speech"
+     },
+     {
+      "video_id": "v_c59f6af7ec",
+      "start": 183.75,
+      "end": 190.49,
+      "reason": "step 1 is not heard in the speech"
+     },
+     {
+      "video_id": "v_bb19a1082c",
+      "start": 31.27,
+      "end": 39.09,
+      "reason": "step 1 is not heard in the speech"
+     },
+     {
+      "video_id": "v_c59f6af7ec",
+      "start": 177.88,
+      "end": 183.75,
+      "reason": "step 1 is not heard in the speech"
+     },
+     {
+      "video_id": "v_0bf46a8e27",
+      "start": 135.3,
+      "end": 139.84,
+      "reason": "step 1 is not heard in the speech"
+     }
+    ],
+    "counts": {
+     "candidates": 12,
+     "checked": 12,
+     "confirmed": 0,
+     "rejected": 12
+    },
+    "seconds": {
+     "search": 0.07,
+     "load": 0.0,
+     "check": 0.0
+    }
+   },
+   "stderr": "tlv: searching 6 videos for 1 steps\ntlv: listening to 12 stretches\ntlv: found 0 in 0 s: 0 s searching, 0 s loading the model, 0 s checking (0 s of it answering)\n"
+  },
+  {
+   "id": "coding-build-fail",
+   "query": "when did the build fail",
+   "then": [],
+   "argv": [
+    "uv",
+    "run",
+    "tlv",
+    "--index",
+    "everyday",
+    "find",
+    "when did the build fail",
+    "--max-candidates",
+    "12",
+    "--no-cut",
+    "--json"
+   ],
+   "seconds": 49.5,
+   "exit_code": 0,
+   "output": {
+    "claim": "when did the build fail",
+    "confirmed": [
+     {
+      "id": "obs_5109cbb7be",
+      "video_id": "v_568bc3351c",
+      "title": "greeter: a scripted terminal session",
+      "source": "/private/var/tmp/akyl/Everyday/final/coding.mp4",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/coding-568bc3351c.mp4",
+      "start": 27.5,
+      "end": 34.34,
+      "timecode": "00:00:27.5 -> 00:00:34.3",
+      "claim": "when did the build fail",
+      "who": "rust compiler",
+      "entity_id": null,
+      "confidence": 1.0,
+      "evidence": {
+       "summary": "build error E0308 mismatched types",
+       "frames": [
+        {
+         "t": 28.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_568bc3351c_20.5-34.3/06.jpg"
+        },
+        {
+         "t": 29.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_568bc3351c_20.5-34.3/07.jpg"
+        },
+        {
+         "t": 30.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_568bc3351c_20.5-34.3/08.jpg"
+        },
+        {
+         "t": 32.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_568bc3351c_20.5-34.3/09.jpg"
+        },
+        {
+         "t": 33.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_568bc3351c_20.5-34.3/10.jpg"
+        }
+       ],
+       "transcript": [],
+       "ocr": [
+        {
+         "t": 28.25,
+         "text": "Compiling greeter v0.1.0 (/private/var/tmp/akyl/Everyday/vhs/run-1791871956/gree | ter) | error[E0308]: mismatched types | src/main.rs:16:45 | > | \"times\" => settings.times = value, | 16 | ^\u043b\u043b expected 'u32\", found &str' | expected due to the type of this binding | For more information about this error, tryirustc --explain E0308'. | error: could not compile 'greeter' (bin \"greeter\") due to 1 previous error | greeter $"
+        },
+        {
+         "t": 31.25,
+         "text": "Compiling greeter v0.1.0 (/private/var/tmp/akyl/Everyday/vhs/run-1791871956/gree | ter) | error[E0308]: mismatched types | src/main.rs:16:45 | \"times\" => settings.times = value, | 16 | ^\u043b\u043b expected 'u32\", found &str' | expected due to the type of this binding | For more information about this error, tryirustc --explain E0308'. | error: could not compile 'greeter' (bin \"greeter\") due to 1 previous error | greeter $"
+        }
+       ],
+       "sounds": []
+      },
+      "steps": [
+       {
+        "step": "when did the build fail",
+        "start": 27.5,
+        "end": 34.34,
+        "timecode": "00:00:27.5 -> 00:00:34.3"
+       }
+      ],
+      "replays": []
+     },
+     {
+      "id": "obs_4e8bdfab51",
+      "video_id": "v_568bc3351c",
+      "title": "greeter: a scripted terminal session",
+      "source": "/private/var/tmp/akyl/Everyday/final/coding.mp4",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/coding-568bc3351c.mp4",
+      "start": 64.0,
+      "end": 68.0,
+      "timecode": "00:01:04.0 -> 00:01:08.0",
+      "claim": "when did the build fail",
+      "who": "null",
+      "entity_id": null,
+      "confidence": 1.0,
+      "evidence": {
+       "summary": "error message at 4:04.8",
+       "frames": [
+        {
+         "t": 64.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_568bc3351c_59.7-73.5/04.jpg"
+        },
+        {
+         "t": 65.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_568bc3351c_59.7-73.5/05.jpg"
+        },
+        {
+         "t": 67.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_568bc3351c_59.7-73.5/06.jpg"
+        }
+       ],
+       "transcript": [],
+       "ocr": [
+        {
+         "t": 64.25,
+         "text": "Compiling greeter v0.1.0 (/private/var/tmp/akyl/Everyday/vhs/run-1791871956/gree | ter) | error[E0308]: mismatched types | src/main.rs:16:45 | \"times\" => settings.times = value, | 16 | \"\u043b\u043b\u043b\u043b expected 'u32\", foundi&str\" | expected due to the type of this binding | For more information about this error, tryirustc --explain E0308'. | error: could not compile 'greeter' (bin \"greeter\") due to 1 previous error | greeter $ vim src/main.rs | greeter $"
+        },
+        {
+         "t": 66.25,
+         "text": "Compiling greeter v0.1.0 (/private/var/tmp/akyl/Everyday/vhs/run-1791871956/gree | ter) | error[E0308]: mismatched types | src/main.rs:16:45 | \"times\" => settings.times = value, | 16 | \"\u043b\u043b\u043b\u043b expected 'u32\", foundi&str\" | expected due to the type of this binding | For more information about this error, tryirustc --explain E0308'. | error: could not compile 'greeter' (bin \"greeter\") due to 1 previous error | greeter $ vim src/main.rs | greeter $ cleal"
+        },
+        {
+         "t": 67.25,
+         "text": "Compiling greeter v0.1.0 (/private/var/tmp/akyl/Everyday/vhs/run-1791871956/gree | ter) | error[E0308]: mismatched types | src/main.rs:16:45 | \"times\" => settings.times = value, | 16 | \"\u043b\u043b\u043b\u043b expected 'u32\", foundi&str\" | expected due to the type of this binding | For more information about this error, tryirustc --explain E0308'. | error: could not compile 'greeter' (bin \"greeter\") due to 1 previous error | greeter $ vim src/main.rs | greeter $ clear && carg"
+        }
+       ],
+       "sounds": []
+      },
+      "steps": [
+       {
+        "step": "when did the build fail",
+        "start": 64.0,
+        "end": 68.0,
+        "timecode": "00:01:04.0 -> 00:01:08.0"
+       }
+      ],
+      "replays": []
+     },
+     {
+      "id": "obs_8c12935d57",
+      "video_id": "v_568bc3351c",
+      "title": "greeter: a scripted terminal session",
+      "source": "/private/var/tmp/akyl/Everyday/final/coding.mp4",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/coding-568bc3351c.mp4",
+      "start": 149.0,
+      "end": 151.87,
+      "timecode": "00:02:29.0 -> 00:02:31.9",
+      "claim": "when did the build fail",
+      "who": "unknown",
+      "entity_id": null,
+      "confidence": 1.0,
+      "evidence": {
+       "summary": "build error at 9:29.8",
+       "frames": [
+        {
+         "t": 149.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_568bc3351c_138.0-151.9/09.jpg"
+        },
+        {
+         "t": 151.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_568bc3351c_138.0-151.9/10.jpg"
+        }
+       ],
+       "transcript": [],
+       "ocr": [
+        {
+         "t": 149.25,
+         "text": "Compiling greeter v0.1.0 (/private/var/tmp/akyl/Everyday/vhs/run-1791871956/gree | ter) | error[E0609]: no field 'nmae' on type 'Settings' | src/main.rs:27:56 | println!(#{i}: good to see you, {}!l, settings.nmae); | 27 | ^^^^ unknown field | help: a field with a similar name exists | printin: (\"(1): good to see you, 1}Ii, Settings.name); | 27 \u2014 | 27 | println! (\"{i): good to see you, {}!\" | errr not comutthetntrreterieta previous error | --explain E0609'. | greeter $"
+        },
+        {
+         "t": 150.25,
+         "text": "Compiling greeter v0.1.0 (/private/var/tmp/akyl/Everyday/vhs/run-1791871956/gree | ter) | error[E0609]: no field 'nmae' on type 'Settings' | src/main.rs:27:56 | println!({i}: good to see you, {}!l, settings.nmae); | 27 | ^^^^ unknown field | help: a field with a similar name exists | printin (\"(1): good to see you, (!\", settangs.name); | 27 \u2014 | 27 | errr not comutthetntrreterieta previous error | --explain E0609'. | greeter $"
+        }
+       ],
+       "sounds": []
+      },
+      "steps": [
+       {
+        "step": "when did the build fail",
+        "start": 149.0,
+        "end": 151.87,
+        "timecode": "00:02:29.0 -> 00:02:31.9"
+       }
+      ],
+      "replays": []
+     }
+    ],
+    "rejected": [
+     {
+      "video_id": "v_407081314f",
+      "start": 185.77,
+      "end": 186.98,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_407081314f",
+      "start": 118.99,
+      "end": 122.37,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_c59f6af7ec",
+      "start": 401.71,
+      "end": 409.29,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_c59f6af7ec",
+      "start": 120.93,
+      "end": 128.46,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_568bc3351c",
+      "start": 117.53,
+      "end": 125.36,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_c59f6af7ec",
+      "start": 409.29,
+      "end": 416.88,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_568bc3351c",
+      "start": 109.69,
+      "end": 117.53,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_c59f6af7ec",
+      "start": 128.46,
+      "end": 135.99,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_407081314f",
+      "start": 362.74,
+      "end": 368.45,
+      "reason": "no match"
+     }
+    ],
+    "counts": {
+     "candidates": 12,
+     "checked": 12,
+     "confirmed": 3,
+     "rejected": 9
+    },
+    "seconds": {
+     "search": 5.09,
+     "load": 4.77,
+     "check": 39.38
+    }
+   },
+   "stderr": "tlv: searching 6 videos for 1 steps\ntlv: checking 12 stretches\ntlv: found 3 in 49 s: 5 s searching, 5 s loading the model, 39 s checking (39 s of it answering)\n"
+  },
+  {
+   "id": "coding-settings",
+   "query": "find where i opened settings",
+   "then": [],
+   "argv": [
+    "uv",
+    "run",
+    "tlv",
+    "--index",
+    "everyday",
+    "find",
+    "find where i opened settings",
+    "--max-candidates",
+    "12",
+    "--no-cut",
+    "--json"
+   ],
+   "seconds": 54.5,
+   "exit_code": 0,
+   "output": {
+    "claim": "find where i opened settings",
+    "confirmed": [
+     {
+      "id": "obs_d5be6be47a",
+      "video_id": "v_568bc3351c",
+      "title": "greeter: a scripted terminal session",
+      "source": "/private/var/tmp/akyl/Everyday/final/coding.mp4",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/coding-568bc3351c.mp4",
+      "start": 91.02,
+      "end": 104.86,
+      "timecode": "00:01:31.0 -> 00:01:44.9",
+      "claim": "find where i opened settings",
+      "who": "user",
+      "entity_id": null,
+      "confidence": 1.0,
+      "evidence": {
+       "summary": "settings.toml file opened",
+       "frames": [
+        {
+         "t": 91.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_568bc3351c_91.0-104.9/01.jpg"
+        },
+        {
+         "t": 93.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_568bc3351c_91.0-104.9/02.jpg"
+        },
+        {
+         "t": 94.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_568bc3351c_91.0-104.9/03.jpg"
+        },
+        {
+         "t": 95.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_568bc3351c_91.0-104.9/04.jpg"
+        },
+        {
+         "t": 97.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_568bc3351c_91.0-104.9/05.jpg"
+        },
+        {
+         "t": 98.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_568bc3351c_91.0-104.9/06.jpg"
+        },
+        {
+         "t": 100.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_568bc3351c_91.0-104.9/07.jpg"
+        },
+        {
+         "t": 101.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_568bc3351c_91.0-104.9/08.jpg"
+        },
+        {
+         "t": 102.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_568bc3351c_91.0-104.9/09.jpg"
+        },
+        {
+         "t": 104.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_568bc3351c_91.0-104.9/10.jpg"
+        }
+       ],
+       "transcript": [],
+       "ocr": [
+        {
+         "t": 91.25,
+         "text": "UW PICO 5.09 | File: settings.toml | # greeter settings | name = \"world\" | times = 1 | ^K Cut Text^C Cur Pos | Get Help | WriteOut | ^G | ^R | Read File | ^y | Prev Pg | Exit | Justify | Where is | UnCut Text^T To Spell | Next Pg | ^\u0425 | ~W | ^V"
+        },
+        {
+         "t": 95.25,
+         "text": "Modified | UW PICO 5.09 | File: settings.toml | # greeter settings | name = \"world | times = 1 | ^K Cut Text^C Cur Pos | Get Help | WriteOut | ^G | ^R | Read File | ^y | Prev Pg | Exit | Justify | Where is | UnCut Text^T To Spell | Next Pg | ^\u0425 | ~W | ^V"
+        },
+        {
+         "t": 96.25,
+         "text": "Modified | UW PICO 5.09 | File: settings.toml | # greeter | settings | name = \" | times = 1 | ^K Cut Text^C Cur Pos | Get Help | WriteOut | ^G | ^R | Read File | ^y | Prev Pg | Exit | Justify | Where is | UnCut Text^T To Spell | Next Pg | ^\u0425 | ~W | ^V"
+        },
+        {
+         "t": 97.25,
+         "text": "Modified | UW PICO 5.09 | File: settings.toml | # greeter settings | name = \"Aktan\" | times = 1 | ^K Cut Text^C Cur Pos | Get Help | WriteOut | ^G | ^R | Read File | ^y | Prev Pg | Exit | Justify | Where is | UnCut Text^T To Spell | Next Pg | ^\u0425 | ~W | ^V"
+        },
+        {
+         "t": 100.25,
+         "text": "Modified | UW PICO 5.09 | File: settings.toml | # greeter settings | name = \"Aktan\" | times = 3 | ^K Cut Text^C Cur Pos | Get Help | WriteOut | ^G | ^R | Read File | ^y | Prev Pg | Exit | Justify | Where is | UnCut Text^T To Spell | Next Pg | ^\u0425 | ~W | ^V"
+        },
+        {
+         "t": 104.25,
+         "text": "Modified | UW PICO 5.09 | File: settings.toml | # greeter settings | name = \"Aktan\" | times = 3 | File Name to write : settings.toml | ^G Get Help | ^TI | To Files | \u00bfC | TAB Complete | Cancel"
+        }
+       ],
+       "sounds": []
+      },
+      "steps": [
+       {
+        "step": "find where i opened settings",
+        "start": 91.02,
+        "end": 104.86,
+        "timecode": "00:01:31.0 -> 00:01:44.9"
+       }
+      ],
+      "replays": []
+     },
+     {
+      "id": "obs_e1bafcb111",
+      "video_id": "v_568bc3351c",
+      "title": "greeter: a scripted terminal session",
+      "source": "/private/var/tmp/akyl/Everyday/final/coding.mp4",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/coding-568bc3351c.mp4",
+      "start": 205.0,
+      "end": 207.5,
+      "timecode": "00:03:25.0 -> 00:03:27.5",
+      "claim": "find where i opened settings",
+      "who": "user",
+      "entity_id": null,
+      "confidence": 1.0,
+      "evidence": {
+       "summary": "user types 'nano settings.toml'",
+       "frames": [
+        {
+         "t": 205.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_568bc3351c_200.7-214.5/04.jpg"
+        },
+        {
+         "t": 206.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_568bc3351c_200.7-214.5/05.jpg"
+        }
+       ],
+       "transcript": [],
+       "ocr": [
+        {
+         "t": 205.25,
+         "text": "Compiling greeter v0.1.0 (/private/var/tmp/akyl/Everyday/vhs/run-1791871956/gree | ter) | Finished 'dev' profile lunoptimized + debuginfol target(s) in 0.74s | greeter $ cargo run | F\u00e5unnang itarget/debug/prettimized +_debug\u00e5nfo) target(s) in 0.00s | 1: good to see you, Aktan! | 2: good to see you, Aktan! | 3: good to see you, | Aktan! | greeter $ nano set"
+        },
+        {
+         "t": 206.25,
+         "text": "Compiling greeter v0.1.0 (/private/var/tmp/akyl/Everyday/vhs/run-1791871956/gree | ter) | Finished 'dev' profile lunoptimized + debuginfol target(s) in 0.74s | greeter $ cargo run | F\u00e5unnang itarget/debug/prettimized +_debug\u00e5nfo) target(s) in 0.00s | 1: good to see you, Aktan! | 2: good to see you, Aktan! | 3: good to see you, Aktan! | greeter $ nano settings.tom"
+        },
+        {
+         "t": 207.25,
+         "text": "UW PICO 5.09 | File: settings.toml | # greeter settings | name = \"Aktan\" | times = 3 | ^K Cut Text^C Cur Pos | ^G | Get Help | WriteOut | Read File | ^y | ~0 | Prev Pg | Exit | Justify | Where is | UnCut Text^T To Spell | Next Pg | ^\u0425 | ^V | ~W"
+        }
+       ],
+       "sounds": []
+      },
+      "steps": [
+       {
+        "step": "find where i opened settings",
+        "start": 205.0,
+        "end": 207.5,
+        "timecode": "00:03:25.0 -> 00:03:27.5"
+       }
+      ],
+      "replays": []
+     },
+     {
+      "id": "obs_5a9695863e",
+      "video_id": "v_568bc3351c",
+      "title": "greeter: a scripted terminal session",
+      "source": "/private/var/tmp/akyl/Everyday/final/coding.mp4",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/coding-568bc3351c.mp4",
+      "start": 208.54,
+      "end": 221.0,
+      "timecode": "00:03:28.5 -> 00:03:41.0",
+      "claim": "find where i opened settings",
+      "who": "user",
+      "entity_id": null,
+      "confidence": 1.0,
+      "evidence": {
+       "summary": "settings.toml file opened",
+       "frames": [
+        {
+         "t": 209.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_568bc3351c_208.5-222.4/01.jpg"
+        },
+        {
+         "t": 210.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_568bc3351c_208.5-222.4/02.jpg"
+        },
+        {
+         "t": 212.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_568bc3351c_208.5-222.4/03.jpg"
+        },
+        {
+         "t": 213.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_568bc3351c_208.5-222.4/04.jpg"
+        },
+        {
+         "t": 214.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_568bc3351c_208.5-222.4/05.jpg"
+        },
+        {
+         "t": 216.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_568bc3351c_208.5-222.4/06.jpg"
+        },
+        {
+         "t": 217.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_568bc3351c_208.5-222.4/07.jpg"
+        },
+        {
+         "t": 218.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_568bc3351c_208.5-222.4/08.jpg"
+        },
+        {
+         "t": 220.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_568bc3351c_208.5-222.4/09.jpg"
+        }
+       ],
+       "transcript": [],
+       "ocr": [
+        {
+         "t": 209.25,
+         "text": "UW PICO 5.09 | File: settings.toml | # greeter settings | name = \"Aktan\" | times = 3 | ^K Cut Text^C Cur Pos | Get Help | ^G | WriteOut | Read File | ^y | ~0 | Prev Pg | Exit | Justify | Where is | UnCut Text^T To Spell | Next Pg | ^\u0425 | ^V | ~W"
+        },
+        {
+         "t": 215.25,
+         "text": "Modified | UW PICO 5.09 | File: settings.toml | # greeter settings | name = \"Aktan\" | times = 2 | ^K Cut Text^C Cur Pos | Get Help | ^G | WriteOut | Read File | ^y | ~0 | Prev Pg | Exit | Justify | Where is | UnCut Text^T To Spell | Next Pg | ^\u0425 | ^V | ~W"
+        },
+        {
+         "t": 217.25,
+         "text": "Modified | UW PICO 5.09 | File: settings.toml | # greeter settings | name = \"Aktan\" | times = 2 | ^K Cut Text^C Cur Pos | Get Help | WriteOut | ^G | ^~0 | ^R | Read File | ^y | Prev Pg | Exit | Justify | Where is | UnCut Text^T To Spell | Next Pg | ^\u0425 | ~W | ^V"
+        },
+        {
+         "t": 218.25,
+         "text": "Modified | UW PICO 5.09 | File: settings.toml | # greeter settings | name = \"Aktan\" | times = 2 | File Name to write : settings.toml | ^G Get Help | To Files | \u00bfC | TAB Complete | Cancel"
+        },
+        {
+         "t": 220.25,
+         "text": "UW PICO 5.09 | File: settings.toml | # greeter settings | name = \"Aktan\" | times = 2 | L Wrote 3 lines | Read File ^Y Prev Pg | ^K Cut Text^C Cur Pos | Get Help | ^G | WriteOut | ^R | Justify | Exit | ^V Next Pg | Where is | UnCut Text^T To Spell | ^\u0425"
+        }
+       ],
+       "sounds": []
+      },
+      "steps": [
+       {
+        "step": "find where i opened settings",
+        "start": 208.54,
+        "end": 221.0,
+        "timecode": "00:03:28.5 -> 00:03:41.0"
+       }
+      ],
+      "replays": []
+     }
+    ],
+    "rejected": [
+     {
+      "video_id": "v_568bc3351c",
+      "start": 180.21,
+      "end": 188.04,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_568bc3351c",
+      "start": 86.19,
+      "end": 94.02,
+      "reason": "the claim covers fewer than 2 of the frames shown"
+     },
+     {
+      "video_id": "v_568bc3351c",
+      "start": 15.67,
+      "end": 23.5,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_568bc3351c",
+      "start": 7.83,
+      "end": 15.67,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_568bc3351c",
+      "start": 156.7,
+      "end": 164.53,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_568bc3351c",
+      "start": 141.03,
+      "end": 148.87,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_568bc3351c",
+      "start": 0.0,
+      "end": 7.83,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_568bc3351c",
+      "start": 172.37,
+      "end": 180.21,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_568bc3351c",
+      "start": 98.86,
+      "end": 104.5,
+      "reason": "same moment as obs_d5be6be47a"
+     }
+    ],
+    "counts": {
+     "candidates": 12,
+     "checked": 12,
+     "confirmed": 3,
+     "rejected": 9
+    },
+    "seconds": {
+     "search": 6.66,
+     "load": 4.59,
+     "check": 42.5
+    }
+   },
+   "stderr": "tlv: searching 6 videos for 1 steps\ntlv: waiting for another model run to finish before vlm\ntlv: checking 12 stretches\ntlv: found 3 in 54 s: 7 s searching, 5 s loading the model, 42 s checking (42 s of it answering)\n"
+  },
+  {
+   "id": "movie-car-chase",
+   "query": "the car chase",
+   "then": [],
+   "argv": [
+    "uv",
+    "run",
+    "tlv",
+    "--index",
+    "everyday",
+    "find",
+    "the car chase",
+    "--max-candidates",
+    "12",
+    "--no-cut",
+    "--json"
+   ],
+   "seconds": 54.6,
+   "exit_code": 0,
+   "output": {
+    "claim": "the car chase",
+    "confirmed": [
+     {
+      "id": "obs_dd3798cefd",
+      "video_id": "v_407081314f",
+      "title": "Sherlock Jr. (1924)",
+      "source": "/private/var/tmp/akyl/Everyday/final/movie.mp4",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/movie-407081314f.mp4",
+      "start": 212.17,
+      "end": 223.34,
+      "timecode": "00:03:32.2 -> 00:03:43.3",
+      "claim": "the car chase",
+      "who": "unknown",
+      "entity_id": null,
+      "confidence": 1.0,
+      "evidence": {
+       "summary": "car driving on road",
+       "frames": [
+        {
+         "t": 212.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_407081314f_212.2-223.3/01.jpg"
+        },
+        {
+         "t": 213.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_407081314f_212.2-223.3/02.jpg"
+        },
+        {
+         "t": 214.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_407081314f_212.2-223.3/03.jpg"
+        },
+        {
+         "t": 216.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_407081314f_212.2-223.3/04.jpg"
+        },
+        {
+         "t": 217.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_407081314f_212.2-223.3/05.jpg"
+        },
+        {
+         "t": 218.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_407081314f_212.2-223.3/06.jpg"
+        },
+        {
+         "t": 219.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_407081314f_212.2-223.3/07.jpg"
+        },
+        {
+         "t": 220.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_407081314f_212.2-223.3/08.jpg"
+        },
+        {
+         "t": 221.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_407081314f_212.2-223.3/09.jpg"
+        },
+        {
+         "t": 222.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_407081314f_212.2-223.3/10.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 212.22,
+         "end": 215.02,
+         "text": "Thank you."
+        }
+       ],
+       "ocr": [],
+       "sounds": [
+        {
+         "start": 0.0,
+         "end": 365.0,
+         "label": "music"
+        },
+        {
+         "start": 211.0,
+         "end": 213.5,
+         "label": "orchestra"
+        },
+        {
+         "start": 211.5,
+         "end": 214.0,
+         "label": "brass_instrument"
+        },
+        {
+         "start": 211.5,
+         "end": 212.5,
+         "label": "trombone"
+        },
+        {
+         "start": 212.0,
+         "end": 213.0,
+         "label": "violin_fiddle"
+        },
+        {
+         "start": 213.0,
+         "end": 214.5,
+         "label": "wind_instrument"
+        },
+        {
+         "start": 213.5,
+         "end": 215.5,
+         "label": "bowed_string_instrument"
+        },
+        {
+         "start": 214.0,
+         "end": 215.0,
+         "label": "cello"
+        },
+        {
+         "start": 214.5,
+         "end": 217.0,
+         "label": "orchestra"
+        },
+        {
+         "start": 215.0,
+         "end": 217.0,
+         "label": "brass_instrument"
+        },
+        {
+         "start": 215.5,
+         "end": 216.5,
+         "label": "trombone"
+        },
+        {
+         "start": 216.5,
+         "end": 218.5,
+         "label": "bowed_string_instrument"
+        },
+        {
+         "start": 216.5,
+         "end": 218.5,
+         "label": "cello"
+        },
+        {
+         "start": 218.0,
+         "end": 220.0,
+         "label": "brass_instrument"
+        },
+        {
+         "start": 218.0,
+         "end": 219.5,
+         "label": "orchestra"
+        },
+        {
+         "start": 219.0,
+         "end": 220.0,
+         "label": "trombone"
+        },
+        {
+         "start": 219.5,
+         "end": 222.0,
+         "label": "bowed_string_instrument"
+        },
+        {
+         "start": 219.5,
+         "end": 220.5,
+         "label": "cello"
+        },
+        {
+         "start": 220.0,
+         "end": 221.0,
+         "label": "wind_instrument"
+        },
+        {
+         "start": 220.5,
+         "end": 222.5,
+         "label": "orchestra"
+        },
+        {
+         "start": 220.5,
+         "end": 221.5,
+         "label": "trombone"
+        },
+        {
+         "start": 221.5,
+         "end": 225.5,
+         "label": "brass_instrument"
+        },
+        {
+         "start": 222.0,
+         "end": 223.0,
+         "label": "trombone"
+        },
+        {
+         "start": 222.5,
+         "end": 223.5,
+         "label": "bowed_string_instrument"
+        },
+        {
+         "start": 222.5,
+         "end": 223.5,
+         "label": "cello"
+        },
+        {
+         "start": 223.0,
+         "end": 225.5,
+         "label": "orchestra"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "the car chase",
+        "start": 212.17,
+        "end": 223.34,
+        "timecode": "00:03:32.2 -> 00:03:43.3"
+       }
+      ],
+      "replays": []
+     },
+     {
+      "id": "obs_8cda6c33be",
+      "video_id": "v_407081314f",
+      "title": "Sherlock Jr. (1924)",
+      "source": "/private/var/tmp/akyl/Everyday/final/movie.mp4",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/movie-407081314f.mp4",
+      "start": 224.19,
+      "end": 227.5,
+      "timecode": "00:03:44.2 -> 00:03:47.5",
+      "claim": "the car chase",
+      "who": "drivers and passengers",
+      "entity_id": null,
+      "confidence": 1.0,
+      "evidence": {
+       "summary": "car chase sequence with multiple cars",
+       "frames": [
+        {
+         "t": 224.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_407081314f_224.2-235.4/01.jpg"
+        },
+        {
+         "t": 225.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_407081314f_224.2-235.4/02.jpg"
+        },
+        {
+         "t": 226.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_407081314f_224.2-235.4/03.jpg"
+        }
+       ],
+       "transcript": [],
+       "ocr": [],
+       "sounds": [
+        {
+         "start": 0.0,
+         "end": 365.0,
+         "label": "music"
+        },
+        {
+         "start": 221.5,
+         "end": 225.5,
+         "label": "brass_instrument"
+        },
+        {
+         "start": 223.0,
+         "end": 225.5,
+         "label": "orchestra"
+        },
+        {
+         "start": 224.0,
+         "end": 226.5,
+         "label": "bowed_string_instrument"
+        },
+        {
+         "start": 224.0,
+         "end": 225.0,
+         "label": "cello"
+        },
+        {
+         "start": 225.0,
+         "end": 226.0,
+         "label": "violin_fiddle"
+        },
+        {
+         "start": 225.5,
+         "end": 226.5,
+         "label": "cello"
+        },
+        {
+         "start": 226.0,
+         "end": 229.5,
+         "label": "brass_instrument"
+        },
+        {
+         "start": 226.0,
+         "end": 228.0,
+         "label": "trombone"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "the car chase",
+        "start": 224.19,
+        "end": 227.5,
+        "timecode": "00:03:44.2 -> 00:03:47.5"
+       }
+      ],
+      "replays": []
+     },
+     {
+      "id": "obs_9041e3144e",
+      "video_id": "v_407081314f",
+      "title": "Sherlock Jr. (1924)",
+      "source": "/private/var/tmp/akyl/Everyday/final/movie.mp4",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/movie-407081314f.mp4",
+      "start": 251.5,
+      "end": 262.5,
+      "timecode": "00:04:11.5 -> 00:04:22.5",
+      "claim": "the car chase",
+      "who": "driver and passenger",
+      "entity_id": null,
+      "confidence": 1.0,
+      "evidence": {
+       "summary": "car chase sequence shown",
+       "frames": [
+        {
+         "t": 252.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_407081314f_251.5-263.8/01.jpg"
+        },
+        {
+         "t": 253.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_407081314f_251.5-263.8/02.jpg"
+        },
+        {
+         "t": 254.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_407081314f_251.5-263.8/03.jpg"
+        },
+        {
+         "t": 255.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_407081314f_251.5-263.8/04.jpg"
+        },
+        {
+         "t": 257.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_407081314f_251.5-263.8/05.jpg"
+        },
+        {
+         "t": 258.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_407081314f_251.5-263.8/06.jpg"
+        },
+        {
+         "t": 259.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_407081314f_251.5-263.8/07.jpg"
+        },
+        {
+         "t": 260.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_407081314f_251.5-263.8/08.jpg"
+        },
+        {
+         "t": 261.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_407081314f_251.5-263.8/09.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 258.26,
+         "end": 259.66,
+         "text": "\u00b6\u00b6"
+        }
+       ],
+       "ocr": [],
+       "sounds": [
+        {
+         "start": 0.0,
+         "end": 365.0,
+         "label": "music"
+        },
+        {
+         "start": 250.5,
+         "end": 255.5,
+         "label": "brass_instrument"
+        },
+        {
+         "start": 251.0,
+         "end": 252.5,
+         "label": "trombone"
+        },
+        {
+         "start": 252.0,
+         "end": 253.5,
+         "label": "wind_instrument"
+        },
+        {
+         "start": 252.5,
+         "end": 255.0,
+         "label": "orchestra"
+        },
+        {
+         "start": 253.0,
+         "end": 254.0,
+         "label": "trombone"
+        },
+        {
+         "start": 253.5,
+         "end": 254.5,
+         "label": "bowed_string_instrument"
+        },
+        {
+         "start": 254.5,
+         "end": 255.5,
+         "label": "trombone"
+        },
+        {
+         "start": 255.0,
+         "end": 256.5,
+         "label": "bowed_string_instrument"
+        },
+        {
+         "start": 255.0,
+         "end": 256.0,
+         "label": "cello"
+        },
+        {
+         "start": 255.5,
+         "end": 256.5,
+         "label": "accordion"
+        },
+        {
+         "start": 256.0,
+         "end": 258.0,
+         "label": "brass_instrument"
+        },
+        {
+         "start": 256.0,
+         "end": 258.0,
+         "label": "trombone"
+        },
+        {
+         "start": 258.0,
+         "end": 262.5,
+         "label": "bowed_string_instrument"
+        },
+        {
+         "start": 258.0,
+         "end": 259.5,
+         "label": "violin_fiddle"
+        },
+        {
+         "start": 259.0,
+         "end": 261.0,
+         "label": "brass_instrument"
+        },
+        {
+         "start": 259.0,
+         "end": 260.0,
+         "label": "cello"
+        },
+        {
+         "start": 259.5,
+         "end": 260.5,
+         "label": "wind_instrument"
+        },
+        {
+         "start": 260.5,
+         "end": 262.5,
+         "label": "cello"
+        },
+        {
+         "start": 262.0,
+         "end": 263.0,
+         "label": "clarinet"
+        },
+        {
+         "start": 262.0,
+         "end": 263.0,
+         "label": "wind_instrument"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "the car chase",
+        "start": 251.5,
+        "end": 262.5,
+        "timecode": "00:04:11.5 -> 00:04:22.5"
+       }
+      ],
+      "replays": []
+     },
+     {
+      "id": "obs_624756121a",
+      "video_id": "v_407081314f",
+      "title": "Sherlock Jr. (1924)",
+      "source": "/private/var/tmp/akyl/Everyday/final/movie.mp4",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/movie-407081314f.mp4",
+      "start": 10.26,
+      "end": 20.68,
+      "timecode": "00:00:10.3 -> 00:00:20.7",
+      "claim": "the car chase",
+      "who": "men in suits and hats",
+      "entity_id": null,
+      "confidence": 0.95,
+      "evidence": {
+       "summary": "car chase sequence shown",
+       "frames": [
+        {
+         "t": 10.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_407081314f_10.3-20.7/01.jpg"
+        },
+        {
+         "t": 11.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_407081314f_10.3-20.7/02.jpg"
+        },
+        {
+         "t": 12.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_407081314f_10.3-20.7/03.jpg"
+        },
+        {
+         "t": 13.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_407081314f_10.3-20.7/04.jpg"
+        },
+        {
+         "t": 14.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_407081314f_10.3-20.7/05.jpg"
+        },
+        {
+         "t": 15.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_407081314f_10.3-20.7/06.jpg"
+        },
+        {
+         "t": 17.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_407081314f_10.3-20.7/07.jpg"
+        },
+        {
+         "t": 18.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_407081314f_10.3-20.7/08.jpg"
+        },
+        {
+         "t": 19.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_407081314f_10.3-20.7/09.jpg"
+        },
+        {
+         "t": 20.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_407081314f_10.3-20.7/10.jpg"
+        }
+       ],
+       "transcript": [],
+       "ocr": [],
+       "sounds": [
+        {
+         "start": 0.0,
+         "end": 365.0,
+         "label": "music"
+        },
+        {
+         "start": 9.5,
+         "end": 11.0,
+         "label": "bowed_string_instrument"
+        },
+        {
+         "start": 9.5,
+         "end": 10.5,
+         "label": "violin_fiddle"
+        },
+        {
+         "start": 10.0,
+         "end": 11.0,
+         "label": "orchestra"
+        },
+        {
+         "start": 10.5,
+         "end": 11.5,
+         "label": "brass_instrument"
+        },
+        {
+         "start": 10.5,
+         "end": 14.0,
+         "label": "wind_instrument"
+        },
+        {
+         "start": 11.0,
+         "end": 12.0,
+         "label": "saxophone"
+        },
+        {
+         "start": 11.5,
+         "end": 13.0,
+         "label": "orchestra"
+        },
+        {
+         "start": 12.0,
+         "end": 20.5,
+         "label": "brass_instrument"
+        },
+        {
+         "start": 13.5,
+         "end": 19.0,
+         "label": "trombone"
+        },
+        {
+         "start": 16.0,
+         "end": 17.0,
+         "label": "wind_instrument"
+        },
+        {
+         "start": 18.5,
+         "end": 19.5,
+         "label": "trumpet"
+        },
+        {
+         "start": 19.0,
+         "end": 20.0,
+         "label": "keyboard_musical"
+        },
+        {
+         "start": 19.5,
+         "end": 22.5,
+         "label": "orchestra"
+        },
+        {
+         "start": 20.0,
+         "end": 21.5,
+         "label": "bowed_string_instrument"
+        },
+        {
+         "start": 20.5,
+         "end": 21.5,
+         "label": "cello"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "the car chase",
+        "start": 10.26,
+        "end": 20.68,
+        "timecode": "00:00:10.3 -> 00:00:20.7"
+       }
+      ],
+      "replays": []
+     },
+     {
+      "id": "obs_664b4d0dd9",
+      "video_id": "v_407081314f",
+      "title": "Sherlock Jr. (1924)",
+      "source": "/private/var/tmp/akyl/Everyday/final/movie.mp4",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/movie-407081314f.mp4",
+      "start": 209.0,
+      "end": 213.0,
+      "timecode": "00:03:29.0 -> 00:03:33.0",
+      "claim": "the car chase",
+      "who": "driver",
+      "entity_id": null,
+      "confidence": 0.95,
+      "evidence": {
+       "summary": "car speeds away from barn",
+       "frames": [
+        {
+         "t": 209.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_407081314f_199.2-213.0/08.jpg"
+        },
+        {
+         "t": 210.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_407081314f_199.2-213.0/09.jpg"
+        },
+        {
+         "t": 212.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_407081314f_199.2-213.0/10.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 212.22,
+         "end": 213.62,
+         "text": "Thank"
+        }
+       ],
+       "ocr": [],
+       "sounds": [
+        {
+         "start": 0.0,
+         "end": 365.0,
+         "label": "music"
+        },
+        {
+         "start": 208.0,
+         "end": 211.0,
+         "label": "brass_instrument"
+        },
+        {
+         "start": 208.5,
+         "end": 210.5,
+         "label": "trombone"
+        },
+        {
+         "start": 210.0,
+         "end": 212.0,
+         "label": "wind_instrument"
+        },
+        {
+         "start": 210.5,
+         "end": 211.5,
+         "label": "bowed_string_instrument"
+        },
+        {
+         "start": 211.0,
+         "end": 213.5,
+         "label": "orchestra"
+        },
+        {
+         "start": 211.5,
+         "end": 214.0,
+         "label": "brass_instrument"
+        },
+        {
+         "start": 211.5,
+         "end": 212.5,
+         "label": "trombone"
+        },
+        {
+         "start": 212.0,
+         "end": 213.0,
+         "label": "violin_fiddle"
+        },
+        {
+         "start": 213.0,
+         "end": 214.5,
+         "label": "wind_instrument"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "the car chase",
+        "start": 209.0,
+        "end": 213.0,
+        "timecode": "00:03:29.0 -> 00:03:33.0"
+       }
+      ],
+      "replays": []
+     }
+    ],
+    "rejected": [
+     {
+      "video_id": "v_407081314f",
+      "start": 194.4,
+      "end": 202.2,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_407081314f",
+      "start": 279.27,
+      "end": 286.62,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_407081314f",
+      "start": 57.27,
+      "end": 64.56,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_407081314f",
+      "start": 264.56,
+      "end": 271.91,
+      "reason": "expected 1 steps, got 3"
+     },
+     {
+      "video_id": "v_407081314f",
+      "start": 237.74,
+      "end": 241.2,
+      "reason": "expected 1 steps, got 8"
+     },
+     {
+      "video_id": "v_407081314f",
+      "start": 35.37,
+      "end": 39.29,
+      "reason": "no match"
+     }
+    ],
+    "counts": {
+     "candidates": 12,
+     "checked": 11,
+     "confirmed": 5,
+     "rejected": 6
+    },
+    "seconds": {
+     "search": 7.64,
+     "load": 6.5,
+     "check": 39.56
+    }
+   },
+   "stderr": "tlv: searching 6 videos for 1 steps\ntlv: checking 11 stretches\ntlv: found 5 in 54 s: 8 s searching, 6 s loading the model, 40 s checking (39 s of it answering)\n"
+  },
+  {
+   "id": "movie-coco",
+   "query": "every scene with coco",
+   "then": [],
+   "argv": [
+    "uv",
+    "run",
+    "tlv",
+    "--index",
+    "everyday",
+    "find",
+    "every scene with coco",
+    "--max-candidates",
+    "12",
+    "--no-cut",
+    "--json"
+   ],
+   "seconds": 47.1,
+   "exit_code": 0,
+   "output": {
+    "claim": "every scene with coco",
+    "confirmed": [],
+    "rejected": [
+     {
+      "video_id": "v_d227f77eae",
+      "start": 453.18,
+      "end": 461.0,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_c59f6af7ec",
+      "start": 151.06,
+      "end": 158.59,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_0bf46a8e27",
+      "start": 297.46,
+      "end": 302.67,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_c59f6af7ec",
+      "start": 52.1,
+      "end": 57.42,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_d227f77eae",
+      "start": 296.73,
+      "end": 304.55,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_407081314f",
+      "start": 52.64,
+      "end": 57.27,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_568bc3351c",
+      "start": 23.5,
+      "end": 31.34,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_c59f6af7ec",
+      "start": 16.04,
+      "end": 23.12,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_c59f6af7ec",
+      "start": 105.86,
+      "end": 113.39,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_c59f6af7ec",
+      "start": 120.93,
+      "end": 128.46,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_d227f77eae",
+      "start": 192.24,
+      "end": 199.97,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_0bf46a8e27",
+      "start": 124.19,
+      "end": 129.75,
+      "reason": "no match"
+     }
+    ],
+    "counts": {
+     "candidates": 12,
+     "checked": 12,
+     "confirmed": 0,
+     "rejected": 12
+    },
+    "seconds": {
+     "search": 5.49,
+     "load": 4.6,
+     "check": 36.6
+    }
+   },
+   "stderr": "tlv: searching 6 videos for 1 steps\ntlv: waiting for another model run to finish before vlm\ntlv: checking 12 stretches\ntlv: found 0 in 47 s: 5 s searching, 5 s loading the model, 37 s checking (36 s of it answering)\n"
+  }
+ ]
+}

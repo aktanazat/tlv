@@ -1,0 +1,74 @@
+[
+  {
+    "id": "cooking-garlic",
+    "query": "when does she add the garlic",
+    "then": [],
+    "tests": "one cooking step: the garlic going into the pot, with the wine and the herbs going into the same pot just before as distractors"
+  },
+  {
+    "id": "cooking-taste",
+    "query": "show every time she tastes it",
+    "then": [],
+    "tests": "a repeated action: two tastings five minutes apart with her mouth never in frame, and other talk of taste as a distractor"
+  },
+  {
+    "id": "lecture-backprop",
+    "query": "where does she explain backprop",
+    "then": [],
+    "tests": "speech and slides: a named idea explained at the end of a lecture, with the earlier slides on neurons and error as distractors"
+  },
+  {
+    "id": "lecture-chart",
+    "query": "the slide with the chart",
+    "then": [],
+    "tests": "an on-screen visual: two plots, one of them on screen for two seconds, among slides of formulas, diagrams and truth tables"
+  },
+  {
+    "id": "vlog-golden-gate",
+    "query": "the golden gate bridge",
+    "then": [],
+    "tests": "a landmark: the moments it is named or zoomed on, with the bridge far in the background of many shots and a footbridge called 'a bridge' as distractors"
+  },
+  {
+    "id": "vlog-dogs",
+    "query": "when the dogs show up",
+    "then": [],
+    "tests": "a short scene: one dog walker with eight dogs, with 'bring your dog' said over a shot with no dog as a distractor"
+  },
+  {
+    "id": "meeting-pricing",
+    "query": "when did they talk about pricing",
+    "then": [],
+    "tests": "a spoken topic in a talking-head meeting: the price tiers, with a later remark on what the summit costs as a distractor"
+  },
+  {
+    "id": "meeting-summit",
+    "query": "when did they talk about the summit",
+    "then": [],
+    "tests": "a recurring spoken topic: three separate stretches about the company summit, with an outside conference called a summit as a distractor"
+  },
+  {
+    "id": "coding-build-fail",
+    "query": "when did the build fail",
+    "then": [],
+    "tests": "screen text: two failed builds, each back on screen when the editor closes, with three builds that pass as distractors"
+  },
+  {
+    "id": "coding-settings",
+    "query": "find where i opened settings",
+    "then": [],
+    "tests": "screen text: the settings file opened twice, with the word Settings on screen in the source file as a distractor"
+  },
+  {
+    "id": "movie-car-chase",
+    "query": "the car chase",
+    "then": [],
+    "tests": "an action scene in a silent film, with a long motorcycle ride before it and the car floating in a lake after it as distractors"
+  },
+  {
+    "id": "movie-coco",
+    "query": "every scene with coco",
+    "then": [],
+    "tests": "a named person: four scenes with the girl after her name is added once at a labelled frame, with her look changing from a cloche hat to long hair"
+  }
+]

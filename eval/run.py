@@ -3,9 +3,11 @@
     uv run python eval/run.py                  # every query
     uv run python eval/run.py curry-three      # only the named queries
     uv run python eval/run.py --out FILE       # into FILE instead of today's file
+    uv run python eval/run.py --set everyday   # the set in eval/everyday/, searched in tlv's everyday index
 
-Results go to eval/results/local-<date>.json, rewritten after each query so an interrupted run
-keeps what finished; running named queries again replaces just their records in the file.
+Results go to eval/results/local-<date>.json (eval/results/NAME-local-<date>.json for --set NAME),
+rewritten after each query so an interrupted run keeps what finished; running named queries again
+replaces just their records in the file.
 eval/results/twelvelabs-2026-10-12.json is the yardstick: the same queries and flags run once
 through the Twelve Labs client this tool replaced, before that client was removed.
 """
@@ -24,14 +26,15 @@ REPO = EVAL.parent
 FLAGS = ["--max-candidates", "12", "--no-cut", "--json"]
 
 
-def command(query: dict) -> list[str]:
+def command(query: dict, index: str | None) -> list[str]:
     then = [arg for step in query["then"] for arg in ("--then", step)]
-    return ["uv", "run", "tlv", "find", query["query"], *then, *FLAGS]
+    named = ["--index", index] if index else []
+    return ["uv", "run", "tlv", *named, "find", query["query"], *then, *FLAGS]
 
 
-def run(query: dict) -> dict:
+def run(query: dict, index: str | None) -> dict:
     """One `find` call: its parsed JSON output (None when it failed), exit code, stderr and wall time."""
-    argv = command(query)
+    argv = command(query, index)
     started = time.monotonic()
     done = subprocess.run(argv, cwd=REPO, capture_output=True, text=True)
     return {
@@ -50,21 +53,23 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("ids", nargs="*", help="query ids to run (default: all)")
     parser.add_argument("--out", type=Path, help="results file (default: eval/results/local-<date>.json)")
+    parser.add_argument("--set", metavar="NAME", help="the queries in eval/NAME/, searched in tlv's NAME index")
     args = parser.parse_args()
 
-    queries = json.loads((EVAL / "queries.json").read_text())
+    queries = json.loads(((EVAL / args.set if args.set else EVAL) / "queries.json").read_text())
     unknown = set(args.ids) - {query["id"] for query in queries}
     if unknown:
         parser.error(f"unknown query ids: {', '.join(sorted(unknown))}")
     chosen = [query for query in queries if not args.ids or query["id"] in args.ids]
 
-    path = args.out or EVAL / "results" / f"local-{datetime.date.today().isoformat()}.json"
+    prefix = f"{args.set}-" if args.set else ""
+    path = args.out or EVAL / "results" / f"{prefix}local-{datetime.date.today().isoformat()}.json"
     path.parent.mkdir(exist_ok=True)
     saved = json.loads(path.read_text())["runs"] if path.exists() else []
     runs = {record["id"]: record for record in saved}
     for query in chosen:
         print(f"local: {query['id']}", flush=True)
-        runs[query["id"]] = run(query)
+        runs[query["id"]] = run(query, args.set)
         record = runs[query["id"]]
         print(f"  exit {record['exit_code']} in {record['seconds']} s", flush=True)
         ordered = [runs[q["id"]] for q in queries if q["id"] in runs]
