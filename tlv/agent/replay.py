@@ -96,13 +96,16 @@ def _repeats(a: Moment, b: Moment) -> bool:
     return a.video_id == b.video_id and overlap >= min(0.5 * shorter, REPEAT_SHARED_S)
 
 
-def join_pieces[M: Moment](moments: list[M], join: Callable[[M, M], M]) -> list[M]:
-    """Joins confirmed moments that run on from one another into one moment, as `_continues` says.
-    `join(earlier, later)` makes one moment of two pieces. Returns the moments by video and time, live
-    footage before replays."""
+def join_pieces[M: Moment](
+    moments: list[M], join: Callable[[M, M], M], continues: Callable[[M, M], bool] | None = None
+) -> list[M]:
+    """Joins confirmed moments that run on from one another into one moment, as `continues(earlier,
+    later)` says (`_continues` when not given). `join(earlier, later)` makes one moment of two pieces.
+    Returns the moments by video and time, live footage before replays."""
+    runs_on = continues or _continues
     joined: list[M] = []
     for moment in sorted(moments, key=lambda m: (m.video_id, m.replay, m.start)):
-        if joined and _continues(joined[-1], moment):
+        if joined and runs_on(joined[-1], moment):
             joined[-1] = join(joined[-1], moment)
         else:
             joined.append(moment)
