@@ -52,20 +52,20 @@ def _headroom_script(path, free_pct):
 
 @pytest.fixture
 def hog(tmp_path, monkeypatch):
-    """The hog model's env, under a private $TLV_HOME whose hosts are stopped afterwards. The home
-    is short because a Unix socket path holds at most 104 bytes, which pytest's tmp_path exceeds."""
-    home = Path(tempfile.mkdtemp(prefix="tlv-"))
-    monkeypatch.setenv("TLV_HOME", str(home))
+    """The hog model's env, served by a private model host that is stopped afterwards. The host's
+    folder is short because a Unix socket path holds at most 104 bytes, which tmp_path exceeds."""
+    run = Path(tempfile.mkdtemp(prefix="tlv-"))
+    monkeypatch.setenv("TLV_MODEL_HOST", str(run / "models.sock"))
     monkeypatch.setenv("TLV_MODEL_IDLE_S", "60")
     monkeypatch.setenv("TLV_PRESSURE_CHECK_S", "0.2")
     monkeypatch.setenv("TLV_HEADROOM_CMD", _headroom_script(tmp_path / "ample", 60))
     (tmp_path / "hog.py").write_text(HOG)
     yield {"PYTHONPATH": str(tmp_path)}
-    log = home / "run" / "models.log"
+    log = run / "models.log"
     for pid in re.findall(r"model host (\d+) serving", log.read_text() if log.exists() else ""):
         with contextlib.suppress(ProcessLookupError):
             os.kill(int(pid), signal.SIGTERM)
-    shutil.rmtree(home)
+    shutil.rmtree(run)
 
 
 def _run(env, job=None, cap_mb=600, progress=None):

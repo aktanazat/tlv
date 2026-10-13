@@ -1,9 +1,10 @@
 """Memory guard for model runs, so a model can never swamp the Mac.
 
 Every model (vision-language, speech, embeddings, faces) runs in a guarded child process
-(`Child`) owned by the model host (tlv.host), one host per $TLV_HOME shared by every tlv process
-and agent. Callers reach it through `ModelProcess`, which starts the host on first use. The host
-runs one job at a time and keeps models loaded between runs; tlv.host says when it lets them go.
+(`Child`) owned by the model host (tlv.host), one host per user shared by every tlv process,
+agent and $TLV_HOME. Callers reach it through `ModelProcess`, which starts the host on first
+use. The host runs one job at a time and keeps models loaded between runs; tlv.host says when it
+lets them go.
 Before a model loads, the host waits until the kernel's memory pressure allows it: never at
 critical, and at warn only when the reclaimable memory covers the cap. While a child lives, its
 watchdog reads the child's physical footprint (the number Activity Monitor shows, GPU buffers
@@ -30,8 +31,6 @@ from collections import deque
 from collections.abc import Callable
 from pathlib import Path
 from typing import Any, TextIO
-
-from tlv import store
 
 GB = 1024**3
 NORMAL, WARN, CRITICAL = 1, 2, 4
@@ -120,7 +119,12 @@ def wait_for_headroom(need: int, progress: Progress | None = None, wait_s: float
 
 
 def socket_path() -> Path:
-    return store.data_dir("run") / "models.sock"
+    """The model host's socket; its lock and log sit beside it. One host serves every $TLV_HOME of
+    this user, so the memory it holds is bounded machine-wide. TLV_MODEL_HOST names another socket,
+    for a host of its own, as the tests use."""
+    path = Path(os.environ.get("TLV_MODEL_HOST") or Path.home() / ".local/share/tlv/run/models.sock")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    return path
 
 
 class ModelProcess:

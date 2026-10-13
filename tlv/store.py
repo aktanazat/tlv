@@ -18,7 +18,7 @@ from typing import Literal
 
 import numpy as np
 
-Sub = Literal["media", "clips", "frames", "crops", "locks", "models", "run", "work"]
+Sub = Literal["media", "clips", "frames", "crops", "locks", "models", "work"]
 
 SCHEMA = """
 -- tlv.index.pipeline: one row per added video.

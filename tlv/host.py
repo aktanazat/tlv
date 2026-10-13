@@ -1,7 +1,8 @@
-"""The model host: one background process per $TLV_HOME that keeps models loaded between runs.
+"""The model host: one background process per user that keeps models loaded between runs.
 
-tlv.guard.ModelProcess reaches it over a Unix socket ($TLV_HOME/run/models.sock) and starts it
-when none is running; it logs to $TLV_HOME/run/models.log. The host
+tlv.guard.ModelProcess reaches it over a Unix socket (~/.local/share/tlv/run/models.sock, or
+TLV_MODEL_HOST) and starts it when none is running; it logs to models.log beside the socket, so
+every $TLV_HOME shares one host and one memory budget. The host
 
 1. runs one job at a time across every tlv process and agent, loading a model in a guarded child
    (tlv.guard.Child) the first time it is asked for, and tells a caller who has to wait;
@@ -39,7 +40,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from tlv import guard, store
+from tlv import guard
 
 IDLE_S = float(os.environ.get("TLV_MODEL_IDLE_S", "600"))
 HELD_BYTES = int(float(os.environ.get("TLV_HELD_MEMORY_GB", "8")) * guard.GB)
@@ -241,9 +242,9 @@ def _take(handle: Any) -> bool:
 
 
 def main() -> None:
-    with (store.data_dir("locks") / "model-host").open("a") as lock:
+    with guard.socket_path().with_name("models.lock").open("a") as lock:
         if not _take(lock):
-            return  # another host serves this $TLV_HOME
+            return  # another host serves this socket
         path = guard.socket_path()
         path.unlink(missing_ok=True)
         host = Host()
