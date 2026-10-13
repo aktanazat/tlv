@@ -16,6 +16,10 @@ query ─▶ plan ─▶ retrieve ─▶ connect ─▶ inspect ─▶ answer (c
 - **Index** (`tlv/index/`): camera cuts, frames every 0.5 s with image embeddings, speech with
   word times, on-screen text, faces and bodies, audio events, then spans of a few seconds with
   a structured caption from the vision-language model. Each caption becomes an observation.
+  Speech is transcribed in pieces of one to two minutes of audio, one model job each, so a
+  search waits behind one piece, never a whole video. Two pieces share 6 s around a seam placed
+  in the quietest half second (a pause when there is one) and are joined at a word both heard
+  at the same time, so no word is lost, doubled or cut at a seam. Times stay in the video's time.
 - **Entities** (`tlv/entities.py`): faces and bodies grouped into one person across videos.
   Embed, retrieve a candidate pool, verify gray cases together with the vision-language model,
   cluster conservatively, then name from clues (spoken names, on-screen names, jersey numbers).
