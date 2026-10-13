@@ -6,8 +6,9 @@ apart. Then evidence joins groups, strongest first: a face sitting on a body (tr
 "same" answer from the vision-language model, one jersey number on one uniform within a game, and
 faces close enough in ArcFace space, at least one of them sharp, when each group's faces as a whole
 agree too. A join is refused when it would put together two appearances seen at the same moment,
-two jersey numbers, two different names, or a pair someone (or the model) said are different. A
-missed join is the safe failure; a false one contaminates every later answer.
+two bodies wearing one number in one game in uniforms that share almost no colors, two jersey
+numbers, two different names, or a pair someone (or the model) said are different. A missed join
+is the safe failure; a false one contaminates every later answer.
 """
 
 from __future__ import annotations
@@ -31,6 +32,12 @@ FACE_CENTROID = 0.4  # the two groups' mean sharp faces must agree this well as 
 # 0.3 or more matched no other person in its frame above 0.15, but for one pair (likely a dissolve).
 FACE_QUALITY = 0.3
 UNIFORM_SAME = 0.9  # two bodies with one jersey number wear one uniform when their colors agree this well
+# Two bodies with one jersey number in one game whose uniform colors agree below this wear two
+# uniforms, so they are two people, one per team. On the games labeled in eval/people.json, 1,205
+# pairs of one player's numbered bodies never agreed below 0.195, while 20 pairs of two players
+# (gold against white #23) did, down to 0.08. Telling such pairs apart before any join keeps a crop
+# that shows both uniforms from chaining the two players into one person.
+UNIFORM_APART = 0.15
 NEIGHBORS = 15
 HALF_STEP = 0.25  # half the sampling step: a track last seen at t is visible until t + HALF_STEP
 BLOCK_ROWS = 1024
@@ -103,15 +110,20 @@ def cluster(
             groups.block(index[c.a], index[c.b])
     for i, j in _forced(corrections, index, groups.corrected):
         groups.force(i, j)
+    dressed = _jersey_pairs(apps)
     for i, j in _apart(apps, verdicts, index):
         groups.block(i, j)
+    for similarity, i, j in dressed:
+        if similarity < UNIFORM_APART:
+            groups.block(i, j)
     for i, j in _links(apps, index):
         groups.join(i, j)
     for (a, b), same in sorted(verdicts.items()):
         if same and a in index and b in index:
             groups.join(index[a], index[b])
-    for i, j in _jersey_pairs(apps):
-        groups.join(i, j)
+    for similarity, i, j in dressed:
+        if similarity >= UNIFORM_SAME:
+            groups.join(i, j)
     faces = [i for i, a in enumerate(apps) if a.kind == "face"]
     near, gray = [], []
     for i, j, similarity in _neighbors(apps, faces, [i for i in faces if apps[i].sharp]):
@@ -204,8 +216,11 @@ class _Groups:
     def conflict(self, a: int, b: int) -> bool:
         """Whether groups a and b cannot be one person: told apart, wearing different numbers (a
         player keeps his number from game to game), or named differently. Where only one group is
-        known by a name, every name the other's clues give counts against it: one caption or one
-        mention naming someone else is enough to stay apart."""
+        known by a name its clues agree on, every name the other's clues give counts against it:
+        one caption or one mention naming someone else is enough to stay apart. A name the owner
+        gave is contradicted only by a name the other group is known by, since it may be one no
+        caption or commentator uses; otherwise every mention of the person's own name would cut
+        the named face from its body."""
         if b in self.blocked[a]:
             return True
         if self.jerseys[a] and self.jerseys[b] and self.jerseys[a].isdisjoint(self.jerseys[b]):
@@ -213,7 +228,8 @@ class _Groups:
         mine, theirs = self.names(a), self.names(b)
         if not (mine or theirs):
             return False
-        mine, theirs = mine or self.heard(a), theirs or self.heard(b)
+        mine = mine or (frozenset() if self.corrected[b] else self.heard(a))
+        theirs = theirs or (frozenset() if self.corrected[a] else self.heard(b))
         return bool(mine and theirs) and not any(rules.same_person(x, y) for x in mine for y in theirs)
 
     def face(self, root: int) -> np.ndarray | None:
@@ -311,8 +327,9 @@ def _links(apps: Sequence[Appearance], index: dict[str, int]) -> Iterator[tuple[
             yield i, index[a.body]
 
 
-def _jersey_pairs(apps: Sequence[Appearance]) -> list[tuple[int, int]]:
-    """Body pairs from one game with one jersey number and alike uniforms, most alike first."""
+def _jersey_pairs(apps: Sequence[Appearance]) -> list[tuple[float, int, int]]:
+    """Body pairs from one game with one jersey number, with how alike their uniforms are, most
+    alike first."""
     wearing: dict[tuple[str | None, str], list[int]] = defaultdict(list)
     for i, a in enumerate(apps):
         if a.kind == "body" and a.video_id is not None:
@@ -325,9 +342,8 @@ def _jersey_pairs(apps: Sequence[Appearance]) -> list[tuple[int, int]]:
         similar = vectors @ vectors.T
         for x in range(len(members)):
             for y in range(x + 1, len(members)):
-                if similar[x, y] >= UNIFORM_SAME:
-                    pairs.append((float(similar[x, y]), members[x], members[y]))
-    return [(i, j) for _, i, j in sorted(pairs, reverse=True)]
+                pairs.append((float(similar[x, y]), members[x], members[y]))
+    return sorted(pairs, reverse=True)
 
 
 def _neighbors(

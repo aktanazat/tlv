@@ -25,6 +25,13 @@ def jersey(number: str) -> dict:
     return {"kind": "jersey", "value": number, "t": 0.0}
 
 
+def blend(degrees: float) -> np.ndarray:
+    """Jersey colors turned from one uniform's (0 degrees) toward a uniform sharing none of them (90)."""
+    vector = np.zeros(27, dtype=np.float32)
+    vector[:2] = np.cos(np.radians(degrees)), np.sin(np.radians(degrees))
+    return vector
+
+
 def who(db, video_id: str, t: float) -> str:
     """The one person on screen at t."""
     (person,) = entities.present(db, video_id, t, t)
@@ -129,6 +136,25 @@ def test_two_jersey_numbers_keep_look_alike_faces_apart(db, video, appearance, s
     assert (who(db, "v_a", 1.0) == who(db, second_game, 11.0)) is together
 
 
+@pytest.mark.parametrize(
+    ("last", "together"),
+    [
+        (90.0, False),  # the other team's uniform, no color in common: two players
+        (75.0, True),  # some colors still in common: one uniform in changing light and company
+    ],
+)
+def test_one_number_in_two_uniforms_is_two_players_however_the_crops_between_blend(
+    db, video, appearance, last, together
+):
+    game = video("v_a")
+    # #23 seen five times in one game, each crop a short step (cosine 0.92) from the one before, as
+    # when a crop shows a rival beside the player and so has colors between the two uniforms
+    for k, degrees in enumerate((0.0, 22.5, 45.0, 67.5, last)):
+        appearance(f"body_{k}", game, "body", 10.0 * k, 10.0 * k + 2.0, blend(degrees), clues=[jersey("23")])
+    entities.recluster(db)
+    assert (who(db, game, 1.0) == who(db, game, 41.0)) is together
+
+
 def introduce(db, video_id: str, person: str, ocr: bool = True, speech: bool = True) -> None:
     """Names the person shown from 0 s to 20 s in a caption of 4 s to 10 s, and unless told
     otherwise on screen at 5 s and aloud at 8 s."""
@@ -179,6 +205,58 @@ def test_a_person_known_by_name_takes_in_no_one_whose_clues_name_someone_else(
         introduce(db, "v_b", second_caption, ocr=False, speech=False)
     entities.recluster(db)
     assert (who(db, "v_a", 1.0) == who(db, "v_b", 1.0)) is together
+
+
+@pytest.mark.parametrize(
+    ("said", "agreed", "together"),
+    [
+        (None, False, True),  # nothing said about the new face: the faces decide
+        ("Rui Hachimura", False, True),  # one caption calls her by a name other than the owner's
+        ("Rui Hachimura", True, False),  # read, heard and captioned: the clues agree on another name
+    ],
+)
+def test_a_person_the_owner_named_takes_in_new_footage_where_she_goes_by_another_name(
+    db, video, appearance, said, agreed, together
+):
+    appearance("face_a", video("v_a"), "face", 0.0, 20.0, face(1.0), height=0.3)
+    entities.recluster(db)
+    entities.name(db, who(db, "v_a", 1.0), "coco")
+    appearance("face_b", video("v_b"), "face", 0.0, 20.0, face(0.8, 0.6))
+    if said:
+        introduce(db, "v_b", said, ocr=agreed, speech=agreed)
+    entities.recluster(db)
+    assert (who(db, "v_b", 1.0) == who(db, "v_a", 1.0)) is together
+
+
+def test_naming_a_stray_piece_of_a_named_person_only_adds_it_to_them(db, video, appearance):
+    game = video("v_a")
+    appearance("body", game, "body", 0.0, 2.0, UNIFORM)
+    appearance("face", game, "face", 0.0, 2.0, face(1.0), body="body")
+    # a box drawn around her and the players beside her, at the same moment as her own box: two
+    # bodies at once count as two people, so it stays a piece of its own
+    appearance("crowd", game, "body", 1.0, 1.0, UNIFORM)
+    entities.recluster(db)
+    entities.name(db, who(db, game, 0.5), "coco")
+    entities.name(db, "crowd", "coco")
+    entities.recluster(db)
+    assert [person["name"] for person in entities.present(db, game, 0.0, 2.0)] == ["coco"]
+
+
+@pytest.mark.parametrize("named", [None, "Jane Doe"])
+def test_one_appearance_told_apart_from_a_person_takes_nothing_of_theirs_along(db, video, appearance, named):
+    game = video("v_a")
+    appearance("body_1", game, "body", 0.0, 2.0, UNIFORM, clues=[jersey("23")])
+    appearance("face_1", game, "face", 0.0, 2.0, face(1.0), height=0.3, body="body_1")  # the face she is shown by
+    appearance("body_2", game, "body", 10.0, 12.0, UNIFORM, clues=[jersey("23")])  # her again, by number
+    appearance("stranger", game, "face", 10.0, 12.0, face(0.0, 1.0), body="body_2")  # a face laid on her body
+    entities.recluster(db)
+    if named:
+        entities.name(db, who(db, game, 1.0), named)
+    entities.different(db, "stranger", who(db, game, 1.0))
+    entities.recluster(db)
+    her = who(db, game, 1.0)
+    on_screen = {(person["entity_id"] == her, person["name"]) for person in entities.present(db, game, 11.0, 11.0)}
+    assert on_screen == {(True, named), (False, None)}  # her body stays hers; the face goes alone, nameless
 
 
 @pytest.fixture

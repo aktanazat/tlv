@@ -754,20 +754,18 @@ def present(db: sqlite3.Connection, video_id: str, start: float, end: float) -> 
 
 
 def name(db: sqlite3.Connection, target: str, name: str) -> list[dict[str, Any]]:
-    """Names a person. An entity id renames everyone in it; an appearance id says who that one
-    appearance shows. The name is stored against appearances, so it survives reclustering."""
+    """Names a person. An entity id names everyone in it, which keeps them together as that person
+    whatever later evidence says, until one of them is told apart; an appearance id says who that
+    one appearance shows. Names are stored against appearances, so they survive reclustering."""
     value = _clean_name(name)
     appearance_id = _appearance_of(db, target)
+    named = _side(db, target)
     now = store.now()
     with store.transaction(db):
-        db.execute(
-            "UPDATE corrections SET value = ?, created_at = ? WHERE kind = 'name' AND a IN"
-            " (SELECT appearance_id FROM entity_members WHERE entity_id = ?)",
-            (value, now, target),
-        )
-        db.execute("DELETE FROM corrections WHERE kind = 'name' AND a = ?", (appearance_id,))
-        db.execute(
-            "INSERT INTO corrections (kind, a, value, created_at) VALUES ('name', ?, ?, ?)", (appearance_id, value, now)
+        db.executemany("DELETE FROM corrections WHERE kind = 'name' AND a = ?", [(a,) for a in named])
+        db.executemany(
+            "INSERT INTO corrections (kind, a, value, created_at) VALUES ('name', ?, ?, ?)",
+            [(a, value, now) for a in named],
         )
     _regroup(db, _quiet, ask=False)
     return _rows_of(db, [appearance_id])
@@ -775,33 +773,74 @@ def name(db: sqlite3.Connection, target: str, name: str) -> list[dict[str, Any]]
 
 def same(db: sqlite3.Connection, a: str, b: str) -> list[dict[str, Any]]:
     """Says two entities or appearances are one person; returns the merged person."""
-    x, y = _pair(db, a, b, "already one person")
-    _correct(db, "same", x, y)
+    x, y = _appearance_of(db, a), _appearance_of(db, b)
+    if x == y:
+        raise ValueError(f"{a} and {b} are already one person")
+    _correct(db, "same", _side(db, a), _side(db, b), [(x, y)])
     return _rows_of(db, [x])
 
 
 def different(db: sqlite3.Connection, a: str, b: str) -> list[dict[str, Any]]:
-    """Says two entities or appearances are different people; returns both."""
-    x, y = _pair(db, a, b, "one appearance; name two of its appearances to split a person")
-    _correct(db, "different", x, y)
+    """Says two entities or appearances are different people; returns both. One appearance told
+    apart from a person is told apart from everyone in them and loses the name it shares with
+    them, so what tied it there (a face laid on the wrong body, say) cannot take part of them along."""
+    x, y = _appearance_of(db, a), _appearance_of(db, b)
+    left, right = _side(db, a), _side(db, b)
+    if len(left) > 1 and len(right) > 1:  # two people, told apart through their canonical appearances
+        pairs = [(x, y)] if x != y else []
+    else:
+        pairs = [(p, q) for p in left for q in right if p != q]
+    if not pairs:
+        raise ValueError(f"{a} and {b} are one appearance; name two of its appearances to split a person")
+    unnamed = [
+        lone[0]
+        for lone, person, others in ((left, b, right), (right, a, left))
+        if len(lone) == 1 and len(others) > 1 and _named_as(db, lone[0], person)
+    ]
+    _correct(db, "different", left, right, pairs, unnamed)
     return _rows_of(db, [x, y])
 
 
-def _pair(db: sqlite3.Connection, a: str, b: str, alike: str) -> tuple[str, str]:
-    x, y = _appearance_of(db, a), _appearance_of(db, b)
-    if x == y:
-        raise ValueError(f"{a} and {b} are {alike}")
-    return x, y
+def _side(db: sqlite3.Connection, target: str) -> list[str]:
+    """The appearances a correction about `target` speaks of: everyone in an entity, or the one given."""
+    members = [row[0] for row in db.execute("SELECT appearance_id FROM entity_members WHERE entity_id = ?", (target,))]
+    return members or [_appearance_of(db, target)]
 
 
-def _correct(db: sqlite3.Connection, kind: str, x: str, y: str) -> None:
-    """Records same/different for a pair, replacing any earlier answer about it, and regroups."""
+def _named_as(db: sqlite3.Connection, appearance_id: str, entity_id: str) -> bool:
+    """Whether a name correction gives the appearance the name of the entity's person."""
+    person = db.execute("SELECT name FROM entities WHERE entity_id = ?", (entity_id,)).fetchone()
+    given = db.execute(
+        "SELECT value FROM corrections WHERE kind = 'name' AND a = ? ORDER BY created_at DESC, id DESC LIMIT 1",
+        (appearance_id,),
+    ).fetchone()
+    return bool(person and person[0] and given and rules.same_person(given[0], person[0]))
+
+
+def _correct(
+    db: sqlite3.Connection,
+    kind: str,
+    left: Sequence[str],
+    right: Sequence[str],
+    pairs: Sequence[tuple[str, str]],
+    unnamed: Sequence[str] = (),
+) -> None:
+    """Records same/different for `pairs`, replacing every earlier answer between the two sides,
+    drops the name corrections of `unnamed`, and regroups."""
+    left_set, right_set = set(left), set(right)
+    now = store.now()
     with store.transaction(db):
-        db.execute(
-            "DELETE FROM corrections WHERE kind IN ('same', 'different') AND ((a = ? AND b = ?) OR (a = ? AND b = ?))",
-            (x, y, y, x),
+        earlier = [
+            (row["id"],)
+            for row in db.execute("SELECT id, a, b FROM corrections WHERE kind IN ('same', 'different')")
+            if (row["a"] in left_set and row["b"] in right_set) or (row["a"] in right_set and row["b"] in left_set)
+        ]
+        db.executemany("DELETE FROM corrections WHERE id = ?", earlier)
+        db.executemany("DELETE FROM corrections WHERE kind = 'name' AND a = ?", [(a,) for a in unnamed])
+        db.executemany(
+            "INSERT INTO corrections (kind, a, b, created_at) VALUES (?, ?, ?, ?)",
+            [(kind, p, q, now) for p, q in pairs],
         )
-        db.execute("INSERT INTO corrections (kind, a, b, created_at) VALUES (?, ?, ?, ?)", (kind, x, y, store.now()))
     _regroup(db, _quiet, ask=False)
 
 
