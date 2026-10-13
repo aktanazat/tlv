@@ -167,9 +167,15 @@ def test_a_word_belongs_to_the_span_holding_its_middle(scene):
 
 @pytest.fixture
 def captioner(monkeypatch):
-    """Stands in for the vision-language and text-embedding models. Captions are numbered in the
-    order they are made, and a test may set the shot kind the model answers."""
-    answer = {"shot": "replay", "made": 0}
+    """Stands in for the vision-language and text-embedding models, answering a job of one question
+    or a batch as the model worker does. Captions are numbered in the order they are made, "jobs"
+    lists how many questions each job asked, and a test may set the shot kind the model answers
+    and the job at which it stops."""
+    answer = {"shot": "replay", "made": 0, "jobs": [], "fails_at": None}
+
+    def caption():
+        answer["made"] += 1
+        return {"text": json.dumps({"caption": f"caption {answer['made']}", "shot": answer["shot"]})}
 
     class Model:
         def __init__(self, module, progress=None):
@@ -182,8 +188,10 @@ def captioner(monkeypatch):
             return None
 
         def call(self, job):
-            answer["made"] += 1
-            return {"text": json.dumps({"caption": f"caption {answer['made']}", "shot": answer["shot"]})}
+            answer["jobs"].append(len(job.get("batch", [job])))
+            if len(answer["jobs"]) == answer["fails_at"]:
+                raise RuntimeError("the model stopped")
+            return {"results": [caption() for _ in job["batch"]]} if "batch" in job else caption()
 
     monkeypatch.setattr(guard, "ModelProcess", Model)
     monkeypatch.setattr(embed, "sentences", lambda texts, progress=None: np.ones((len(texts), 4), dtype=np.float32))
@@ -223,6 +231,30 @@ def test_each_span_has_one_caption_observation_over_its_range(scene, captioner):
         ("caption:v_test:0.000", 0.0, 4.0, "caption 1"),
         ("caption:v_test:4.000", 4.0, 8.0, "caption 2"),
     ]
+
+
+def in_order(db):
+    return [row["caption"] for row in db.execute("SELECT caption FROM spans ORDER BY start")]
+
+
+def test_a_two_minute_shot_is_captioned_in_two_model_jobs(db, video, captioner):
+    # The model writes a job's answers together, so a span asked in a job of its own took about 30%
+    # more time in the model: fifteen spans go in jobs of eight, each answer to its span.
+    add_rows(db, "shots", [{"idx": 0, "start": 0.0, "end": 120.0}])
+    spans.run(db, video, None)
+    assert (captioner["jobs"], in_order(db)) == ([8, 7], [f"caption {n}" for n in range(1, 16)])
+
+
+def test_an_interrupted_run_keeps_the_jobs_done_and_the_rerun_captions_the_rest(db, video, captioner):
+    add_rows(db, "shots", [{"idx": 0, "start": 0.0, "end": 120.0}])
+    captioner["fails_at"] = 2
+    with pytest.raises(RuntimeError, match="the model stopped"):
+        spans.run(db, video, None)
+    interrupted = in_order(db)
+    captioner["fails_at"] = None
+    spans.run(db, video, None)
+    made = [f"caption {n}" for n in range(1, 16)]
+    assert (interrupted, in_order(db)) == ([*made[:8], *[None] * 7], made)
 
 
 @pytest.mark.parametrize(("shot", "replay"), [("replay", 1), ("live", 0), ("crowd", None)])

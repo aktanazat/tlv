@@ -3,8 +3,8 @@ structured caption from the vision-language model, a text embedding for search, 
 observation tied to its time range and evidence.
 
 A caption is kept across reruns while its span and everything the model saw (frames, speech,
-on-screen text, prompt, model) are unchanged, and each is saved as soon as it is made, so an
-interrupted run resumes where it stopped.
+on-screen text, prompt, model) are unchanged. Spans go to the model BATCH to a job, and a job's
+captions are saved as soon as it returns, so an interrupted run resumes where it stopped.
 """
 
 from __future__ import annotations
@@ -26,6 +26,10 @@ MIN_S = 2.0
 MAX_S = 8.0
 FRAMES_PER_SPAN = 4
 MAX_TOKENS = 400
+# Spans per model job. The model writes a job's answers together, taking up the next span as an
+# answer ends, so a span costs less model time than in a job of its own; eight keep a job under
+# half a minute, the longest another process then waits for the shared model.
+BATCH = 8
 OCR_MIN_CONF = 0.5
 OCR_LINES = 12
 # Unverified: a caption is the model's first look, not a checked find.
@@ -283,18 +287,23 @@ def document(caption: str, details: dict[str, Any], seen: Inputs) -> str:
 
 
 def _caption(db: sqlite3.Connection, todo: list[Span], progress: guard.Progress | None) -> None:
-    """Captions each span with one loaded model, saving every caption as soon as it is made."""
+    """Captions the spans with one loaded model, BATCH to a job, saving a job's captions as soon
+    as it returns."""
     with guard.ModelProcess("tlv.models.vlm", progress=progress) as model:
-        for done, span in enumerate(todo, 1):
-            answer = model.call({"images": span.inputs.frames, "prompt": span.prompt, "max_tokens": MAX_TOKENS})
-            details = ground(parse(answer["text"]), span.inputs)
-            replay = {"replay": 1, "live": 0}.get(details["shot"])
-            db.execute(
-                "UPDATE spans SET caption = ?, details = ?, replay = ? WHERE span_id = ?",
-                (details["caption"], json.dumps({**details, "digest": span.digest}), replay, span.span_id),
-            )
-            if progress and (done % 10 == 0 or done == len(todo)):
-                progress(f"captioned {done} of {len(todo)} spans")
+        for first in range(0, len(todo), BATCH):
+            batch = todo[first : first + BATCH]
+            questions = [
+                {"images": span.inputs.frames, "prompt": span.prompt, "max_tokens": MAX_TOKENS} for span in batch
+            ]
+            rows = []
+            for span, answer in zip(batch, model.call({"batch": questions})["results"], strict=True):
+                details = ground(parse(answer["text"]), span.inputs)
+                replay = {"replay": 1, "live": 0}.get(details["shot"])
+                rows.append((details["caption"], json.dumps({**details, "digest": span.digest}), replay, span.span_id))
+            with store.transaction(db):
+                db.executemany("UPDATE spans SET caption = ?, details = ?, replay = ? WHERE span_id = ?", rows)
+            if progress:
+                progress(f"captioned {first + len(batch)} of {len(todo)} spans")
 
 
 def _first_caption_object(answer: str) -> dict[str, Any]:
