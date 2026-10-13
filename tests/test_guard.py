@@ -6,6 +6,8 @@ import os
 import re
 import shutil
 import signal
+import subprocess
+import sys
 import tempfile
 import textwrap
 import threading
@@ -41,7 +43,13 @@ HOG = textwrap.dedent(
                 open(job["hold"], "w").close()
                 while os.path.exists(job["hold"]):
                     time.sleep(0.01)
-            return {"held_mb": 50 * len(held), "pid": os.getpid(), "began": began, "ended": time.time()}
+            return {
+                "held_mb": 50 * len(held),
+                "pid": os.getpid(),
+                "began": began,
+                "ended": time.time(),
+                "code": __file__,
+            }
         return handle
 
     serve(load)
@@ -111,6 +119,44 @@ def test_a_loaded_model_is_replaced_once_tlv_code_changes(hog):
     first = _run(hog)["pid"]
     os.utime(Path(guard.__file__).with_name("models") / "protocol.py")  # what saving the file does
     assert _run(hog)["pid"] != first
+
+
+def _wait_for_log(text, seconds=30):
+    log = guard.socket_path().with_name("models.log")
+    deadline = time.monotonic() + seconds
+    while text not in (log.read_text() if log.exists() else "") and time.monotonic() < deadline:
+        time.sleep(0.1)
+
+
+def test_a_model_runs_its_callers_code_though_the_host_started_in_another_checkout(hog, tmp_path):
+    """Models run in the folder the host started in, and `python -m` looks there first. On
+    2026-10-13 the shared host had been started from the main checkout, so a worktree's caller got
+    the main checkout's model code."""
+    other = tmp_path / "other-checkout"
+    other.mkdir()
+    (other / "hog.py").write_text(HOG)  # that checkout's own copy of the model
+    with guard.socket_path().with_name("models.log").open("a") as log:  # as a caller from before the fix
+        subprocess.Popen(
+            [sys.executable, "-m", "tlv.host"],
+            cwd=other,
+            stdin=subprocess.DEVNULL,
+            stdout=log,
+            stderr=log,
+            start_new_session=True,
+        )
+    _wait_for_log("serving")
+    assert _run(hog)["code"] == str(tmp_path / "hog.py")
+
+
+def test_a_host_started_inside_another_checkout_runs_its_starters_code(hog, tmp_path, monkeypatch):
+    """A caller may stand in another checkout's folder when it starts the host, one mid-edit whose
+    tlv does not even import; the host and its models still run the caller's code."""
+    other = tmp_path / "other-checkout"
+    (other / "tlv").mkdir(parents=True)
+    (other / "tlv" / "__init__.py").write_text("raise ImportError('another checkout, mid-edit')\n")
+    (other / "hog.py").write_text(HOG)
+    monkeypatch.chdir(other)
+    assert _run(hog)["code"] == str(tmp_path / "hog.py")
 
 
 @pytest.mark.parametrize(

@@ -44,6 +44,10 @@ HOST_START_S = 30.0  # how long a caller waits for a host it started to accept c
 # Variables that pick a model checkpoint (TLV_VLM_MODEL, ...). A caller's values travel with each
 # request, so a model loaded for one setting is never handed to a caller asking for another.
 MODEL_VARIABLE = re.compile(r"TLV_\w+_MODEL")
+# `python -m` puts the folder it runs in first on the import path, and the host and its models run
+# in the folder of whoever started the host, which may hold another checkout of tlv. With this in
+# their environment they import the code their own interpreter installs: their caller's checkout.
+OWN_CODE = {"PYTHONSAFEPATH": "1"}
 
 Progress = Callable[[str], None]
 
@@ -153,7 +157,11 @@ class ModelProcess:
         self.module = module
         self.cap = cap_bytes
         self.progress = progress
-        self.env = {**{k: v for k, v in os.environ.items() if MODEL_VARIABLE.fullmatch(k)}, **(env or {})}
+        self.env = {
+            **{k: v for k, v in os.environ.items() if MODEL_VARIABLE.fullmatch(k)},
+            **(env or {}),
+            **OWN_CODE,
+        }
         self.code = code_stamp()
         self._conn: socket.socket | None = None
         self._lines: TextIO | None = None
@@ -237,6 +245,7 @@ def _connect() -> socket.socket:
                     stdin=subprocess.DEVNULL,
                     stdout=log,
                     stderr=log,
+                    env={**os.environ, **OWN_CODE},
                     start_new_session=True,
                 )
             started = True
@@ -248,8 +257,9 @@ def _connect() -> socket.socket:
 class Child:
     """One model loaded in a guarded child process (`<python> -m <module>`, which calls
     tlv.models.protocol.serve), answering JSON jobs one at a time. `python` is the caller's
-    interpreter, so the child runs the caller's checkout of tlv. Its watchdog stops it past its
-    cap, or when memory pressure stays critical while it holds real memory."""
+    interpreter and the caller's env carries OWN_CODE, so the child runs the caller's checkout of
+    tlv whatever folder the host started in. Its watchdog stops it past its cap, or when memory
+    pressure stays critical while it holds real memory."""
 
     def __init__(
         self, module: str, cap: int, env: dict[str, str], python: str, progress: Progress | None = None
