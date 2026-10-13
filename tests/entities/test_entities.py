@@ -1,15 +1,17 @@
 """People across videos, through the published entities API on a private database.
 
-No model runs here: every pair of faces is either clearly alike (cosine at least 0.5) or clearly not
-(under 0.3), so reclustering has nothing to ask the vision-language model.
+No model runs here. Every pair of faces is either clearly alike (cosine at least 0.5) or clearly not
+(under 0.3), or both faces are blurred, so reclustering has no look-alike faces to ask the
+vision-language model about; where a new video's leads need asking, a scripted model answers.
 """
 
 import json
+from pathlib import Path
 
 import numpy as np
 import pytest
 
-from tlv import entities
+from tlv import entities, guard
 
 UNIFORM = np.eye(27, dtype=np.float32)[0]  # one jersey's colors
 
@@ -226,6 +228,71 @@ def test_a_person_the_owner_named_takes_in_new_footage_where_she_goes_by_another
         introduce(db, "v_b", said, ocr=agreed, speech=agreed)
     entities.recluster(db)
     assert (who(db, "v_b", 1.0) == who(db, "v_a", 1.0)) is together
+
+
+class Model:
+    """Stands in for the vision-language model: "same" when the second crop of a pair is one of
+    `theirs`, "different" otherwise. Called like guard.ModelProcess; `shown` keeps every pair."""
+
+    def __init__(self, theirs: set[str]) -> None:
+        self.theirs = theirs
+        self.shown: list[tuple[str, str]] = []
+
+    def __call__(self, name: str, progress=None) -> "Model":
+        return self
+
+    def __enter__(self) -> "Model":
+        return self
+
+    def __exit__(self, *exc: object) -> None:
+        return None
+
+    def call(self, job: dict) -> dict:
+        pairs = [(Path(a).stem, Path(b).stem) for a, b in (question["images"] for question in job["batch"])]
+        self.shown += pairs
+        return {"results": [{"text": "same" if b in self.theirs else "different"} for _, b in pairs], "seconds": 0.0}
+
+
+@pytest.mark.parametrize(
+    ("t", "on_screen"),
+    [
+        (1.0, {"coco", None}),  # her blurred face joins her; the body it sits on in a hug stays someone else's
+        (11.0, {"coco"}),  # her back, by the number she wears
+        (21.0, {None}),  # a blurred face that looks a little like hers, which the model tells apart
+    ],
+)
+def test_a_person_the_owner_named_is_found_in_a_new_video_by_what_the_model_says(
+    db, video, appearance, monkeypatch, t, on_screen
+):
+    # coco, named by the owner, seen only blurred, on a body wearing 28
+    appearance("coco_body", video("v_a"), "body", 0.0, 2.0, UNIFORM, clues=[jersey("28")])
+    appearance("coco_face", "v_a", "face", 0.0, 2.0, face(1.0), body="coco_body", quality=0.1)
+    entities.recluster(db)
+    entities.name(db, who(db, "v_a", 1.0), "coco")
+    # a new game where nothing joins her on its own: her face blurred again, sitting on the body of
+    # the player she hugs, her back wearing 28, and a stranger's blurred face
+    new = video("v_b")
+    appearance("hug_body", new, "body", 0.0, 2.0, blend(90.0))
+    appearance("her_face", new, "face", 0.0, 2.0, face(0.6, 0.8), body="hug_body", quality=0.1)
+    appearance("her_back", new, "body", 10.0, 12.0, UNIFORM, clues=[jersey("28")])
+    appearance("stranger", new, "face", 20.0, 22.0, face(0.4, 0.0, np.sqrt(0.84)), quality=0.1)
+    monkeypatch.setattr(guard, "ModelProcess", Model(theirs={"her_face", "her_back"}))
+    entities.recluster(db, video_id=new)
+    assert {person["name"] for person in entities.present(db, new, t, t)} == on_screen
+
+
+def test_a_new_video_buys_questions_about_its_closest_leads_by_the_minute(db, video, appearance, monkeypatch):
+    appearance("coco_face", video("v_a"), "face", 0.0, 2.0, face(1.0), quality=0.1)
+    entities.recluster(db)
+    entities.name(db, "coco_face", "coco")
+    new = video("v_b")  # a minute long
+    leads = entities.LEADS_PER_MINUTE + 5
+    for k in range(leads):  # blurred faces, each a little more like hers than the one before
+        appearance(f"face_{k:02d}", new, "face", 3.0 * k, 3.0 * k + 1.0, face(0.5 + 0.02 * k, 0.8), quality=0.1)
+    model = Model(theirs=set())
+    monkeypatch.setattr(guard, "ModelProcess", model)
+    entities.recluster(db, video_id=new)
+    assert sorted(b for _, b in model.shown) == [f"face_{k:02d}" for k in range(5, leads)]
 
 
 def test_naming_a_stray_piece_of_a_named_person_only_adds_it_to_them(db, video, appearance):

@@ -146,6 +146,10 @@ timecodes (`1:23.4`, `00:01:23.4`). Progress goes to stderr.
   answers the follow-up with the earlier questions and answers in view.
 - People belong to an index. Corrections are stored against the appearances they name, so they
   survive re-clustering when new videos are added.
+- A person you name is looked for in each video added later. The new video's people that no clear
+  face already places are shown to the vision-language model beside that person, closest first and
+  at most 15 questions per minute of video (under 10 s a minute). Its "same" joins them, its
+  "different" keeps them apart, and a correction overrides either.
 - `person` reads only what indexing and `find` stored, so it runs no model and answers in
   milliseconds. Clusters that carry the same name count as one person; its filmstrip is saved
   under `$TLV_HOME/frames/`.

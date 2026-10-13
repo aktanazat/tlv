@@ -3,8 +3,9 @@
 `index_video` turns one video's Vision detections into appearances: one person followed through one
 shot (tracks.py), as a face embedded with ArcFace, or a body known by the jersey number read off it
 or by the face on it. `recluster` groups every appearance in the collection into entities
-(cluster.py), first asking the vision-language model about a bounded number of look-alike faces,
-names each entity from corrections or agreeing clues (clues.py), and points each caption
+(cluster.py), first asking the vision-language model about a bounded number of look-alike faces
+and, after a video is indexed, whether its people that no sharp face places are people the owner
+named; it names each entity from corrections or agreeing clues (clues.py), and points each caption
 observation at the person it is about. Corrections are stored against appearances, so they survive
 reclustering and re-indexing.
 """
@@ -14,6 +15,7 @@ from __future__ import annotations
 import base64
 import hashlib
 import json
+import math
 import re
 import shutil
 import sqlite3
@@ -30,7 +32,7 @@ import numpy as np
 from tlv import guard, store
 from tlv.entities import clues as rules
 from tlv.entities import crops
-from tlv.entities.cluster import FACE_QUALITY, HALF_STEP, Appearance, Correction, cluster, describe
+from tlv.entities.cluster import FACE_QUALITY, HALF_STEP, Appearance, Correction, Lead, cluster, describe
 from tlv.entities.tracks import MIN_IOU, Box, Kind, Seen, Track, clearest, follow, iou, link
 from tlv.index import vision
 
@@ -52,6 +54,18 @@ FACE_BATCH = 64
 BIG_FACE, BIG_BODY = 0.12, 0.5
 MAX_QUESTIONS = 80  # look-alike face pairs the vision-language model is asked about per recluster
 PER_QUESTION = 4  # candidates shown beside one reference face
+# Questions about leads (cluster.Lead) asked per minute of a newly indexed video. In one batch, a
+# pair of face crops took the model 0.47 s and a pair of body crops 0.63 s, so this keeps the check
+# under 10 s a minute; an ESPN clip of 2.7 minutes used 29 of its 41, a 3-minute reel 2 of its 46.
+LEADS_PER_MINUTE = 15
+SAME_PERSON = {
+    "face": "Image 1 and image 2 each show a person's face. Are they the same person? Judge the face itself: its"
+    " shape, eyes, nose, mouth, skin, hair and beard. Ignore clothes, pose, lighting and background. Answer with"
+    " one word: same, different or unsure.",
+    "body": "Image 1 and image 2 each show a person at a basketball game. Are they the same person? Judge what tells"
+    " people apart: the uniform and its colors, the number and the name on the jersey, skin, hair and build. A"
+    " player, a referee, a coach and a fan are different people. Answer with one word: same, different or unsure.",
+}
 MIN_LISTED = 3  # unnamed people seen fewer times are left out of `entities()`
 JERSEY_QUERY = re.compile(r"(?:#\s*|\bnumber\s+|\bno\.?\s*|\bjersey\s+)(\d{1,2})\b", re.IGNORECASE)
 ENTITY_ID = re.compile(r"\bent_[0-9a-f]{12}\b")
@@ -95,7 +109,7 @@ def index_video(db: sqlite3.Connection, video_id: str, progress: guard.Progress 
         shutil.rmtree(work, ignore_errors=True)
     with store.lock("entities", lambda: say("waiting for another entities run")):
         _replace(db, video_id, found)
-    recluster(db, progress)
+    recluster(db, progress, video_id)
 
 
 def _tracks(db: sqlite3.Connection, video_id: str, height: int) -> tuple[list[Track], list[Track]]:
@@ -323,19 +337,27 @@ def _heir(old: sqlite3.Row, found: list[_Found]) -> str | None:
 # Grouping the collection.
 
 
-def recluster(db: sqlite3.Connection, progress: guard.Progress | None = None) -> None:
+def recluster(db: sqlite3.Connection, progress: guard.Progress | None = None, video_id: str | None = None) -> None:
     """Regroups every appearance into entities, honoring every correction; the vision-language
-    model is first asked about up to MAX_QUESTIONS look-alike face pairs it has not judged."""
-    _regroup(db, progress or _quiet, ask=True)
+    model is first asked about up to MAX_QUESTIONS look-alike face pairs it has not judged, then,
+    with `video_id`, the video just indexed, about its leads: up to LEADS_PER_MINUTE questions per
+    minute of it."""
+    _regroup(db, progress or _quiet, ask=True, new_video=video_id)
 
 
-def _regroup(db: sqlite3.Connection, say: guard.Progress, ask: bool) -> None:
+def _regroup(db: sqlite3.Connection, say: guard.Progress, ask: bool, new_video: str | None = None) -> None:
     with store.lock("entities", lambda: say("waiting for another entities run")):
         _refresh_names(db)
         apps, fixes, verdicts = _appearances(db), _corrections(db), _verdicts(db)
-        grouped = cluster(apps, fixes, verdicts)
+        grouped = cluster(apps, fixes, verdicts, new_video)
         if ask and grouped.gray:
             answers = _ask(db, [(a, b) for a, b, _ in grouped.gray[:MAX_QUESTIONS]], say)
+            if answers:
+                verdicts |= answers
+                grouped = cluster(apps, fixes, verdicts, new_video)
+        if ask and new_video and grouped.leads:
+            (minutes,) = db.execute("SELECT duration / 60.0 FROM videos WHERE video_id = ?", (new_video,)).fetchone()
+            answers = _ask_leads(db, _within(grouped.leads, math.ceil(LEADS_PER_MINUTE * minutes)), say)
             if answers:
                 grouped = cluster(apps, fixes, verdicts | answers)
         _save(db, apps, fixes, grouped.groups)
@@ -404,7 +426,7 @@ def _save(db: sqlite3.Connection, apps: list[Appearance], fixes: list[Correction
         db.executemany("INSERT INTO entity_members (appearance_id, entity_id) VALUES (?, ?)", members)
 
 
-# Asking the vision-language model about look-alike faces.
+# Asking the vision-language model about look-alike faces, and about leads.
 
 
 def _ask(
@@ -412,7 +434,7 @@ def _ask(
 ) -> dict[tuple[str, str], bool | None]:
     """The model's verdict on each pair, stored so no pair is asked twice. When the model cannot
     run, the pairs stay unasked, and so apart."""
-    crop = {row[0]: row[1] for row in db.execute("SELECT appearance_id, crop_path FROM appearances")}
+    crop = _crops(db)
     questions = _questions(pairs)
     answers: dict[tuple[str, str], bool | None] = {}
     try:
@@ -430,12 +452,75 @@ def _ask(
                 say(f"compared look-alike faces {k} of {len(questions)}")
     except (guard.ModelError, guard.HeadroomError) as error:
         say(f"left look-alike faces apart: {error}")
+    _remember(db, answers)
+    return answers
+
+
+def _ask_leads(db: sqlite3.Connection, leads: list[Lead], say: guard.Progress) -> dict[tuple[str, str], bool | None]:
+    """The model's verdict on each lead, then on the bodies of each lead it says is the named
+    person, stored as `_ask` stores its own. A body it says is someone else is also stored as a
+    different person from every face sitting on it, so the face joins the named person alone."""
+    crop = _crops(db)
+    answers: dict[tuple[str, str], bool | None] = {}
+    bodies: list[tuple[str, str, str]] = []
+    try:
+        with guard.ModelProcess("tlv.models.vlm", progress=say) as model:
+            answers |= _judge(model, crop, [(lead.kind, lead.reference, lead.candidate) for lead in leads])
+            found = [lead for lead in leads if answers[_pair(lead.reference, lead.candidate)]]
+            bodies = [("body", reference, body) for lead in found for reference, body in lead.bodies]
+            if bodies:
+                answers |= _judge(model, crop, bodies)
+            say(f"compared {len(leads)} people in the new video with the people you named")
+    except (guard.ModelError, guard.HeadroomError) as error:
+        say(f"left the new video's unknown people apart: {error}")
+    for _, reference, body in bodies:
+        if answers.get(_pair(reference, body)) is False:
+            sitting = db.execute("SELECT appearance_id FROM appearances WHERE body = ?", (body,)).fetchall()
+            answers |= {_pair(face, body): False for (face,) in sitting}
+    _remember(db, answers)
+    return answers
+
+
+def _within(leads: list[Lead], budget: int) -> list[Lead]:
+    """The closest leads whose questions, each lead's own and its bodies', fit in `budget`."""
+    taken = []
+    for lead in leads:
+        budget -= 1 + len(lead.bodies)
+        if budget < 0:
+            break
+        taken.append(lead)
+    return taken
+
+
+def _judge(
+    model: guard.ModelProcess, crop: dict[str, str], pairs: list[tuple[str, str, str]]
+) -> dict[tuple[str, str], bool | None]:
+    """The model's same/different/unsure on each (kind, reference, candidate), asked as one batch."""
+    jobs = [{"images": [crop[r], crop[c]], "prompt": SAME_PERSON[kind], "max_tokens": 4} for kind, r, c in pairs]
+    reply = model.call({"batch": jobs})
+    return {_pair(r, c): _word(result["text"]) for (_, r, c), result in zip(pairs, reply["results"], strict=True)}
+
+
+def _word(text: str) -> bool | None:
+    """The model's one-word answer; anything else is unsure."""
+    words = re.findall(r"[a-z]+", text.lower())
+    return {"same": True, "different": False}.get(words[0] if words else "")
+
+
+def _pair(a: str, b: str) -> tuple[str, str]:
+    return (a, b) if a <= b else (b, a)
+
+
+def _crops(db: sqlite3.Connection) -> dict[str, str]:
+    return {row[0]: row[1] for row in db.execute("SELECT appearance_id, crop_path FROM appearances")}
+
+
+def _remember(db: sqlite3.Connection, answers: dict[tuple[str, str], bool | None]) -> None:
     with store.transaction(db):
         db.executemany(
             "INSERT OR REPLACE INTO verdicts (a, b, same, created_at) VALUES (?, ?, ?, ?)",
             [(a, b, None if same is None else int(same), store.now()) for (a, b), same in answers.items()],
         )
-    return answers
 
 
 def _questions(pairs: list[tuple[str, str]]) -> list[tuple[str, list[str]]]:

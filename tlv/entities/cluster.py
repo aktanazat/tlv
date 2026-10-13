@@ -9,6 +9,11 @@ agree too. A join is refused when it would put together two appearances seen at 
 two bodies wearing one number in one game in uniforms that share almost no colors, two jersey
 numbers, two different names, or a pair someone (or the model) said are different. A missed join
 is the safe failure; a false one contaminates every later answer.
+
+Blurred faces and backs say too little to join anyone on their own. So when a video has just been
+indexed, its groups that no sharp face places become leads: each may be a person the owner named,
+and the vision-language model is asked to compare it with that person (`Lead`); its "same" then
+joins them like any other verdict.
 """
 
 from __future__ import annotations
@@ -71,11 +76,28 @@ class Correction:
 
 
 @dataclass(frozen=True)
+class Lead:
+    """A group seen only in a newly indexed video that may be a person the owner named: the model is
+    asked whether `candidate`, the group's clearest face or else its biggest body, shows the same
+    person as `reference`, the named person's appearance of that kind. Only when it does is each of
+    `bodies`, a (reference, body) pair for every body of the group, asked about too, since a face can
+    sit on someone else's body in a hug."""
+
+    kind: Kind
+    reference: str
+    candidate: str
+    closeness: float  # ArcFace cosine to the person's nearest face, or uniform colors' to the reference body
+    bodies: tuple[tuple[str, str], ...] = ()
+
+
+@dataclass(frozen=True)
 class Clustering:
     groups: list[list[str]]
     # Appearance pairs from different groups whose faces look alike, but not enough to join on
     # their own and with no verdict yet: the questions for the vision-language model, closest first.
     gray: list[tuple[str, str, float]]
+    # Groups of the newly indexed video that may be people the owner named, closest first.
+    leads: list[Lead]
 
 
 @dataclass(frozen=True)
@@ -99,9 +121,11 @@ def cluster(
     apps: Sequence[Appearance],
     corrections: Sequence[Correction] = (),
     verdicts: dict[tuple[str, str], bool | None] | None = None,
+    new_video: str | None = None,
 ) -> Clustering:
     """Groups appearances into people. `verdicts` maps sorted appearance id pairs to the model's
-    answer (True same, False different, None unsure)."""
+    answer (True same, False different, None unsure). With `new_video`, the video just indexed,
+    also lists its leads."""
     verdicts = verdicts or {}
     index = {a.id: i for i, a in enumerate(apps)}
     groups = _Groups(apps, latest_names(corrections))
@@ -138,10 +162,11 @@ def cluster(
         if pair[0] != pair[1] and pair not in asked and pair not in questions and not groups.conflict(*pair):
             a, b = sorted((apps[i].id, apps[j].id))
             questions[pair] = (a, b, similarity)
-    members: dict[int, list[str]] = defaultdict(list)
-    for i, a in enumerate(apps):
-        members[groups.find(i)].append(a.id)
-    return Clustering(list(members.values()), list(questions.values()))
+    members: dict[int, list[int]] = defaultdict(list)
+    for i in range(len(apps)):
+        members[groups.find(i)].append(i)
+    leads = _leads(apps, groups, members, new_video, verdicts) if new_video else []
+    return Clustering([[apps[i].id for i in group] for group in members.values()], list(questions.values()), leads)
 
 
 def describe(apps: Sequence[Appearance], corrections: Sequence[Correction] = ()) -> Description:
@@ -325,6 +350,70 @@ def _links(apps: Sequence[Appearance], index: dict[str, int]) -> Iterator[tuple[
     for i, a in enumerate(apps):
         if a.body in index:
             yield i, index[a.body]
+
+
+def _leads(
+    apps: Sequence[Appearance],
+    groups: _Groups,
+    members: dict[int, list[int]],
+    video_id: str,
+    verdicts: dict[tuple[str, str], bool | None],
+) -> list[Lead]:
+    """The groups seen only in `video_id`, with no sharp face, that may be a person the owner named,
+    closest first: groups that neither wear another number nor go by another name (_Groups.conflict),
+    and whose clearest face looks at least FACE_GRAY like one of the person's faces or, showing no
+    face, wear the person's number. A lead the model has already judged is not listed again."""
+    named = [root for root in members if groups.corrected[root]]
+    leads = []
+    for root, group in members.items():
+        if groups.corrected[root] or any(apps[i].video_id != video_id or apps[i].sharp for i in group):
+            continue
+        for person in named:
+            lead = None if groups.conflict(person, root) else _lead(apps, members[person], group)
+            if lead and tuple(sorted((lead.reference, lead.candidate))) not in verdicts:
+                leads.append(lead)
+    return sorted(leads, key=lambda lead: -lead.closeness)
+
+
+def _lead(apps: Sequence[Appearance], person: list[int], group: list[int]) -> Lead | None:
+    """The question that would tell whether `group` is `person`, when it may be. A face is shown
+    beside the person's portrait (their biggest sharp face, else their biggest face), a body beside
+    the person's biggest body wearing its number."""
+    faces = [i for i in group if apps[i].kind == "face"]
+    bodies = [i for i in group if apps[i].kind == "body"]
+    theirs = [i for i in person if apps[i].kind == "face"]
+    if faces:
+        if not theirs:
+            return None
+        best = max(faces, key=lambda i: (apps[i].quality or 0.0, _area(apps[i]), apps[i].id))
+        closeness = float(np.max(np.stack([apps[i].vector for i in theirs]) @ apps[best].vector))
+        if closeness < FACE_GRAY:
+            return None
+        portrait = max([i for i in theirs if apps[i].sharp] or theirs, key=lambda i: (apps[i].box[3], apps[i].id))
+        asked = [(_reference_body(apps, person, apps[b]), b) for b in bodies]
+        pairs = tuple((apps[r].id, apps[b].id) for r, b in asked if r is not None)
+        return Lead("face", apps[portrait].id, apps[best].id, closeness, pairs)
+    body = max(bodies, key=lambda i: (_area(apps[i]), apps[i].id))
+    reference = _reference_body(apps, person, apps[body])
+    if reference is None or not _worn(apps[body]) & _worn(apps[reference]):
+        return None
+    return Lead("body", apps[reference].id, apps[body].id, float(apps[reference].vector @ apps[body].vector))
+
+
+def _reference_body(apps: Sequence[Appearance], person: list[int], body: Appearance) -> int | None:
+    """The person's biggest body wearing a number `body` wears, else any number, else any body: a
+    number read off a body vouches that it is theirs."""
+    theirs = [i for i in person if apps[i].kind == "body"]
+    pool = [i for i in theirs if _worn(apps[i]) & _worn(body)] or [i for i in theirs if _worn(apps[i])] or theirs
+    return max(pool, key=lambda i: (_area(apps[i]), apps[i].id), default=None)
+
+
+def _worn(a: Appearance) -> set[str]:
+    return {clue["value"] for clue in a.clues if clue["kind"] == "jersey"}
+
+
+def _area(a: Appearance) -> float:
+    return a.box[2] * a.box[3]
 
 
 def _jersey_pairs(apps: Sequence[Appearance]) -> list[tuple[float, int, int]]:
