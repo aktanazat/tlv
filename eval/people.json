@@ -1,9 +1,11 @@
 {
-  "about": "People confirmed by eye on contact sheets and frames of the three indexed NBA videos (2026-10-12). Each label is one appearance: a face or body track. appearance_id is a hash of the track's video, kind, first time and box, so it survives regrouping; t (clearest frame, seconds) and box ([x, y, w, h] as frame shares at t) find the same track again if the video is re-indexed. Boxes holding two people were left out.",
+  "about": "People confirmed by eye on contact sheets and frames of the three indexed NBA videos (2026-10-12), and of two more videos indexed into a copy of that index (2026-10-13) to check that a name the owner gives carries over to new footage: a Rui Hachimura highlight reel shot by the wide game camera only (YouTube 9WE8t_yvcLM), and ESPN's last minute of Lakers at Raptors on 2025-12-04 (YouTube 1R1gb0oY2b8), where only Hachimura and LeBron James were labeled. Each label is one appearance: a face or body track. appearance_id is a hash of the track's video, kind, first time and box, so it survives regrouping; t (clearest frame, seconds) and box ([x, y, w, h] as frame shares at t) find the same track again if the video is re-indexed. Boxes holding two people were left out.",
   "videos": {
     "v_8718a4de6d": "8718",
     "v_df7432f2b3": "f2b3",
-    "v_3ee2db6c19": "6c19"
+    "v_3ee2db6c19": "6c19",
+    "v_de2b70b4c6": "b4c6",
+    "v_d7bc78c82d": "c82d"
   },
   "people": {
     "LeBron James": {
@@ -101,6 +103,21 @@
     },
     "Man with light hair": {
       "note": "the face wrongly grouped with LeBron"
+    },
+    "Referee #28": {
+      "note": "a referee wearing 28, in the Hachimura reel"
+    },
+    "Referee #39": {
+      "note": "a referee wearing 39, in the Hachimura reel"
+    },
+    "Referee #70": {
+      "note": "a referee wearing 70, in the Hachimura reel"
+    },
+    "Lakers #36": {
+      "note": "white Lakers #36, in the Hachimura reel"
+    },
+    "Grizzlies #23": {
+      "note": "a Memphis player in light blue #23, in the Hachimura reel"
     }
   },
   "labels": [
@@ -138,6 +155,7 @@
     {"appearance_id": "app_bd169311bc4a", "video_id": "v_3ee2db6c19", "kind": "body", "t": 215.75, "box": [0.7783, 0.5292, 0.095, 0.2475], "person": "Gabe Vincent", "seen_as": "gold Lakers #7"},
     {"appearance_id": "app_e6ff82aa1440", "video_id": "v_3ee2db6c19", "kind": "body", "t": 394.75, "box": [0.5052, 0.6897, 0.1069, 0.2645], "person": "Gabe Vincent", "seen_as": "gold Lakers #7"},
     {"appearance_id": "app_e416b6098423", "video_id": "v_8718a4de6d", "kind": "body", "t": 99.75, "box": [0.4149, 0.4973, 0.1247, 0.3533], "person": "Gabe Vincent", "seen_as": "white 'VINCENT 7'"},
+    {"appearance_id": "app_6f7623fa2067", "video_id": "v_de2b70b4c6", "kind": "body", "t": 114.75, "box": [0.6274, 0.4197, 0.0702, 0.2128], "person": "Grizzlies #23", "seen_as": "light-blue #23"},
     {"appearance_id": "app_c268b0250858", "video_id": "v_3ee2db6c19", "kind": "face", "t": 437.75, "box": [0.3096, 0.3048, 0.2756, 0.49], "person": "JJ Redick", "seen_as": "face"},
     {"appearance_id": "app_91f6f8dd7a26", "video_id": "v_8718a4de6d", "kind": "body", "t": 13.75, "box": [0.1359, 0.3529, 0.0948, 0.2225], "person": "Jabari Walker", "seen_as": "black 76ers #33"},
     {"appearance_id": "app_3ee2d93bc475", "video_id": "v_8718a4de6d", "kind": "body", "t": 41.75, "box": [0.7797, 0.1693, 0.2203, 0.6631], "person": "Jabari Walker", "seen_as": "black 76ers #33"},
@@ -152,6 +170,7 @@
     {"appearance_id": "app_a5ce9b53b986", "video_id": "v_8718a4de6d", "kind": "body", "t": 12.75, "box": [0.386, 0.5461, 0.0874, 0.2733], "person": "Jake LaRavia", "seen_as": "white #12"},
     {"appearance_id": "app_bf656a269c46", "video_id": "v_8718a4de6d", "kind": "body", "t": 14.25, "box": [0.4223, 0.56, 0.0758, 0.2088], "person": "Jake LaRavia", "seen_as": "white #12"},
     {"appearance_id": "app_6f5b24f82f3d", "video_id": "v_8718a4de6d", "kind": "body", "t": 19.25, "box": [0.5146, 0.191, 0.2612, 0.809], "person": "Jake LaRavia", "seen_as": "white #12"},
+    {"appearance_id": "app_19e09d9a4ab8", "video_id": "v_de2b70b4c6", "kind": "body", "t": 105.25, "box": [0.7087, 0.1713, 0.0834, 0.2747], "person": "Jake LaRavia", "seen_as": "gold Lakers #12 by the bench"},
     {"appearance_id": "app_687282342bdd", "video_id": "v_8718a4de6d", "kind": "body", "t": 17.25, "box": [0.6515, 0.5544, 0.0546, 0.2111], "person": "Jared McCain", "seen_as": "black #20"},
     {"appearance_id": "app_b881aafd6d5d", "video_id": "v_8718a4de6d", "kind": "body", "t": 56.75, "box": [0.6368, 0.4302, 0.0732, 0.2375], "person": "Jared McCain", "seen_as": "black #20"},
     {"appearance_id": "app_8bb91ac49c7b", "video_id": "v_8718a4de6d", "kind": "body", "t": 83.25, "box": [0.2318, 0.6046, 0.0939, 0.2875], "person": "Jared McCain", "seen_as": "black #20"},
@@ -190,6 +209,8 @@
     {"appearance_id": "app_fe9825e0f2ef", "video_id": "v_df7432f2b3", "kind": "face", "t": 186.25, "box": [0.0039, 0.7011, 0.1837, 0.3266], "person": "Kentavious Caldwell-Pope", "seen_as": "face, and a close-up body"},
     {"appearance_id": "app_929ad922a95c", "video_id": "v_df7432f2b3", "kind": "face", "t": 186.75, "box": [0.3379, 0.0639, 0.1639, 0.2915], "person": "Kentavious Caldwell-Pope", "seen_as": "face, and a close-up body"},
     {"appearance_id": "app_ad51293788ce", "video_id": "v_df7432f2b3", "kind": "face", "t": 187.75, "box": [0.2274, 0.0546, 0.1771, 0.3149], "person": "Kentavious Caldwell-Pope", "seen_as": "face, and a close-up body"},
+    {"appearance_id": "app_70795a9dfff1", "video_id": "v_de2b70b4c6", "kind": "body", "t": 77.25, "box": [0.6393, 0.7165, 0.0755, 0.2333], "person": "Lakers #36", "seen_as": "white Lakers #36"},
+    {"appearance_id": "app_95f22a61a33e", "video_id": "v_de2b70b4c6", "kind": "body", "t": 77.75, "box": [0.5656, 0.6514, 0.09, 0.2162], "person": "Lakers #36", "seen_as": "white Lakers #36"},
     {"appearance_id": "app_21af94ca83ac", "video_id": "v_3ee2db6c19", "kind": "body", "t": 60.25, "box": [0.5439, 0.6888, 0.1333, 0.2855], "person": "LeBron James", "seen_as": "gold Lakers #23"},
     {"appearance_id": "app_0f43c35e8217", "video_id": "v_3ee2db6c19", "kind": "body", "t": 60.75, "box": [0.6166, 0.6276, 0.0959, 0.2888], "person": "LeBron James", "seen_as": "gold Lakers #23"},
     {"appearance_id": "app_fc9b90731a2f", "video_id": "v_3ee2db6c19", "kind": "body", "t": 185.25, "box": [0.0253, 0.3341, 0.0712, 0.2541], "person": "LeBron James", "seen_as": "gold Lakers #23"},
@@ -285,6 +306,19 @@
     {"appearance_id": "app_b268975c9051", "video_id": "v_8718a4de6d", "kind": "face", "t": 420.75, "box": [0.2308, 0.2089, 0.1745, 0.3103], "person": "LeBron James", "seen_as": "member of his main group, checked on contact sheets"},
     {"appearance_id": "app_47d46d6a0a63", "video_id": "v_8718a4de6d", "kind": "body", "t": 421.75, "box": [0.2794, 0.0526, 0.5325, 0.9415], "person": "LeBron James", "seen_as": "member of his main group, checked on contact sheets"},
     {"appearance_id": "app_28acede060c8", "video_id": "v_8718a4de6d", "kind": "face", "t": 421.75, "box": [0.3107, 0.2846, 0.1925, 0.3422], "person": "LeBron James", "seen_as": "member of his main group, checked on contact sheets"},
+    {"appearance_id": "app_db4eef6010ce", "video_id": "v_d7bc78c82d", "kind": "face", "t": 98.25, "box": [0.5039, 0.2935, 0.0809, 0.1439], "person": "LeBron James", "seen_as": "gold Lakers #23 after the winning shot"},
+    {"appearance_id": "app_e3b1f987d141", "video_id": "v_d7bc78c82d", "kind": "body", "t": 101.25, "box": [0.2881, 0.2087, 0.2846, 0.6814], "person": "LeBron James", "seen_as": "gold Lakers #23 after the winning shot"},
+    {"appearance_id": "app_cfa19974ade0", "video_id": "v_d7bc78c82d", "kind": "face", "t": 101.25, "box": [0.4349, 0.2772, 0.0881, 0.1566], "person": "LeBron James", "seen_as": "gold Lakers #23 after the winning shot"},
+    {"appearance_id": "app_d13303dc751f", "video_id": "v_d7bc78c82d", "kind": "body", "t": 101.75, "box": [0.2067, 0.2121, 0.3355, 0.6645], "person": "LeBron James", "seen_as": "gold Lakers #23 after the winning shot"},
+    {"appearance_id": "app_902aab273e39", "video_id": "v_d7bc78c82d", "kind": "face", "t": 101.75, "box": [0.3846, 0.2731, 0.0872, 0.155], "person": "LeBron James", "seen_as": "gold Lakers #23 after the winning shot"},
+    {"appearance_id": "app_5d8b2bff2850", "video_id": "v_d7bc78c82d", "kind": "body", "t": 102.25, "box": [0.1855, 0.2328, 0.34, 0.6835], "person": "LeBron James", "seen_as": "gold Lakers #23 after the winning shot"},
+    {"appearance_id": "app_8126387337d3", "video_id": "v_d7bc78c82d", "kind": "face", "t": 102.25, "box": [0.4108, 0.3053, 0.0891, 0.1585], "person": "LeBron James", "seen_as": "gold Lakers #23 after the winning shot"},
+    {"appearance_id": "app_c8aa409bef83", "video_id": "v_d7bc78c82d", "kind": "body", "t": 105.25, "box": [0.559, 0.2791, 0.2414, 0.6897], "person": "LeBron James", "seen_as": "gold Lakers #23 after the winning shot"},
+    {"appearance_id": "app_fb7da3f5218b", "video_id": "v_d7bc78c82d", "kind": "face", "t": 105.25, "box": [0.6154, 0.3478, 0.1086, 0.193], "person": "LeBron James", "seen_as": "gold Lakers #23 after the winning shot"},
+    {"appearance_id": "app_5eb186f8f299", "video_id": "v_d7bc78c82d", "kind": "body", "t": 105.75, "box": [0.3429, 0.2617, 0.4255, 0.7308], "person": "LeBron James", "seen_as": "gold Lakers #23 after the winning shot"},
+    {"appearance_id": "app_a4dca3735dd7", "video_id": "v_d7bc78c82d", "kind": "face", "t": 106.25, "box": [0.478, 0.2497, 0.1164, 0.2069], "person": "LeBron James", "seen_as": "gold Lakers #23 after the winning shot"},
+    {"appearance_id": "app_ad0bf5ee296a", "video_id": "v_d7bc78c82d", "kind": "face", "t": 106.75, "box": [0.4035, 0.2308, 0.1184, 0.2105], "person": "LeBron James", "seen_as": "gold Lakers #23 after the winning shot"},
+    {"appearance_id": "app_a2450a7f1089", "video_id": "v_d7bc78c82d", "kind": "face", "t": 107.25, "box": [0.3745, 0.2168, 0.0863, 0.1534], "person": "LeBron James", "seen_as": "gold Lakers #23 after the winning shot"},
     {"appearance_id": "app_f3acbace8550", "video_id": "v_df7432f2b3", "kind": "face", "t": 10.25, "box": [0.3146, 0.0405, 0.1555, 0.2765], "person": "LeBron James", "seen_as": "member of his main group, checked on contact sheets"},
     {"appearance_id": "app_c4f83e100d96", "video_id": "v_df7432f2b3", "kind": "body", "t": 10.75, "box": [0.1322, 0.076, 0.3762, 0.9115], "person": "LeBron James", "seen_as": "member of his main group, checked on contact sheets"},
     {"appearance_id": "app_a91329e7ab1b", "video_id": "v_df7432f2b3", "kind": "face", "t": 11.25, "box": [0.3482, 0.2423, 0.1883, 0.3347], "person": "LeBron James", "seen_as": "member of his main group, checked on contact sheets"},
@@ -363,6 +397,12 @@
     {"appearance_id": "app_29d14a27430e", "video_id": "v_df7432f2b3", "kind": "body", "t": 184.75, "box": [0.0026, 0.1674, 0.2444, 0.8311], "person": "Referee", "seen_as": "face and body"},
     {"appearance_id": "app_087cdd03024b", "video_id": "v_df7432f2b3", "kind": "face", "t": 184.75, "box": [0.0666, 0.331, 0.1559, 0.2772], "person": "Referee", "seen_as": "face and body"},
     {"appearance_id": "app_28442cdca28d", "video_id": "v_df7432f2b3", "kind": "face", "t": 189.25, "box": [0.5334, 0.1107, 0.1935, 0.344], "person": "Referee", "seen_as": "face and body"},
+    {"appearance_id": "app_144cccb64fcf", "video_id": "v_de2b70b4c6", "kind": "body", "t": 48.75, "box": [0.5535, 0.5673, 0.0802, 0.2407], "person": "Referee #28", "seen_as": "referee #28"},
+    {"appearance_id": "app_814fe24a98e5", "video_id": "v_de2b70b4c6", "kind": "body", "t": 50.25, "box": [0.4167, 0.5601, 0.0618, 0.2462], "person": "Referee #28", "seen_as": "referee #28"},
+    {"appearance_id": "app_2055baa12926", "video_id": "v_de2b70b4c6", "kind": "body", "t": 69.75, "box": [0.4171, 0.6192, 0.0622, 0.2433], "person": "Referee #39", "seen_as": "referee #39, in two games"},
+    {"appearance_id": "app_4d1bbcd334b9", "video_id": "v_de2b70b4c6", "kind": "body", "t": 81.25, "box": [0.6111, 0.6163, 0.0793, 0.2536], "person": "Referee #39", "seen_as": "referee #39, in two games"},
+    {"appearance_id": "app_50839a5f9327", "video_id": "v_de2b70b4c6", "kind": "body", "t": 82.25, "box": [0.5434, 0.6449, 0.0842, 0.2427], "person": "Referee #39", "seen_as": "referee #39, in two games"},
+    {"appearance_id": "app_93dbac1633ed", "video_id": "v_de2b70b4c6", "kind": "body", "t": 160.75, "box": [0.5366, 0.7196, 0.0816, 0.2244], "person": "Referee #70", "seen_as": "referee #70 (read as 65 off the scoreboard)"},
     {"appearance_id": "app_a222954b197f", "video_id": "v_3ee2db6c19", "kind": "body", "t": 0.25, "box": [0.389, 0.2354, 0.1619, 0.4858], "person": "Rui Hachimura", "seen_as": "gold Lakers #28"},
     {"appearance_id": "app_d970f37d13ef", "video_id": "v_3ee2db6c19", "kind": "body", "t": 0.75, "box": [0.3913, 0.2208, 0.1802, 0.5148], "person": "Rui Hachimura", "seen_as": "gold Lakers #28"},
     {"appearance_id": "app_5923819839fc", "video_id": "v_3ee2db6c19", "kind": "body", "t": 1.25, "box": [0.3759, 0.2456, 0.1799, 0.496], "person": "Rui Hachimura", "seen_as": "gold Lakers #28"},
@@ -381,6 +421,7 @@
     {"appearance_id": "app_4649e204b155", "video_id": "v_3ee2db6c19", "kind": "body", "t": 223.25, "box": [0.6017, 0.3874, 0.0901, 0.2283], "person": "Rui Hachimura", "seen_as": "gold Lakers #28"},
     {"appearance_id": "app_b1a3f6a3da87", "video_id": "v_3ee2db6c19", "kind": "body", "t": 305.75, "box": [0.3789, 0.436, 0.0961, 0.2493], "person": "Rui Hachimura", "seen_as": "gold Lakers #28"},
     {"appearance_id": "app_067743c07e46", "video_id": "v_3ee2db6c19", "kind": "face", "t": 329.75, "box": [0.555, 0.3377, 0.1304, 0.2318], "person": "Rui Hachimura", "seen_as": "face over a gold #28 / 'HACHIMURA'"},
+    {"appearance_id": "app_c75cf299e2c4", "video_id": "v_3ee2db6c19", "kind": "body", "t": 330.25, "box": [0.3343, 0.2357, 0.4227, 0.7654], "person": "Rui Hachimura", "seen_as": "close-up of his face, gold Lakers"},
     {"appearance_id": "app_c24bedc10f19", "video_id": "v_3ee2db6c19", "kind": "body", "t": 451.25, "box": [0.6821, 0.5492, 0.0818, 0.2193], "person": "Rui Hachimura", "seen_as": "gold Lakers #28"},
     {"appearance_id": "app_4b47d8ca0d61", "video_id": "v_3ee2db6c19", "kind": "body", "t": 467.25, "box": [0.2, 0.1284, 0.6157, 0.8141], "person": "Rui Hachimura", "seen_as": "gold Lakers #28"},
     {"appearance_id": "app_3acf11544f10", "video_id": "v_3ee2db6c19", "kind": "face", "t": 467.75, "box": [0.4141, 0.3195, 0.0884, 0.1572], "person": "Rui Hachimura", "seen_as": "face over a gold #28 / 'HACHIMURA'"},
@@ -406,6 +447,21 @@
     {"appearance_id": "app_b76259462d7c", "video_id": "v_8718a4de6d", "kind": "face", "t": 220.25, "box": [0.2976, 0.3, 0.1048, 0.1864], "person": "Rui Hachimura", "seen_as": "face over a white #28"},
     {"appearance_id": "app_c968e7d078fc", "video_id": "v_8718a4de6d", "kind": "face", "t": 221.25, "box": [0.4141, 0.0341, 0.1128, 0.2006], "person": "Rui Hachimura", "seen_as": "face over a white #28"},
     {"appearance_id": "app_0af88582146a", "video_id": "v_8718a4de6d", "kind": "body", "t": 228.75, "box": [0.0294, 0.5445, 0.0729, 0.2773], "person": "Rui Hachimura", "seen_as": "white Lakers #28"},
+    {"appearance_id": "app_e93f800b208c", "video_id": "v_d7bc78c82d", "kind": "body", "t": 90.25, "box": [0.467, 0.2241, 0.486, 0.7759], "person": "Rui Hachimura", "seen_as": "gold Lakers #28 'HACHIMURA' from behind"},
+    {"appearance_id": "app_e7495c2b9c48", "video_id": "v_d7bc78c82d", "kind": "body", "t": 92.75, "box": [0.4235, 0.1897, 0.2311, 0.7785], "person": "Rui Hachimura", "seen_as": "gold Lakers #28 'HACHIMURA' from behind"},
+    {"appearance_id": "app_546ae009d21d", "video_id": "v_d7bc78c82d", "kind": "face", "t": 94.25, "box": [0.4374, 0.2298, 0.0956, 0.1699], "person": "Rui Hachimura", "seen_as": "face and shoulders as teammates mob him after the winning shot"},
+    {"appearance_id": "app_67d99e459cae", "video_id": "v_d7bc78c82d", "kind": "body", "t": 94.75, "box": [0.3699, 0.2565, 0.1714, 0.2357], "person": "Rui Hachimura", "seen_as": "face and shoulders as teammates mob him after the winning shot"},
+    {"appearance_id": "app_8d3c60a8c095", "video_id": "v_d7bc78c82d", "kind": "face", "t": 94.75, "box": [0.3974, 0.2595, 0.0869, 0.1544], "person": "Rui Hachimura", "seen_as": "face and shoulders as teammates mob him after the winning shot"},
+    {"appearance_id": "app_f17e09b337dd", "video_id": "v_d7bc78c82d", "kind": "face", "t": 95.25, "box": [0.4644, 0.4038, 0.0848, 0.1508], "person": "Rui Hachimura", "seen_as": "face and shoulders as teammates mob him after the winning shot"},
+    {"appearance_id": "app_3f0ffcafa80e", "video_id": "v_d7bc78c82d", "kind": "face", "t": 111.25, "box": [0.2271, 0.3949, 0.1462, 0.2599], "person": "Rui Hachimura", "seen_as": "face and shoulders as teammates mob him after the winning shot"},
+    {"appearance_id": "app_a4205eaa9e37", "video_id": "v_d7bc78c82d", "kind": "face", "t": 111.75, "box": [0.5304, 0.3639, 0.1502, 0.2671], "person": "Rui Hachimura", "seen_as": "face and shoulders as teammates mob him after the winning shot"},
+    {"appearance_id": "app_1a7fc1ed3ff3", "video_id": "v_d7bc78c82d", "kind": "body", "t": 132.75, "box": [0.347, 0.3958, 0.1324, 0.2971], "person": "Rui Hachimura", "seen_as": "gold Lakers #28 'HACHIMURA' from behind"},
+    {"appearance_id": "app_9697d1577e90", "video_id": "v_d7bc78c82d", "kind": "face", "t": 136.75, "box": [0.7468, 0.4303, 0.052, 0.0925], "person": "Rui Hachimura", "seen_as": "blurred face in the replay of the celebration"},
+    {"appearance_id": "app_1e01de2331fe", "video_id": "v_d7bc78c82d", "kind": "face", "t": 138.25, "box": [0.6997, 0.5857, 0.0935, 0.1662], "person": "Rui Hachimura", "seen_as": "blurred face in the replay of the celebration"},
+    {"appearance_id": "app_780c3ff25b90", "video_id": "v_de2b70b4c6", "kind": "body", "t": 54.25, "box": [0.6203, 0.604, 0.077, 0.2333], "person": "Rui Hachimura", "seen_as": "gold Lakers #28 'HACHIMURA', wide camera"},
+    {"appearance_id": "app_d87fb5f303b3", "video_id": "v_de2b70b4c6", "kind": "body", "t": 54.75, "box": [0.5885, 0.6019, 0.0643, 0.2022], "person": "Rui Hachimura", "seen_as": "gold Lakers #28 'HACHIMURA', wide camera"},
+    {"appearance_id": "app_caebdb8384ce", "video_id": "v_de2b70b4c6", "kind": "body", "t": 56.75, "box": [0.5581, 0.571, 0.0634, 0.2456], "person": "Rui Hachimura", "seen_as": "gold Lakers #28 'HACHIMURA', wide camera"},
+    {"appearance_id": "app_500fe864923f", "video_id": "v_de2b70b4c6", "kind": "body", "t": 141.75, "box": [0.1929, 0.5498, 0.0728, 0.2051], "person": "Rui Hachimura", "seen_as": "gold Lakers #28 'HACHIMURA', wide camera"},
     {"appearance_id": "app_7e52e905bcdc", "video_id": "v_3ee2db6c19", "kind": "face", "t": 115.75, "box": [0.314, 0.5081, 0.1253, 0.2228], "person": "Sideline reporter", "seen_as": "face"},
     {"appearance_id": "app_1c6f199912ef", "video_id": "v_3ee2db6c19", "kind": "face", "t": 118.25, "box": [0.1942, 0.5826, 0.1152, 0.2048], "person": "Sideline reporter", "seen_as": "face"},
     {"appearance_id": "app_ced21ed3eb38", "video_id": "v_3ee2db6c19", "kind": "face", "t": 119.25, "box": [0.0047, 0.6633, 0.1856, 0.33], "person": "Sideline reporter", "seen_as": "face"},

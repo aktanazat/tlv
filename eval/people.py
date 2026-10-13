@@ -7,7 +7,8 @@
 
 Each label says which person one appearance (a face or body track) shows. A label finds its
 appearance by id, else by the same video and kind, a clearest frame within MATCH_S seconds and a
-box overlapping by MATCH_IOU, so the labels outlive a re-index that moves track ids.
+box overlapping by MATCH_IOU, so the labels outlive a re-index that moves track ids. Labels of a
+video the index does not hold are counted apart and left out.
 
 Per person: how many groups (entities) hold their labels, how many sit in the main one, whether one
 group holds them in every video they appear in, and cross-video recall: of the pairs of their
@@ -16,7 +17,8 @@ people (a false merge) and precision: of the labeled pairs that share a group, t
 one person. Unlabeled appearances count for neither.
 
 With --name and --person: whether the group(s) so named hold exactly that person's labels in every
-video, and which groups `tlv.entities.resolve` returns for "@NAME" and the bare name.
+video, how many appearances nobody labeled they hold (to check by eye), and which groups
+`tlv.entities.resolve` returns for "@NAME" and the bare name.
 
 With --prove HOME: the correction proof, on a copy of the index made in HOME (which becomes
 $TLV_HOME; the index itself is only read). The owner's corrections go through tlv.entities, which
@@ -93,15 +95,20 @@ def iou(a: tuple[float, ...], b: tuple[float, ...]) -> float:
 
 
 def locate(db: sqlite3.Connection, labels: list[Label]) -> tuple[dict[Label, str], Counter[str]]:
-    """Each label's appearance id in this index, and how many were found by id, by place, or not."""
+    """Each label's appearance id in this index, and how many were found by id, by place, not at all,
+    or sit in a video the index does not hold."""
     rows = db.execute("SELECT appearance_id, video_id, kind, best_t, box FROM appearances").fetchall()
     ids = {row["appearance_id"] for row in rows}
+    indexed = {row[0] for row in db.execute("SELECT video_id FROM videos")}
     found: dict[Label, str] = {}
     how: Counter[str] = Counter()
     for label in labels:
         if label.appearance_id in ids:
             found[label] = label.appearance_id
             how["by id"] += 1
+            continue
+        if label.video not in indexed:
+            how["in a video not in this index"] += 1
             continue
         near = [
             (iou(label.box, tuple(json.loads(row["box"]))), row["appearance_id"])
@@ -134,10 +141,14 @@ class Grouping:
 
     def __init__(self, db: sqlite3.Connection, labels: list[Label], short: dict[str, str]) -> None:
         self.found, self.how = locate(db, labels)
-        member = {row[0]: row[1] for row in db.execute("SELECT appearance_id, entity_id FROM entity_members")}
+        rows = db.execute(
+            "SELECT m.appearance_id, m.entity_id, a.video_id FROM entity_members m"
+            " JOIN appearances a USING (appearance_id)"
+        )
+        self.member: dict[str, tuple[str, str]] = {row[0]: (row[1], row[2]) for row in rows}
         self.names = {row[0]: row[1] for row in db.execute("SELECT entity_id, name FROM entities")}
         self.short = short
-        self.entity = {label: member.get(app) for label, app in self.found.items()}
+        self.entity = {label: self.member[app][0] if app in self.member else None for label, app in self.found.items()}
         self.people: dict[str, list[Label]] = defaultdict(list)
         for label in labels:
             if self.entity.get(label):
@@ -235,7 +246,9 @@ class Grouping:
         print(f'groups named "{name}": {", ".join(groups)}')
         mine = self.people[person]
         held_anywhere = {x.video for x, e in self.entity.items() if e in groups}
-        videos = sorted({x.video for x in mine} | held_anywhere, key=self.short.get)
+        labeled = set(self.found.values())
+        unlabeled = Counter(video for app, (e, video) in self.member.items() if e in groups and app not in labeled)
+        videos = sorted({x.video for x in mine} | held_anywhere | set(unlabeled), key=lambda v: self.short.get(v, v))
         rows, exact = [], len(groups) == 1
         for v in videos:
             in_video = [x for x in mine if x.video == v]
@@ -246,12 +259,14 @@ class Grouping:
             exact = exact and len(held) == len(in_video) and not others
             rows.append(
                 [
-                    self.short[v],
+                    self.short.get(v, v),
                     f"{len(held)} of {len(in_video)}",
                     ", ".join(f"{p} {n}" for p, n in others.most_common()) or "none",
+                    unlabeled[v],
                 ]
             )
-        print(table(["video", f"{person}'s labels in it", "other people's labels in it"], rows))
+        header = ["video", f"{person}'s labels in it", "other people's labels in it", "unlabeled appearances in it"]
+        print(table(header, rows))
         return exact
 
 
