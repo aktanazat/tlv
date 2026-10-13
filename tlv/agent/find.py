@@ -196,10 +196,8 @@ def find(
             with Vlm(progress) as vlm:
                 loaded = time.monotonic()
                 _say(progress, f"checking {len(stretches)} stretches")
-                outcomes = []
-                for done, s in enumerate(stretches, 1):
-                    outcomes.append(check(vlm, db, by_id[s.video_id], s, claim, steps, senses, pad, min_confidence))
-                    _say(progress, f"checked {done} of {len(stretches)}")
+                looked = [(by_id[s.video_id], s) for s in stretches]
+                outcomes = check(vlm, db, looked, claim, steps, senses, pad, min_confidence)
                 kept, repeats = distinct_moments([o for o in outcomes if isinstance(o, Moment)])
                 plays = merge_replays(kept, lambda a, b: same_play(vlm, a, b))
                 model_seconds = vlm.seconds

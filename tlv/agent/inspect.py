@@ -16,7 +16,7 @@ from PIL import Image, ImageDraw, ImageFont
 from tlv import store
 from tlv.agent import plan, retrieve, sources
 from tlv.agent.connect import Ranged
-from tlv.agent.model import Reply, Vlm, parse_json
+from tlv.agent.model import Question, Reply, Vlm, parse_json
 from tlv.agent.plan import Sense
 from tlv.agent.replay import GameClock, period_ended, read_clock
 from tlv.agent.sources import Frame, Line, Video
@@ -37,6 +37,10 @@ VERDICT_TOKENS = 200
 VERDICT_TEXT_CHARS = 800
 SOUND_CHARS = 400  # sound labels in one verdict prompt, for a claim about something heard
 PAIR_FRAMES = 4  # frames of each moment shown when asking whether two moments are one play
+# Answers stop at their first words when those settle them: a verdict of no match, two moments that
+# are not one play. Nothing after them is read.
+NO_MATCH = r'"match"\s*:\s*false'
+NOT_SAME = r'"same"\s*:\s*false'
 OCR_SPACING_S = 1.0  # on-screen text is read once a second
 # A time a verdict names instead of a frame number, as stamped on the frames: h:mm:ss.s or m:ss.s.
 _STAMPED = re.compile(r"(?:(\d+):)?(\d+):(\d+(?:\.\d+)?)")
@@ -326,22 +330,46 @@ class Rejection:
     reason: str
 
 
-def ask_verdict(
-    vlm: Vlm, images: list[Path], prompt: str, steps: list[str], times: list[float], window: Range
-) -> Verdict | str:
-    """The model's verdict. An answer that cannot be read is asked for once more, told what was wrong
-    with it, before the candidate is given up."""
-    verdict = _verdict(vlm.ask(images, prompt, VERDICT_TOKENS), steps, times, window)
-    if isinstance(verdict, Verdict):
-        return verdict
-    again = f"{prompt}\nA previous answer could not be used: {verdict}. Answer again with JSON only, in that form."
-    return _verdict(vlm.ask(images, again, VERDICT_TOKENS), steps, times, window)
+@dataclass(frozen=True)
+class Shown:
+    """A stretch made ready to ask about: the frames and prompt the model is shown, and what judging
+    its answer needs."""
+
+    video: Video
+    look: Ranged
+    window: Range
+    frames: list[Frame]
+    stamped: list[Path]  # the frames as shown, numbered and timed
+    prompt: str
+    text: list[Line]  # on-screen text of the window, where the game clock is read
+    spoken: dict[int, tuple[float, float]]  # when each spoken step is heard, by step index
 
 
-def _verdict(reply: Reply, steps: list[str], times: list[float], window: Range) -> Verdict | str:
+def ask_verdicts(vlm: Vlm, shown: list[Shown], steps: list[str]) -> list[Verdict | str]:
+    """The model's verdicts on the stretches, asked together. An answer that cannot be read is asked
+    for once more, told what was wrong with it, before its candidate is given up."""
+    verdicts = _verdicts(vlm, shown, [s.prompt for s in shown], steps)
+    again = [i for i, verdict in enumerate(verdicts) if isinstance(verdict, str)]
+    told = "Answer again with JSON only, in that form."
+    prompts = [f"{shown[i].prompt}\nA previous answer could not be used: {verdicts[i]}. {told}" for i in again]
+    for i, verdict in zip(again, _verdicts(vlm, [shown[i] for i in again], prompts, steps), strict=True):
+        verdicts[i] = verdict
+    return verdicts
+
+
+def _verdicts(vlm: Vlm, shown: list[Shown], prompts: list[str], steps: list[str]) -> list[Verdict | str]:
+    questions = [
+        Question(s.stamped, prompt, VERDICT_TOKENS, NO_MATCH) for s, prompt in zip(shown, prompts, strict=True)
+    ]
+    return [_verdict(reply, steps, s) for s, reply in zip(shown, vlm.ask_all(questions), strict=True)]
+
+
+def _verdict(reply: Reply, steps: list[str], shown: Shown) -> Verdict | str:
+    if reply.stopped:  # it said no match; what it would have said next cannot change that
+        return Verdict(False, 0.0, "", "", False, ())
     if reply.truncated:
         return "verdict cut off at the token limit"
-    return read_verdict(parse_json(reply.text), steps, times, window)
+    return read_verdict(parse_json(reply.text), steps, [f.t for f in shown.frames], shown.window)
 
 
 def heard_at(words: list[Line], keys: list[str]) -> tuple[float, float] | None:
@@ -426,45 +454,60 @@ def unheard(steps: list[str], senses: list[Sense], heard: list[Line], text: list
 def check(
     vlm: Vlm,
     db: sqlite3.Connection,
-    video: Video,
-    look: Ranged,
+    looks: list[tuple[Video, Ranged]],
     claim: str,
     steps: list[str],
     senses: list[Sense],
     pad: float,
     min_confidence: float,
-) -> Moment | Rejection:
-    """Shows the model the stretch's window and judges its answer. A spoken step must be heard in the
-    window, and takes the time it is heard whatever the model says of it; a step to be heard must have
-    been heard or read by the index there, as `unheard` says, before the model is asked."""
+) -> list[Moment | Rejection]:
+    """Shows the model each stretch's window, all in one batch, and judges its answers. A spoken step
+    must be heard in the window, and takes the time it is heard whatever the model says of it; a step
+    to be heard must have been heard or read by the index there, as `unheard` says, before the model
+    is asked."""
+    ready = [show(db, video, look, claim, steps, senses, pad) for video, look in looks]
+    verdicts = iter(ask_verdicts(vlm, [r for r in ready if isinstance(r, Shown)], steps))
+    return [
+        r if isinstance(r, Rejection) else _judged(db, r, next(verdicts), len(steps), min_confidence) for r in ready
+    ]
 
-    def reject(reason: str) -> Rejection:
-        return Rejection(video.video_id, look.start, look.end, reason)
 
+def show(
+    db: sqlite3.Connection, video: Video, look: Ranged, claim: str, steps: list[str], senses: list[Sense], pad: float
+) -> Shown | Rejection:
+    """The stretch's window made ready to ask about, or why the model need not be asked."""
     window = inspection_window(look, pad, video.duration, MIN_WINDOW_S)
     spoken = _spoken(db, video, window, steps, senses)
     if isinstance(spoken, str):
-        return reject(spoken)
+        return Rejection(video.video_id, look.start, look.end, spoken)
     text = sources.screen_text(db, video.video_id, window.start, window.end)
     heard = sources.sounds(db, video.video_id, window.start, window.end) if "sound" in senses else []
     silent = unheard(steps, senses, heard, text)
     if silent is not None:
-        return reject(f"step {silent + 1} is not heard: no sound or game clock in the index shows it")
+        reason = f"step {silent + 1} is not heard: no sound or game clock in the index shows it"
+        return Rejection(video.video_id, look.start, look.end, reason)
     most = MAX_FRAMES if "sight" in senses else MIN_FRAMES
     frames = pick_frames(sources.frames(db, video.video_id, window.start, window.end), window, most)
     if len(frames) < 2:
-        return reject("the index has no frames in this window")
+        return Rejection(video.video_id, look.start, look.end, "the index has no frames in this window")
     stamped = stamp(frames, _folder(video, window), [_game_clock(db, video.video_id, f.t) for f in frames])
     speech = sources.speech(db, video.video_id, window.start, window.end)
     shown_text = text if "text" in senses else sources.fit(text, VERDICT_TEXT_CHARS)
     prompt = verdict_prompt(claim, steps, senses, frames, speech, shown_text, sources.fit(heard, SOUND_CHARS))
-    verdict = ask_verdict(vlm, stamped, prompt, steps, [f.t for f in frames], window)
+    return Shown(video, look, window, frames, stamped, prompt, text, spoken)
+
+
+def _judged(
+    db: sqlite3.Connection, shown: Shown, verdict: Verdict | str, step_count: int, min_confidence: float
+) -> Moment | Rejection:
+    video, look = shown.video, shown.look
     if isinstance(verdict, str):
-        return reject(verdict)
+        return Rejection(video.video_id, look.start, look.end, verdict)
+    spoken = shown.spoken
     seen = tuple(StepSeen(s.step, True, *spoken[i]) if i in spoken else s for i, s in enumerate(verdict.steps))
-    judgement = judge(replace(verdict, steps=seen), window, look, len(steps), min_confidence)
+    judgement = judge(replace(verdict, steps=seen), shown.window, look, step_count, min_confidence)
     if isinstance(judgement, Rejected):
-        return reject(judgement.reason)
+        return Rejection(video.video_id, look.start, look.end, judgement.reason)
     start, end = judgement.start, judgement.end
     return Moment(
         video,
@@ -474,9 +517,9 @@ def check(
         verdict.who,
         verdict.evidence,
         verdict.replay or sources.mostly_replay(db, video.video_id, start, end),
-        read_clock([line for line in text if start <= line.start <= end]),
+        read_clock([line for line in shown.text if start <= line.start <= end]),
         judgement.steps,
-        tuple(zip(frames, stamped, strict=True)),
+        tuple(zip(shown.frames, shown.stamped, strict=True)),
     )
 
 
@@ -498,7 +541,8 @@ def same_play(vlm: Vlm, kept: Moment, moment: Moment) -> str | None:
         "not the same moment.\n"
         'Answer with JSON only: {"same": true or false, "reason": "one short sentence"}'
     )
-    value = parse_json(vlm.ask(stamped, prompt, 80).text)
+    reply = vlm.ask(stamped, prompt, 80, NOT_SAME)
+    value = None if reply.stopped else parse_json(reply.text)
     if not isinstance(value, dict) or value.get("same") is not True:
         return None
     reason = value.get("reason")

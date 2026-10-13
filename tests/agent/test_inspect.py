@@ -3,6 +3,7 @@ The window and judge cases are ported from test/search.test.ts, with steps in vi
 
 import json
 import math
+from pathlib import Path
 
 import pytest
 
@@ -10,9 +11,10 @@ from tlv.agent.inspect import (
     CheckedStep,
     Confirmed,
     Rejected,
+    Shown,
     StepSeen,
     Verdict,
-    ask_verdict,
+    ask_verdicts,
     heard_at,
     inspection_window,
     judge,
@@ -21,7 +23,7 @@ from tlv.agent.inspect import (
 )
 from tlv.agent.model import Reply
 from tlv.agent.retrieve import sound_keys
-from tlv.agent.sources import Line
+from tlv.agent.sources import Frame, Line, Video
 from tlv.media import Range
 
 
@@ -135,32 +137,60 @@ def test_a_null_step_is_a_step_not_seen():
 
 
 class Model:
-    """Stands in for the vision model: gives its replies in turn and keeps the prompts it was asked."""
+    """Stands in for the vision model: gives its replies in turn and keeps the questions it was asked."""
 
     def __init__(self, replies):
         self.replies = list(replies)
-        self.prompts = []
+        self.asked = []
 
-    def ask(self, images, prompt, max_tokens):
-        self.prompts.append(prompt)
-        return Reply(self.replies.pop(0), 0, 0, 0.0, False)
+    def ask_all(self, questions):
+        self.asked += questions
+        return [self.replies.pop(0) for _ in questions]
 
 
-READABLE = json.dumps(answer([[3, 5]]))
+def said(text):
+    return Reply(text, 0, 0, False, False)
+
+
+READABLE = said(json.dumps(answer([[3, 5]])))
+UNREADABLE = said("frames 3 to 5")
+# What the model process returns for an answer stopped at its first words, which say no match.
+STOPPED_AT_NO = Reply('{"match": false', 0, 4, False, True)
+VIDEO = Video("v1", "game", "file", "/videos/game.mp4", 600.0)
+
+
+def stretch(name):
+    """A stretch whose prompt is `name` and whose one stamped image is named after it."""
+    frames = [Frame(t, Path(f"{n}.jpg")) for n, t in enumerate(TIMES, 1)]
+    return Shown(VIDEO, CANDIDATE, WINDOW, frames, [Path(f"{name}.jpg")], name, [], {})
 
 
 @pytest.mark.parametrize(
     ("replies", "asked", "readable"),
     [
         pytest.param([READABLE], 1, True, id="a readable answer is taken"),
-        pytest.param(["frames 3 to 5", READABLE], 2, True, id="an unreadable answer is asked for again"),
-        pytest.param(["frames 3 to 5", "still frames 3 to 5"], 2, False, id="a second unreadable answer gives up"),
+        pytest.param([UNREADABLE, READABLE], 2, True, id="an unreadable answer is asked for again"),
+        pytest.param([UNREADABLE, said("still frames 3 to 5")], 2, False, id="a second unreadable answer gives up"),
     ],
 )
 def test_an_unreadable_verdict_is_asked_for_once_more(replies, asked, readable):
     model = Model(replies)
-    verdict = ask_verdict(model, [], "Claim?", ["dunks"], TIMES, WINDOW)
-    assert (len(model.prompts), isinstance(verdict, Verdict)) == (asked, readable)
+    (verdict,) = ask_verdicts(model, [stretch("dunk")], ["dunks"])
+    assert (len(model.asked), isinstance(verdict, Verdict)) == (asked, readable)
+
+
+def test_an_answer_stopped_at_no_match_is_a_no_match_verdict_without_asking_again():
+    model = Model([STOPPED_AT_NO])
+    (verdict,) = ask_verdicts(model, [stretch("dunk")], ["dunks"])
+    assert (len(model.asked), verdict.match) == (1, False)
+
+
+def test_only_unreadable_answers_of_a_batch_are_asked_again_each_with_its_own_stretch():
+    model = Model([READABLE, UNREADABLE, READABLE])
+    verdicts = ask_verdicts(model, [stretch("first"), stretch("second")], ["dunks"])
+    assert [isinstance(v, Verdict) for v in verdicts] == [True, True]
+    asked = [(q.prompt.split("\n")[0], [p.stem for p in q.images]) for q in model.asked]
+    assert asked == [("first", ["first"]), ("second", ["second"]), ("second", ["second"])]
 
 
 SAID = [
