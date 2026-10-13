@@ -1,11 +1,11 @@
-"""One play, one result: repeats dropped, replays merged into their play, distinct plays kept.
-The distinct_moments cases are ported from test/search.test.ts."""
+"""One play, one result: repeats dropped, pieces of one moment joined, replays merged into their play,
+distinct plays kept. The distinct_moments cases are ported from test/search.test.ts."""
 
 from dataclasses import dataclass
 
 import pytest
 
-from tlv.agent.replay import GameClock, distinct_moments, merge_replays, period_ended, read_clock
+from tlv.agent.replay import GameClock, distinct_moments, join_pieces, merge_replays, period_ended, read_clock
 from tlv.agent.sources import Line
 
 
@@ -230,3 +230,74 @@ def test_merge_replays(moments, model, expected, asked):
 def test_a_replay_shown_before_its_live_play_is_listed_under_the_live_play():
     replay = Seen("replay", "v1", 250, 256, confidence=0.99, replay=True, clock=clock(72))
     assert groups(merge_replays([replay, SECOND_THREE], Model())) == [("second three", ["replay"])]
+
+
+def join(a, b):
+    """Stands in for inspect.joined: one moment named after both pieces, spanning both."""
+    return Seen(
+        f"{a.name}+{b.name}",
+        a.video_id,
+        min(a.start, b.start),
+        max(a.end, b.end),
+        max(a.confidence, b.confidence),
+        a.replay,
+        a.clock or b.clock,
+    )
+
+
+# Clip times are those the everyday and sports runs returned (eval/results/everyday-local-2026-10-13.json,
+# local-2026-10-12.json), where each pair below came back as separate clips.
+@pytest.mark.parametrize(
+    ("moments", "expected"),
+    [
+        pytest.param(
+            [Seen("a", "v1", 444.5, 451.41), Seen("b", "v1", 453.28, 467.15), Seen("c", "v1", 468.25, 471.5)],
+            [("a+b+c", 444.5, 471.5)],
+            id="three looks at one lecture slide, 1.9 s and 1.1 s apart, are one moment",
+        ),
+        pytest.param(
+            [Seen("b", "v1", 212.17, 223.34), Seen("a", "v1", 209.0, 213.0), Seen("c", "v1", 224.19, 227.5)],
+            [("a+b+c", 209.0, 227.5)],
+            id="a car chase seen in three looks, sharing 0.8 s and then 0.9 s apart, is one moment",
+        ),
+        pytest.param(
+            [Seen("a", "v1", 159.5, 166.5), Seen("b", "v1", 166.75, 169.0)],
+            [("a+b", 159.5, 169.0)],
+            id="pointing at the bridge across a shot cut is one moment",
+        ),
+        pytest.param(
+            [Seen("a", "v1", 270.0, 276.25), Seen("b", "v1", 281.75, 285.75)],
+            [("a", 270.0, 276.25), ("b", 281.75, 285.75)],
+            id="two baskets 5.5 s apart stay apart",
+        ),
+        pytest.param(
+            [Seen("a", "v1", 444.5, 451.41), Seen("b", "v2", 453.28, 467.15)],
+            [("a", 444.5, 451.41), ("b", 453.28, 467.15)],
+            id="neighbouring times in two videos stay apart",
+        ),
+        pytest.param(
+            [
+                Seen("live", "v1", 296.25, 300.26, clock=clock(27.9)),
+                Seen("replay", "v1", 298.5, 308.0, replay=True, clock=clock(27.3, 27.9)),
+            ],
+            [("live", 296.25, 300.26), ("replay", 298.5, 308.0)],
+            id="a play and the replay overlapping it stay apart",
+        ),
+        pytest.param(
+            [Seen("a", "v1", 100.0, 106.0, clock=clock(220, 226)), Seen("b", "v1", 107.0, 113.0, clock=clock(71, 77))],
+            [("a", 100.0, 106.0), ("b", 107.0, 113.0)],
+            id="a cut between two plays a second apart stays apart when the game clock jumps",
+        ),
+        pytest.param(
+            [
+                Seen("a", "v1", 100.0, 106.0, clock=clock(220, 226)),
+                Seen("b", "v1", 108.0, 114.0, clock=clock(212, 218)),
+            ],
+            [("a+b", 100.0, 114.0)],
+            id="pieces of one play 2 s apart join when the game clock runs on across the gap",
+        ),
+    ],
+)
+def test_join_pieces(moments, expected):
+    joined = join_pieces(moments, join)
+    assert sorted((m.name, m.start, m.end) for m in joined) == sorted(expected)

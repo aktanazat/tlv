@@ -27,12 +27,14 @@ from tlv.agent.inspect import (
     hear,
     heard_at,
     inspection_window,
+    joined,
     judge,
     read_on_screen,
     read_verdict,
     unheard,
 )
 from tlv.agent.model import Reply
+from tlv.agent.replay import GameClock
 from tlv.agent.retrieve import said_words
 from tlv.agent.sources import Frame, Line, Video
 from tlv.media import Range
@@ -466,3 +468,29 @@ def test_a_spoken_claim_is_heard_where_its_topic_is_said(game, step, said, expec
     speak(game, said)
     outcome = hear(game, GAME, LOOK, [step], 3.0)
     assert (None if isinstance(outcome, Rejection) else (outcome.start, outcome.end)) == expected
+
+
+def piece(start, end, confidence, summary, times, clock):
+    step = CheckedStep("the golden gate bridge", start, end)
+    shown = tuple((Frame(t, Path(f"{t}.jpg")), Path(f"stamped/{t}.jpg")) for t in times)
+    return Moment(GAME, start, end, confidence, "", summary, False, clock, (step,), shown)
+
+
+def test_two_pieces_join_into_one_moment_with_the_frames_and_clock_of_both():
+    # The two looks at the vlog's bridge pointing (everyday-local-2026-10-13.json), with game clocks added.
+    earlier = piece(
+        159.5,
+        166.5,
+        0.95,
+        "man points to bridge",
+        [160.25, 161.75, 165.75, 167.25],
+        GameClock(frozenset("4"), 220, 226),
+    )
+    later = piece(
+        166.75, 169.0, 1.0, "points at the bridge", [165.75, 167.25, 168.25], GameClock(frozenset("4"), 212, 218)
+    )
+    moment = joined(earlier, later)
+    assert (moment.start, moment.end, moment.confidence, moment.summary) == (159.5, 169.0, 1.0, "points at the bridge")
+    assert moment.steps == (CheckedStep("the golden gate bridge", 159.5, 169.0),)
+    assert [frame.t for frame, _ in moment.shown] == [160.25, 161.75, 165.75, 167.25, 168.25]
+    assert moment.clock == GameClock(frozenset("4"), 212, 226)
