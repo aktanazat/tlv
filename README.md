@@ -70,6 +70,10 @@ Results come back as structured content plus a short text summary; `video_cut`, 
 `video_person` also return the frame, contact sheet or filmstrip as an image. Long calls send
 progress notifications when the client passes a progress token.
 
+`video_at` finds a game time on a video's scoreboard and returns its first still as an image;
+`video_more` follows up on the last `video_find`, and `video_search` and `video_find` take a `clock`
+window.
+
 ## Examples
 
 ```sh
@@ -96,6 +100,16 @@ tlv find "LeBron James steals the ball" --then "he dunks"
 
 # one person across every video: on screen, named, verified; --strip adds a filmstrip still
 tlv person @LeBron --strip
+
+# a game time on the scoreboard: the live play and each replay, a still of each (--cut adds clips)
+tlv at VIDEO_ID "4th 1:12"
+tlv find "lebron james scores" --clock 4th          # check only where the scoreboard shows the 4th
+tlv search "three pointer" --clock "last 2 min"
+
+# follow up on the last find: a narrowing takes milliseconds and no model
+tlv more "now only fourth quarter"
+tlv more "without the replays"
+tlv more "same but steph"                           # finds again with Stephen Curry instead
 
 # look at a range, check it, cut it
 tlv frames VIDEO_ID --from 4:15 --to 4:22
@@ -124,6 +138,14 @@ timecodes (`1:23.4`, `00:01:23.4`). Progress goes to stderr.
   under `$TLV_HOME/frames/`.
 - `find` prefers a missed clip over a wrong one: a candidate is confirmed only when the frames
   show the claim with enough confidence and every step in order.
+- `--clock` and `at` read the scoreboard from the on-screen text indexing stored, so they run no
+  model. `--clock` keeps `search` and `find` to the stretches where the scoreboard shows that game
+  time, before anything is ranked or checked; a video whose scoreboard was never read is left out
+  and named, and a window no video shows is an error.
+- `find` keeps its result as the index's last under `$TLV_HOME/work/sessions/`. `more` narrows it
+  by game clock, video, replays or clip id without a model or a new search, or finds again with
+  another person in place of the one searched; each follow-up builds on the one before. The rules
+  read the usual phrasings and the model reads the rest.
 
 ## How it compares
 

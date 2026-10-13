@@ -17,6 +17,7 @@ import sqlite3
 import subprocess
 import sys
 import threading
+import time
 import urllib.parse
 import urllib.request
 import uuid
@@ -255,21 +256,31 @@ def video_search(
     max_gap: float = 12,
     limit: int = 10,
     video_ids: list[str] | None = None,
+    clock: str | None = None,
 ) -> dict[str, Any]:
-    """`modalities` limits the channels searched: visual, audio, transcription (default all)."""
+    """`modalities` limits the channels searched: visual, audio, transcription (default all).
+    `clock` limits the search to where the scoreboard shows that game time ("4th", "last 2 min")."""
     from tlv import agent
 
+    shown = _clock_within(index, video_ids, clock) if clock else None
     with _selected(index):
-        return agent.search(
-            query, then=list(then), limit=limit, video_ids=video_ids, max_gap=max_gap, modalities=modalities
+        result = agent.search(
+            query,
+            then=list(then),
+            limit=limit,
+            video_ids=video_ids,
+            max_gap=max_gap,
+            modalities=modalities,
+            within=shown["ranges"] if shown else None,
         )
+    return {**result, "clock": shown} if shown else result
 
 
 def search_text(r: dict[str, Any]) -> str:
     asked = ", then ".join([r["query"], *r["then"]])
     if not r["results"]:
-        return f'no results for "{asked}"'
-    lines = [f'{len(r["results"])} results for "{asked}":']
+        return "\n".join([*_clock_lines(r), f'no results for "{asked}"'])
+    lines = [*_clock_lines(r), f'{len(r["results"])} results for "{asked}":']
     for i, hit in enumerate(r["results"], 1):
         lines.append(
             f'{i}. {hit["timecode"]}  "{hit["title"]}"  video_id={hit["video_id"]}  {hit["kind"]} score {hit["score"]}'
@@ -307,26 +318,33 @@ def video_find(
     min_confidence: float = 0.6,
     cut: bool = True,
     video_ids: list[str] | None = None,
+    clock: str | None = None,
     progress: Progress = None,
 ) -> dict[str, Any]:
-    from tlv import agent
-
-    with _selected(index):
-        return agent.find(
-            query,
-            then=list(then),
-            max_candidates=max_candidates,
-            pad=pad,
-            min_confidence=min_confidence,
-            cut=cut,
-            video_ids=video_ids,
-            progress=progress,
-        )
+    """`clock` checks only where the scoreboard shows that game time ("4th", "last 2 min"). The
+    find is kept as the index's last, for video_more to follow up on."""
+    request = {
+        "query": query,
+        "then": list(then),
+        "max_candidates": max_candidates,
+        "pad": pad,
+        "min_confidence": min_confidence,
+        "cut": cut,
+        "video_ids": video_ids,
+        "clock": clock,
+        "no_replays": False,
+    }
+    result = _found(index, request, progress)
+    _keep_find(index, request, result)
+    return result
 
 
 def find_text(r: dict[str, Any]) -> str:
     counts = r["counts"]
-    lines = [f'confirmed {counts["confirmed"]} of {counts["candidates"]} candidates for "{r["claim"]}"']
+    lines = [
+        *_clock_lines(r),
+        f'confirmed {counts["confirmed"]} of {counts["candidates"]} candidates for "{r["claim"]}"',
+    ]
     for o in r["confirmed"]:
         lines.append(
             f'{o["id"]}  {o["timecode"]}  "{o["title"]}"  video_id={o["video_id"]}  confidence {o["confidence"]}'
@@ -353,6 +371,237 @@ def find_text(r: dict[str, Any]) -> str:
     lines.extend(
         f"rejected {format_range(x['start'], x['end'])} video_id={x['video_id']}: {x['reason']}" for x in r["rejected"]
     )
+    return "\n".join(lines)
+
+
+# video_more, video_at, and the game clock windows of find and search
+
+
+def _last_find(index: str) -> Path:
+    folder = store.data_dir("work") / "sessions"
+    folder.mkdir(exist_ok=True)
+    return folder / f"find-{_checked(index)}.json"
+
+
+def _keep_find(index: str, request: dict[str, Any], result: dict[str, Any]) -> None:
+    """Saves a find as the index's last, what was asked beside what it found, for video_more."""
+    session = json.dumps({"request": request, "result": result}, ensure_ascii=False)
+    media.write_atomically(_last_find(index), lambda partial: partial.write_text(session))
+
+
+def _clock_shown(index: str, video_ids: list[str] | None, clock: str) -> dict[str, Any]:
+    """A window of game time and where the videos show it, as a result's "clock": the window, the
+    stretches of each video inside it, and the videos whose scoreboard was never read."""
+    from tlv.agent import clock as game_clock
+    from tlv.agent import sources
+
+    window = game_clock.Window.parse(clock)
+    with _db(index) as db:
+        coverage = game_clock.coverage(db, sources.videos(db, video_ids), window)
+    ranges = {v: [(_r(start), _r(end)) for start, end in spans] for v, spans in coverage.ranges.items()}
+    return {"window": str(window), "ranges": ranges, "unread": coverage.unread}
+
+
+def _clock_within(index: str, video_ids: list[str] | None, clock: str) -> dict[str, Any]:
+    """`_clock_shown` for a search or find to keep within; a window no video shows is an error,
+    raised before anything is searched."""
+    shown = _clock_shown(index, video_ids, clock)
+    if not shown["ranges"]:
+        unread = f"; {len(shown['unread'])} of the videos show no game clock" if shown["unread"] else ""
+        raise LookupError(f"no video shows {shown['window']} on its scoreboard{unread}")
+    return shown
+
+
+def _clock_lines(r: dict[str, Any]) -> list[str]:
+    if "clock" not in r:
+        return []
+    shown = r["clock"]
+    seconds = sum(end - start for spans in shown["ranges"].values() for start, end in spans)
+    videos = len(shown["ranges"])
+    lines = [f"game clock {shown['window']}: {format_timecode(seconds)} of {videos} video{'s' * (videos != 1)}"]
+    if shown["unread"]:
+        lines.append(f"no game clock read in {', '.join(shown['unread'])}")
+    return lines
+
+
+def _replayed(db: sqlite3.Connection, clips: list[dict[str, Any]]) -> set[str]:
+    """The ids of the clips the captioner calls mostly replay."""
+    from tlv.agent import sources
+
+    return {c["id"] for c in clips if sources.mostly_replay(db, c["video_id"], c["start"], c["end"])}
+
+
+def _found(index: str, request: dict[str, Any], progress: Progress) -> dict[str, Any]:
+    """Runs the find a request describes: within its game clock window, without the clips that
+    are mostly replay when it says so."""
+    from tlv import agent
+    from tlv.agent import followup
+
+    shown = _clock_within(index, request["video_ids"], request["clock"]) if request["clock"] else None
+    with _selected(index):
+        result = agent.find(
+            request["query"],
+            then=request["then"],
+            max_candidates=request["max_candidates"],
+            pad=request["pad"],
+            min_confidence=request["min_confidence"],
+            cut=request["cut"],
+            video_ids=request["video_ids"],
+            progress=progress,
+            within=shown["ranges"] if shown else None,
+        )
+    if request["no_replays"]:
+        with _db(index) as db:
+            replayed = _replayed(db, result["confirmed"])
+        result = followup.narrowed(result, followup.Narrow(no_replays=True), {}, replayed)
+    return {**result, "clock": shown} if shown else result
+
+
+def video_more(index: str, instruction: str, progress: Progress = None) -> dict[str, Any]:
+    """Follows up on the index's last find, in words. "now only fourth quarter", "without the
+    replays", "only the warriors game" or "drop obs_1a2b3c" keep some of the clips it confirmed,
+    read from the index with no model and no new search; "same but steph" reruns it for someone
+    else. Rules read those phrasings and the model reads the rest. Each follow-up builds on the
+    one before: the result is kept as the last find."""
+    from tlv.agent import clock as game_clock
+    from tlv.agent import followup, sources
+    from tlv.agent.find import plain_texts
+    from tlv.agent.model import Vlm
+
+    began = time.perf_counter()
+    path = _last_find(index)
+    if not path.exists():
+        raise LookupError(f'no find to follow up in index "{index}": run tlv find first')
+    session = json.loads(path.read_text())
+    request, result = session["request"], session["result"]
+    with _db(index) as db:
+        said, *steps = plain_texts(db, [instruction, request["query"], *request["then"]])
+        names = sources.person_names(db)
+        titles = {video.video_id: video.title for video in sources.videos(db)}
+    change = followup.parse(said, steps, names, titles)
+    read_by = "rules"
+    if change is None:
+        with Vlm(progress) as vlm:
+            change = followup.with_model(vlm, said, steps, names, titles)
+        read_by = "model"
+    if change is None:
+        raise ValueError(
+            f'could not tell what to change from "{instruction}": say "now only the 4th quarter", "without the '
+            'replays", "only the <title words> game", "drop <clip id>" or "same but <name>"'
+        )
+    narrow, clock, video_ids = change.narrow, request["clock"], request["video_ids"]
+    if narrow.clock:
+        clock = str(game_clock.Window.parse(clock).narrowed_to(narrow.clock) if clock else narrow.clock)
+    if narrow.video_ids is not None:
+        video_ids = sorted(narrow.video_ids & set(video_ids or narrow.video_ids))
+        if not video_ids:
+            raise ValueError(f"the last find did not search {', '.join(sorted(narrow.video_ids))}")
+    no_replays = request["no_replays"] or narrow.no_replays
+    request = {**request, "clock": clock, "video_ids": video_ids, "no_replays": no_replays}
+    before = len(result["confirmed"])
+    if change.swap:
+        query, *then = followup.swapped(steps, change.swap)
+        request = {**request, "query": query, "then": then}
+        result = _found(index, request, progress)
+    else:
+        clips = result["confirmed"]
+        shown = _clock_shown(index, sorted({c["video_id"] for c in clips}), clock) if narrow.clock else None
+        with _db(index) as db:
+            replayed = _replayed(db, clips) if narrow.no_replays else set()
+        result = followup.narrowed(result, narrow, shown["ranges"] if shown else {}, replayed)
+        result = {**result, "clock": shown} if shown else result
+    _keep_find(index, request, result)
+    done = {
+        "instruction": instruction,
+        "read_by": read_by,
+        "reran": change.swap is not None,
+        "query": ", then ".join([request["query"], *request["then"]]),
+        "clock": request["clock"],
+        "video_ids": request["video_ids"],
+        "no_replays": request["no_replays"],
+        "dropped": [] if change.swap else sorted(narrow.drop),
+        "before": before,
+        "ms": round((time.perf_counter() - began) * 1000, 1),
+    }
+    return {**result, "followup": done}
+
+
+def more_text(r: dict[str, Any]) -> str:
+    f = r["followup"]
+    asked = [
+        *([f"game clock {f['clock']}"] if f["clock"] else []),
+        *([f"videos {', '.join(f['video_ids'])}"] if f["video_ids"] else []),
+        *(["without replays"] if f["no_replays"] else []),
+        *([f"without {', '.join(f['dropped'])}"] if f["dropped"] else []),
+    ]
+    took = f"{f['ms']:.0f} ms" if f["ms"] < 1000 else f"{f['ms'] / 1000:.1f} s"
+    if f["reran"]:
+        head = f'reran the find for "{f["query"]}"'
+    else:
+        head = f"kept {r['counts']['confirmed']} of {f['before']} clips"
+    read = "no model" if f["read_by"] == "rules" and not f["reran"] else f"instruction read by {f['read_by']}"
+    return f"{head} ({'; '.join([*asked, took, read])})\n{find_text(r)}"
+
+
+AT_CLIP_S = 6.0  # seconds of the clip video_at cuts around each moment
+
+
+def video_at(index: str, video_id: str, clock: str, cut: bool = False) -> dict[str, Any]:
+    """Every stretch of a video whose scoreboard shows a game time ("4th 1:12") or a window of it
+    ("Q4 2:00-1:00", "OT"): the live play and each replay that keeps the scoreboard on screen,
+    each with a still of its frame nearest the asked time and, with `cut`, a clip around that
+    frame. Reads the on-screen text in the index; no model runs."""
+    from tlv.agent import clock as game_clock
+
+    window = game_clock.Window.parse(clock)
+    with _db(index) as db:
+        video = _video(db, video_id)
+        readings = game_clock.readings(db, video_id)
+    hits = [
+        {
+            "t": _r(shown.best.t),
+            "timecode": format_timecode(shown.best.t),
+            "start": _r(shown.start),
+            "end": _r(shown.end),
+            "shows": game_clock.reading_text(shown.best),
+            **_at_media(video, shown.best.t, cut),
+        }
+        for shown in game_clock.showings(readings, window)
+    ]
+    return {
+        "video_id": video_id,
+        "title": video["title"],
+        "clock": str(window),
+        "readings": len(readings),
+        "hits": hits,
+    }
+
+
+def _at_media(video: sqlite3.Row, t: float, cut: bool) -> dict[str, str]:
+    """The still at `t` and, with `cut`, an AT_CLIP_S clip around it."""
+    source = _local_file(video)
+    still = store.data_dir("frames") / f"{media.slug(video['title'])}-{video['video_id'][-6:]}_{t:.1f}_at.jpg"
+    media.still(source, t, still, STILL_WIDTH)
+    if not cut:
+        return {"frame_path": str(still)}
+    span = _clamp(video, t - AT_CLIP_S / 2, t + AT_CLIP_S / 2)
+    clip = store.data_dir("clips") / f"{_stem(video, span)}.mp4"
+    media.cut(source, span, clip)
+    return {"frame_path": str(still), "clip_path": str(clip)}
+
+
+def at_text(r: dict[str, Any]) -> str:
+    if not r["readings"]:
+        return f'no game clock read in "{r["title"]}"'
+    if not r["hits"]:
+        return f'no frame of "{r["title"]}" shows {r["clock"]} (the game clock is read in {r["readings"]} frames)'
+    count = len(r["hits"])
+    lines = [f'"{r["title"]}" shows {r["clock"]} in {count} stretch{"es" * (count != 1)}:']
+    for hit in r["hits"]:
+        lines.append(f"{hit['timecode']}  {hit['shows']}  on screen {format_range(hit['start'], hit['end'])}")
+        lines.append(f"   frame: {hit['frame_path']}")
+        if "clip_path" in hit:
+            lines.append(f"   clip: {hit['clip_path']}")
     return "\n".join(lines)
 
 

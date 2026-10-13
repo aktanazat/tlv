@@ -37,6 +37,8 @@ commands:
       --max-gap S              most seconds between steps (default 12)
       --limit N                most results (default 10)
       --video ID               search only this video (repeatable)
+      --clock W                only where the scoreboard shows this game time ("4th",
+                               "Q4 2:00-0:00", "2nd half", "last 2 min")
   ask <video_id> <question>    ask the vision-language model about a video
       --from T --to T          only this window
       --schema JSON            JSON Schema the answer must follow
@@ -47,12 +49,19 @@ commands:
       --min-confidence C       0 to 1 (default 0.6)
       --no-cut                 do not cut the confirmed clips
       --video ID               search only this video (repeatable)
+      --clock W                check only where the scoreboard shows this game time
+  more <instruction>           follow up on the last find: "now only 4th quarter", "without the
+                               replays" keep some of its clips, no model; "same but steph"
+                               finds again for that person
   cut <video_id> --from T --to T [--frame mid|sheet|none]
                                cut a clip from the local copy
   frames <video_id> --from T --to T [--count N]
                                contact sheet of a range
   timeline <video_id> --from T --to T
                                speech, on-screen text, sounds, captions and people in a range
+  at <video_id> <clock> [--cut]
+                               where the scoreboard shows a game time ("4th 1:12"): the live
+                               play and each replay, a still of each (--cut: and a clip)
   entity-add <name> [--image PATH|URL]... [--video ID --at T...]
                                teach a person for @Name in queries
   entities                     people found in the videos, named or not
@@ -78,8 +87,10 @@ Everything runs on this Mac; data lives in $TLV_HOME (default ~/.local/share/tlv
 
 TEXT_OPTIONS = ("index", "title", "max-gap", "limit", "from", "to", "schema", "max-candidates", "pad")
 TEXT_OPTIONS += ("min-confidence", "frame", "count", "session")
+TEXT_OPTIONS += ("clock",)
 LIST_OPTIONS = ("then", "modality", "video", "image", "at", "stage")
 FLAG_OPTIONS = ("json", "no-wait", "no-cut", "force", "strip")
+FLAG_OPTIONS += ("cut",)
 COMMON_OPTIONS = ("index", "json", "help")
 
 
@@ -201,6 +212,7 @@ def _search(args: list[str], v: Values) -> dict[str, Any]:
         max_gap=_number(v.get("max-gap"), "max-gap"),
         limit=_whole(v.get("limit"), "limit"),
         video_ids=v.get("video"),
+        clock=v.get("clock"),
     )
 
 
@@ -233,7 +245,12 @@ def _find(args: list[str], v: Values) -> dict[str, Any]:
         min_confidence=_number(v.get("min-confidence"), "min-confidence"),
         cut=not v.get("no-cut"),
         video_ids=v.get("video"),
+        clock=v.get("clock"),
     )
+
+
+def _more(args: list[str], _v: Values) -> dict[str, Any]:
+    return {"instruction": _words(args, 'a follow-up, like "now only the 4th quarter"')}
 
 
 def _range(args: list[str], v: Values) -> dict[str, Any]:
@@ -251,6 +268,12 @@ def _cut(args: list[str], v: Values) -> dict[str, Any]:
 
 def _frames(args: list[str], v: Values) -> dict[str, Any]:
     return _present(**_range(args, v), count=_whole(v.get("count"), "count"))
+
+
+def _at(args: list[str], v: Values) -> dict[str, Any]:
+    if not args:
+        raise UsageError("expected a video_id")
+    return {"video_id": args[0], "clock": _words(args[1:], 'a game clock, like "4th 1:12"'), "cut": bool(v.get("cut"))}
 
 
 def _entity_add(args: list[str], v: Values) -> dict[str, Any]:
@@ -320,8 +343,8 @@ COMMANDS: dict[str, Command] = {
         reports_progress=True,
     ),
     "search": Command(
-        "tlv search <query> [--then STEP]... [--modality M]... [--max-gap S] [--limit N] [--video ID]...",
-        ("then", "modality", "max-gap", "limit", "video"),
+        "tlv search <query> [--then STEP]... [--modality M]... [--max-gap S] [--limit N] [--video ID]... [--clock W]",
+        ("then", "modality", "max-gap", "limit", "video", "clock"),
         _search,
         core.video_search,
         core.search_text,
@@ -335,11 +358,19 @@ COMMANDS: dict[str, Command] = {
     ),
     "find": Command(
         "tlv find <query> [--then STEP]... [--max-candidates N] [--pad S] [--min-confidence C] [--no-cut]"
-        " [--video ID]...",
-        ("then", "max-candidates", "pad", "min-confidence", "no-cut", "video"),
+        " [--video ID]... [--clock W]",
+        ("then", "max-candidates", "pad", "min-confidence", "no-cut", "video", "clock"),
         _find,
         core.video_find,
         core.find_text,
+        reports_progress=True,
+    ),
+    "more": Command(
+        "tlv more <instruction>",
+        (),
+        _more,
+        core.video_more,
+        core.more_text,
         reports_progress=True,
     ),
     "cut": Command(
@@ -362,6 +393,13 @@ COMMANDS: dict[str, Command] = {
         _range,
         core.video_timeline,
         core.timeline_text,
+    ),
+    "at": Command(
+        "tlv at <video_id> <clock> [--cut]",
+        ("cut",),
+        _at,
+        core.video_at,
+        core.at_text,
     ),
     "entity-add": Command(
         "tlv entity-add <name> [--image PATH|URL]... [--video ID --at T...]",

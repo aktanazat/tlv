@@ -102,5 +102,25 @@ so the CLI and MCP output stays familiar)
 - `answer(question, video_ids=None, progress=None) -> JockeyResult`: a collection-wide
   question answered by planning, calling the same tools, and citing clips.
 
+`tlv/agent/clock.py` (reads the on-screen text indexing stored; no model runs)
+- `Window.parse(text) -> Window`: a window of game time ("4th", "Q4 2:00-0:00", "2nd half", "OT",
+  "last 2 min"); `str(window)` prints it back in words `parse` reads.
+- `readings(db, video_id) -> list[Reading]`: the scoreboard in each frame showing one period and
+  one time; a time under 5 s beside another time is the shot clock and is left out.
+- `showings(readings, window) -> list[Showing]`: one per run of frames inside the window, the
+  live play and each replay that keeps the scoreboard on screen, for `tlv at` and `video_at`.
+- `coverage(db, videos, window) -> Coverage`: each video's stretches inside the window, the
+  `within` ranges `find --clock` and `search --clock` pass on, and the videos never read.
+
+`tlv/agent/followup.py`
+- `parse(instruction, steps, names, titles) -> Followup | None`: rules read a follow-up to the
+  last find into a `Narrow` (game clock window, videos, no replays, dropped clip ids) and a
+  `Swap` (a person to find instead); None leaves it to `with_model(vlm, ...)`, whose answer
+  counts only where each part names something that exists.
+- `narrowed(result, narrow, ranges, replayed) -> dict`: the find result keeping only the
+  confirmed clips inside the narrow; `swapped(steps, swap) -> list[str]` for the rerun.
+- The last find of each index is kept in `$TLV_HOME/work/sessions/find-<index>.json` with what
+  was asked, so `tlv more` and `video_more` follow up on it and each follow-up on the one before.
+
 `tlv/cli.py`, `tlv/mcp_server.py`: the commands and MCP tools of the Twelve Labs client, same
 names and flags, plus entity corrections.
