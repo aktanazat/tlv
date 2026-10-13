@@ -461,8 +461,8 @@ def video_more(index: str, instruction: str, progress: Progress = None) -> dict[
     """Follows up on the index's last find, in words. "now only fourth quarter", "without the
     replays", "only the warriors game" or "drop obs_1a2b3c" keep some of the clips it confirmed,
     read from the index with no model and no new search; "same but steph" reruns it for someone
-    else. Rules read those phrasings and the model reads the rest. Each follow-up builds on the
-    one before: the result is kept as the last find."""
+    else. Rules read those phrasings; the model reads other ways to name a person, a game time or
+    a video. Each follow-up builds on the one before: the result is kept as the last find."""
     from tlv.agent import clock as game_clock
     from tlv.agent import followup, sources
     from tlv.agent.find import plain_texts

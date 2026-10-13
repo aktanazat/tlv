@@ -212,7 +212,7 @@ def prompt(instruction: str, steps: Sequence[str], titles: Mapping[str, str]) ->
         f"Change: {instruction}\n"
         'Answer with JSON only: {"replace": "the words of the search naming the person to change", "with": "the '
         'person to find instead", "clock": "the game time to keep, like 4th, 2nd half, 4th 2:00-0:00 or last 2 min", '
-        '"video": "words from the title of the one video to keep", "no_replays": true to keep only the live play}'
+        '"video": "words from the title of the one video to keep"}'
     )
 
 
@@ -220,21 +220,23 @@ def read_answer(
     value: object, steps: Sequence[str], names: Sequence[str], titles: Mapping[str, str]
 ) -> Followup | None:
     """The model's follow-up when each part it fills in names something that exists and some part
-    asks for a change; None otherwise."""
+    asks for a change; None otherwise. The model writes "null" as a word for the parts a change does
+    not mention. Leaving out the replays is for the rules alone: asked for it as one more part, the
+    model said to leave them out for nearly every change, "make it purple" too."""
     if not isinstance(value, dict):
         return None
-    clock, video, old, new = (value.get(key) for key in ("clock", "video", "replace", "with"))
-    no_replays = value.get("no_replays")
+    clock, video, old, new = (
+        None if isinstance(part, str) and part.strip().lower() == "null" else part
+        for part in (value.get(key) for key in ("clock", "video", "replace", "with"))
+    )
     if not all(isinstance(part, str | None) for part in (clock, video, old, new)):
-        return None
-    if not isinstance(no_replays, bool | None):
         return None
     window = mentioned(clock) if clock else None
     video_ids = _titled(_content(video), titles) if video and _content(video) else None
     swap = _swap(old, new, steps, names) if new else None
     if (clock and window is None) or video_ids == frozenset() or (new and swap is None):
         return None
-    narrow = Narrow(window[0] if window else None, video_ids, bool(no_replays))
+    narrow = Narrow(window[0] if window else None, video_ids)
     return Followup(narrow, swap) if swap or narrow != Narrow() else None
 
 

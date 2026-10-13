@@ -158,7 +158,7 @@ timecodes (`1:23.4`, `00:01:23.4`). Progress goes to stderr.
 - `find` keeps its result as the index's last under `$TLV_HOME/work/sessions/`. `more` narrows it
   by game clock, video, replays or clip id without a model or a new search, or finds again with
   another person in place of the one searched; each follow-up builds on the one before. The rules
-  read the usual phrasings and the model reads the rest.
+  read the usual phrasings and the model reads other ways to name a person, a game time or a video.
 - `reel --from` cuts a saved find (`find --json`, or an eval results file and a run name) and runs
   no model. `--order game` sorts the clips by the scoreboard each one shows, read from the
   on-screen text indexing stored; clips that show none go last. The song's tempo and first beat

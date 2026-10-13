@@ -117,7 +117,8 @@ so the CLI and MCP output stays familiar)
 - `parse(instruction, steps, names, titles) -> Followup | None`: rules read a follow-up to the
   last find into a `Narrow` (game clock window, videos, no replays, dropped clip ids) and a
   `Swap` (a person to find instead); None leaves it to `with_model(vlm, ...)`, whose answer
-  counts only where each part names something that exists.
+  counts only where each part names something that exists. It holds a window, a video and a
+  swap, never replays: the model says to leave those out for nearly any change.
 - `narrowed(result, narrow, ranges, replayed) -> dict`: the find result keeping only the
   confirmed clips inside the narrow; `swapped(steps, swap) -> list[str]` for the rerun.
 - The last find of each index is kept in `$TLV_HOME/work/sessions/find-<index>.json` with what

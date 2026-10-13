@@ -17,6 +17,7 @@ STEPS = ["LeBron James dunks", "he celebrates"]
 LEBRON = ("LeBron James", "LeBron", "James")
 CURRY = Swap(LEBRON, "Stephen Curry")
 FOURTH = Window(frozenset({"4"}))
+SECOND_HALF = Window(frozenset({"3", "4"}))
 
 
 @pytest.mark.parametrize(
@@ -131,23 +132,43 @@ def test_dropping_a_clip_the_find_did_not_confirm_is_an_error():
 @pytest.mark.parametrize(
     ("answer", "change"),
     [
-        ({"replace": "LeBron", "with": "Steph", "clock": None, "no_replays": False}, Followup(Narrow(), CURRY)),
-        ({"with": "Stephen Curry", "clock": "the 4th quarter", "no_replays": None}, Followup(Narrow(FOURTH), CURRY)),
-        (
-            {"video": "Warriors at Lakers", "no_replays": True},
-            Followup(Narrow(video_ids=frozenset({"v_lal"}), no_replays=True)),
-        ),
+        ({"replace": "LeBron", "with": "Steph", "clock": None}, Followup(Narrow(), CURRY)),
+        ({"with": "Stephen Curry", "clock": "the 4th quarter"}, Followup(Narrow(FOURTH), CURRY)),
+        ({"video": "Warriors at Lakers"}, Followup(Narrow(video_ids=frozenset({"v_lal"})))),
         ({"with": "Klay Thompson"}, Followup(Narrow(), Swap(LEBRON, "Klay Thompson"))),
         ({"clock": "purple"}, None),
         ({"video": "the Celtics game"}, None),
         ({"replace": "Kobe", "with": "Steph"}, None),
-        ({"no_replays": "yes"}, None),
-        ({"clock": None, "video": None, "replace": None, "with": None, "no_replays": False}, None),
+        ({"clock": None, "video": None, "replace": None, "with": None}, None),
         (["4th"], None),
         (None, None),
     ],
 )
 def test_the_models_reading_counts_only_where_each_part_names_something_that_exists(answer, change):
+    assert followup.read_answer(answer, STEPS, NAMES, TITLES) == change
+
+
+# Answers as the model wrote them (Qwen3-VL-4B, asked with the prompt that still had a no_replays
+# part): every part filled in, "null" written as a word, the searched person named as the one to
+# replace, and the replays left out whatever the change said.
+@pytest.mark.parametrize(
+    ("answer", "change"),
+    [
+        (  # "could you redo that search but with stephen curry in place of lebron"
+            {"replace": "LeBron James", "with": "Stephen Curry", "clock": None, "video": None, "no_replays": True},
+            Followup(Narrow(), CURRY),
+        ),
+        (  # "just the ones after halftime"
+            {"replace": "lebron james", "with": "null", "clock": "2nd half", "video": "null", "no_replays": True},
+            Followup(Narrow(SECOND_HALF)),
+        ),
+        (  # "make it purple"
+            {"replace": "lebron james", "with": "null", "clock": "null", "video": "null", "no_replays": True},
+            None,
+        ),
+    ],
+)
+def test_the_model_asks_for_no_more_than_the_parts_it_names(answer, change):
     assert followup.read_answer(answer, STEPS, NAMES, TITLES) == change
 
 
