@@ -85,6 +85,12 @@ Signatures below are the interface; each owner may add private helpers freely. `
 - `resolve(db, text) -> list[str]`: entity ids a name or description in a query refers to
   ("LeBron James", "lebron", "@Coco", "number 23"), empty when unsure.
 - `present(db, video_id, start, end) -> list[dict]`: who is visible in a range, with times.
+- `sight_only(db, entity_ids) -> dict[str, str]`: the named people among them whose name no clue
+  gives where the index sees them (the owner named them), with their names. No channel of words
+  finds them, so retrieval puts first the spans showing them, and the check tells the model which
+  of its frames show them and where; the model alone judges what happens.
+- `sightings(db, video_id, entity_id, start, end) -> list[tuple]`: each appearance of a person in
+  a range: when it is seen, face or body, and its box.
 - `name(db, target, name)`, `same(db, a, b)`, `different(db, a, b)`: corrections; `target`,
   `a`, `b` are entity or appearance ids.
 - `add_reference(db, name, images=(), frames=()) -> dict`: teach a person from image files or

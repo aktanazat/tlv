@@ -2,7 +2,9 @@
 vision-language model at their true times, each stamped with its number, its time and the game
 clock the score bug shows, together with the speech, on-screen text and sounds of the window. The
 model names frames, never seconds; frame numbers become video times here, so a step lands where
-its frames are. A spoken step is checked against the words spoken instead: the model cannot hear."""
+its frames are. A spoken step is checked against the words spoken instead: the model cannot hear.
+A person the claim names whom only sight knows is pointed out in the frames the index sees them in:
+the index says who someone is, the model whether the claim happens."""
 
 from __future__ import annotations
 
@@ -301,14 +303,24 @@ def verdict_prompt(
     speech: list[Line],
     text: list[Line],
     heard: list[Line],
+    people: list[str],
 ) -> str:
+    """The question the model is asked about a window. `people` are lines from `recognized`: who the
+    index sees in which frames, for the people the claim names whom only sight knows."""
     numbered = "\n".join(f"{i}. {step}{_HINTS[s]}" for i, (step, s) in enumerate(zip(steps, senses, strict=True), 1))
     template = ", ".join(f'"{i}": [first frame number, last frame number] or null' for i in range(1, len(steps) + 1))
+    known = (
+        "Who is who: the index recognizes these people by how they look, which the frames alone cannot tell you.\n"
+        + "".join(f"- {line}\n" for line in people)
+        + "That says who someone is, not what they do: whether the claim happens, judge from the frames.\n"
+        if people
+        else ""
+    )
     return (
         f"These {len(frames)} frames come from one video, in time order. Each frame shows in its top-left corner "
         f"its number (1 to {len(frames)}), its time (minutes:seconds) and, when the score bug shows one, the game "
         "clock (quarter and time left).\n"
-        f"{lines_text('Speech', speech)}{lines_text('On-screen text', text)}{lines_text('Sounds', heard)}"
+        f"{lines_text('Speech', speech)}{lines_text('On-screen text', text)}{lines_text('Sounds', heard)}{known}"
         f"Claim: {claim}\nSteps, in order:\n{numbered}\n"
         "Does the whole claim happen here, every step in this order? If the person, the action or the order is "
         "uncertain, it is not a match. For each step, give the numbers of the first and last frame showing it, "
@@ -318,6 +330,32 @@ def verdict_prompt(
         '"evidence": "what decides it, at most eight words", '
         f'"replay": true if the footage is a replay, "steps": {{{template}}}}}'
     )
+
+
+def recognized(db: sqlite3.Connection, video_id: str, claim: str, frames: list[Frame]) -> list[str]:
+    """A line for each person the claim names whom only sight knows (`entities.sight_only`) and the
+    index sees in the frames: the runs of frames showing them, each with where in the frame, as
+    "coco: frames 5 to 6, face at 28-57% across and 32-70% down". No word names such a person, so the
+    frames alone cannot tell the model who they are; the index knows them by how they look."""
+    lines = []
+    for entity_id, name in entities.sight_only(db, entities.resolve(db, claim)).items():
+        seen = entities.sightings(db, video_id, entity_id, frames[0].t, frames[-1].t)
+        runs: list[tuple[int, int, str]] = []
+        for number, frame in enumerate(frames, 1):
+            here = [s for s in seen if s[0] <= frame.t <= s[1]]
+            if not here:
+                continue
+            _, _, kind, (x, y, w, h) = min(here, key=lambda s: s[2] != "face")  # a face over the body under it
+            across, down = f"{x * 100:.0f}-{(x + w) * 100:.0f}% across", f"{y * 100:.0f}-{(y + h) * 100:.0f}% down"
+            where = f"{kind} at {across} and {down}"
+            if runs and runs[-1][1] == number - 1 and runs[-1][2] == where:
+                runs[-1] = (runs[-1][0], number, where)
+            else:
+                runs.append((number, number, where))
+        if runs:
+            shown = (f"frame {a}, {where}" if a == b else f"frames {a} to {b}, {where}" for a, b, where in runs)
+            lines.append(f"{name}: {'; '.join(shown)}")
+    return lines
 
 
 @dataclass(frozen=True)
@@ -595,7 +633,8 @@ def check(
     is asked. A step read on screen that names a known person takes the time text holding the name is
     on screen, as `read_steps` says. A claim to be seen must cover MIN_SEEN_FRAMES shown frames, and a
     person it names whom the index sees in the window must be seen where it is placed, as `unseen`
-    says."""
+    says. The model is told where the index sees a person the claim names whom only sight knows, as
+    `recognized` says; that tells it who someone is, and the claim stands only on its own verdict."""
     ready = [show(db, video, look, claim, steps, senses, pad) for video, look in looks]
     verdicts = iter(ask_verdicts(vlm, [r for r in ready if isinstance(r, Shown)], steps))
     return [
@@ -624,7 +663,8 @@ def show(
     stamped = stamp(frames, _folder(video, window), [_game_clock(db, video.video_id, f.t) for f in frames])
     speech = sources.speech(db, video.video_id, window.start, window.end)
     shown_text = text if "text" in senses else sources.fit(text, VERDICT_TEXT_CHARS)
-    prompt = verdict_prompt(claim, steps, senses, frames, speech, shown_text, sources.fit(heard, SOUND_CHARS))
+    people = recognized(db, video.video_id, claim, frames)
+    prompt = verdict_prompt(claim, steps, senses, frames, speech, shown_text, sources.fit(heard, SOUND_CHARS), people)
     return Shown(video, look, window, frames, stamped, prompt, text, spoken)
 
 

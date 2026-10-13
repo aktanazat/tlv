@@ -3,6 +3,7 @@ The window and judge cases are ported from test/search.test.ts, with steps in vi
 
 import json
 import math
+import re
 from contextlib import closing
 from pathlib import Path
 
@@ -409,18 +410,20 @@ def test_a_long_stretch_costs_the_model_ten_frames_of_tokens_at_most(game):
     assert sum(image_tokens(path) for path in question.images) <= 1120
 
 
-def person(db, name, appearances):
-    """A named person whom the index sees in the game over each (start, end) given."""
+def person(db, name, appearances, read=False):
+    """A named person whom the index sees in the game over each (start, end) given; with `read`, the
+    index read the name on screen there, which it keeps as a clue of the name."""
     blob = store.to_blob(np.ones(4, dtype=np.float32))
     db.execute(
         "INSERT INTO entities (entity_id, name, canonical_appearance, embedding, updated_at) VALUES (?, ?, ?, ?, 0)",
         (f"e_{name}", name, f"{name}_0", blob),
     )
     for n, (start, end) in enumerate(appearances):
+        clues = [{"kind": "ocr_name", "value": name, "t": start}] if read else []
         db.execute(
-            "INSERT INTO appearances (appearance_id, video_id, kind, start, end, best_t, box, crop_path, embedding)"
-            " VALUES (?, 'v', 'body', ?, ?, ?, '[0, 0, 0.1, 0.2]', 'crop.jpg', ?)",
-            (f"{name}_{n}", start, end, start, blob),
+            "INSERT INTO appearances (appearance_id, video_id, kind, start, end, best_t, box, crop_path, embedding,"
+            " clues) VALUES (?, 'v', 'body', ?, ?, ?, '[0, 0, 0.1, 0.2]', 'crop.jpg', ?, ?)",
+            (f"{name}_{n}", start, end, start, blob, json.dumps(clues)),
         )
         db.execute("INSERT INTO entity_members (appearance_id, entity_id) VALUES (?, ?)", (f"{name}_{n}", f"e_{name}"))
 
@@ -450,6 +453,36 @@ def test_a_step_read_on_screen_moves_the_moment_onto_the_text_naming_the_person(
     claim = "LeBron James's stat line is on screen"
     (moment,) = check(Model([seen_on(3, 6)]), game, [(GAME, LOOK)], claim, [claim], ["text"], 3.0, 0.6)
     assert (moment.start, moment.end) == (17.0, 21.0)
+
+
+def asked(db, claim):
+    """The prompt the model is shown to check `claim` at LOOK."""
+    model = Model([seen_on(5, 6)])
+    check(model, db, [(GAME, LOOK)], claim, [claim], ["sight"], 3.0, 0.6)
+    (question,) = model.asked
+    return question.prompt
+
+
+@pytest.mark.parametrize(
+    ("read", "told"),
+    [
+        pytest.param(False, ["5", "6", "0", "10", "0", "20"], id="only sight knows her: her frames and box are told"),
+        pytest.param(True, [], id="her name is read where she is seen: nothing is added"),
+    ],
+)
+def test_the_model_is_told_where_the_index_sees_a_person_only_sight_knows(game, read, told):
+    """No word names coco, so the frames cannot tell the model who she is; the index knows her by how
+    she looks. Seen over 21.5-22.5 s, she is in frames 5 to 6, her box 0-10% across and 0-20% down."""
+    unnamed = asked(game, "coco waves").splitlines()
+    person(game, "coco", [(21.5, 22.5)], read=read)
+    added = [line for line in asked(game, "coco waves").splitlines() if line not in unnamed]
+    assert [number for line in added if "coco" in line for number in re.findall(r"\d+", line)] == told
+
+
+def test_where_the_index_sees_a_person_never_confirms_a_claim_by_itself(game):
+    person(game, "coco", [(17.5, 26.5)])
+    (outcome,) = check(Model([STOPPED_AT_NO]), game, [(GAME, LOOK)], "coco waves", ["coco waves"], ["sight"], 3.0, 0.6)
+    assert outcome == Rejection("v", 20.0, 24.0, "no match")
 
 
 def speak(db, said):

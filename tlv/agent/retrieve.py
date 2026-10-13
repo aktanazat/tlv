@@ -2,7 +2,9 @@
 look like (SigLIP), what the captions mean (a text embedding), the words in captions and on-screen
 text, the words spoken (matched by how they sound), the sounds heard, and the people seen. Each
 step searches the channels of its sense. Each channel ranks spans on its own, so no channel's scores
-need to be comparable with another's; a span comes as high as its best rank in any channel."""
+need to be comparable with another's; a span comes as high as its best rank in any channel. The
+people channel ranks no span itself: it puts first the spans showing a person only sight knows,
+whom no channel of words can find."""
 
 from __future__ import annotations
 
@@ -33,12 +35,16 @@ CHANNELS = {
     "audio": ("sounds", "speech words"),
     "transcription": ("speech words",),
 }
-# Channels each sense of a step searches. Sight: measured on "lebron james scores, then lebron james
-# celebrates" over three games, fusing people (presence ties at rank 1 for every span he fills), speech
-# and sounds pushed two of the four true plays past the first 12 candidates; frames, captions and screen
-# words alone bring all four into the first 6.
+# Channels each sense of a step searches. The people channel puts first the spans showing a person the query
+# names whom only sight knows (`entities.sight_only`: the owner named them, and the index never read or heard
+# the name where it saw them). "every scene with coco", of a person the owner named in a film, brought none of
+# her 4 scenes into the first 12 candidates by the other channels; seen first, the scene the index sees her
+# in comes first. It ranks nobody the words find: on "lebron james scores, then lebron james celebrates" over
+# three games, fusing his presence (ties at rank 1 for every span he fills), speech and sounds pushed two of
+# the four true plays past the first 12 candidates; frames, captions and screen words alone bring all four
+# into the first 6.
 SENSE_CHANNELS: dict[Sense, tuple[str, ...]] = {
-    "sight": ("frames", "captions", "screen words"),
+    "sight": ("frames", "captions", "screen words", "people"),
     "text": ("screen words", "frames", "captions"),
     "speech": ("speech words",),
     "sound": ("sounds", "screen words", "captions"),
@@ -315,8 +321,10 @@ class Query:
 
 
 def rank(db: sqlite3.Connection, corpus: Corpus, queries: list[Query]) -> list[list[Clip]]:
-    """Clips (spans) for each query, best first, ranked 1, 2, 3... by the fused ranks of its channels.
-    An embedder is loaded only when some query searches its channel."""
+    """Clips (spans) for each query, best first, ranked 1, 2, 3... by the fused ranks of its channels,
+    after the spans showing a person it names whom only sight knows when it searches the people
+    channel, as `seen_first` orders them. An embedder is loaded only when some query searches its
+    channel."""
     wanted = frozenset().union(*(q.channels for q in queries))
     texts = [q.text for q in queries]
     seen = "frames" in wanted and len(corpus.frame_vectors) > 0
@@ -327,7 +335,8 @@ def rank(db: sqlite3.Connection, corpus: Corpus, queries: list[Query]) -> list[l
     else:
         looks = embed.image_queries(texts) if seen else None
         means = embed.sentences(texts, query=True) if read else None
-    people = _people(db, corpus) if "people" in wanted and any(q.entity_ids for q in queries) else None
+    by_sight = [list(entities.sight_only(db, q.entity_ids)) if "people" in q.channels else [] for q in queries]
+    people = _people(db, corpus) if any(by_sight) else []
     results = []
     for i, query in enumerate(queries):
         rankings = []
@@ -344,10 +353,7 @@ def rank(db: sqlite3.Connection, corpus: Corpus, queries: list[Query]) -> list[l
             named = set(stems)
             heard = [sum(weight for labels, weight in span if labels & named) for span in corpus.sounds]
             rankings.append(competition_ranks(np.array(heard)))
-        if people is not None and "people" in query.channels and query.entity_ids:
-            seen = [max((share.get(e, 0.0) for e in query.entity_ids), default=0.0) for share in people]
-            rankings.append(competition_ranks(np.array(seen)))
-        order = fuse(rankings)
+        order = seen_first(fuse(rankings), people, by_sight[i]) if by_sight[i] else fuse(rankings)
         results.append(
             [
                 Clip(corpus.spans[s].video_id, corpus.spans[s].start, corpus.spans[s].end, r)
@@ -376,3 +382,16 @@ def _people(db: sqlite3.Connection, corpus: Corpus) -> list[dict[str, float]]:
             seen[person["entity_id"]] = max(seen.get(person["entity_id"], 0.0), inside / length)
         shares.append(seen)
     return shares
+
+
+def seen_first(order: list[int], people: list[dict[str, float]], who: list[str]) -> list[int]:
+    """The spans showing any of `who` (by `people`, each span's share of time each person is seen),
+    then the rest as `order` has them. Those showing more of `who` come first, then those `order`
+    ranks as it ranks them, then the others, more seen first."""
+    place = {s: n for n, s in enumerate(order)}
+    showing = {s: [shares.get(e, 0.0) for e in who] for s, shares in enumerate(people)}
+    first = sorted(
+        (s for s, seen in showing.items() if any(seen)),
+        key=lambda s: (-sum(share > 0 for share in showing[s]), place.get(s, len(order)), -sum(showing[s]), s),
+    )
+    return first + [s for s in order if not any(showing[s])]

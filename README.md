@@ -158,6 +158,10 @@ timecodes (`1:23.4`, `00:01:23.4`). Progress goes to stderr.
   face already places are shown to the vision-language model beside that person, closest first and
   at most 15 questions per minute of video (under 10 s a minute). Its "same" joins them, its
   "different" keeps them apart, and a correction overrides either.
+- A person you name whom no caption, on-screen text or speech names where they are seen, such as
+  family in a home video, is found by how they look: `search` and `find` start with the stretches
+  the index sees them in, and the check tells the model which frames show them and where. The
+  index says who someone is; the model still decides whether the claim happens.
 - `person` reads only what indexing and `find` stored, so it runs no model and answers in
   milliseconds. Clusters that carry the same name count as one person; its filmstrip is saved
   under `$TLV_HOME/frames/`.

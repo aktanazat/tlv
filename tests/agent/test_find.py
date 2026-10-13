@@ -1,15 +1,18 @@
 """A confirmed moment's id names its video and range, so finding it again replaces its record; a
 search narrowed to video-time ranges keeps only the hits inside them; Jev drops a play the commentary
-credits to another player, and only when its key is given."""
+credits to another player, and only when its key is given; a search for a person only sight knows
+looks first where the index sees them."""
 
+import json
 import re
 from contextlib import closing
 
+import numpy as np
 import pytest
 
 from tlv import judge, store
 from tlv.agent.connect import Clip
-from tlv.agent.find import clips_within, credited, observation_id
+from tlv.agent.find import clips_within, credited, observation_id, search
 from tlv.agent.inspect import Moment
 from tlv.agent.replay import Play
 from tlv.agent.sources import Video
@@ -79,3 +82,79 @@ def test_when_jev_cannot_answer_every_play_stays(db, monkeypatch):
     monkeypatch.setenv("TYPESAFE_API_KEY", "test")
     monkeypatch.setattr(judge, "bools", refuse)
     assert credited(db, [BUTLER, CURRY], "Curry makes a three", None) == ([BUTLER, CURRY], [])
+
+
+def film(db, read):
+    """A minute of film in 5 s scenes, two of them called scenes by their captions, and coco, a person
+    the owner named, seen through most of 20-25 s and for a second of 40-45 s. With `read`, a sign at
+    41.5 s reads her name while she is seen, which the index keeps as a clue of her name."""
+    db.execute(
+        "INSERT INTO videos (video_id, title, source, local_path, duration, width, height, fps, added_at, status)"
+        " VALUES ('v', 'Film', 'file', '/videos/film.mp4', 60, 640, 360, 30, 0, 'ready')"
+    )
+    captions = {
+        0.0: "a quiet street scene at dawn",
+        5.0: "the same kitchen scene every morning",
+        10.0: "a dog runs across the grass",
+        20.0: "a girl reads by the window",
+        30.0: "a car drives along the coast",
+        40.0: "a girl walks down to the lake",
+    }
+    for start, caption in captions.items():
+        db.execute(
+            "INSERT INTO spans (span_id, video_id, start, end, caption) VALUES (?, 'v', ?, ?, ?)",
+            (f"v:{start:.3f}", start, start + 5.0, caption),
+        )
+    blob = store.to_blob(np.ones(4, dtype=np.float32))
+    db.execute(
+        "INSERT INTO entities (entity_id, name, canonical_appearance, embedding, updated_at)"
+        " VALUES ('e_coco', 'coco', 'coco_0', ?, 0)",
+        (blob,),
+    )
+    for n, (start, end) in enumerate([(20.5, 24.5), (41.0, 42.0)]):
+        clues = [{"kind": "ocr_name", "value": "coco", "t": 41.5}] if read and n == 1 else []
+        db.execute(
+            "INSERT INTO appearances (appearance_id, video_id, kind, start, end, best_t, box, crop_path, embedding,"
+            " clues, quality) VALUES (?, 'v', 'face', ?, ?, ?, '[0.4, 0.1, 0.1, 0.2]', 'crop.jpg', ?, ?, 0.5)",
+            (f"coco_{n}", start, end, start, blob, json.dumps(clues)),
+        )
+        db.execute("INSERT INTO entity_members (appearance_id, entity_id) VALUES (?, 'e_coco')", (f"coco_{n}",))
+    if read:
+        db.execute(
+            "INSERT INTO ocr (video_id, t, text, x, y, w, h, conf) VALUES ('v', 41.5, 'COCO', 0.4, 0.8, 0.2, 0.1, 1)"
+        )
+    db.commit()
+
+
+def places(query):
+    return [(hit["start"], hit["end"]) for hit in search(query)["results"]]
+
+
+@pytest.mark.parametrize(
+    ("query", "expected"),
+    [
+        pytest.param(
+            "every scene with coco",
+            [(20.0, 25.0), (40.0, 45.0), (5.0, 10.0), (0.0, 5.0)],
+            id="the scene she fills before the one she crosses, then what the words find",
+        ),
+        pytest.param("every scene with @coco", [(20.0, 25.0), (40.0, 45.0), (5.0, 10.0), (0.0, 5.0)], id="as @coco"),
+        pytest.param(
+            "coco walks down to the lake",
+            [(40.0, 45.0), (20.0, 25.0)],
+            id="among her scenes the words still come first",
+        ),
+    ],
+)
+def test_a_person_only_sight_knows_is_looked_for_first_where_the_index_sees_them(db, query, expected):
+    """No caption, speech or on-screen text names coco, so no channel of words finds her; the scenes
+    the index sees her in come first, then the rest."""
+    film(db, read=False)
+    assert places(query) == expected
+
+
+def test_a_person_the_words_name_is_found_by_the_words_alone(db):
+    """Once a sign reads coco's name where she is seen, the words find her, as they find a player the
+    commentary names; where she is only seen is not moved ahead of them."""
+    film(db, read=True)
+    assert places("every scene with coco") == [(5.0, 10.0), (40.0, 45.0), (0.0, 5.0)]

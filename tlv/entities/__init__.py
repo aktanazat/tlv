@@ -888,6 +888,45 @@ def present(db: sqlite3.Connection, video_id: str, start: float, end: float) -> 
     return sorted(found, key=lambda p: (p["start"], p["entity_id"]))
 
 
+def sight_only(db: sqlite3.Connection, entity_ids: Iterable[str]) -> dict[str, str]:
+    """The named people among `entity_ids` whose name the index never read or heard where it saw them,
+    by entity id, with their names: no name clue of theirs (on screen, in speech, in a caption) gives
+    it, so the owner named them and only how they look ties them to the name. The words of the index
+    cannot find such a person; where the index sees them can."""
+    found = {}
+    for entity_id in entity_ids:
+        rows = db.execute(
+            "SELECT e.name, a.clues FROM entities e JOIN entity_members m USING (entity_id)"
+            " JOIN appearances a USING (appearance_id) WHERE e.entity_id = ? AND e.name IS NOT NULL",
+            (entity_id,),
+        ).fetchall()
+        read = any(
+            clue["kind"] in rules.NAME_KINDS and rules.same_person(clue["value"], row["name"])
+            for row in rows
+            for clue in json.loads(row["clues"])
+        )
+        if rows and not read:
+            found[entity_id] = rows[0]["name"]
+    return found
+
+
+def sightings(
+    db: sqlite3.Connection, video_id: str, entity_id: str, start: float, end: float
+) -> list[tuple[float, float, Kind, Box]]:
+    """Each appearance of a person in a video between start and end: the stretch it is seen, widened by
+    HALF_STEP as in `present` and cut to start..end, whether a face or a body is seen, and its box at
+    its clearest frame; earliest first."""
+    seen: list[tuple[float, float, Kind, Box]] = []
+    for row in db.execute(
+        "SELECT a.start, a.end, a.kind, a.box FROM appearances a JOIN entity_members m USING (appearance_id)"
+        " WHERE m.entity_id = ? AND a.video_id = ? AND a.end + ? >= ? AND a.start - ? <= ? ORDER BY a.start",
+        (entity_id, video_id, HALF_STEP, start, HALF_STEP, end),
+    ):
+        x, y, w, h = json.loads(row["box"])
+        seen.append((max(start, row["start"] - HALF_STEP), min(end, row["end"] + HALF_STEP), row["kind"], (x, y, w, h)))
+    return seen
+
+
 # Corrections.
 
 
