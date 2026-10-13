@@ -1,0 +1,253 @@
+{
+  "method": "Labeled by hand from the three local videos: 1 fps contact sheets of every video, score-bug crops at 1 fps to time each basket by the score change and the shot-clock reset, and full-resolution crops at 0.04-0.5 s steps to read jersey numbers and tell dunks from layups. YouTube's automatic captions were used only as a search aid (spoken mentions, play locations). Neither system's output was read before these labels were written. Each event lists the live range first, then every replay of the same moment. Times are m:ss.s from the start of the local file. 'ambiguous' holds moments the labels could not settle; a clip there is neither credited nor penalized.",
+  "videos": {
+    "oyk2QtdUtKE": {
+      "title": "LeBron James TURNED BACK THE CLOCK With 29 PTS vs 76ERS | December 7, 2025",
+      "duration": "7:01.8",
+      "source": "https://www.youtube.com/watch?v=oyk2QtdUtKE"
+    },
+    "zHBgJqG1nJo": {
+      "title": "LeBron James drops dimes and scores first bucket for 76ers",
+      "duration": "4:02.3",
+      "source": "https://www.youtube.com/watch?v=zHBgJqG1nJo"
+    },
+    "G6go_js-qoU": {
+      "title": "WARRIORS at LAKERS | FULL GAME HIGHLIGHTS | April 3, 2025",
+      "duration": "12:12.2",
+      "source": "https://www.youtube.com/watch?v=G6go_js-qoU"
+    }
+  },
+  "queries": {
+    "lebron-score-celebrate": {
+      "events": [
+        {
+          "video": "oyk2QtdUtKE",
+          "ranges": [["4:44.0", "4:57.0"], ["4:57.5", "5:07.5"]],
+          "note": "108-110: LeBron drives and scores (4:48.5-4:50), then flexes and raises his arms (4:51-4:56); the baseline-camera replay of the same play follows."
+        },
+        {
+          "video": "G6go_js-qoU",
+          "ranges": [["5:55.0", "5:59.8"]],
+          "note": "62-64: LeBron's layup from the right wing (5:56.2-5:56.6), then a close-up of him pointing (5:58.5-5:59.5)."
+        }
+      ],
+      "ambiguous": [
+        {
+          "video": "oyk2QtdUtKE",
+          "ranges": [["4:15.5", "4:21.0"]],
+          "note": "102-105 three; he jogs back with a brief open-hand gesture (4:20.2-4:20.4) that may or may not be a celebration."
+        },
+        {
+          "video": "oyk2QtdUtKE",
+          "ranges": [["4:26.0", "4:36.0"], ["4:36.0", "4:41.5"]],
+          "note": "105-108 three and its replay; fists clenched 4:33.4-4:34.6, subdued."
+        }
+      ],
+      "notes": "Celebration means a visible gesture after the basket: flex, scream, point, fist pump, chest thump or raised arms. LeBron baskets followed by no gesture are not events: oyk2 0:53-0:56, 1:16-1:24 (replay 1:42-1:46.8), 1:36-1:41.5, 1:51.6, 2:01.6, the 2:12 three, the 2:52 floater, 3:55-4:07.5; G6go 5:12.3, 5:40.2, 8:23.8; zHBg the 3:45.6-3:50 scoop (replay 3:53-4:00.5). A clip on the oyk2 4:57.5-5:07.5 replay is the same 108-110 play, not a new basket."
+    },
+    "lebron-pass-dunk": {
+      "events": [
+        {
+          "video": "oyk2QtdUtKE",
+          "ranges": [["3:07.0", "3:14.0"], ["3:14.0", "3:22.0"]],
+          "note": "LeBron's lob to Ayton (#5), who dunks the alley-oop; CARL'S CAM replay 3:14-3:22."
+        },
+        {
+          "video": "G6go_js-qoU",
+          "ranges": [["9:18.5", "9:21.0"]],
+          "note": "LeBron drives and dishes to Hachimura (#28) on the baseline (9:19.4); Hachimura catches on the floor and two-hand dunks (9:20.3-9:20.7). No replay."
+        },
+        {
+          "video": "zHBgJqG1nJo",
+          "ranges": [["0:49.0", "0:52.5"], ["1:04.0", "1:07.5"]],
+          "note": "LeBron's no-look pass to Edgecombe (#77) cutting along the baseline; Edgecombe slams it (0:50.8-0:51.0) and hangs on the rim; replay 1:04-1:07."
+        },
+        {
+          "video": "zHBgJqG1nJo",
+          "ranges": [["2:25.5", "2:28.0"], ["2:39.0", "2:43.5"]],
+          "note": "LeBron whips a pass down low to Jabari Walker (#33), who catches it on the floor and dunks (2:27.0-2:27.4); replay 2:39-2:43."
+        }
+      ],
+      "ambiguous": [
+        {
+          "video": "zHBgJqG1nJo",
+          "ranges": [["0:36.0", "0:41.5"], ["1:00.0", "1:03.5"]],
+          "note": "LeBron passes to Embiid, who dishes to #7 for the jam (0:39.0-0:39.2): LeBron passed and a teammate dunked, but LeBron's pass did not go to the dunker. Replay 1:00-1:03."
+        },
+        {
+          "video": "zHBgJqG1nJo",
+          "ranges": [["0:27.0", "0:30.5"]],
+          "note": "LeBron's hit-ahead pass to Edgecombe, who finishes at the rim at 0:28.2-0:28.4 (0-2); at this camera distance a dunk could not be told from a layup."
+        }
+      ],
+      "notes": "The pass must come before the dunk and the dunker must be a teammate. Not events: zHBg 1:16-1:19 Maxey drive-and-dunk after a pass from #7, not LeBron (replay 1:24-1:27.5); every other LeBron assist in the three videos ends in a jumper, a three or a layup."
+    },
+    "curry-three": {
+      "events": [
+        {
+          "video": "G6go_js-qoU",
+          "ranges": [["4:00.0", "4:06.4"]],
+          "note": "Curry (#30) pull-up three over Luka, released 4:02.8."
+        },
+        {
+          "video": "G6go_js-qoU",
+          "ranges": [["9:24.0", "9:31.5"]],
+          "note": "Curry three released 9:27.2 (111-114), Curry close-ups 9:30.3 and 9:31.5."
+        }
+      ],
+      "ambiguous": [
+        {
+          "video": "G6go_js-qoU",
+          "ranges": [["3:26.0", "3:37.0"]],
+          "note": "40-43 for Golden State around Curry; almost certainly three free throws, but the scoring itself is not shown."
+        }
+      ],
+      "notes": "Threes by other Warriors are not events: Podziemski 0:18.0, 0:53.0, 4:23.0, 7:52.5, 9:44.4; Moody 0:39.4, 3:01; another guard 1:46.9; 7:33.9 while Curry was on the bench. Curry does not play in oyk2 or zHBg."
+    },
+    "lebron-dunk": {
+      "events": [
+        {
+          "video": "oyk2QtdUtKE",
+          "ranges": [["1:01.5", "1:05.0"], ["1:06.5", "1:12.0"]],
+          "note": "Cutting one-hand dunk off a Luka pass; replay 1:06.5-1:12."
+        },
+        {
+          "video": "oyk2QtdUtKE",
+          "ranges": [["2:19.5", "2:28.0"], ["2:30.0", "2:38.5"], ["2:39.0", "2:43.5"]],
+          "note": "Fast-break dunk; two replays."
+        }
+      ],
+      "ambiguous": [
+        {
+          "video": "oyk2QtdUtKE",
+          "ranges": [["0:36.0", "0:46.5"]],
+          "note": "Coast-to-coast drive; the finish looks like a layup, but the camera does not settle it."
+        }
+      ],
+      "notes": "Every LeBron basket shown in G6go and zHBg is a layup, floater or jumper."
+    },
+    "lebron-stats-graphic": {
+      "events": [
+        {
+          "video": "oyk2QtdUtKE",
+          "ranges": [["5:27.0", "5:48.0"]],
+          "note": "'LEBRON JAMES PTS 29 FG 12/17 3-PT 4/6 REB 7 AST 6'; bounds read from the 1 fps overview."
+        },
+        {
+          "video": "G6go_js-qoU",
+          "ranges": [["5:19.0", "5:21.5"]],
+          "note": "'14 PTS 4/7 FG 3/4 FT'."
+        },
+        {
+          "video": "G6go_js-qoU",
+          "ranges": [["8:35.5", "8:38.5"]],
+          "note": "'27 PTS 8/11 FG 8/9 FT'."
+        },
+        {
+          "video": "G6go_js-qoU",
+          "ranges": [["9:31.5", "9:33.0"]],
+          "note": "'8 PTS 1ST HALF 22 PTS 2ND HALF'."
+        }
+      ],
+      "ambiguous": [],
+      "notes": "Graphics about anyone else are not events: oyk2 Drummond 4:08.5-4:14, Embiid 4:20.5-4:25, 'LAKERS 8-0 IN CLUTCH GAMES' 5:49-6:01, paint points 2:44; G6go Kerr 2:01-2:07, Curry 3:34.2-3:36.2, Podziemski 3:54-3:56, Draymond 4:50-4:53, Hachimura 5:30-5:31, Curry postgame 10:47-10:53; zHBg the 'ON THE FLOOR' lineup 2:05-2:07.5 names LeBron but shows no stats."
+    },
+    "fernandez-mention": {
+      "events": [
+        {
+          "video": "zHBgJqG1nJo",
+          "ranges": [["2:45.7", "2:50.0"]],
+          "note": "'They've got a lot of talent and Jordi Fernandez planning to take advantage this season.'"
+        },
+        {
+          "video": "zHBgJqG1nJo",
+          "ranges": [["3:13.7", "3:15.6"]],
+          "note": "'He's talking to Jordi Fernandez about it.'"
+        }
+      ],
+      "ambiguous": [],
+      "notes": "Found with YouTube's automatic captions; the wording was not re-transcribed from the audio. No mention in oyk2 or G6go."
+    },
+    "end-of-quarter-buzzer": {
+      "events": [
+        {
+          "video": "oyk2QtdUtKE",
+          "ranges": [["5:12.5", "5:17.5"]],
+          "note": "Game end: game clock 0.0 at about 5:14.5, FINAL graphic 5:15.5-5:16."
+        },
+        {
+          "video": "G6go_js-qoU",
+          "ranges": [["4:21.0", "4:29.5"]],
+          "note": "Half end: Podziemski three released about 4:23.0, game clock 0.0 at 4:24.0-4:24.2."
+        },
+        {
+          "video": "G6go_js-qoU",
+          "ranges": [["10:36.0", "10:42.0"]],
+          "note": "Game end: game clock 0.0 at 10:41 (123-116); bounds read from the 1 fps overview."
+        }
+      ],
+      "ambiguous": [],
+      "notes": "Truth is the game clock reaching 0.0 at the end of a period, half and game end included; the horn was not checked separately in the audio. Not events: the shot clock at 0.0 (G6go 6:59 and 10:21-10:22; zHBg 3:02-3:04 during a stoppage at 1st :12.3). G6go's 1st and 3rd quarter ends and zHBg's end of the 1st quarter are not shown."
+    },
+    "lebron-fast-break-dunk": {
+      "events": [
+        {
+          "video": "oyk2QtdUtKE",
+          "ranges": [["2:19.5", "2:28.0"], ["2:30.0", "2:38.5"], ["2:39.0", "2:43.5"]],
+          "note": "Fast-break dunk; two replays."
+        }
+      ],
+      "ambiguous": [
+        {
+          "video": "oyk2QtdUtKE",
+          "ranges": [["0:36.0", "0:46.5"]],
+          "note": "Coast-to-coast drive; the finish looks like a layup, but the camera does not settle it."
+        }
+      ],
+      "notes": "The oyk2 1:01.5 cutting dunk is a half-court play and not an event."
+    },
+    "alley-oop": {
+      "events": [
+        {
+          "video": "oyk2QtdUtKE",
+          "ranges": [["3:07.0", "3:14.0"], ["3:14.0", "3:22.0"]],
+          "note": "LeBron's lob to Ayton, caught in the air and dunked; CARL'S CAM replay 3:14-3:22."
+        }
+      ],
+      "ambiguous": [
+        {
+          "video": "zHBgJqG1nJo",
+          "ranges": [["0:36.0", "0:41.5"], ["1:00.0", "1:03.5"]],
+          "note": "Embiid's short dish to #7 at the rim, dunked 0:39.0-0:39.2; whether the catch was in the air could not be settled."
+        },
+        {
+          "video": "zHBgJqG1nJo",
+          "ranges": [["0:49.0", "0:52.5"], ["1:04.0", "1:07.5"]],
+          "note": "Edgecombe catches LeBron's no-look pass on a baseline cut and slams it; whether the catch was in the air could not be settled."
+        }
+      ],
+      "notes": "Alley-oop means the pass is caught in the air and dunked before landing. Not events: zHBg Walker jam 2:25.5-2:28 (caught on the floor), Maxey drive-and-dunk 1:16-1:19, Edgecombe's 0:28 finish after a dribble drive, Embiid 3:33-3:37 (pass up top that he does not finish; the score stays 38-39); G6go Hachimura 9:18.5-9:21 (caught on the floor). G6go has no dunk off a lob."
+    },
+    "durant-three": {
+      "events": [],
+      "ambiguous": [],
+      "notes": "Kevin Durant does not appear in any of the three videos (Lakers at 76ers, 76ers at Nets, Warriors at Lakers); every returned clip is false."
+    },
+    "coach-interview": {
+      "events": [
+        {
+          "video": "G6go_js-qoU",
+          "ranges": [["1:49.5", "2:17.5"]],
+          "note": "Steve Kerr in-game interview."
+        },
+        {
+          "video": "G6go_js-qoU",
+          "ranges": [["7:01.5", "7:19.5"]],
+          "note": "JJ Redick in-game interview."
+        }
+      ],
+      "ambiguous": [],
+      "notes": "Postgame player interviews are not events: oyk2 LeBron 5:19-7:01, G6go Curry 10:42-12:05. zHBg has no interview."
+    }
+  }
+}

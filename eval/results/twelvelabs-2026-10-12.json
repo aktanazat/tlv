@@ -1,0 +1,2082 @@
+{
+ "system": "twelvelabs",
+ "flags": [
+  "--max-candidates",
+  "12",
+  "--no-cut",
+  "--json"
+ ],
+ "runs": [
+  {
+   "id": "lebron-score-celebrate",
+   "query": "lebron james scores",
+   "then": [
+    "lebron james celebrates"
+   ],
+   "argv": [
+    "/Users/aktanazat/.local/bin/mem-secret",
+    "run",
+    "TWELVELABS_API_KEY",
+    "--",
+    "/Users/aktanazat/.bun/bin/bun",
+    "/Users/aktanazat/Developer/tlv-yardstick/src/cli.ts",
+    "find",
+    "lebron james scores",
+    "--then",
+    "lebron james celebrates",
+    "--max-candidates",
+    "12",
+    "--no-cut",
+    "--json"
+   ],
+   "seconds": 40.8,
+   "exit_code": 0,
+   "output": {
+    "claim": "lebron james scores, then lebron james celebrates",
+    "confirmed": [
+     {
+      "id": "obs_7366abb382",
+      "video_id": "6acd5d8eb4def3563b044971",
+      "title": "LeBron James TURNED BACK THE CLOCK With 29 PTS vs 76ERS | December 7, 2025",
+      "source": "https://www.youtube.com/watch?v=oyk2QtdUtKE",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-oyk2QtdUtKE.mp4",
+      "start": 287.9,
+      "end": 296.9,
+      "timecode": "00:04:47.9 -> 00:04:56.9",
+      "claim": "lebron james scores, then lebron james celebrates",
+      "who": "LeBron James (Lakers #23)",
+      "evidence": "LeBron James wearing Lakers jersey #23 is seen shooting and scoring a three-pointer at the start of the clip. The score bug updates from 108 to 110 for the Lakers. Immediately after, he is shown celebrating by raising his arms and flexing while walking back down the court. Commentary mentions 'Lebron' during the celebration.",
+      "confidence": 1,
+      "steps": [
+       {
+        "step": "lebron james scores",
+        "start": 287.9,
+        "end": 290.9,
+        "timecode": "00:04:47.9 -> 00:04:50.9"
+       },
+       {
+        "step": "lebron james celebrates",
+        "start": 290.9,
+        "end": 296.9,
+        "timecode": "00:04:50.9 -> 00:04:56.9"
+       }
+      ]
+     },
+     {
+      "id": "obs_1f70afc35d",
+      "video_id": "6acd5d8eb4def3563b044971",
+      "title": "LeBron James TURNED BACK THE CLOCK With 29 PTS vs 76ERS | December 7, 2025",
+      "source": "https://www.youtube.com/watch?v=oyk2QtdUtKE",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-oyk2QtdUtKE.mp4",
+      "start": 255.53,
+      "end": 261.53,
+      "timecode": "00:04:15.5 -> 00:04:21.5",
+      "claim": "lebron james scores, then lebron james celebrates",
+      "who": "LeBron James (Lakers #23)",
+      "evidence": "LeBron James wearing Lakers jersey #23 is seen shooting and scoring a three-pointer around 10-12 seconds. Immediately after, from 12-16 seconds, he is shown celebrating by pumping his fist and running back down the court. The score bug updates from 102-100 to 105-100 confirming the basket.",
+      "confidence": 0.95,
+      "steps": [
+       {
+        "step": "lebron james scores",
+        "start": 255.53,
+        "end": 257.53,
+        "timecode": "00:04:15.5 -> 00:04:17.5"
+       },
+       {
+        "step": "lebron james celebrates",
+        "start": 257.53,
+        "end": 261.53,
+        "timecode": "00:04:17.5 -> 00:04:21.5"
+       }
+      ]
+     },
+     {
+      "id": "obs_af8289fbe9",
+      "video_id": "6acd5d8eb4def3563b044971",
+      "title": "LeBron James TURNED BACK THE CLOCK With 29 PTS vs 76ERS | December 7, 2025",
+      "source": "https://www.youtube.com/watch?v=oyk2QtdUtKE",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-oyk2QtdUtKE.mp4",
+      "start": 269.3,
+      "end": 275.3,
+      "timecode": "00:04:29.3 -> 00:04:35.3",
+      "claim": "lebron james scores, then lebron james celebrates",
+      "who": "LeBron James (Lakers #23)",
+      "evidence": "LeBron James wearing Lakers jersey #23 is seen shooting and scoring a basket as the score changes from 105-105 to 108-105. Immediately after, he is shown jogging and celebrating with the crowd visible in the background.",
+      "confidence": 0.95,
+      "steps": [
+       {
+        "step": "lebron james scores",
+        "start": 269.3,
+        "end": 271.8,
+        "timecode": "00:04:29.3 -> 00:04:31.8"
+       },
+       {
+        "step": "lebron james celebrates",
+        "start": 271.8,
+        "end": 275.3,
+        "timecode": "00:04:31.8 -> 00:04:35.3"
+       }
+      ]
+     },
+     {
+      "id": "obs_b529fd43cb",
+      "video_id": "6acd5d8eb4def3563b044971",
+      "title": "LeBron James TURNED BACK THE CLOCK With 29 PTS vs 76ERS | December 7, 2025",
+      "source": "https://www.youtube.com/watch?v=oyk2QtdUtKE",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-oyk2QtdUtKE.mp4",
+      "start": 296.17,
+      "end": 302.17,
+      "timecode": "00:04:56.2 -> 00:05:02.2",
+      "claim": "lebron james scores, then lebron james celebrates",
+      "who": "LeBron James (Lakers #23)",
+      "evidence": "Player wearing Lakers jersey #23 (LeBron James) is seen shooting and scoring a three-pointer around the 3-second mark. Immediately after the ball goes through the net, he turns and performs a celebratory dance/movement along the sideline until about 8 seconds. The score bug updates from 108-105 to 110-105, confirming the basket. Commentary mentions 'Lebron's night'.",
+      "confidence": 0.95,
+      "steps": [
+       {
+        "step": "lebron james scores",
+        "start": 296.17,
+        "end": 298.17,
+        "timecode": "00:04:56.2 -> 00:04:58.2"
+       },
+       {
+        "step": "lebron james celebrates",
+        "start": 298.17,
+        "end": 302.17,
+        "timecode": "00:04:58.2 -> 00:05:02.2"
+       }
+      ]
+     },
+     {
+      "id": "obs_81ade96c53",
+      "video_id": "6acd5f05737ec91c630a990b",
+      "title": "WARRIORS at LAKERS | FULL GAME HIGHLIGHTS | April 3, 2025",
+      "source": "https://www.youtube.com/watch?v=G6go_js-qoU",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-G6go_js-qoU.mp4",
+      "start": 354.8,
+      "end": 356.3,
+      "timecode": "00:05:54.8 -> 00:05:56.3",
+      "claim": "lebron james scores, then lebron james celebrates",
+      "who": "LeBron James, #23, Los Angeles Lakers",
+      "evidence": "LeBron James wearing Lakers jersey #23 is seen driving to the basket and scoring a layup around 5.5s-6.0s. Immediately after, at 6.0s-7.0s, he is shown in a close-up celebrating with arms spread wide. The score bug updates from 73-62 to 73-64 confirming the basket.",
+      "confidence": 0.95,
+      "steps": [
+       {
+        "step": "lebron james scores",
+        "start": 354.8,
+        "end": 355.3,
+        "timecode": "00:05:54.8 -> 00:05:55.3"
+       },
+       {
+        "step": "lebron james celebrates",
+        "start": 355.3,
+        "end": 356.3,
+        "timecode": "00:05:55.3 -> 00:05:56.3"
+       }
+      ]
+     }
+    ],
+    "rejected": [
+     {
+      "video_id": "6acd5f05737ec91c630a990b",
+      "start": 571.9,
+      "end": 578.97,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5d8eb4def3563b044971",
+      "start": 275.83,
+      "end": 281.9,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5d8eb4def3563b044971",
+      "start": 148.17,
+      "end": 158.7,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5d8eb4def3563b044971",
+      "start": 74.5,
+      "end": 85.5,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5d8eb4def3563b044971",
+      "start": 40.13,
+      "end": 47.13,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5d8eb4def3563b044971",
+      "start": 257.57,
+      "end": 263.57,
+      "reason": "same moment as obs_1f70afc35d"
+     },
+     {
+      "video_id": "6acd5d8eb4def3563b044971",
+      "start": 287.9,
+      "end": 296.9,
+      "reason": "same moment as obs_7366abb382"
+     }
+    ],
+    "counts": {
+     "candidates": 12,
+     "confirmed": 5,
+     "rejected": 7
+    }
+   },
+   "stderr": "tlv: checking 12 candidates with Pegasus\ntlv: checked 1 of 12\ntlv: checked 2 of 12\ntlv: checked 3 of 12\ntlv: checked 4 of 12\ntlv: checked 5 of 12\ntlv: checked 6 of 12\ntlv: checked 7 of 12\ntlv: checked 8 of 12\ntlv: checked 9 of 12\ntlv: checked 10 of 12\ntlv: checked 11 of 12\ntlv: checked 12 of 12\n"
+  },
+  {
+   "id": "lebron-pass-dunk",
+   "query": "lebron james passes the ball",
+   "then": [
+    "a teammate dunks"
+   ],
+   "argv": [
+    "/Users/aktanazat/.local/bin/mem-secret",
+    "run",
+    "TWELVELABS_API_KEY",
+    "--",
+    "/Users/aktanazat/.bun/bin/bun",
+    "/Users/aktanazat/Developer/tlv-yardstick/src/cli.ts",
+    "find",
+    "lebron james passes the ball",
+    "--then",
+    "a teammate dunks",
+    "--max-candidates",
+    "12",
+    "--no-cut",
+    "--json"
+   ],
+   "seconds": 48.6,
+   "exit_code": 0,
+   "output": {
+    "claim": "lebron james passes the ball, then a teammate dunks",
+    "confirmed": [
+     {
+      "id": "obs_28c751e601",
+      "video_id": "6acd5d8eb4def3563b044971",
+      "title": "LeBron James TURNED BACK THE CLOCK With 29 PTS vs 76ERS | December 7, 2025",
+      "source": "https://www.youtube.com/watch?v=oyk2QtdUtKE",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-oyk2QtdUtKE.mp4",
+      "start": 69.5,
+      "end": 74,
+      "timecode": "00:01:09.5 -> 00:01:14.0",
+      "claim": "lebron james passes the ball, then a teammate dunks",
+      "who": "LeBron James (Lakers #23)",
+      "evidence": "LeBron James wearing Lakers jersey #23 is clearly visible driving to the basket. At approximately 00:06, he passes the ball to a teammate (Lakers #11, Hayes) who then performs a dunk at 00:09-00:10. The score bug confirms the Lakers team.",
+      "confidence": 0.95,
+      "steps": [
+       {
+        "step": "lebron james passes the ball",
+        "start": 69.5,
+        "end": 71,
+        "timecode": "00:01:09.5 -> 00:01:11.0"
+       },
+       {
+        "step": "a teammate dunks",
+        "start": 72,
+        "end": 74,
+        "timecode": "00:01:12.0 -> 00:01:14.0"
+       }
+      ]
+     },
+     {
+      "id": "obs_1dc9898f43",
+      "video_id": "6acd5d8eb4def3563b044971",
+      "title": "LeBron James TURNED BACK THE CLOCK With 29 PTS vs 76ERS | December 7, 2025",
+      "source": "https://www.youtube.com/watch?v=oyk2QtdUtKE",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-oyk2QtdUtKE.mp4",
+      "start": 82.5,
+      "end": 86,
+      "timecode": "00:01:22.5 -> 00:01:26.0",
+      "claim": "lebron james passes the ball, then a teammate dunks",
+      "who": "LeBron James (Lakers #23) and Anthony Davis (Lakers #3)",
+      "evidence": "At 0:11-0:12, LeBron James (#23) is seen passing the ball to a teammate near the basket. Immediately after, at 0:12-0:14, Anthony Davis (#3) catches the pass and performs a dunk. The commentary confirms 'Great pass from James' and the visual sequence clearly shows the pass followed by the dunk.",
+      "confidence": 0.95,
+      "steps": [
+       {
+        "step": "lebron james passes the ball",
+        "start": 82.5,
+        "end": 84,
+        "timecode": "00:01:22.5 -> 00:01:24.0"
+       },
+       {
+        "step": "a teammate dunks",
+        "start": 84,
+        "end": 86,
+        "timecode": "00:01:24.0 -> 00:01:26.0"
+       }
+      ]
+     },
+     {
+      "id": "obs_25b068d1b7",
+      "video_id": "6acd5d8eb4def3563b044971",
+      "title": "LeBron James TURNED BACK THE CLOCK With 29 PTS vs 76ERS | December 7, 2025",
+      "source": "https://www.youtube.com/watch?v=oyk2QtdUtKE",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-oyk2QtdUtKE.mp4",
+      "start": 147.63,
+      "end": 152.13,
+      "timecode": "00:02:27.6 -> 00:02:32.1",
+      "claim": "lebron james passes the ball, then a teammate dunks",
+      "who": "LeBron James (Lakers #23) and Rui Hachimura (Lakers #28)",
+      "evidence": "At 00:14, LeBron James (#23) is seen dribbling down the court on a fast break. At 00:16, he passes the ball to his teammate Rui Hachimura (#28). Immediately after, at 00:17, Hachimura catches the ball and performs a dunk. The commentary also mentions 'James plays a little defense... to love to jail' and 'finish it after rim'.",
+      "confidence": 0.95,
+      "steps": [
+       {
+        "step": "lebron james passes the ball",
+        "start": 147.63,
+        "end": 150.13,
+        "timecode": "00:02:27.6 -> 00:02:30.1"
+       },
+       {
+        "step": "a teammate dunks",
+        "start": 150.13,
+        "end": 152.13,
+        "timecode": "00:02:30.1 -> 00:02:32.1"
+       }
+      ]
+     },
+     {
+      "id": "obs_afba3a5a67",
+      "video_id": "6acd5d8eb4def3563b044971",
+      "title": "LeBron James TURNED BACK THE CLOCK With 29 PTS vs 76ERS | December 7, 2025",
+      "source": "https://www.youtube.com/watch?v=oyk2QtdUtKE",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-oyk2QtdUtKE.mp4",
+      "start": 155.7,
+      "end": 159.7,
+      "timecode": "00:02:35.7 -> 00:02:39.7",
+      "claim": "lebron james passes the ball, then a teammate dunks",
+      "who": "LeBron James (Lakers #23) and Dwight Howard (Lakers #39)",
+      "evidence": "At the start of the clip, LeBron James (#23) is seen driving and passing the ball. Immediately after, Dwight Howard (#39) catches the pass and performs a dunk. The score bug identifies the teams as LAL and PHI.",
+      "confidence": 0.95,
+      "steps": [
+       {
+        "step": "lebron james passes the ball",
+        "start": 155.7,
+        "end": 157.2,
+        "timecode": "00:02:35.7 -> 00:02:37.2"
+       },
+       {
+        "step": "a teammate dunks",
+        "start": 157.2,
+        "end": 159.7,
+        "timecode": "00:02:37.2 -> 00:02:39.7"
+       }
+      ]
+     },
+     {
+      "id": "obs_3b2aea3f08",
+      "video_id": "6acd5d8eb4def3563b044971",
+      "title": "LeBron James TURNED BACK THE CLOCK With 29 PTS vs 76ERS | December 7, 2025",
+      "source": "https://www.youtube.com/watch?v=oyk2QtdUtKE",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-oyk2QtdUtKE.mp4",
+      "start": 187.53,
+      "end": 193.53,
+      "timecode": "00:03:07.5 -> 00:03:13.5",
+      "claim": "lebron james passes the ball, then a teammate dunks",
+      "who": "LeBron James (Lakers #23) and Christian Wood (Lakers #5)",
+      "evidence": "At 00:17-00:22, LeBron James (#23) is seen driving and passing the ball to Christian Wood (#5) who then dunks. The commentary at 00:23-00:32 confirms 'Lebron on the drive... easy lob for A' referring to the dunk. The replay from Carl's Cam (00:33-00:42) clearly shows the pass and dunk sequence.",
+      "confidence": 0.95,
+      "steps": [
+       {
+        "step": "lebron james passes the ball",
+        "start": 187.53,
+        "end": 191.53,
+        "timecode": "00:03:07.5 -> 00:03:11.5"
+       },
+       {
+        "step": "a teammate dunks",
+        "start": 191.53,
+        "end": 193.53,
+        "timecode": "00:03:11.5 -> 00:03:13.5"
+       }
+      ]
+     },
+     {
+      "id": "obs_16f2766f28",
+      "video_id": "6acd5d8eb4def3563b044971",
+      "title": "LeBron James TURNED BACK THE CLOCK With 29 PTS vs 76ERS | December 7, 2025",
+      "source": "https://www.youtube.com/watch?v=oyk2QtdUtKE",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-oyk2QtdUtKE.mp4",
+      "start": 203.4,
+      "end": 208.4,
+      "timecode": "00:03:23.4 -> 00:03:28.4",
+      "claim": "lebron james passes the ball, then a teammate dunks",
+      "who": "LeBron James (Lakers #23) and Taurean Prince (Lakers #5)",
+      "evidence": "At 00:04-00:06, LeBron James (#23) is seen dribbling and passing the ball to a teammate. At 00:07-00:09, the teammate (Taurean Prince, #5) receives the pass and performs a dunk. The score bug shows Lakers leading, and the commentary mentions 'down to Lebron, down the middle land up and in' confirming the sequence.",
+      "confidence": 0.95,
+      "steps": [
+       {
+        "step": "lebron james passes the ball",
+        "start": 203.4,
+        "end": 205.4,
+        "timecode": "00:03:23.4 -> 00:03:25.4"
+       },
+       {
+        "step": "a teammate dunks",
+        "start": 205.9,
+        "end": 208.4,
+        "timecode": "00:03:25.9 -> 00:03:28.4"
+       }
+      ]
+     }
+    ],
+    "rejected": [
+     {
+      "video_id": "6acd5f05737ec91c630a990b",
+      "start": 352.3,
+      "end": 360.7,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5d8eb4def3563b044971",
+      "start": 136.63,
+      "end": 148.17,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5d8eb4def3563b044971",
+      "start": 47.13,
+      "end": 57.4,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5d8eb4def3563b044971",
+      "start": 27.53,
+      "end": 40.13,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5f05737ec91c630a990b",
+      "start": 557.1,
+      "end": 563.9,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5d8eb4def3563b044971",
+      "start": 189.57,
+      "end": 194.07,
+      "reason": "same moment as obs_3b2aea3f08"
+     }
+    ],
+    "counts": {
+     "candidates": 12,
+     "confirmed": 6,
+     "rejected": 6
+    }
+   },
+   "stderr": "tlv: checking 12 candidates with Pegasus\ntlv: checked 1 of 12\ntlv: checked 2 of 12\ntlv: checked 3 of 12\ntlv: checked 4 of 12\ntlv: checked 5 of 12\ntlv: checked 6 of 12\ntlv: checked 7 of 12\ntlv: checked 8 of 12\ntlv: checked 9 of 12\ntlv: checked 10 of 12\ntlv: checked 11 of 12\ntlv: checked 12 of 12\n"
+  },
+  {
+   "id": "curry-three",
+   "query": "stephen curry makes a three pointer",
+   "then": [],
+   "argv": [
+    "/Users/aktanazat/.local/bin/mem-secret",
+    "run",
+    "TWELVELABS_API_KEY",
+    "--",
+    "/Users/aktanazat/.bun/bin/bun",
+    "/Users/aktanazat/Developer/tlv-yardstick/src/cli.ts",
+    "find",
+    "stephen curry makes a three pointer",
+    "--max-candidates",
+    "12",
+    "--no-cut",
+    "--json"
+   ],
+   "seconds": 43.3,
+   "exit_code": 0,
+   "output": {
+    "claim": "stephen curry makes a three pointer",
+    "confirmed": [
+     {
+      "id": "obs_309382c3f4",
+      "video_id": "6acd5f05737ec91c630a990b",
+      "title": "WARRIORS at LAKERS | FULL GAME HIGHLIGHTS | April 3, 2025",
+      "source": "https://www.youtube.com/watch?v=G6go_js-qoU",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-G6go_js-qoU.mp4",
+      "start": 15,
+      "end": 22.53,
+      "timecode": "00:00:15.0 -> 00:00:22.5",
+      "claim": "stephen curry makes a three pointer",
+      "who": "Stephen Curry (Golden State Warriors, #30)",
+      "evidence": "At 00:15, a player in a white Warriors jersey with number 30 receives the ball near the three-point line. At 00:18, he shoots from beyond the arc. The ball goes through the hoop at 00:19. The score bug updates from GSW 0 to GSW 3 at 00:21, confirming a three-pointer. The commentator mentions 'tie it' and 'three point line' during the sequence.",
+      "confidence": 0.95,
+      "steps": [
+       {
+        "step": "stephen curry makes a three pointer",
+        "start": 25.53,
+        "end": 25.53,
+        "timecode": "00:00:25.5 -> 00:00:25.5"
+       }
+      ]
+     },
+     {
+      "id": "obs_1c2f821b02",
+      "video_id": "6acd5f05737ec91c630a990b",
+      "title": "WARRIORS at LAKERS | FULL GAME HIGHLIGHTS | April 3, 2025",
+      "source": "https://www.youtube.com/watch?v=G6go_js-qoU",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-G6go_js-qoU.mp4",
+      "start": 215.97,
+      "end": 220.97,
+      "timecode": "00:03:36.0 -> 00:03:41.0",
+      "claim": "stephen curry makes a three pointer",
+      "who": "Stephen Curry (Golden State Warriors, #30)",
+      "evidence": "At 00:03, a close-up shows Stephen Curry in his #30 Golden State Warriors jersey. At 00:05, an on-screen graphic identifies him as 'STEPHEN CURRY'. He is seen dribbling, shooting from beyond the arc around 00:07-00:08, and the ball goes through the hoop. The score bug updates from GSW 40 to GSW 43 immediately after the shot, confirming a 3-point basket.",
+      "confidence": 0.95,
+      "steps": [
+       {
+        "step": "stephen curry makes a three pointer",
+        "start": 215.97,
+        "end": 220.97,
+        "timecode": "00:03:36.0 -> 00:03:41.0"
+       }
+      ]
+     },
+     {
+      "id": "obs_61774b829f",
+      "video_id": "6acd5f05737ec91c630a990b",
+      "title": "WARRIORS at LAKERS | FULL GAME HIGHLIGHTS | April 3, 2025",
+      "source": "https://www.youtube.com/watch?v=G6go_js-qoU",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-G6go_js-qoU.mp4",
+      "start": 270.3,
+      "end": 271.8,
+      "timecode": "00:04:30.3 -> 00:04:31.8",
+      "claim": "stephen curry makes a three pointer",
+      "who": "Stephen Curry (Golden State Warriors, #30)",
+      "evidence": "At 00:06, a player in a white Warriors jersey with number 30 (Stephen Curry) shoots a three-pointer from beyond the arc. The ball goes through the hoop, and the score bug updates from GSW 57 to GSW 60 immediately after. The player is then seen celebrating with teammates.",
+      "confidence": 0.95,
+      "steps": [
+       {
+        "step": "stephen curry makes a three pointer",
+        "start": 270.3,
+        "end": 271.8,
+        "timecode": "00:04:30.3 -> 00:04:31.8"
+       }
+      ]
+     },
+     {
+      "id": "obs_a8451282e5",
+      "video_id": "6acd5f05737ec91c630a990b",
+      "title": "WARRIORS at LAKERS | FULL GAME HIGHLIGHTS | April 3, 2025",
+      "source": "https://www.youtube.com/watch?v=G6go_js-qoU",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-G6go_js-qoU.mp4",
+      "start": 382.57,
+      "end": 387.57,
+      "timecode": "00:06:22.6 -> 00:06:27.6",
+      "claim": "stephen curry makes a three pointer",
+      "who": "Stephen Curry (Golden State Warriors, #30)",
+      "evidence": "In the segment from 382s to 390s, a player in a white Warriors jersey with number 30 receives a pass in the corner and shoots a three-pointer that goes in. The score bug updates from GSW 78 to GSW 81, confirming the three-point basket. The commentary explicitly mentions 'Curry the fake the fire and the three'.",
+      "confidence": 0.95,
+      "steps": [
+       {
+        "step": "stephen curry makes a three pointer",
+        "start": 382.57,
+        "end": 387.57,
+        "timecode": "00:06:22.6 -> 00:06:27.6"
+       }
+      ]
+     },
+     {
+      "id": "obs_c351a616a0",
+      "video_id": "6acd5f05737ec91c630a990b",
+      "title": "WARRIORS at LAKERS | FULL GAME HIGHLIGHTS | April 3, 2025",
+      "source": "https://www.youtube.com/watch?v=G6go_js-qoU",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-G6go_js-qoU.mp4",
+      "start": 454.43,
+      "end": 457.93,
+      "timecode": "00:07:34.4 -> 00:07:37.9",
+      "claim": "stephen curry makes a three pointer",
+      "who": "Stephen Curry, #30, Golden State Warriors",
+      "evidence": "At 00:00-00:03, Stephen Curry (#30) is seen shooting from beyond the arc and the ball goes through the hoop. The score bug updates from 88-80 to 91-80 immediately after, confirming a 3-point basket. At 00:04-00:06, Curry is shown celebrating the made shot.",
+      "confidence": 0.95,
+      "steps": [
+       {
+        "step": "stephen curry makes a three pointer",
+        "start": 454.43,
+        "end": 457.93,
+        "timecode": "00:07:34.4 -> 00:07:37.9"
+       }
+      ]
+     },
+     {
+      "id": "obs_2e77fd6aaf",
+      "video_id": "6acd5f05737ec91c630a990b",
+      "title": "WARRIORS at LAKERS | FULL GAME HIGHLIGHTS | April 3, 2025",
+      "source": "https://www.youtube.com/watch?v=G6go_js-qoU",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-G6go_js-qoU.mp4",
+      "start": 470.03,
+      "end": 472.53,
+      "timecode": "00:07:50.0 -> 00:07:52.5",
+      "claim": "stephen curry makes a three pointer",
+      "who": "Stephen Curry (Golden State Warriors, #30)",
+      "evidence": "At 0:04-0:06, a player in a white Warriors jersey with number 30 (Stephen Curry) is seen shooting from beyond the arc. The ball goes through the hoop, and the score bug updates from GSW 93 to GSW 96, confirming a three-point basket. The player is clearly identifiable by his jersey number and team colors.",
+      "confidence": 0.95,
+      "steps": [
+       {
+        "step": "stephen curry makes a three pointer",
+        "start": 470.03,
+        "end": 472.53,
+        "timecode": "00:07:50.0 -> 00:07:52.5"
+       }
+      ]
+     },
+     {
+      "id": "obs_a0c47d1fa3",
+      "video_id": "6acd5f05737ec91c630a990b",
+      "title": "WARRIORS at LAKERS | FULL GAME HIGHLIGHTS | April 3, 2025",
+      "source": "https://www.youtube.com/watch?v=G6go_js-qoU",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-G6go_js-qoU.mp4",
+      "start": 568.9,
+      "end": 571.4,
+      "timecode": "00:09:28.9 -> 00:09:31.4",
+      "claim": "stephen curry makes a three pointer",
+      "who": "Stephen Curry (Golden State Warriors, #30)",
+      "evidence": "At the start of the clip, Stephen Curry (#30) is seen shooting a three-pointer from beyond the arc. The ball goes through the hoop, and the score bug updates from GSW 111 to GSW 114, confirming the three-point basket. The commentary also mentions 'Here's a three' during the play.",
+      "confidence": 0.95,
+      "steps": [
+       {
+        "step": "stephen curry makes a three pointer",
+        "start": 568.9,
+        "end": 571.4,
+        "timecode": "00:09:28.9 -> 00:09:31.4"
+       }
+      ]
+     },
+     {
+      "id": "obs_623910c32a",
+      "video_id": "6acd5f05737ec91c630a990b",
+      "title": "WARRIORS at LAKERS | FULL GAME HIGHLIGHTS | April 3, 2025",
+      "source": "https://www.youtube.com/watch?v=G6go_js-qoU",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-G6go_js-qoU.mp4",
+      "start": 583.9,
+      "end": 587.4,
+      "timecode": "00:09:43.9 -> 00:09:47.4",
+      "claim": "stephen curry makes a three pointer",
+      "who": "Stephen Curry (Golden State Warriors, #30)",
+      "evidence": "At 00:00-00:03, Stephen Curry (#30) is seen shooting a three-pointer from beyond the arc. The ball goes through the hoop, and the score bug updates from GSW 114 to GSW 117. At 00:04-00:06, Curry is shown on the bench celebrating with teammates, raising his hand. The replay at 00:09-00:13 confirms the shot was made by Curry.",
+      "confidence": 0.95,
+      "steps": [
+       {
+        "step": "stephen curry makes a three pointer",
+        "start": 583.9,
+        "end": 587.4,
+        "timecode": "00:09:43.9 -> 00:09:47.4"
+       }
+      ]
+     }
+    ],
+    "rejected": [
+     {
+      "video_id": "6acd5f05737ec91c630a990b",
+      "start": 50.67,
+      "end": 58.13,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5f05737ec91c630a990b",
+      "start": 239.23,
+      "end": 246.57,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5f05737ec91c630a990b",
+      "start": 232.63,
+      "end": 239.23,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5f05737ec91c630a990b",
+      "start": 175.1,
+      "end": 181.97,
+      "reason": "no match"
+     }
+    ],
+    "counts": {
+     "candidates": 12,
+     "confirmed": 8,
+     "rejected": 4
+    }
+   },
+   "stderr": "tlv: checking 12 candidates with Pegasus\ntlv: checked 1 of 12\ntlv: checked 2 of 12\ntlv: checked 3 of 12\ntlv: checked 4 of 12\ntlv: checked 5 of 12\ntlv: checked 6 of 12\ntlv: checked 7 of 12\ntlv: checked 8 of 12\ntlv: checked 9 of 12\ntlv: checked 10 of 12\ntlv: checked 11 of 12\ntlv: checked 12 of 12\n"
+  },
+  {
+   "id": "lebron-dunk",
+   "query": "lebron james dunks",
+   "then": [],
+   "argv": [
+    "/Users/aktanazat/.local/bin/mem-secret",
+    "run",
+    "TWELVELABS_API_KEY",
+    "--",
+    "/Users/aktanazat/.bun/bin/bun",
+    "/Users/aktanazat/Developer/tlv-yardstick/src/cli.ts",
+    "find",
+    "lebron james dunks",
+    "--max-candidates",
+    "12",
+    "--no-cut",
+    "--json"
+   ],
+   "seconds": 42.2,
+   "exit_code": 0,
+   "output": {
+    "claim": "lebron james dunks",
+    "confirmed": [
+     {
+      "id": "obs_f3cfff4e97",
+      "video_id": "6acd5d8eb4def3563b044971",
+      "title": "LeBron James TURNED BACK THE CLOCK With 29 PTS vs 76ERS | December 7, 2025",
+      "source": "https://www.youtube.com/watch?v=oyk2QtdUtKE",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-oyk2QtdUtKE.mp4",
+      "start": 40.13,
+      "end": 47.13,
+      "timecode": "00:00:40.1 -> 00:00:47.1",
+      "claim": "lebron james dunks",
+      "who": "LeBron James (Lakers #23)",
+      "evidence": "The player wearing the white Lakers jersey with number 23 is clearly visible driving to the basket and performing a dunk. The on-screen scoreboard identifies the team as the Lakers. The commentary explicitly mentions 'Lebron' finishing the play.",
+      "confidence": 1,
+      "steps": [
+       {
+        "step": "lebron james dunks",
+        "start": 50.13,
+        "end": 50.13,
+        "timecode": "00:00:50.1 -> 00:00:50.1"
+       }
+      ]
+     },
+     {
+      "id": "obs_6b8653e5a8",
+      "video_id": "6acd5d8eb4def3563b044971",
+      "title": "LeBron James TURNED BACK THE CLOCK With 29 PTS vs 76ERS | December 7, 2025",
+      "source": "https://www.youtube.com/watch?v=oyk2QtdUtKE",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-oyk2QtdUtKE.mp4",
+      "start": 70,
+      "end": 74,
+      "timecode": "00:01:10.0 -> 00:01:14.0",
+      "claim": "lebron james dunks",
+      "who": "LeBron James, #23, Los Angeles Lakers",
+      "evidence": "Player wearing Lakers jersey #23 is clearly seen driving to the basket and completing a dunk. The commentary explicitly mentions 'Lebron' and praises his speed during the transition play.",
+      "confidence": 0.98,
+      "steps": [
+       {
+        "step": "lebron james dunks",
+        "start": 70,
+        "end": 74,
+        "timecode": "00:01:10.0 -> 00:01:14.0"
+       }
+      ]
+     },
+     {
+      "id": "obs_9c2e15bbfa",
+      "video_id": "6acd5d8eb4def3563b044971",
+      "title": "LeBron James TURNED BACK THE CLOCK With 29 PTS vs 76ERS | December 7, 2025",
+      "source": "https://www.youtube.com/watch?v=oyk2QtdUtKE",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-oyk2QtdUtKE.mp4",
+      "start": 148.17,
+      "end": 158.7,
+      "timecode": "00:02:28.2 -> 00:02:38.7",
+      "claim": "lebron james dunks",
+      "who": "LeBron James (Lakers #23)",
+      "evidence": "At 00:15-00:18, a player wearing a white Lakers jersey with number 23 is clearly seen driving to the basket and performing a two-handed dunk. The commentary also references 'James' finishing at the rim.",
+      "confidence": 0.98,
+      "steps": [
+       {
+        "step": "lebron james dunks",
+        "start": 160.17,
+        "end": 161.7,
+        "timecode": "00:02:40.2 -> 00:02:41.7"
+       }
+      ]
+     },
+     {
+      "id": "obs_e2d756d0c3",
+      "video_id": "6acd5d8eb4def3563b044971",
+      "title": "LeBron James TURNED BACK THE CLOCK With 29 PTS vs 76ERS | December 7, 2025",
+      "source": "https://www.youtube.com/watch?v=oyk2QtdUtKE",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-oyk2QtdUtKE.mp4",
+      "start": 198.9,
+      "end": 201.1,
+      "timecode": "00:03:18.9 -> 00:03:21.1",
+      "claim": "lebron james dunks",
+      "who": "LeBron James (Lakers #23)",
+      "evidence": "At 00:00-00:02, a player wearing the Lakers jersey #23 (LeBron James) is clearly seen driving to the basket and performing a dunk. The commentary at 04.56s-12.00s also mentions 'down to Lebron, down the middle land up and in', confirming the action.",
+      "confidence": 0.95,
+      "steps": [
+       {
+        "step": "lebron james dunks",
+        "start": 198.9,
+        "end": 201.1,
+        "timecode": "00:03:18.9 -> 00:03:21.1"
+       }
+      ]
+     },
+     {
+      "id": "obs_92df602ca9",
+      "video_id": "6acd5f05737ec91c630a990b",
+      "title": "WARRIORS at LAKERS | FULL GAME HIGHLIGHTS | April 3, 2025",
+      "source": "https://www.youtube.com/watch?v=G6go_js-qoU",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-G6go_js-qoU.mp4",
+      "start": 353.8,
+      "end": 356.3,
+      "timecode": "00:05:53.8 -> 00:05:56.3",
+      "claim": "lebron james dunks",
+      "who": "LeBron James (Lakers #23)",
+      "evidence": "At 00:05, a Lakers player wearing jersey #23 drives to the basket and performs a dunk. At 00:07, a close-up shot clearly shows LeBron James in the Lakers #23 jersey. The score bug updates from LAL 62 to LAL 64 immediately after the play.",
+      "confidence": 0.95,
+      "steps": [
+       {
+        "step": "lebron james dunks",
+        "start": 353.8,
+        "end": 356.3,
+        "timecode": "00:05:53.8 -> 00:05:56.3"
+       }
+      ]
+     },
+     {
+      "id": "obs_e5e3e65594",
+      "video_id": "6acd5f05737ec91c630a990b",
+      "title": "WARRIORS at LAKERS | FULL GAME HIGHLIGHTS | April 3, 2025",
+      "source": "https://www.youtube.com/watch?v=G6go_js-qoU",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-G6go_js-qoU.mp4",
+      "start": 559.1,
+      "end": 561.1,
+      "timecode": "00:09:19.1 -> 00:09:21.1",
+      "claim": "lebron james dunks",
+      "who": "LeBron James (Lakers #23)",
+      "evidence": "At 00:05-00:07, LeBron James wearing the Lakers #23 jersey receives a pass near the basket and performs a dunk. The score bug updates from 109-102 to 109-104 immediately after the basket, confirming the two-point score. A close-up of LeBron James follows at 00:08.",
+      "confidence": 0.95,
+      "steps": [
+       {
+        "step": "lebron james dunks",
+        "start": 559.1,
+        "end": 561.1,
+        "timecode": "00:09:19.1 -> 00:09:21.1"
+       }
+      ]
+     }
+    ],
+    "rejected": [
+     {
+      "video_id": "6acd5d8eb4def3563b044971",
+      "start": 74.5,
+      "end": 85.5,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5f05737ec91c630a990b",
+      "start": 314.63,
+      "end": 323.23,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5d8eb4def3563b044971",
+      "start": 136.63,
+      "end": 148.17,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5d8eb4def3563b044971",
+      "start": 192.57,
+      "end": 201.9,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5d8eb4def3563b044971",
+      "start": 44.13,
+      "end": 46.13,
+      "reason": "same moment as obs_f3cfff4e97"
+     },
+     {
+      "video_id": "6acd5d8eb4def3563b044971",
+      "start": 155.7,
+      "end": 159.7,
+      "reason": "same moment as obs_9c2e15bbfa"
+     }
+    ],
+    "counts": {
+     "candidates": 12,
+     "confirmed": 6,
+     "rejected": 6
+    }
+   },
+   "stderr": "tlv: checking 12 candidates with Pegasus\ntlv: checked 1 of 12\ntlv: checked 2 of 12\ntlv: checked 3 of 12\ntlv: checked 4 of 12\ntlv: checked 5 of 12\ntlv: checked 6 of 12\ntlv: checked 7 of 12\ntlv: checked 8 of 12\ntlv: checked 9 of 12\ntlv: checked 10 of 12\ntlv: checked 11 of 12\ntlv: checked 12 of 12\n"
+  },
+  {
+   "id": "lebron-stats-graphic",
+   "query": "an on-screen graphic shows lebron james's stats",
+   "then": [],
+   "argv": [
+    "/Users/aktanazat/.local/bin/mem-secret",
+    "run",
+    "TWELVELABS_API_KEY",
+    "--",
+    "/Users/aktanazat/.bun/bin/bun",
+    "/Users/aktanazat/Developer/tlv-yardstick/src/cli.ts",
+    "find",
+    "an on-screen graphic shows lebron james's stats",
+    "--max-candidates",
+    "12",
+    "--no-cut",
+    "--json"
+   ],
+   "seconds": 40.2,
+   "exit_code": 0,
+   "output": {
+    "claim": "an on-screen graphic shows lebron james's stats",
+    "confirmed": [
+     {
+      "id": "obs_686948da7a",
+      "video_id": "6acd5d8eb4def3563b044971",
+      "title": "LeBron James TURNED BACK THE CLOCK With 29 PTS vs 76ERS | December 7, 2025",
+      "source": "https://www.youtube.com/watch?v=oyk2QtdUtKE",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-oyk2QtdUtKE.mp4",
+      "start": 325.03,
+      "end": 331.33,
+      "timecode": "00:05:25.0 -> 00:05:31.3",
+      "claim": "an on-screen graphic shows lebron james's stats",
+      "who": "LeBron James",
+      "evidence": "At the 9-second mark of the segment (326.0s in absolute time), a purple on-screen graphic appears at the bottom of the screen displaying '23 LEBRON JAMES' along with his game statistics: PTS 29, FG 12/17, 3-PT 4/6, REB 7, AST 6.",
+      "confidence": 1,
+      "steps": [
+       {
+        "step": "an on-screen graphic shows lebron james's stats",
+        "start": 325.03,
+        "end": 331.33,
+        "timecode": "00:05:25.0 -> 00:05:31.3"
+       }
+      ]
+     },
+     {
+      "id": "obs_15be8762ee",
+      "video_id": "6acd5d8eb4def3563b044971",
+      "title": "LeBron James TURNED BACK THE CLOCK With 29 PTS vs 76ERS | December 7, 2025",
+      "source": "https://www.youtube.com/watch?v=oyk2QtdUtKE",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-oyk2QtdUtKE.mp4",
+      "start": 334.71,
+      "end": 350.01,
+      "timecode": "00:05:34.7 -> 00:05:50.0",
+      "claim": "an on-screen graphic shows lebron james's stats",
+      "who": "LeBron James",
+      "evidence": "An on-screen graphic at the bottom of the screen clearly displays 'LEBRON JAMES' with his jersey number 23 and team logo (Lakers). The graphic lists his stats: PTS 29, FG 12/17, 3-PT 4/6, REB 7, AST 6. This graphic is visible throughout the entire segment.",
+      "confidence": 1,
+      "steps": [
+       {
+        "step": "an on-screen graphic shows lebron james's stats",
+        "start": 334.71,
+        "end": 350.01,
+        "timecode": "00:05:34.7 -> 00:05:50.0"
+       }
+      ]
+     },
+     {
+      "id": "obs_35a8a87228",
+      "video_id": "6acd5f05737ec91c630a990b",
+      "title": "WARRIORS at LAKERS | FULL GAME HIGHLIGHTS | April 3, 2025",
+      "source": "https://www.youtube.com/watch?v=G6go_js-qoU",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-G6go_js-qoU.mp4",
+      "start": 570.9,
+      "end": 572.9,
+      "timecode": "00:09:30.9 -> 00:09:32.9",
+      "claim": "an on-screen graphic shows lebron james's stats",
+      "who": "LeBron James",
+      "evidence": "At timestamp 00:02, a purple on-screen graphic appears in the bottom right corner displaying 'LEBRON JAMES' along with his stats: '8 PTS 1ST HALF' and '22 PTS 2ND HALF'.",
+      "confidence": 1,
+      "steps": [
+       {
+        "step": "an on-screen graphic shows lebron james's stats",
+        "start": 570.9,
+        "end": 572.9,
+        "timecode": "00:09:30.9 -> 00:09:32.9"
+       }
+      ]
+     },
+     {
+      "id": "obs_ab2fa2174c",
+      "video_id": "6acd5d8eb4def3563b044971",
+      "title": "LeBron James TURNED BACK THE CLOCK With 29 PTS vs 76ERS | December 7, 2025",
+      "source": "https://www.youtube.com/watch?v=oyk2QtdUtKE",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-oyk2QtdUtKE.mp4",
+      "start": 353.39,
+      "end": 368.69,
+      "timecode": "00:05:53.4 -> 00:06:08.7",
+      "claim": "an on-screen graphic shows lebron james's stats",
+      "who": "LeBron James",
+      "evidence": "Throughout the video segment, an on-screen graphic is visible at the bottom of the screen. It displays the Los Angeles Lakers logo and text reading 'THIS SEASON 8-0 IN CLUTCH GAMES - LEADS NBA FINAL 5 MIN OF 4TH QTR W/ SCORE WITHIN 5 PTS'. The person being interviewed is clearly LeBron James wearing a Lakers jersey.",
+      "confidence": 0.95,
+      "steps": [
+       {
+        "step": "an on-screen graphic shows lebron james's stats",
+        "start": 353.39,
+        "end": 368.69,
+        "timecode": "00:05:53.4 -> 00:06:08.7"
+       }
+      ]
+     }
+    ],
+    "rejected": [
+     {
+      "video_id": "6acd5d8eb4def3563b044971",
+      "start": 102.17,
+      "end": 106.97,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5d8eb4def3563b044971",
+      "start": 260.57,
+      "end": 272.3,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5d8eb4def3563b044971",
+      "start": 248.03,
+      "end": 260.57,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5d8eb4def3563b044971",
+      "start": 275.83,
+      "end": 281.9,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5d8eb4def3563b044971",
+      "start": 173.53,
+      "end": 183.03,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5d8eb4def3563b044971",
+      "start": 7.2,
+      "end": 18.87,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5d8eb4def3563b044971",
+      "start": 327.37,
+      "end": 340.67,
+      "reason": "same moment as obs_686948da7a"
+     },
+     {
+      "video_id": "6acd5d8eb4def3563b044971",
+      "start": 344.05,
+      "end": 348.05,
+      "reason": "same moment as obs_15be8762ee"
+     }
+    ],
+    "counts": {
+     "candidates": 12,
+     "confirmed": 4,
+     "rejected": 8
+    }
+   },
+   "stderr": "tlv: checking 12 candidates with Pegasus\ntlv: checked 1 of 12\ntlv: checked 2 of 12\ntlv: checked 3 of 12\ntlv: checked 4 of 12\ntlv: checked 5 of 12\ntlv: checked 6 of 12\ntlv: checked 7 of 12\ntlv: checked 8 of 12\ntlv: checked 9 of 12\ntlv: checked 10 of 12\ntlv: checked 11 of 12\ntlv: checked 12 of 12\n"
+  },
+  {
+   "id": "fernandez-mention",
+   "query": "the commentators talk about jordi fernandez",
+   "then": [],
+   "argv": [
+    "/Users/aktanazat/.local/bin/mem-secret",
+    "run",
+    "TWELVELABS_API_KEY",
+    "--",
+    "/Users/aktanazat/.bun/bin/bun",
+    "/Users/aktanazat/Developer/tlv-yardstick/src/cli.ts",
+    "find",
+    "the commentators talk about jordi fernandez",
+    "--max-candidates",
+    "12",
+    "--no-cut",
+    "--json"
+   ],
+   "seconds": 46.2,
+   "exit_code": 0,
+   "output": {
+    "claim": "the commentators talk about jordi fernandez",
+    "confirmed": [
+     {
+      "id": "obs_30de595dea",
+      "video_id": "6acd5d9982f0657191b01823",
+      "title": "LeBron James drops dimes and scores first bucket for 76ers \ud83d\udd25 Preseason debut highlights",
+      "source": "https://www.youtube.com/watch?v=zHBgJqG1nJo",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-zHBgJqG1nJo.mp4",
+      "start": 190.86,
+      "end": 198.5,
+      "timecode": "00:03:10.9 -> 00:03:18.5",
+      "claim": "the commentators talk about jordi fernandez",
+      "who": "Commentators",
+      "evidence": "The audio transcript explicitly states 'Not liking the call to Porty Fernandez about it' and 'he reaches right there', confirming the commentators are discussing Jordi Fernandez's reaction to a call.",
+      "confidence": 0.95,
+      "steps": [
+       {
+        "step": "the commentators talk about jordi fernandez",
+        "start": 190.86,
+        "end": 198.5,
+        "timecode": "00:03:10.9 -> 00:03:18.5"
+       }
+      ]
+     }
+    ],
+    "rejected": [
+     {
+      "video_id": "6acd5f05737ec91c630a990b",
+      "start": 421.57,
+      "end": 430.63,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5f05737ec91c630a990b",
+      "start": 430.63,
+      "end": 439.7,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5f05737ec91c630a990b",
+      "start": 128.23,
+      "end": 137.63,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5f05737ec91c630a990b",
+      "start": 118.83,
+      "end": 128.23,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5f05737ec91c630a990b",
+      "start": 109.43,
+      "end": 118.83,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5f05737ec91c630a990b",
+      "start": 675.03,
+      "end": 683.37,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5d9982f0657191b01823",
+      "start": 53.8,
+      "end": 56.8,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5d9982f0657191b01823",
+      "start": 13.13,
+      "end": 20.93,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5f05737ec91c630a990b",
+      "start": 683.37,
+      "end": 691.85,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5f05737ec91c630a990b",
+      "start": 655.66,
+      "end": 665.34,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5d9982f0657191b01823",
+      "start": 5.33,
+      "end": 13.13,
+      "reason": "no match"
+     }
+    ],
+    "counts": {
+     "candidates": 12,
+     "confirmed": 1,
+     "rejected": 11
+    }
+   },
+   "stderr": "tlv: checking 12 candidates with Pegasus\ntlv: checked 1 of 12\ntlv: checked 2 of 12\ntlv: checked 3 of 12\ntlv: checked 4 of 12\ntlv: checked 5 of 12\ntlv: checked 6 of 12\ntlv: checked 7 of 12\ntlv: checked 8 of 12\ntlv: checked 9 of 12\ntlv: checked 10 of 12\ntlv: checked 11 of 12\ntlv: checked 12 of 12\n"
+  },
+  {
+   "id": "end-of-quarter-buzzer",
+   "query": "the buzzer sounds at the end of a quarter",
+   "then": [],
+   "argv": [
+    "/Users/aktanazat/.local/bin/mem-secret",
+    "run",
+    "TWELVELABS_API_KEY",
+    "--",
+    "/Users/aktanazat/.bun/bin/bun",
+    "/Users/aktanazat/Developer/tlv-yardstick/src/cli.ts",
+    "find",
+    "the buzzer sounds at the end of a quarter",
+    "--max-candidates",
+    "12",
+    "--no-cut",
+    "--json"
+   ],
+   "seconds": 38.5,
+   "exit_code": 0,
+   "output": {
+    "claim": "the buzzer sounds at the end of a quarter",
+    "confirmed": [
+     {
+      "id": "obs_eb6ed25304",
+      "video_id": "6acd5d9982f0657191b01823",
+      "title": "LeBron James drops dimes and scores first bucket for 76ers \ud83d\udd25 Preseason debut highlights",
+      "source": "https://www.youtube.com/watch?v=zHBgJqG1nJo",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-zHBgJqG1nJo.mp4",
+      "start": 176.63,
+      "end": 180.63,
+      "timecode": "00:02:56.6 -> 00:03:00.6",
+      "claim": "the buzzer sounds at the end of a quarter",
+      "who": "Philadelphia 76ers vs Brooklyn Nets",
+      "evidence": "The on-screen score bug shows '1st :12.3' with the shot clock counting down to 0.0 at 00:03, indicating the end of the quarter. Players stop play and walk toward the bench as the clock expires.",
+      "confidence": 0.95,
+      "steps": [
+       {
+        "step": "the buzzer sounds at the end of a quarter",
+        "start": 176.63,
+        "end": 180.63,
+        "timecode": "00:02:56.6 -> 00:03:00.6"
+       }
+      ]
+     },
+     {
+      "id": "obs_dd053e75b8",
+      "video_id": "6acd5f05737ec91c630a990b",
+      "title": "WARRIORS at LAKERS | FULL GAME HIGHLIGHTS | April 3, 2025",
+      "source": "https://www.youtube.com/watch?v=G6go_js-qoU",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-G6go_js-qoU.mp4",
+      "start": 254.43,
+      "end": 267.3,
+      "timecode": "00:04:14.4 -> 00:04:27.3",
+      "claim": "the buzzer sounds at the end of a quarter",
+      "who": "Golden State Warriors vs Los Angeles Lakers",
+      "evidence": "The on-screen scoreboard clearly shows the game clock hitting 0.0 with '2ND' displayed, indicating the end of the 2nd quarter. The players stop play and begin walking toward the bench area, and the score updates to GSW 60, LAL 47.",
+      "confidence": 0.95,
+      "steps": [
+       {
+        "step": "the buzzer sounds at the end of a quarter",
+        "start": 270.3,
+        "end": 270.3,
+        "timecode": "00:04:30.3 -> 00:04:30.3"
+       }
+      ]
+     },
+     {
+      "id": "obs_59684fb1fb",
+      "video_id": "6acd5f05737ec91c630a990b",
+      "title": "WARRIORS at LAKERS | FULL GAME HIGHLIGHTS | April 3, 2025",
+      "source": "https://www.youtube.com/watch?v=G6go_js-qoU",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-G6go_js-qoU.mp4",
+      "start": 268.83,
+      "end": 271.33,
+      "timecode": "00:04:28.8 -> 00:04:31.3",
+      "claim": "the buzzer sounds at the end of a quarter",
+      "who": "Golden State Warriors players",
+      "evidence": "At the start of the clip, the score bug clearly shows '0.0' on the game clock with '2ND' quarter displayed. Players are seen celebrating and walking off the court, indicating the quarter has just ended. The audio commentary also references the end of the period.",
+      "confidence": 0.95,
+      "steps": [
+       {
+        "step": "the buzzer sounds at the end of a quarter",
+        "start": 268.83,
+        "end": 271.33,
+        "timecode": "00:04:28.8 -> 00:04:31.3"
+       }
+      ]
+     },
+     {
+      "id": "obs_05477773b7",
+      "video_id": "6acd5d8eb4def3563b044971",
+      "title": "LeBron James TURNED BACK THE CLOCK With 29 PTS vs 76ERS | December 7, 2025",
+      "source": "https://www.youtube.com/watch?v=oyk2QtdUtKE",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-oyk2QtdUtKE.mp4",
+      "start": 318.77,
+      "end": 321.27,
+      "timecode": "00:05:18.8 -> 00:05:21.3",
+      "claim": "the buzzer sounds at the end of a quarter",
+      "who": "LeBron James (Lakers #23)",
+      "evidence": "At 00:14-00:16, the game clock hits 0.0 and the on-screen score bug explicitly changes to display 'FINAL', confirming the end of the game. The commentary also mentions 'the game is over' around 00:06-00:16.",
+      "confidence": 0.95,
+      "steps": [
+       {
+        "step": "the buzzer sounds at the end of a quarter",
+        "start": 318.77,
+        "end": 321.27,
+        "timecode": "00:05:18.8 -> 00:05:21.3"
+       }
+      ]
+     },
+     {
+      "id": "obs_6104db5d15",
+      "video_id": "6acd5f05737ec91c630a990b",
+      "title": "WARRIORS at LAKERS | FULL GAME HIGHLIGHTS | April 3, 2025",
+      "source": "https://www.youtube.com/watch?v=G6go_js-qoU",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-G6go_js-qoU.mp4",
+      "start": 637.83,
+      "end": 642.3,
+      "timecode": "00:10:37.8 -> 00:10:42.3",
+      "claim": "the buzzer sounds at the end of a quarter",
+      "who": "Golden State Warriors vs. Los Angeles Lakers",
+      "evidence": "The on-screen score bug shows the game clock counting down from 5.7 seconds to 0.0 in the 4th quarter. At 0.0 seconds, players stop play and begin post-game interactions (hugging), indicating the quarter has ended. The scoreboard clearly displays '4TH' and '0.0' at the end of the segment.",
+      "confidence": 0.95,
+      "steps": [
+       {
+        "step": "the buzzer sounds at the end of a quarter",
+        "start": 640.83,
+        "end": 645.3,
+        "timecode": "00:10:40.8 -> 00:10:45.3"
+       }
+      ]
+     }
+    ],
+    "rejected": [
+     {
+      "video_id": "6acd5d9982f0657191b01823",
+      "start": 191.7,
+      "end": 195.5,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5d9982f0657191b01823",
+      "start": 53.8,
+      "end": 56.8,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5d9982f0657191b01823",
+      "start": 0,
+      "end": 5.33,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5f05737ec91c630a990b",
+      "start": 228.3,
+      "end": 232.63,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5d8eb4def3563b044971",
+      "start": 102.17,
+      "end": 106.97,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5f05737ec91c630a990b",
+      "start": 264.3,
+      "end": 267.3,
+      "reason": "same moment as obs_dd053e75b8"
+     },
+     {
+      "video_id": "6acd5f05737ec91c630a990b",
+      "start": 639.3,
+      "end": 641.8,
+      "reason": "same moment as obs_6104db5d15"
+     }
+    ],
+    "counts": {
+     "candidates": 12,
+     "confirmed": 5,
+     "rejected": 7
+    }
+   },
+   "stderr": "tlv: checking 12 candidates with Pegasus\ntlv: checked 1 of 12\ntlv: checked 2 of 12\ntlv: checked 3 of 12\ntlv: checked 4 of 12\ntlv: checked 5 of 12\ntlv: checked 6 of 12\ntlv: checked 7 of 12\ntlv: checked 8 of 12\ntlv: checked 9 of 12\ntlv: checked 10 of 12\ntlv: checked 11 of 12\ntlv: checked 12 of 12\n"
+  },
+  {
+   "id": "lebron-fast-break-dunk",
+   "query": "lebron james dunks on a fast break",
+   "then": [],
+   "argv": [
+    "/Users/aktanazat/.local/bin/mem-secret",
+    "run",
+    "TWELVELABS_API_KEY",
+    "--",
+    "/Users/aktanazat/.bun/bin/bun",
+    "/Users/aktanazat/Developer/tlv-yardstick/src/cli.ts",
+    "find",
+    "lebron james dunks on a fast break",
+    "--max-candidates",
+    "12",
+    "--no-cut",
+    "--json"
+   ],
+   "seconds": 44.9,
+   "exit_code": 0,
+   "output": {
+    "claim": "lebron james dunks on a fast break",
+    "confirmed": [
+     {
+      "id": "obs_977fea7e78",
+      "video_id": "6acd5d8eb4def3563b044971",
+      "title": "LeBron James TURNED BACK THE CLOCK With 29 PTS vs 76ERS | December 7, 2025",
+      "source": "https://www.youtube.com/watch?v=oyk2QtdUtKE",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-oyk2QtdUtKE.mp4",
+      "start": 158.17,
+      "end": 161.67,
+      "timecode": "00:02:38.2 -> 00:02:41.7",
+      "claim": "lebron james dunks on a fast break",
+      "who": "LeBron James, #23, Los Angeles Lakers",
+      "evidence": "LeBron James wearing jersey #23 for the Lakers is clearly visible running the fast break and completing a dunk. The commentary explicitly mentions 'finishing after rim the way James' and 'run a break'. The score bug identifies the team as LAL.",
+      "confidence": 0.98,
+      "steps": [
+       {
+        "step": "lebron james dunks on a fast break",
+        "start": 158.17,
+        "end": 161.67,
+        "timecode": "00:02:38.2 -> 00:02:41.7"
+       }
+      ]
+     },
+     {
+      "id": "obs_fa4aeb0fb3",
+      "video_id": "6acd5d8eb4def3563b044971",
+      "title": "LeBron James TURNED BACK THE CLOCK With 29 PTS vs 76ERS | December 7, 2025",
+      "source": "https://www.youtube.com/watch?v=oyk2QtdUtKE",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-oyk2QtdUtKE.mp4",
+      "start": 37.13,
+      "end": 42.13,
+      "timecode": "00:00:37.1 -> 00:00:42.1",
+      "claim": "lebron james dunks on a fast break",
+      "who": "LeBron James, #23, Los Angeles Lakers",
+      "evidence": "The player is clearly wearing a white Lakers jersey with the number 23. The on-screen scoreboard identifies the team as 'LAKERS'. The commentary explicitly mentions 'Lebron' and describes the action of him finishing with a 'nice left hand' dunk after driving against contact.",
+      "confidence": 0.95,
+      "steps": [
+       {
+        "step": "lebron james dunks on a fast break",
+        "start": 37.13,
+        "end": 42.13,
+        "timecode": "00:00:37.1 -> 00:00:42.1"
+       }
+      ]
+     },
+     {
+      "id": "obs_ff4246e32c",
+      "video_id": "6acd5d8eb4def3563b044971",
+      "title": "LeBron James TURNED BACK THE CLOCK With 29 PTS vs 76ERS | December 7, 2025",
+      "source": "https://www.youtube.com/watch?v=oyk2QtdUtKE",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-oyk2QtdUtKE.mp4",
+      "start": 63.5,
+      "end": 71,
+      "timecode": "00:01:03.5 -> 00:01:11.0",
+      "claim": "lebron james dunks on a fast break",
+      "who": "LeBron James, #23, Los Angeles Lakers",
+      "evidence": "Player wearing Lakers jersey #23 is seen sprinting down the court on a fast break and performing a dunk. The commentator explicitly mentions 'Lebron' and his speed during the transition. The jersey number 23 and team colors confirm the identity.",
+      "confidence": 0.95,
+      "steps": [
+       {
+        "step": "lebron james dunks on a fast break",
+        "start": 63.5,
+        "end": 71,
+        "timecode": "00:01:03.5 -> 00:01:11.0"
+       }
+      ]
+     },
+     {
+      "id": "obs_28bf55a284",
+      "video_id": "6acd5d8eb4def3563b044971",
+      "title": "LeBron James TURNED BACK THE CLOCK With 29 PTS vs 76ERS | December 7, 2025",
+      "source": "https://www.youtube.com/watch?v=oyk2QtdUtKE",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-oyk2QtdUtKE.mp4",
+      "start": 155.7,
+      "end": 158.7,
+      "timecode": "00:02:35.7 -> 00:02:38.7",
+      "claim": "lebron james dunks on a fast break",
+      "who": "LeBron James, #23, Los Angeles Lakers",
+      "evidence": "At 00:00-00:03, LeBron James (#23) is seen driving to the basket and performing a dunk. The replay from 00:04-00:08 confirms the action. The score bug at 00:05 identifies the team as LAL (Lakers) and the player as #23.",
+      "confidence": 0.95,
+      "steps": [
+       {
+        "step": "lebron james dunks on a fast break",
+        "start": 155.7,
+        "end": 158.7,
+        "timecode": "00:02:35.7 -> 00:02:38.7"
+       }
+      ]
+     },
+     {
+      "id": "obs_22a83cd133",
+      "video_id": "6acd5f05737ec91c630a990b",
+      "title": "WARRIORS at LAKERS | FULL GAME HIGHLIGHTS | April 3, 2025",
+      "source": "https://www.youtube.com/watch?v=G6go_js-qoU",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-G6go_js-qoU.mp4",
+      "start": 353.3,
+      "end": 355.3,
+      "timecode": "00:05:53.3 -> 00:05:55.3",
+      "claim": "lebron james dunks on a fast break",
+      "who": "LeBron James (Lakers #23)",
+      "evidence": "At 00:04-00:06, LeBron James (Lakers #23) is seen driving down the court on a fast break and performing a dunk. The score bug shows LAL vs GSW in the 3rd quarter. At 00:07-00:09, a close-up confirms it is LeBron James (#23) celebrating after the play.",
+      "confidence": 0.95,
+      "steps": [
+       {
+        "step": "lebron james dunks on a fast break",
+        "start": 353.3,
+        "end": 355.3,
+        "timecode": "00:05:53.3 -> 00:05:55.3"
+       }
+      ]
+     }
+    ],
+    "rejected": [
+     {
+      "video_id": "6acd5d8eb4def3563b044971",
+      "start": 136.63,
+      "end": 148.17,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5d8eb4def3563b044971",
+      "start": 27.53,
+      "end": 40.13,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5d8eb4def3563b044971",
+      "start": 201.9,
+      "end": 212.1,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5d8eb4def3563b044971",
+      "start": 74.5,
+      "end": 85.5,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5d8eb4def3563b044971",
+      "start": 192.57,
+      "end": 201.9,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5f05737ec91c630a990b",
+      "start": 314.63,
+      "end": 323.23,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5d8eb4def3563b044971",
+      "start": 47.13,
+      "end": 57.4,
+      "reason": "no match"
+     }
+    ],
+    "counts": {
+     "candidates": 12,
+     "confirmed": 5,
+     "rejected": 7
+    }
+   },
+   "stderr": "tlv: checking 12 candidates with Pegasus\ntlv: checked 1 of 12\ntlv: checked 2 of 12\ntlv: checked 3 of 12\ntlv: checked 4 of 12\ntlv: checked 5 of 12\ntlv: checked 6 of 12\ntlv: checked 7 of 12\ntlv: checked 8 of 12\ntlv: checked 9 of 12\ntlv: checked 10 of 12\ntlv: checked 11 of 12\ntlv: checked 12 of 12\n"
+  },
+  {
+   "id": "alley-oop",
+   "query": "a player dunks an alley-oop",
+   "then": [],
+   "argv": [
+    "/Users/aktanazat/.local/bin/mem-secret",
+    "run",
+    "TWELVELABS_API_KEY",
+    "--",
+    "/Users/aktanazat/.bun/bin/bun",
+    "/Users/aktanazat/Developer/tlv-yardstick/src/cli.ts",
+    "find",
+    "a player dunks an alley-oop",
+    "--max-candidates",
+    "12",
+    "--no-cut",
+    "--json"
+   ],
+   "seconds": 40.0,
+   "exit_code": 0,
+   "output": {
+    "claim": "a player dunks an alley-oop",
+    "confirmed": [
+     {
+      "id": "obs_3769cc85a5",
+      "video_id": "6acd5d9982f0657191b01823",
+      "title": "LeBron James drops dimes and scores first bucket for 76ers \ud83d\udd25 Preseason debut highlights",
+      "source": "https://www.youtube.com/watch?v=zHBgJqG1nJo",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-zHBgJqG1nJo.mp4",
+      "start": 38.6,
+      "end": 46.2,
+      "timecode": "00:00:38.6 -> 00:00:46.2",
+      "claim": "a player dunks an alley-oop",
+      "who": "Jalen Brown (Brooklyn Nets, #21)",
+      "evidence": "Commentary explicitly states 'James sneaks it inside to MB who dishes off to Jalen Brown for the jam.' Visually, at 00:37-00:39, a Brooklyn Nets player in blue jersey #21 catches a lob pass near the rim and performs a two-handed dunk.",
+      "confidence": 0.95,
+      "steps": [
+       {
+        "step": "a player dunks an alley-oop",
+        "start": 49.2,
+        "end": 49.2,
+        "timecode": "00:00:49.2 -> 00:00:49.2"
+       }
+      ]
+     },
+     {
+      "id": "obs_b2519fe887",
+      "video_id": "6acd5d9982f0657191b01823",
+      "title": "LeBron James drops dimes and scores first bucket for 76ers \ud83d\udd25 Preseason debut highlights",
+      "source": "https://www.youtube.com/watch?v=zHBgJqG1nJo",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-zHBgJqG1nJo.mp4",
+      "start": 50.8,
+      "end": 53.3,
+      "timecode": "00:00:50.8 -> 00:00:53.3",
+      "claim": "a player dunks an alley-oop",
+      "who": "Tobias Harris (Philadelphia 76ers, #12)",
+      "evidence": "At the start of the clip, a Philadelphia player in blue (#12) catches a lob pass near the rim and performs a two-handed dunk. The commentary explicitly confirms this action with the phrase 'No look to VJ Edgon for the slam.' The score bug updates from PHI 4 to PHI 6 immediately after the basket.",
+      "confidence": 0.95,
+      "steps": [
+       {
+        "step": "a player dunks an alley-oop",
+        "start": 50.8,
+        "end": 53.3,
+        "timecode": "00:00:50.8 -> 00:00:53.3"
+       }
+      ]
+     },
+     {
+      "id": "obs_a9e3b00d67",
+      "video_id": "6acd5d8eb4def3563b044971",
+      "title": "LeBron James TURNED BACK THE CLOCK With 29 PTS vs 76ERS | December 7, 2025",
+      "source": "https://www.youtube.com/watch?v=oyk2QtdUtKE",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-oyk2QtdUtKE.mp4",
+      "start": 69.5,
+      "end": 73.5,
+      "timecode": "00:01:09.5 -> 00:01:13.5",
+      "claim": "a player dunks an alley-oop",
+      "who": "LeBron James (Lakers #23)",
+      "evidence": "At 0:06-0:10, Lakers player #23 (LeBron James) receives a pass in transition and performs a two-handed dunk over a defender. The commentary explicitly mentions 'pick up Lebron and transition' and praises his speed at 'almost forty one years of age'.",
+      "confidence": 0.95,
+      "steps": [
+       {
+        "step": "a player dunks an alley-oop",
+        "start": 69.5,
+        "end": 73.5,
+        "timecode": "00:01:09.5 -> 00:01:13.5"
+       }
+      ]
+     },
+     {
+      "id": "obs_2b42b538db",
+      "video_id": "6acd5d9982f0657191b01823",
+      "title": "LeBron James drops dimes and scores first bucket for 76ers \ud83d\udd25 Preseason debut highlights",
+      "source": "https://www.youtube.com/watch?v=zHBgJqG1nJo",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-zHBgJqG1nJo.mp4",
+      "start": 79.17,
+      "end": 81.17,
+      "timecode": "00:01:19.2 -> 00:01:21.2",
+      "claim": "a player dunks an alley-oop",
+      "who": "Tyrese Maxey (Philadelphia 76ers, jersey #0)",
+      "evidence": "At 00:00-00:02, a Philadelphia player in blue jersey #0 receives a pass in the air and dunks it. The replay from 00:08 to 00:13 clearly shows the same player (#0) driving, receiving a pass near the rim, and completing a dunk. The scoreboard identifies the team as PHI (Philadelphia). Commentary mentions 'Maxi finishing along the baseline'.",
+      "confidence": 0.95,
+      "steps": [
+       {
+        "step": "a player dunks an alley-oop",
+        "start": 79.17,
+        "end": 81.17,
+        "timecode": "00:01:19.2 -> 00:01:21.2"
+       }
+      ]
+     },
+     {
+      "id": "obs_c19895e1f3",
+      "video_id": "6acd5d9982f0657191b01823",
+      "title": "LeBron James drops dimes and scores first bucket for 76ers \ud83d\udd25 Preseason debut highlights",
+      "source": "https://www.youtube.com/watch?v=zHBgJqG1nJo",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-zHBgJqG1nJo.mp4",
+      "start": 89.1,
+      "end": 91.6,
+      "timecode": "00:01:29.1 -> 00:01:31.6",
+      "claim": "a player dunks an alley-oop",
+      "who": "Maxey (Philadelphia 76ers, #0)",
+      "evidence": "At 0:02-0:04, player #0 (Maxey) receives a pass near the rim and dunks the ball. The commentary at 0:00-0:02 explicitly states 'Maxi finishing along the baseline', confirming the player and action.",
+      "confidence": 0.95,
+      "steps": [
+       {
+        "step": "a player dunks an alley-oop",
+        "start": 89.1,
+        "end": 91.6,
+        "timecode": "00:01:29.1 -> 00:01:31.6"
+       }
+      ]
+     },
+     {
+      "id": "obs_28bf55a284",
+      "video_id": "6acd5d8eb4def3563b044971",
+      "title": "LeBron James TURNED BACK THE CLOCK With 29 PTS vs 76ERS | December 7, 2025",
+      "source": "https://www.youtube.com/watch?v=oyk2QtdUtKE",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-oyk2QtdUtKE.mp4",
+      "start": 155.7,
+      "end": 158.7,
+      "timecode": "00:02:35.7 -> 00:02:38.7",
+      "claim": "a player dunks an alley-oop",
+      "who": "LeBron James (Lakers #23)",
+      "evidence": "At the start of the clip, a player in a white Lakers jersey with number 23 (LeBron James) is seen catching a lob pass and dunking it. The commentary explicitly mentions 'Break, finish that the rim' and 'perfect timing', describing the alley-oop action. The replay from 00:04 to 00:08 clearly shows the pass and the dunk.",
+      "confidence": 0.95,
+      "steps": [
+       {
+        "step": "a player dunks an alley-oop",
+        "start": 155.7,
+        "end": 158.7,
+        "timecode": "00:02:35.7 -> 00:02:38.7"
+       }
+      ]
+     },
+     {
+      "id": "obs_489c446af6",
+      "video_id": "6acd5d8eb4def3563b044971",
+      "title": "LeBron James TURNED BACK THE CLOCK With 29 PTS vs 76ERS | December 7, 2025",
+      "source": "https://www.youtube.com/watch?v=oyk2QtdUtKE",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-oyk2QtdUtKE.mp4",
+      "start": 189.57,
+      "end": 192.07,
+      "timecode": "00:03:09.6 -> 00:03:12.1",
+      "claim": "a player dunks an alley-oop",
+      "who": "LeBron James (Lakers #23) and Anthony Davis (Lakers #3)",
+      "evidence": "Commentary explicitly mentions 'assist to Brun', 'lobster Lebron on the drive', and 'easy lob for A'. Visually, at 00:00-00:02, LeBron James (#23) drives and throws an alley-oop pass to Anthony Davis (#3) who dunks it. The replay from 00:04-00:09 confirms the sequence.",
+      "confidence": 0.95,
+      "steps": [
+       {
+        "step": "a player dunks an alley-oop",
+        "start": 189.57,
+        "end": 192.07,
+        "timecode": "00:03:09.6 -> 00:03:12.1"
+       }
+      ]
+     },
+     {
+      "id": "obs_c057db0505",
+      "video_id": "6acd5d8eb4def3563b044971",
+      "title": "LeBron James TURNED BACK THE CLOCK With 29 PTS vs 76ERS | December 7, 2025",
+      "source": "https://www.youtube.com/watch?v=oyk2QtdUtKE",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-oyk2QtdUtKE.mp4",
+      "start": 198.9,
+      "end": 200.9,
+      "timecode": "00:03:18.9 -> 00:03:20.9",
+      "claim": "a player dunks an alley-oop",
+      "who": "Lakers player #5 (Austin Reaves)",
+      "evidence": "At the start of the clip (0.0s-2.0s), a Lakers player wearing jersey #5 is seen running down the court, receiving a lob pass, and performing a two-handed dunk. The 'Carl's Jr. CARL'S CAM' graphic is visible during the action. The commentary mentions 'easy love for the last' which likely refers to the easy score.",
+      "confidence": 0.95,
+      "steps": [
+       {
+        "step": "a player dunks an alley-oop",
+        "start": 198.9,
+        "end": 200.9,
+        "timecode": "00:03:18.9 -> 00:03:20.9"
+       }
+      ]
+     }
+    ],
+    "rejected": [
+     {
+      "video_id": "6acd5d8eb4def3563b044971",
+      "start": 74.5,
+      "end": 85.5,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5f05737ec91c630a990b",
+      "start": 352.3,
+      "end": 360.7,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5f05737ec91c630a990b",
+      "start": 557.1,
+      "end": 563.9,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5d8eb4def3563b044971",
+      "start": 96.17,
+      "end": 102.17,
+      "reason": "no match"
+     }
+    ],
+    "counts": {
+     "candidates": 12,
+     "confirmed": 8,
+     "rejected": 4
+    }
+   },
+   "stderr": "tlv: checking 12 candidates with Pegasus\ntlv: checked 1 of 12\ntlv: checked 2 of 12\ntlv: checked 3 of 12\ntlv: checked 4 of 12\ntlv: checked 5 of 12\ntlv: checked 6 of 12\ntlv: checked 7 of 12\ntlv: checked 8 of 12\ntlv: checked 9 of 12\ntlv: checked 10 of 12\ntlv: checked 11 of 12\ntlv: checked 12 of 12\n"
+  },
+  {
+   "id": "durant-three",
+   "query": "kevin durant makes a three pointer",
+   "then": [],
+   "argv": [
+    "/Users/aktanazat/.local/bin/mem-secret",
+    "run",
+    "TWELVELABS_API_KEY",
+    "--",
+    "/Users/aktanazat/.bun/bin/bun",
+    "/Users/aktanazat/Developer/tlv-yardstick/src/cli.ts",
+    "find",
+    "kevin durant makes a three pointer",
+    "--max-candidates",
+    "12",
+    "--no-cut",
+    "--json"
+   ],
+   "seconds": 32.7,
+   "exit_code": 0,
+   "output": {
+    "claim": "kevin durant makes a three pointer",
+    "confirmed": [],
+    "rejected": [
+     {
+      "video_id": "6acd5f05737ec91c630a990b",
+      "start": 175.1,
+      "end": 181.97,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5f05737ec91c630a990b",
+      "start": 239.23,
+      "end": 246.57,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5f05737ec91c630a990b",
+      "start": 382.57,
+      "end": 390.23,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5d9982f0657191b01823",
+      "start": 113.67,
+      "end": 123.37,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5f05737ec91c630a990b",
+      "start": 571.9,
+      "end": 578.97,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5f05737ec91c630a990b",
+      "start": 232.63,
+      "end": 239.23,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5f05737ec91c630a990b",
+      "start": 213.97,
+      "end": 221.97,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5f05737ec91c630a990b",
+      "start": 15,
+      "end": 22.53,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5f05737ec91c630a990b",
+      "start": 65.7,
+      "end": 72.43,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5f05737ec91c630a990b",
+      "start": 221.97,
+      "end": 228.3,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5f05737ec91c630a990b",
+      "start": 50.67,
+      "end": 58.13,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5f05737ec91c630a990b",
+      "start": 514.9,
+      "end": 522.63,
+      "reason": "no match"
+     }
+    ],
+    "counts": {
+     "candidates": 12,
+     "confirmed": 0,
+     "rejected": 12
+    }
+   },
+   "stderr": "tlv: checking 12 candidates with Pegasus\ntlv: checked 1 of 12\ntlv: checked 2 of 12\ntlv: checked 3 of 12\ntlv: checked 4 of 12\ntlv: checked 5 of 12\ntlv: checked 6 of 12\ntlv: checked 7 of 12\ntlv: checked 8 of 12\ntlv: checked 9 of 12\ntlv: checked 10 of 12\ntlv: checked 11 of 12\ntlv: checked 12 of 12\n"
+  },
+  {
+   "id": "coach-interview",
+   "query": "a coach is interviewed during the game",
+   "then": [],
+   "argv": [
+    "/Users/aktanazat/.local/bin/mem-secret",
+    "run",
+    "TWELVELABS_API_KEY",
+    "--",
+    "/Users/aktanazat/.bun/bin/bun",
+    "/Users/aktanazat/Developer/tlv-yardstick/src/cli.ts",
+    "find",
+    "a coach is interviewed during the game",
+    "--max-candidates",
+    "12",
+    "--no-cut",
+    "--json"
+   ],
+   "seconds": 40.6,
+   "exit_code": 0,
+   "output": {
+    "claim": "a coach is interviewed during the game",
+    "confirmed": [
+     {
+      "id": "obs_3373d754ad",
+      "video_id": "6acd5f05737ec91c630a990b",
+      "title": "WARRIORS at LAKERS | FULL GAME HIGHLIGHTS | April 3, 2025",
+      "source": "https://www.youtube.com/watch?v=G6go_js-qoU",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-G6go_js-qoU.mp4",
+      "start": 115.83,
+      "end": 131.23,
+      "timecode": "00:01:55.8 -> 00:02:11.2",
+      "claim": "a coach is interviewed during the game",
+      "who": "Steve Kerr",
+      "evidence": "At 02:01, an on-screen graphic identifies the interviewee as 'STEVE KERR' with the Golden State Warriors logo. He is wearing a black pullover with the Warriors logo and is being interviewed by a reporter holding a TNT Sports microphone on the basketball court during a break in play.",
+      "confidence": 1,
+      "steps": [
+       {
+        "step": "a coach is interviewed during the game",
+        "start": 115.83,
+        "end": 131.23,
+        "timecode": "00:01:55.8 -> 00:02:11.2"
+       }
+      ]
+     },
+     {
+      "id": "obs_bdfcd3350a",
+      "video_id": "6acd5f05737ec91c630a990b",
+      "title": "WARRIORS at LAKERS | FULL GAME HIGHLIGHTS | April 3, 2025",
+      "source": "https://www.youtube.com/watch?v=G6go_js-qoU",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-G6go_js-qoU.mp4",
+      "start": 125.23,
+      "end": 139.03,
+      "timecode": "00:02:05.2 -> 00:02:19.0",
+      "claim": "a coach is interviewed during the game",
+      "who": "Steve Kerr",
+      "evidence": "The on-screen graphic clearly identifies the speaker as 'STEVE KERR' with the Golden State Warriors logo. He is shown speaking into a microphone on the court during a break in play, consistent with a sideline interview.",
+      "confidence": 1,
+      "steps": [
+       {
+        "step": "a coach is interviewed during the game",
+        "start": 125.23,
+        "end": 139.03,
+        "timecode": "00:02:05.2 -> 00:02:19.0"
+       }
+      ]
+     },
+     {
+      "id": "obs_fdecee6589",
+      "video_id": "6acd5f05737ec91c630a990b",
+      "title": "WARRIORS at LAKERS | FULL GAME HIGHLIGHTS | April 3, 2025",
+      "source": "https://www.youtube.com/watch?v=G6go_js-qoU",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-G6go_js-qoU.mp4",
+      "start": 421.57,
+      "end": 430.63,
+      "timecode": "00:07:01.6 -> 00:07:10.6",
+      "claim": "a coach is interviewed during the game",
+      "who": "JJ Redick (Lakers Assistant Coach)",
+      "evidence": "The video shows a man wearing a black Lakers pullover with the team logo being interviewed by a female reporter holding a TNT Sports microphone on the court. The background shows the arena and players, confirming the interview takes place during a game break. The transcript confirms the dialogue is an interview about game strategy.",
+      "confidence": 0.95,
+      "steps": [
+       {
+        "step": "a coach is interviewed during the game",
+        "start": 422.57,
+        "end": 433.63,
+        "timecode": "00:07:02.6 -> 00:07:13.6"
+       }
+      ]
+     },
+     {
+      "id": "obs_47558edc22",
+      "video_id": "6acd5f05737ec91c630a990b",
+      "title": "WARRIORS at LAKERS | FULL GAME HIGHLIGHTS | April 3, 2025",
+      "source": "https://www.youtube.com/watch?v=G6go_js-qoU",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-G6go_js-qoU.mp4",
+      "start": 427.63,
+      "end": 439.53,
+      "timecode": "00:07:07.6 -> 00:07:19.5",
+      "claim": "a coach is interviewed during the game",
+      "who": "JJ Redick (Lakers coach)",
+      "evidence": "A man wearing a black Lakers team shirt with the team logo is being interviewed on the basketball court by a female reporter holding a TNT Sports microphone. The background shows the arena, players, and the scoreboard indicating the game context. The interview takes place from 0.0s to 11.9s.",
+      "confidence": 0.95,
+      "steps": [
+       {
+        "step": "a coach is interviewed during the game",
+        "start": 427.63,
+        "end": 439.53,
+        "timecode": "00:07:07.6 -> 00:07:19.5"
+       }
+      ]
+     }
+    ],
+    "rejected": [
+     {
+      "video_id": "6acd5f05737ec91c630a990b",
+      "start": 675.03,
+      "end": 683.37,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5d8eb4def3563b044971",
+      "start": 384.41,
+      "end": 393.75,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5f05737ec91c630a990b",
+      "start": 691.85,
+      "end": 700.33,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5f05737ec91c630a990b",
+      "start": 683.37,
+      "end": 691.85,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5d8eb4def3563b044971",
+      "start": 356.39,
+      "end": 365.73,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5d8eb4def3563b044971",
+      "start": 337.71,
+      "end": 347.05,
+      "reason": "no match"
+     },
+     {
+      "video_id": "6acd5f05737ec91c630a990b",
+      "start": 116.43,
+      "end": 121.83,
+      "reason": "same moment as obs_3373d754ad"
+     },
+     {
+      "video_id": "6acd5f05737ec91c630a990b",
+      "start": 134.63,
+      "end": 137.63,
+      "reason": "same moment as obs_bdfcd3350a"
+     }
+    ],
+    "counts": {
+     "candidates": 12,
+     "confirmed": 4,
+     "rejected": 8
+    }
+   },
+   "stderr": "tlv: checking 12 candidates with Pegasus\ntlv: checked 1 of 12\ntlv: checked 2 of 12\ntlv: checked 3 of 12\ntlv: checked 4 of 12\ntlv: checked 5 of 12\ntlv: checked 6 of 12\ntlv: checked 7 of 12\ntlv: checked 8 of 12\ntlv: checked 9 of 12\ntlv: checked 10 of 12\ntlv: checked 11 of 12\ntlv: checked 12 of 12\n"
+  }
+ ]
+}

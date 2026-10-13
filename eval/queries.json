@@ -1,0 +1,68 @@
+[
+  {
+    "id": "lebron-score-celebrate",
+    "query": "lebron james scores",
+    "then": ["lebron james celebrates"],
+    "tests": "baseline: an ordered two-step action by one player; a replay of a play must not count as a new moment"
+  },
+  {
+    "id": "lebron-pass-dunk",
+    "query": "lebron james passes the ball",
+    "then": ["a teammate dunks"],
+    "tests": "multi-step: two actors in order, a pass by one player and then a dunk by another"
+  },
+  {
+    "id": "curry-three",
+    "query": "stephen curry makes a three pointer",
+    "then": [],
+    "tests": "a specific player other than LeBron doing a specific action, with many other Warriors threes as distractors"
+  },
+  {
+    "id": "lebron-dunk",
+    "query": "lebron james dunks",
+    "then": [],
+    "tests": "cross-video: the same player across three games and two jerseys, dunks against his layups and jumpers"
+  },
+  {
+    "id": "lebron-stats-graphic",
+    "query": "an on-screen graphic shows lebron james's stats",
+    "then": [],
+    "tests": "on-screen text: stat graphics naming LeBron, with other players' stat and name graphics as distractors"
+  },
+  {
+    "id": "fernandez-mention",
+    "query": "the commentators talk about jordi fernandez",
+    "then": [],
+    "tests": "speech: a coach who is only named by the commentators"
+  },
+  {
+    "id": "end-of-quarter-buzzer",
+    "query": "the buzzer sounds at the end of a quarter",
+    "then": [],
+    "tests": "audio event: the horn when the game clock runs out, with a shot-clock violation as a distractor"
+  },
+  {
+    "id": "lebron-fast-break-dunk",
+    "query": "lebron james dunks on a fast break",
+    "then": [],
+    "tests": "replays: one play shown live and then in two replays must count once"
+  },
+  {
+    "id": "alley-oop",
+    "query": "a player dunks an alley-oop",
+    "then": [],
+    "tests": "fine-grained action: alley-oops against ordinary dunks and layups"
+  },
+  {
+    "id": "durant-three",
+    "query": "kevin durant makes a three pointer",
+    "then": [],
+    "tests": "empty answer: Durant plays in none of the three games"
+  },
+  {
+    "id": "coach-interview",
+    "query": "a coach is interviewed during the game",
+    "then": [],
+    "tests": "scene and role: in-game coach interviews, with postgame player interviews as distractors"
+  }
+]
