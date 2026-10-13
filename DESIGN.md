@@ -96,7 +96,8 @@ Signatures below are the interface; each owner may add private helpers freely. `
 so the CLI and MCP output stays familiar)
 - `search(query, then=(), limit=10, video_ids=None, max_gap=12) -> SearchResult`
 - `find(query, then=(), max_candidates=8, pad=3, min_confidence=0.6, cut=True, video_ids=None,
-  progress=None) -> FindResult`. Each confirmed observation adds `replays`: other angles of
+  progress=None) -> FindResult`. Pieces of one moment found by neighbouring looks, at most 2 s
+  apart, come back as one clip. Each confirmed observation adds `replays`: other angles of
   the same moment, `[{video_id, start, end, timecode, reason}]`, merged into it rather than
   listed as separate clips.
 - `ask(video_id, question, start=None, end=None, json_schema=None) -> AskResult`

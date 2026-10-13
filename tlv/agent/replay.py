@@ -1,6 +1,8 @@
 """One play, one result. Broadcasts show a play again: a replay from another camera, a
 slow-motion close-up, or the same moment in another upload of the game. Confirmed moments that
-show the same play are merged into the live one, and the others are listed as its replays.
+show the same play are merged into the live one, and the others are listed as its replays. A moment
+longer than one look comes back in pieces, one from each look at it; pieces that run on from one
+another are joined into one moment first.
 
 Different plays must stay apart even when they look alike (two threes by one player thirteen
 seconds apart), so a merge needs evidence: the same game clock on screen, or the model saying
@@ -23,6 +25,12 @@ CLOCK_TOLERANCE_S = 1.0
 # shorter: the model marks a long moment (an interview) over each look's whole window, and the windows of
 # two neighbouring looks share twice the pad, 6 s by default.
 REPEAT_SHARED_S = 3.0
+# A confirmed moment starting this soon after another of its video ends runs on from it: one moment found in
+# pieces by neighbouring looks, each marking the part it was shown. Looks are checked apart, and their windows
+# can leave a second or two unseen between them. In the everyday and sports eval runs, second cuts from
+# neighbouring looks were 1.9 s or less from their first piece (the others were 24 s or more away), and the
+# nearest two separate plays returned were 5.5 s apart.
+CONTINUES_WITHIN_S = 2.0
 # A game clock is read next to the period it belongs to ("4TH 3:46", "6:11 3RD", "1ST :42.1"),
 # which tells it from the shot clock (":10") and from other numbers on screen.
 _PERIOD = re.compile(r"(?<![A-Za-z0-9])(?:([1-4])(?:ST|ND|RD|TH)|([1-4])Q|Q([1-4])|(\d?OT\d?))(?![A-Za-z0-9])", re.I)
@@ -86,6 +94,34 @@ def _repeats(a: Moment, b: Moment) -> bool:
     overlap = min(a.end, b.end) - max(a.start, b.start)
     shorter = min(a.end - a.start, b.end - b.start)
     return a.video_id == b.video_id and overlap >= min(0.5 * shorter, REPEAT_SHARED_S)
+
+
+def join_pieces[M: Moment](moments: list[M], join: Callable[[M, M], M]) -> list[M]:
+    """Joins confirmed moments that run on from one another into one moment, as `_continues` says.
+    `join(earlier, later)` makes one moment of two pieces. Returns the moments by video and time, live
+    footage before replays."""
+    joined: list[M] = []
+    for moment in sorted(moments, key=lambda m: (m.video_id, m.replay, m.start)):
+        if joined and _continues(joined[-1], moment):
+            joined[-1] = join(joined[-1], moment)
+        else:
+            joined.append(moment)
+    return joined
+
+
+def _continues(earlier: Moment, later: Moment) -> bool:
+    """Whether `later` runs on from `earlier`: same video, both live or both replays (a replay right
+    after its play shows it again, and merge_replays lists it under the play), starting no more than
+    CONTINUES_WITHIN_S after `earlier` ends, and, when both show a game clock, a clock that runs on
+    across the gap rather than jumping to another play."""
+    gap = later.start - earlier.end
+    if earlier.video_id != later.video_id or earlier.replay != later.replay or gap > CONTINUES_WITHIN_S:
+        return False
+    if earlier.clock and later.clock:
+        # The clock runs down, so the later piece may read up to the gap lower.
+        ran_on = GameClock(later.clock.periods, later.clock.low, later.clock.high + max(gap, 0.0))
+        return same_clock(earlier.clock, ran_on)
+    return True
 
 
 def _period(match: re.Match[str]) -> str:

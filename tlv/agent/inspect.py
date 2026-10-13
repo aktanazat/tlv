@@ -331,6 +331,34 @@ class Moment:
         return self.video.video_id
 
 
+def joined(earlier: Moment, later: Moment) -> Moment:
+    """One moment of two pieces of it: their whole range, each step from its first start to its last end,
+    every frame either was shown, the game clock read in either, and the confidence, who and evidence of
+    the more confident piece (the earlier on a tie)."""
+    best = later if later.confidence > earlier.confidence else earlier
+    steps = tuple(
+        CheckedStep(a.step, min(a.start, b.start), max(a.end, b.end))
+        for a, b in zip(earlier.steps, later.steps, strict=True)
+    )
+    shown = {frame.t: (frame, path) for frame, path in (*earlier.shown, *later.shown)}
+    clocks = [c for c in (earlier.clock, later.clock) if c]
+    clock = (
+        GameClock(
+            frozenset().union(*(c.periods for c in clocks)), min(c.low for c in clocks), max(c.high for c in clocks)
+        )
+        if clocks
+        else None
+    )
+    return replace(
+        best,
+        start=min(earlier.start, later.start),
+        end=max(earlier.end, later.end),
+        clock=clock,
+        steps=steps,
+        shown=tuple(shown[t] for t in sorted(shown)),
+    )
+
+
 @dataclass(frozen=True)
 class Rejection:
     video_id: str
