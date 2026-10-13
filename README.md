@@ -32,6 +32,12 @@ uv run tlv --help
 Model weights download from Hugging Face on first use into `~/.cache/huggingface`. Models run one
 at a time, each in a child process held to a memory cap, so indexing waits its turn on a busy Mac.
 
+A background model host keeps the models loaded between searches, so only the first search after
+a pause pays to load them. It lets a model go after 10 minutes unused (`TLV_MODEL_IDLE_S`), holds
+at most 8 GB (`TLV_HELD_MEMORY_GB`), and lets go of every model not in use when
+`~/memory/bin/host-headroom` reports less than 25% of memory free (`TLV_HOLD_MIN_FREE_PCT`). It
+exits once it holds nothing, and logs what it loads and lets go to `$TLV_HOME/run/models.log`.
+
 Files live under `$TLV_HOME` (default `~/.local/share/tlv`): `tlv.db` is the index, `media/`
 holds downloads, `clips/` cut clips, `frames/` stills and contact sheets. `--index NAME` (or
 `TLV_INDEX`) selects another index, stored as `$TLV_HOME/NAME.db`.

@@ -51,10 +51,6 @@ class Vlm:
     def __exit__(self, *exc: object) -> None:
         self._process.__exit__(*exc)
 
-    @property
-    def peak_bytes(self) -> int:
-        return self._process.peak
-
     def ask(self, images: list[Path], prompt: str, max_tokens: int) -> Reply:
         out = self._process.call({"images": [str(p) for p in images], "prompt": prompt, "max_tokens": max_tokens})
         self.seconds += out["seconds"]

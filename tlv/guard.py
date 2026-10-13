@@ -1,19 +1,18 @@
 """Memory guard for model runs, so a model can never swamp the Mac.
 
-Every model (vision-language, speech, embeddings, faces) runs in a child process started by
-`ModelProcess`, which:
+Every model (vision-language, speech, embeddings, faces) runs in a guarded child process
+(`Child`) owned by the model host (tlv.host), one host per $TLV_HOME shared by every tlv process
+and agent. Callers reach it through `ModelProcess`, which starts the host on first use. The host
+runs one job at a time and keeps models loaded between runs; tlv.host says when it lets them go.
+Before a model loads, the host waits until the kernel's memory pressure allows it: never at
+critical, and at warn only when the reclaimable memory covers the cap. While a child lives, its
+watchdog reads the child's physical footprint (the number Activity Monitor shows, GPU buffers
+included) four times a second and kills it past the cap, or when pressure turns critical for
+several seconds while the child holds real memory.
 
-1. takes the machine-wide "model" lock, so only one model is loaded at a time across every
-   tlv process and agent;
-2. waits until the kernel's memory pressure allows the run: never at critical, and at warn
-   only when the reclaimable memory covers the cap;
-3. watches the child's physical footprint (the number Activity Monitor shows, GPU buffers
-   included) four times a second and kills it past the cap, or when pressure turns critical
-   for several seconds while the child holds real memory.
-
-The cap is TLV_MODEL_MEMORY_GB (default 6; the 4B vision-language model peaks near 4.6 GB on
-six frames). The child also gets 80% of the cap as its MLX memory limit, so it frees caches
-before the watchdog has to act.
+The cap is TLV_MODEL_MEMORY_GB (default 6; the 4B vision-language model peaks near 5.7 GB on
+twelve 448 px frames). The child also gets 80% of the cap as its MLX memory limit, so it frees
+caches before the watchdog has to act.
 """
 
 from __future__ import annotations
@@ -22,13 +21,15 @@ import ctypes
 import json
 import os
 import re
+import socket
 import subprocess
 import sys
 import threading
 import time
 from collections import deque
 from collections.abc import Callable
-from typing import Any
+from pathlib import Path
+from typing import Any, TextIO
 
 from tlv import store
 
@@ -40,6 +41,10 @@ WATCH_EVERY_S = 0.25
 # Critical pressure this long while the child holds at least CRITICAL_HOLD_BYTES stops it.
 CRITICAL_GRACE_S = 5.0
 CRITICAL_HOLD_BYTES = GB
+HOST_START_S = 30.0  # how long a caller waits for a host it started to accept connections
+# Variables that pick a model checkpoint (TLV_VLM_MODEL, ...). A caller's values travel with each
+# request, so a model loaded for one setting is never handed to a caller asking for another.
+MODEL_VARIABLE = re.compile(r"TLV_\w+_MODEL")
 
 Progress = Callable[[str], None]
 
@@ -55,6 +60,10 @@ class HeadroomError(RuntimeError):
 
 class ModelError(RuntimeError):
     """A model child died, was stopped by the watchdog, or reported a failed job."""
+
+
+class _HostGone(ModelError):
+    """The model host closed the connection without answering."""
 
 
 def pressure_level() -> int:
@@ -110,11 +119,17 @@ def wait_for_headroom(need: int, progress: Progress | None = None, wait_s: float
         reason = headroom(need)
 
 
+def socket_path() -> Path:
+    return store.data_dir("run") / "models.sock"
+
+
 class ModelProcess:
-    """A model loaded in a guarded child process, answering JSON jobs one at a time.
+    """A model in the model host, answering JSON jobs one at a time.
 
     with ModelProcess("tlv.models.vlm", progress=print) as vlm:
         answer = vlm.call({"images": [...], "prompt": "..."})
+
+    Entering loads the model unless the host already holds it; leaving lets the host keep it.
     """
 
     def __init__(
@@ -128,38 +143,131 @@ class ModelProcess:
         self.module = module
         self.cap = cap_bytes
         self.progress = progress
-        self.env = env or {}
-        self.peak = 0
-        self._child: subprocess.Popen[str] | None = None
-        self._stopped: str | None = None
-        self._stderr: deque[str] = deque(maxlen=20)
-        self._lock_cm: Any = None
+        self.env = {**{k: v for k, v in os.environ.items() if MODEL_VARIABLE.fullmatch(k)}, **(env or {})}
+        self._conn: socket.socket | None = None
+        self._lines: TextIO | None = None
 
     def __enter__(self) -> ModelProcess:
-        name = self.module.rsplit(".", 1)[-1]
-        waiting = f"waiting for another model run to finish before {name}"
-        self._lock_cm = store.lock("model", waiting=lambda: self._say(waiting))
-        self._lock_cm.__enter__()
         try:
-            wait_for_headroom(self.cap, self.progress)
-            env = {**os.environ, **self.env, "TLV_MEMORY_LIMIT_BYTES": str(int(self.cap * 0.8))}
-            self._child = subprocess.Popen(
-                [sys.executable, "-m", self.module],
-                stdin=subprocess.PIPE,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                text=True,
-                env=env,
-            )
-            threading.Thread(target=self._drain_stderr, daemon=True).start()
-            threading.Thread(target=self._watch, daemon=True).start()
-            ready = self._receive()
-            if not ready.get("ready"):
-                raise ModelError(f"{name} did not start: {ready}")
+            try:
+                self._load()
+            except _HostGone:
+                # A host exiting for idleness can drop a connection it had not yet served; a
+                # second connection reaches the host that replaced it.
+                self._load()
         except BaseException:
             self.__exit__(None, None, None)
             raise
         return self
+
+    def call(self, job: dict[str, Any]) -> dict[str, Any]:
+        return self._ask(job)
+
+    def __exit__(self, *exc: object) -> None:
+        lines, conn, self._lines, self._conn = self._lines, self._conn, None, None
+        if lines:
+            lines.close()
+        if conn:
+            conn.close()
+
+    def _load(self) -> None:
+        self.__exit__(None, None, None)
+        self._conn = _connect()
+        self._lines = self._conn.makefile("r", encoding="utf-8")
+        self._ask(None)
+
+    def _ask(self, job: dict[str, Any] | None) -> dict[str, Any]:
+        if not self._conn or not self._lines:
+            raise ModelError(f"{self.module} is not running")
+        request = {"module": self.module, "cap": self.cap, "env": self.env, "job": job}
+        try:
+            self._conn.sendall((json.dumps(request) + "\n").encode())
+            for line in self._lines:
+                reply = json.loads(line)
+                if "progress" in reply:
+                    if self.progress:
+                        self.progress(reply["progress"])
+                elif "error" in reply:
+                    raise (HeadroomError if reply.get("kind") == "headroom" else ModelError)(reply["error"])
+                else:
+                    return reply["result"]
+        except (BrokenPipeError, ConnectionResetError):
+            pass
+        log = socket_path().with_name("models.log")
+        raise _HostGone(f"the model host stopped before answering {self.module}; see {log}")
+
+
+def _connect() -> socket.socket:
+    """A connection to this $TLV_HOME's model host, starting the host when none is running."""
+    path = str(socket_path())
+    started = False
+    deadline = time.monotonic() + HOST_START_S
+    while True:
+        conn = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+        try:
+            conn.connect(path)
+            return conn
+        except (FileNotFoundError, ConnectionRefusedError):
+            conn.close()
+        if not started:
+            # The host runs in its own session, so it outlives this process and ignores its
+            # terminal's Ctrl-C. Two callers starting hosts together is fine: the second host
+            # finds the first's lock and leaves.
+            with socket_path().with_name("models.log").open("a") as log:
+                subprocess.Popen(
+                    [sys.executable, "-m", "tlv.host"],
+                    stdin=subprocess.DEVNULL,
+                    stdout=log,
+                    stderr=log,
+                    start_new_session=True,
+                )
+            started = True
+        elif time.monotonic() >= deadline:
+            raise ModelError(f"the model host did not start; see {socket_path().with_name('models.log')}")
+        time.sleep(0.05)
+
+
+class Child:
+    """One model loaded in a guarded child process (`python -m <module>`, which calls
+    tlv.models.protocol.serve), answering JSON jobs one at a time. Its watchdog stops it past
+    its cap, or when memory pressure stays critical while it holds real memory."""
+
+    def __init__(self, module: str, cap: int, env: dict[str, str], progress: Progress | None = None) -> None:
+        self.module = module
+        self.cap = cap
+        self.env = env
+        self.progress = progress
+        self._child: subprocess.Popen[str] | None = None
+        self._stopped: str | None = None
+        self._stderr: deque[str] = deque(maxlen=20)
+
+    @property
+    def pid(self) -> int:
+        return self._require_child().pid
+
+    def alive(self) -> bool:
+        return self._child is not None and self._child.poll() is None
+
+    def start(self) -> None:
+        name = self.module.rsplit(".", 1)[-1]
+        env = {**os.environ, **self.env, "TLV_MEMORY_LIMIT_BYTES": str(int(self.cap * 0.8))}
+        self._child = subprocess.Popen(
+            [sys.executable, "-m", self.module],
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            env=env,
+        )
+        threading.Thread(target=self._drain_stderr, daemon=True).start()
+        threading.Thread(target=self._watch, daemon=True).start()
+        try:
+            ready = self._receive()
+            if not ready.get("ready"):
+                raise ModelError(f"{name} did not start: {ready}")
+        except BaseException:
+            self.close()
+            raise
 
     def call(self, job: dict[str, Any]) -> dict[str, Any]:
         child = self._require_child()
@@ -173,19 +281,17 @@ class ModelProcess:
             raise ModelError(f"{self.module} failed a job: {result['error']}")
         return result
 
-    def __exit__(self, *exc: object) -> None:
-        child, self._child = self._child, None
-        if child:
-            if child.stdin:
-                child.stdin.close()
-            try:
-                child.wait(timeout=10)
-            except subprocess.TimeoutExpired:
-                child.kill()
-                child.wait()
-        if self._lock_cm:
-            self._lock_cm.__exit__(None, None, None)
-            self._lock_cm = None
+    def close(self) -> None:
+        child = self._child
+        if not child:
+            return
+        if child.stdin:
+            child.stdin.close()
+        try:
+            child.wait(timeout=10)
+        except subprocess.TimeoutExpired:
+            child.kill()
+            child.wait()
 
     def _require_child(self) -> subprocess.Popen[str]:
         if not self._child:
@@ -220,7 +326,6 @@ class ModelProcess:
         critical_since: float | None = None
         while child.poll() is None:
             used = footprint(child.pid)
-            self.peak = max(self.peak, used)
             if used > self.cap:
                 over = f"{self.module} used {used / GB:.1f} GB, over the {self.cap / GB:.1f} GB cap"
                 self._stop(child, f"{over}, so it was stopped")
@@ -238,8 +343,6 @@ class ModelProcess:
     def _stop(self, child: subprocess.Popen[str], reason: str) -> None:
         self._stopped = reason
         child.kill()
-        self._say(reason)
-
-    def _say(self, message: str) -> None:
-        if self.progress:
-            self.progress(message)
+        progress = self.progress
+        if progress:
+            progress(reason)

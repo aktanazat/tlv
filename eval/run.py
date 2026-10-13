@@ -2,9 +2,10 @@
 
     uv run python eval/run.py                  # every query
     uv run python eval/run.py curry-three      # only the named queries
+    uv run python eval/run.py --out FILE       # into FILE instead of today's file
 
 Results go to eval/results/local-<date>.json, rewritten after each query so an interrupted run
-keeps what finished; running named queries again replaces just their records in today's file.
+keeps what finished; running named queries again replaces just their records in the file.
 eval/results/twelvelabs-2026-10-12.json is the yardstick: the same queries and flags run once
 through the Twelve Labs client this tool replaced, before that client was removed.
 """
@@ -48,6 +49,7 @@ def run(query: dict) -> dict:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("ids", nargs="*", help="query ids to run (default: all)")
+    parser.add_argument("--out", type=Path, help="results file (default: eval/results/local-<date>.json)")
     args = parser.parse_args()
 
     queries = json.loads((EVAL / "queries.json").read_text())
@@ -56,7 +58,7 @@ def main() -> None:
         parser.error(f"unknown query ids: {', '.join(sorted(unknown))}")
     chosen = [query for query in queries if not args.ids or query["id"] in args.ids]
 
-    path = EVAL / "results" / f"local-{datetime.date.today().isoformat()}.json"
+    path = args.out or EVAL / "results" / f"local-{datetime.date.today().isoformat()}.json"
     path.parent.mkdir(exist_ok=True)
     saved = json.loads(path.read_text())["runs"] if path.exists() else []
     runs = {record["id"]: record for record in saved}

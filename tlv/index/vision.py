@@ -1,6 +1,6 @@
 """On-screen text, faces and bodies from Apple Vision, through the tlv-vision helper in swift/.
 
-The helper is compiled with swiftc on first use. It runs outside the model lock: Vision's models
+The helper is compiled with swiftc on first use. It runs outside the model host: Vision's models
 ship with macOS and stay small (172 MB peak footprint over a whole 720p video), so they never
 compete with the MLX models for the memory the guard protects. It takes its own lock instead,
 since two helpers at once contend for the Neural Engine and one fails with an e5rt error.

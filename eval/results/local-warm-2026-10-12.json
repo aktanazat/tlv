@@ -1,0 +1,6503 @@
+{
+ "system": "local",
+ "flags": [
+  "--max-candidates",
+  "12",
+  "--no-cut",
+  "--json"
+ ],
+ "runs": [
+  {
+   "id": "lebron-score-celebrate",
+   "query": "lebron james scores",
+   "then": [
+    "lebron james celebrates"
+   ],
+   "argv": [
+    "uv",
+    "run",
+    "tlv",
+    "find",
+    "lebron james scores",
+    "--then",
+    "lebron james celebrates",
+    "--max-candidates",
+    "12",
+    "--no-cut",
+    "--json"
+   ],
+   "seconds": 50.8,
+   "exit_code": 0,
+   "output": {
+    "claim": "lebron james scores, then lebron james celebrates",
+    "confirmed": [
+     {
+      "id": "obs_3562150ed5",
+      "video_id": "v_3ee2db6c19",
+      "title": "WARRIORS at LAKERS | FULL GAME HIGHLIGHTS | April 3, 2025",
+      "source": "https://www.youtube.com/watch?v=G6go_js-qoU",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-G6go_js-qoU.mp4",
+      "start": 521.25,
+      "end": 523.09,
+      "timecode": "00:08:41.2 -> 00:08:43.1",
+      "claim": "lebron james scores, then lebron james celebrates",
+      "who": "23",
+      "entity_id": null,
+      "confidence": 0.95,
+      "evidence": {
+       "summary": "lebron james scores and celebrates",
+       "frames": [
+        {
+         "t": 521.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_511.9-523.1/10.jpg"
+        },
+        {
+         "t": 522.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_511.9-523.1/11.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 521.16,
+         "end": 522.62,
+         "text": "What a cut, what a feat."
+        },
+        {
+         "start": 523.06,
+         "end": 523.12,
+         "text": "The"
+        }
+       ],
+       "ocr": [
+        {
+         "t": 521.25,
+         "text": "6:39 | GET THE 8 App | AKERS.COM | Ker: | NULTRA | SiD SONY | 103 | 6:39 | GSW | TNT | 92 | LAL | 4TH 24 | tg-com | SPORTS"
+        },
+        {
+         "t": 522.25,
+         "text": "6:38 | GET THE 8 App | AKERS.COM | Lakers | IULTRA | 23 | RiD OwY | 105 | 6:38 | TNT | 92 | 4TH 24 | LAL | SPORTS | o.com"
+        }
+       ],
+       "sounds": [
+        {
+         "start": 515.5,
+         "end": 521.5,
+         "label": "basketball_bounce"
+        },
+        {
+         "start": 517.0,
+         "end": 534.5,
+         "label": "speech"
+        },
+        {
+         "start": 520.5,
+         "end": 523.0,
+         "label": "booing"
+        },
+        {
+         "start": 521.5,
+         "end": 522.5,
+         "label": "bowling_impact"
+        },
+        {
+         "start": 522.0,
+         "end": 524.0,
+         "label": "playing_volleyball"
+        },
+        {
+         "start": 523.0,
+         "end": 526.0,
+         "label": "basketball_bounce"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "lebron james scores",
+        "start": 521.25,
+        "end": 522.25,
+        "timecode": "00:08:41.2 -> 00:08:42.2"
+       },
+       {
+        "step": "lebron james celebrates",
+        "start": 522.25,
+        "end": 523.09,
+        "timecode": "00:08:42.2 -> 00:08:43.1"
+       }
+      ],
+      "replays": []
+     },
+     {
+      "id": "obs_a1e2fe4b30",
+      "video_id": "v_8718a4de6d",
+      "title": "LeBron James TURNED BACK THE CLOCK With 29 PTS vs 76ERS | December 7, 2025",
+      "source": "https://www.youtube.com/watch?v=oyk2QtdUtKE",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-oyk2QtdUtKE.mp4",
+      "start": 270.0,
+      "end": 276.25,
+      "timecode": "00:04:30.0 -> 00:04:36.2",
+      "claim": "lebron james scores, then lebron james celebrates",
+      "who": "23",
+      "entity_id": null,
+      "confidence": 0.95,
+      "evidence": {
+       "summary": "LeBron scores, then celebrates",
+       "frames": [
+        {
+         "t": 270.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_263.5-278.9/06.jpg"
+        },
+        {
+         "t": 271.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_263.5-278.9/07.jpg"
+        },
+        {
+         "t": 273.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_263.5-278.9/08.jpg"
+        },
+        {
+         "t": 274.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_263.5-278.9/09.jpg"
+        },
+        {
+         "t": 275.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_263.5-278.9/10.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 269.72,
+         "end": 270.1,
+         "text": "lead."
+        },
+        {
+         "start": 270.32,
+         "end": 271.02,
+         "text": "Got it."
+        },
+        {
+         "start": 271.52,
+         "end": 272.56,
+         "text": "I mean, don't stop yelling."
+        },
+        {
+         "start": 272.58,
+         "end": 273.08,
+         "text": "LeBron."
+        },
+        {
+         "start": 273.38,
+         "end": 273.94,
+         "text": "Isn't that obvious?"
+        },
+        {
+         "start": 274.24,
+         "end": 274.92,
+         "text": "Isn't it obvious?"
+        },
+        {
+         "start": 275.04,
+         "end": 275.8,
+         "text": "I keep telling him."
+        }
+       ],
+       "ocr": [
+        {
+         "t": 270.25,
+         "text": "1: 12 | 4State Farn | xf\u0131n\u0131ty | SANK OF | TOYOTA | XADE NI | BANK OF AMERICA | TAKERS 105 | 105 | BONUS | 4TH | 1:12 | :07"
+        },
+        {
+         "t": 271.25,
+         "text": "A State Farm | xfinity | BANK OF | TOYOTA | \u043e\u043f\u0443\u0440 | \u043e\u0490\u0430\u0442\u0438\u0446\u0445 | BANK OF AMERICA | VKERS 105 | 105 | BONUS | 4TH | :24 | 1:11 | O"
+        },
+        {
+         "t": 272.25,
+         "text": "State Farm | xfinity | BANK OFA | TOYOTA | \u0425NTENOL | BANK OFAMERICA | LAL 108 | 105 | BONUS | :24 | 4TH | 1:11"
+        },
+        {
+         "t": 273.25,
+         "text": "\u01319\u20ac | VAKEPS | TAKERS 108 | 105 | BONUS | 4TH | :24 | 1:11 | SAYERS"
+        },
+        {
+         "t": 274.25,
+         "text": "UNEST | TAKERS 108 | 105 | BONUS | 4\u0442\u043d | :24 | \u2022 1:11"
+        },
+        {
+         "t": 275.25,
+         "text": "UVERS | TAKERS 108 | 105 | BONUS | :24 | 4TH | 1:11"
+        },
+        {
+         "t": 276.25,
+         "text": "\u043a\u0438 | khndy mobile | ARENA"
+        }
+       ],
+       "sounds": [
+        {
+         "start": 265.5,
+         "end": 270.5,
+         "label": "basketball_bounce"
+        },
+        {
+         "start": 269.0,
+         "end": 271.0,
+         "label": "booing"
+        },
+        {
+         "start": 269.5,
+         "end": 270.5,
+         "label": "battle_cry"
+        },
+        {
+         "start": 269.5,
+         "end": 270.5,
+         "label": "playing_volleyball"
+        },
+        {
+         "start": 270.0,
+         "end": 271.0,
+         "label": "cheering"
+        },
+        {
+         "start": 270.0,
+         "end": 271.0,
+         "label": "shout"
+        },
+        {
+         "start": 270.5,
+         "end": 271.5,
+         "label": "fly_buzz"
+        },
+        {
+         "start": 270.5,
+         "end": 271.5,
+         "label": "insect"
+        },
+        {
+         "start": 270.5,
+         "end": 271.5,
+         "label": "mosquito_buzz"
+        },
+        {
+         "start": 271.0,
+         "end": 276.0,
+         "label": "speech"
+        },
+        {
+         "start": 272.0,
+         "end": 273.0,
+         "label": "laughter"
+        },
+        {
+         "start": 272.0,
+         "end": 273.0,
+         "label": "music"
+        },
+        {
+         "start": 272.5,
+         "end": 273.5,
+         "label": "screaming"
+        },
+        {
+         "start": 272.5,
+         "end": 273.5,
+         "label": "yell"
+        },
+        {
+         "start": 273.0,
+         "end": 274.0,
+         "label": "cheering"
+        },
+        {
+         "start": 273.0,
+         "end": 274.0,
+         "label": "crowd"
+        },
+        {
+         "start": 273.5,
+         "end": 275.5,
+         "label": "booing"
+        },
+        {
+         "start": 274.5,
+         "end": 275.5,
+         "label": "playing_volleyball"
+        },
+        {
+         "start": 275.5,
+         "end": 276.5,
+         "label": "door"
+        },
+        {
+         "start": 276.0,
+         "end": 277.0,
+         "label": "air_horn"
+        },
+        {
+         "start": 276.0,
+         "end": 277.5,
+         "label": "basketball_bounce"
+        },
+        {
+         "start": 276.0,
+         "end": 278.0,
+         "label": "booing"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "lebron james scores",
+        "start": 270.0,
+        "end": 272.5,
+        "timecode": "00:04:30.0 -> 00:04:32.5"
+       },
+       {
+        "step": "lebron james celebrates",
+        "start": 272.5,
+        "end": 276.25,
+        "timecode": "00:04:32.5 -> 00:04:36.2"
+       }
+      ],
+      "replays": []
+     },
+     {
+      "id": "obs_dac7e24ea8",
+      "video_id": "v_8718a4de6d",
+      "title": "LeBron James TURNED BACK THE CLOCK With 29 PTS vs 76ERS | December 7, 2025",
+      "source": "https://www.youtube.com/watch?v=oyk2QtdUtKE",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-oyk2QtdUtKE.mp4",
+      "start": 281.75,
+      "end": 285.75,
+      "timecode": "00:04:41.8 -> 00:04:45.8",
+      "claim": "lebron james scores, then lebron james celebrates",
+      "who": "23",
+      "entity_id": null,
+      "confidence": 0.95,
+      "evidence": {
+       "summary": "dunk, then celebration",
+       "frames": [
+        {
+         "t": 282.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_279.0-289.6/04.jpg"
+        },
+        {
+         "t": 283.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_279.0-289.6/05.jpg"
+        },
+        {
+         "t": 284.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_279.0-289.6/06.jpg"
+        },
+        {
+         "t": 285.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_279.0-289.6/07.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 282.06,
+         "end": 282.46,
+         "text": "LeBron."
+        },
+        {
+         "start": 284.2,
+         "end": 285.46,
+         "text": "James, he wants it."
+        }
+       ],
+       "ocr": [
+        {
+         "t": 282.25,
+         "text": "33.8 | \u2022 crypto.com | d State Farm | xf\u0131n\u0131ty | crypto.com | OYOTA | ntas | a | xf\u0131n | TKERS 108 | 105 | BONUS | 4TH | :34.0 | :07"
+        },
+        {
+         "t": 283.25,
+         "text": "cryp | 78 | \u2022 crypto.com | \u2039 crypto.col | El\u0440o\u043d\u043e | TAKERS 108 | A 105 | BONUS | 4TH | :33.0 | :06"
+        },
+        {
+         "t": 284.25,
+         "text": "3 1,9 | \u2022 crypto.com | xfinity | crypto.cc | TOYOTA | rabile | LAKERS 108 | 105 | BONUS | 4T\u043d | :32.0 | :05"
+        },
+        {
+         "t": 285.25,
+         "text": "30.9 | \u00ae crypto.com | A State Farm | Frypto. | 6 | xfintmobile | \u2022\u00b72R | TKERS 108 | 6 105 | BONUS | 4TH | :31.0 | 4.0"
+        }
+       ],
+       "sounds": [
+        {
+         "start": 276.5,
+         "end": 283.0,
+         "label": "speech"
+        },
+        {
+         "start": 281.5,
+         "end": 282.5,
+         "label": "playing_table_tennis"
+        },
+        {
+         "start": 281.5,
+         "end": 282.5,
+         "label": "water"
+        },
+        {
+         "start": 283.0,
+         "end": 284.0,
+         "label": "crowd"
+        },
+        {
+         "start": 283.0,
+         "end": 284.0,
+         "label": "door"
+        },
+        {
+         "start": 284.0,
+         "end": 285.0,
+         "label": "basketball_bounce"
+        },
+        {
+         "start": 284.0,
+         "end": 285.5,
+         "label": "booing"
+        },
+        {
+         "start": 284.0,
+         "end": 291.5,
+         "label": "speech"
+        },
+        {
+         "start": 284.5,
+         "end": 285.5,
+         "label": "playing_tennis"
+        },
+        {
+         "start": 285.0,
+         "end": 286.0,
+         "label": "music"
+        },
+        {
+         "start": 285.5,
+         "end": 289.5,
+         "label": "basketball_bounce"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "lebron james scores",
+        "start": 281.75,
+        "end": 283.75,
+        "timecode": "00:04:41.8 -> 00:04:43.8"
+       },
+       {
+        "step": "lebron james celebrates",
+        "start": 283.75,
+        "end": 285.75,
+        "timecode": "00:04:43.8 -> 00:04:45.8"
+       }
+      ],
+      "replays": []
+     },
+     {
+      "id": "obs_95485140b5",
+      "video_id": "v_8718a4de6d",
+      "title": "LeBron James TURNED BACK THE CLOCK With 29 PTS vs 76ERS | December 7, 2025",
+      "source": "https://www.youtube.com/watch?v=oyk2QtdUtKE",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-oyk2QtdUtKE.mp4",
+      "start": 296.25,
+      "end": 300.26,
+      "timecode": "00:04:56.2 -> 00:05:00.3",
+      "claim": "lebron james scores, then lebron james celebrates",
+      "who": "23",
+      "entity_id": "ent_1035f0e471e4",
+      "confidence": 0.95,
+      "evidence": {
+       "summary": "scored, then celebrated",
+       "frames": [
+        {
+         "t": 296.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_284.3-300.3/10.jpg"
+        },
+        {
+         "t": 298.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_284.3-300.3/11.jpg"
+        },
+        {
+         "t": 299.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_284.3-300.3/12.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 296.96,
+         "end": 299.02,
+         "text": "LeBron tonight even though the guys have played well"
+        },
+        {
+         "start": 299.02,
+         "end": 301.02,
+         "text": "just give it to arguably"
+        }
+       ],
+       "ocr": [
+        {
+         "t": 296.25,
+         "text": "\u00aecrypto.c | TAKERS 110 | 105 | BONUS | :27.3 | :24 | 4TH"
+        },
+        {
+         "t": 297.25,
+         "text": "\u2020V | COIN | ecrypto.t | TAKERS 110 | 105 | BONUS | :27.3 | :24 | 4TH"
+        },
+        {
+         "t": 298.25,
+         "text": "LOS ANGELES | 1- 80r D.os. | 108 | 29.4 4TH | SOSTH 50 | IS PM | WINNING TICKET | 2.4 | PLAYER O 5 8 21' | FLS TOL | POINTS 25 7 12 16 15 | PHILADELPHIA 76ERS | 2154064001 | 29.3 | T+TISSOT | 6 | 23 | KW"
+        },
+        {
+         "t": 299.25,
+         "text": "LOS ANGELES LA | 7 7 |asm | 5030 | \u2022 BOr L.05 | 108 | 28.7 \u00abTH | WINNING TICKET | PHILADELPHIA 76ERS | LAYERO S2177 | 2154064001 | DINTS 25 7 12 1 | 28.5 | T+TISSOT"
+        },
+        {
+         "t": 300.25,
+         "text": "108 | LOS ANGELES LAKERS | - BOT 0.T5 | 0.9 27.9 4TH | WINNING TICKET | FLS TOL | PHILADELPHIA 76ERS | PLAYER O | I12| | 2154064001\u0142 | OINTS 25 7 12 16 15 | 21.1 | T+TISSOT | 8"
+        }
+       ],
+       "sounds": [
+        {
+         "start": 296.5,
+         "end": 298.5,
+         "label": "basketball_bounce"
+        },
+        {
+         "start": 296.5,
+         "end": 299.0,
+         "label": "playing_squash"
+        },
+        {
+         "start": 296.5,
+         "end": 309.5,
+         "label": "speech"
+        },
+        {
+         "start": 298.5,
+         "end": 299.5,
+         "label": "water"
+        },
+        {
+         "start": 299.5,
+         "end": 302.0,
+         "label": "basketball_bounce"
+        },
+        {
+         "start": 300.0,
+         "end": 301.0,
+         "label": "water"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "lebron james scores",
+        "start": 296.25,
+        "end": 299.0,
+        "timecode": "00:04:56.2 -> 00:04:59.0"
+       },
+       {
+        "step": "lebron james celebrates",
+        "start": 299.0,
+        "end": 300.26,
+        "timecode": "00:04:59.0 -> 00:05:00.3"
+       }
+      ],
+      "replays": [
+       {
+        "video_id": "v_8718a4de6d",
+        "start": 298.5,
+        "end": 308.0,
+        "timecode": "00:04:58.5 -> 00:05:08.0",
+        "reason": "same game clock (period 4, 27.3-27.9)"
+       }
+      ]
+     },
+     {
+      "id": "obs_d39828f4db",
+      "video_id": "v_3ee2db6c19",
+      "title": "WARRIORS at LAKERS | FULL GAME HIGHLIGHTS | April 3, 2025",
+      "source": "https://www.youtube.com/watch?v=G6go_js-qoU",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-G6go_js-qoU.mp4",
+      "start": 355.46,
+      "end": 359.75,
+      "timecode": "00:05:55.5 -> 00:05:59.8",
+      "claim": "lebron james scores, then lebron james celebrates",
+      "who": "23",
+      "entity_id": "ent_1035f0e471e4",
+      "confidence": 0.9,
+      "evidence": {
+       "summary": "lebron james scores and celebrates",
+       "frames": [
+        {
+         "t": 355.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_355.5-363.8/01.jpg"
+        },
+        {
+         "t": 357.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_355.5-363.8/02.jpg"
+        },
+        {
+         "t": 358.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_355.5-363.8/03.jpg"
+        },
+        {
+         "t": 359.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_355.5-363.8/04.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 355.78,
+         "end": 356.46,
+         "text": "Reeves Dodic."
+        },
+        {
+         "start": 358.36,
+         "end": 359.98,
+         "text": "Reeves the hockey assist."
+        }
+       ],
+       "ocr": [
+        {
+         "t": 356.25,
+         "text": "HET THE SA | LAKERS.CO | orne | ULTRA | Caehala | Michelab | 73 | 6:09 | GSW | TNT | 62 | 3RD | LAL | 9 | SPORTS"
+        },
+        {
+         "t": 357.25,
+         "text": "608 | GET THE 8 App | LAKERS.CO | \u00d6ORP | swel\u00e4ika | 73 | 6:08 | GSW | TNT | 62 | 3RD | LAL | 24 | SPORTS"
+        },
+        {
+         "t": 358.25,
+         "text": "601 | GET THE S App | LAKERS.COI | 6:07 | 73 | GSW | TNT | UL | 3RD | sure | 24 | SPORTS | NBA"
+        },
+        {
+         "t": 359.25,
+         "text": "bitigo | LAKERS | 23 | 73 | 6:06 | GSW | INT | 64 | 3RD | LAL | 23 | SPORTS"
+        }
+       ],
+       "sounds": [
+        {
+         "start": 341.5,
+         "end": 357.0,
+         "label": "speech"
+        },
+        {
+         "start": 355.0,
+         "end": 356.0,
+         "label": "glass_breaking"
+        },
+        {
+         "start": 355.5,
+         "end": 356.5,
+         "label": "booing"
+        },
+        {
+         "start": 355.5,
+         "end": 356.5,
+         "label": "playing_squash"
+        },
+        {
+         "start": 356.0,
+         "end": 357.0,
+         "label": "firecracker"
+        },
+        {
+         "start": 356.0,
+         "end": 357.0,
+         "label": "fireworks"
+        },
+        {
+         "start": 356.5,
+         "end": 358.0,
+         "label": "crowd"
+        },
+        {
+         "start": 356.5,
+         "end": 358.5,
+         "label": "door"
+        },
+        {
+         "start": 356.5,
+         "end": 357.5,
+         "label": "door_slam"
+        },
+        {
+         "start": 357.0,
+         "end": 358.0,
+         "label": "cheering"
+        },
+        {
+         "start": 357.0,
+         "end": 358.0,
+         "label": "shout"
+        },
+        {
+         "start": 357.5,
+         "end": 359.0,
+         "label": "music"
+        },
+        {
+         "start": 358.0,
+         "end": 360.0,
+         "label": "booing"
+        },
+        {
+         "start": 358.5,
+         "end": 359.5,
+         "label": "basketball_bounce"
+        },
+        {
+         "start": 358.5,
+         "end": 359.5,
+         "label": "playing_volleyball"
+        },
+        {
+         "start": 359.0,
+         "end": 360.0,
+         "label": "playing_tennis"
+        },
+        {
+         "start": 359.0,
+         "end": 364.5,
+         "label": "speech"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "lebron james scores",
+        "start": 355.46,
+        "end": 357.75,
+        "timecode": "00:05:55.5 -> 00:05:57.8"
+       },
+       {
+        "step": "lebron james celebrates",
+        "start": 358.75,
+        "end": 359.75,
+        "timecode": "00:05:58.8 -> 00:05:59.8"
+       }
+      ],
+      "replays": []
+     }
+    ],
+    "rejected": [
+     {
+      "video_id": "v_3ee2db6c19",
+      "start": 320.05,
+      "end": 322.79,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_8718a4de6d",
+      "start": 134.53,
+      "end": 139.91,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_8718a4de6d",
+      "start": 241.65,
+      "end": 248.12,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_8718a4de6d",
+      "start": 287.27,
+      "end": 297.55,
+      "reason": "step 2 starts before step 1"
+     }
+    ],
+    "counts": {
+     "candidates": 12,
+     "checked": 10,
+     "confirmed": 5,
+     "rejected": 4
+    },
+    "seconds": {
+     "search": 5.34,
+     "load": 4.13,
+     "check": 41.17
+    }
+   },
+   "stderr": "tlv: searching 3 videos for 2 steps\ntlv: waiting for another model run to finish before vlm\ntlv: checking 10 stretches\ntlv: checked 1 of 10\ntlv: checked 2 of 10\ntlv: checked 3 of 10\ntlv: checked 4 of 10\ntlv: checked 5 of 10\ntlv: checked 6 of 10\ntlv: checked 7 of 10\ntlv: checked 8 of 10\ntlv: checked 9 of 10\ntlv: checked 10 of 10\ntlv: found 5 in 51 s: 5 s searching, 4 s loading the model, 41 s checking (41 s of it answering)\n"
+  },
+  {
+   "id": "lebron-pass-dunk",
+   "query": "lebron james passes the ball",
+   "then": [
+    "a teammate dunks"
+   ],
+   "argv": [
+    "uv",
+    "run",
+    "tlv",
+    "find",
+    "lebron james passes the ball",
+    "--then",
+    "a teammate dunks",
+    "--max-candidates",
+    "12",
+    "--no-cut",
+    "--json"
+   ],
+   "seconds": 51.4,
+   "exit_code": 0,
+   "output": {
+    "claim": "lebron james passes the ball, then a teammate dunks",
+    "confirmed": [
+     {
+      "id": "obs_42ee70cb0c",
+      "video_id": "v_3ee2db6c19",
+      "title": "WARRIORS at LAKERS | FULL GAME HIGHLIGHTS | April 3, 2025",
+      "source": "https://www.youtube.com/watch?v=G6go_js-qoU",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-G6go_js-qoU.mp4",
+      "start": 519.25,
+      "end": 522.25,
+      "timecode": "00:08:39.2 -> 00:08:42.2",
+      "claim": "lebron james passes the ball, then a teammate dunks",
+      "who": "LeBron James",
+      "entity_id": null,
+      "confidence": 0.95,
+      "evidence": {
+       "summary": "pass to teammate, dunk",
+       "frames": [
+        {
+         "t": 519.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_511.9-523.1/08.jpg"
+        },
+        {
+         "t": 520.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_511.9-523.1/09.jpg"
+        },
+        {
+         "t": 521.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_511.9-523.1/10.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 519.24,
+         "end": 519.5,
+         "text": "out."
+        },
+        {
+         "start": 519.96,
+         "end": 520.88,
+         "text": "Coming to the win it."
+        },
+        {
+         "start": 521.16,
+         "end": 522.42,
+         "text": "What a cut, what a"
+        }
+       ],
+       "ocr": [
+        {
+         "t": 519.25,
+         "text": "GET THE 9 App | AKERS.COM | 27 | VULTRA | SiD fOuY | GSW | E\u00d1g com | INT | LAL | SPORTS"
+        },
+        {
+         "t": 520.25,
+         "text": "6:40 | GET THE 8 App | AKERS.COM | aLaker | BiD TONY | 103 | 6:40 | GSW | TNT | 92 | LAL | 4TH | 12 | 1g com | SPORTS"
+        },
+        {
+         "t": 521.25,
+         "text": "6:39 | GET THE 8 App | AKERS.COM | Ker: | NULTRA | SiD SONY | 103 | 6:39 | GSW | TNT | 92 | LAL | 4TH 24 | tg-com | SPORTS"
+        },
+        {
+         "t": 522.25,
+         "text": "6:38 | GET THE 8 App | AKERS.COM | Lakers | IULTRA | 23 | RiD OwY | 105 | 6:38 | TNT | 92 | 4TH 24 | LAL | SPORTS | o.com"
+        }
+       ],
+       "sounds": [
+        {
+         "start": 515.5,
+         "end": 521.5,
+         "label": "basketball_bounce"
+        },
+        {
+         "start": 517.0,
+         "end": 534.5,
+         "label": "speech"
+        },
+        {
+         "start": 518.5,
+         "end": 519.5,
+         "label": "liquid_trickle_dribble"
+        },
+        {
+         "start": 519.5,
+         "end": 520.5,
+         "label": "bird_chirp_tweet"
+        },
+        {
+         "start": 519.5,
+         "end": 520.5,
+         "label": "cow_moo"
+        },
+        {
+         "start": 519.5,
+         "end": 520.5,
+         "label": "playing_squash"
+        },
+        {
+         "start": 520.5,
+         "end": 523.0,
+         "label": "booing"
+        },
+        {
+         "start": 521.5,
+         "end": 522.5,
+         "label": "bowling_impact"
+        },
+        {
+         "start": 522.0,
+         "end": 524.0,
+         "label": "playing_volleyball"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "lebron james passes the ball",
+        "start": 519.25,
+        "end": 521.25,
+        "timecode": "00:08:39.2 -> 00:08:41.2"
+       },
+       {
+        "step": "a teammate dunks",
+        "start": 520.25,
+        "end": 522.25,
+        "timecode": "00:08:40.2 -> 00:08:42.2"
+       }
+      ],
+      "replays": []
+     },
+     {
+      "id": "obs_33a776a7ec",
+      "video_id": "v_8718a4de6d",
+      "title": "LeBron James TURNED BACK THE CLOCK With 29 PTS vs 76ERS | December 7, 2025",
+      "source": "https://www.youtube.com/watch?v=oyk2QtdUtKE",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-oyk2QtdUtKE.mp4",
+      "start": 65.55,
+      "end": 71.75,
+      "timecode": "00:01:05.6 -> 00:01:11.8",
+      "claim": "lebron james passes the ball, then a teammate dunks",
+      "who": "23",
+      "entity_id": "ent_1035f0e471e4",
+      "confidence": 0.95,
+      "evidence": {
+       "summary": "pass to dunker",
+       "frames": [
+        {
+         "t": 66.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_65.6-77.5/01.jpg"
+        },
+        {
+         "t": 67.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_65.6-77.5/02.jpg"
+        },
+        {
+         "t": 68.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_65.6-77.5/03.jpg"
+        },
+        {
+         "t": 69.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_65.6-77.5/04.jpg"
+        },
+        {
+         "t": 70.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_65.6-77.5/05.jpg"
+        },
+        {
+         "t": 71.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_65.6-77.5/06.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 65.54,
+         "end": 66.36,
+         "text": "to do the sexes?"
+        },
+        {
+         "start": 66.82,
+         "end": 67.72,
+         "text": "Look at the speed."
+        },
+        {
+         "start": 67.8,
+         "end": 68.9,
+         "text": "Who says this guy is slow enough?"
+        },
+        {
+         "start": 69.2,
+         "end": 70.76,
+         "text": "40, almost 41 years of age."
+        },
+        {
+         "start": 71.14,
+         "end": 71.76,
+         "text": "Come on, I"
+        }
+       ],
+       "ocr": [
+        {
+         "t": 66.25,
+         "text": "edicine | S Penn! | ) crypio.com | thcare P: A ver | LAKERS 27 | 28 | SSSSSS | BONUS | xfinityEmobile | 1ST | :55.2 | :23"
+        },
+        {
+         "t": 68.25,
+         "text": "TETISSOT | Burees | LAKERS | ticketmaster | 23 | K\u0418"
+        },
+        {
+         "t": 69.25,
+         "text": "COIR | 6 | 23 | ticketmaster"
+        },
+        {
+         "t": 70.25,
+         "text": "T+TISSOT | BUNG/C | 77"
+        },
+        {
+         "t": 71.25,
+         "text": "*TISSOT | \u010cI\u0107"
+        }
+       ],
+       "sounds": [
+        {
+         "start": 33.5,
+         "end": 78.0,
+         "label": "speech"
+        },
+        {
+         "start": 64.5,
+         "end": 67.0,
+         "label": "basketball_bounce"
+        },
+        {
+         "start": 66.0,
+         "end": 67.0,
+         "label": "music"
+        },
+        {
+         "start": 66.5,
+         "end": 67.5,
+         "label": "laughter"
+        },
+        {
+         "start": 66.5,
+         "end": 67.5,
+         "label": "sneeze"
+        },
+        {
+         "start": 67.0,
+         "end": 68.0,
+         "label": "fly_buzz"
+        },
+        {
+         "start": 67.0,
+         "end": 68.0,
+         "label": "insect"
+        },
+        {
+         "start": 67.5,
+         "end": 69.0,
+         "label": "basketball_bounce"
+        },
+        {
+         "start": 67.5,
+         "end": 68.5,
+         "label": "booing"
+        },
+        {
+         "start": 69.0,
+         "end": 70.0,
+         "label": "booing"
+        },
+        {
+         "start": 69.0,
+         "end": 72.0,
+         "label": "playing_volleyball"
+        },
+        {
+         "start": 69.5,
+         "end": 70.5,
+         "label": "air_horn"
+        },
+        {
+         "start": 70.0,
+         "end": 71.0,
+         "label": "music"
+        },
+        {
+         "start": 70.5,
+         "end": 71.5,
+         "label": "booing"
+        },
+        {
+         "start": 71.0,
+         "end": 72.5,
+         "label": "basketball_bounce"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "lebron james passes the ball",
+        "start": 65.55,
+        "end": 67.75,
+        "timecode": "00:01:05.6 -> 00:01:07.8"
+       },
+       {
+        "step": "a teammate dunks",
+        "start": 69.75,
+        "end": 71.75,
+        "timecode": "00:01:09.8 -> 00:01:11.8"
+       }
+      ],
+      "replays": []
+     },
+     {
+      "id": "obs_bc04e0ad53",
+      "video_id": "v_8718a4de6d",
+      "title": "LeBron James TURNED BACK THE CLOCK With 29 PTS vs 76ERS | December 7, 2025",
+      "source": "https://www.youtube.com/watch?v=oyk2QtdUtKE",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-oyk2QtdUtKE.mp4",
+      "start": 146.25,
+      "end": 158.61,
+      "timecode": "00:02:26.2 -> 00:02:38.6",
+      "claim": "lebron james passes the ball, then a teammate dunks",
+      "who": "23",
+      "entity_id": "ent_1035f0e471e4",
+      "confidence": 0.95,
+      "evidence": {
+       "summary": "pass to teammate, dunk",
+       "frames": [
+        {
+         "t": 146.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_145.3-158.6/02.jpg"
+        },
+        {
+         "t": 148.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_145.3-158.6/03.jpg"
+        },
+        {
+         "t": 149.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_145.3-158.6/04.jpg"
+        },
+        {
+         "t": 150.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_145.3-158.6/05.jpg"
+        },
+        {
+         "t": 151.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_145.3-158.6/06.jpg"
+        },
+        {
+         "t": 152.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_145.3-158.6/07.jpg"
+        },
+        {
+         "t": 153.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_145.3-158.6/08.jpg"
+        },
+        {
+         "t": 154.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_145.3-158.6/09.jpg"
+        },
+        {
+         "t": 155.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_145.3-158.6/10.jpg"
+        },
+        {
+         "t": 156.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_145.3-158.6/11.jpg"
+        },
+        {
+         "t": 158.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_145.3-158.6/12.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 146.68,
+         "end": 148.32,
+         "text": "that's the way you run a break"
+        },
+        {
+         "start": 148.32,
+         "end": 149.48,
+         "text": "time out"
+        },
+        {
+         "start": 150.22,
+         "end": 152.02,
+         "text": "but you guys here pump me up"
+        },
+        {
+         "start": 152.02,
+         "end": 153.52,
+         "text": "I feel like I'm in my 20s again"
+        },
+        {
+         "start": 153.52,
+         "end": 154.86,
+         "text": "as Rui running the floor"
+        },
+        {
+         "start": 154.86,
+         "end": 156.18,
+         "text": "now this is how you run a break"
+        },
+        {
+         "start": 156.18,
+         "end": 157.52,
+         "text": "finish it at the rim"
+        },
+        {
+         "start": 157.52,
+         "end": 158.58,
+         "text": "the way James Borey"
+        },
+        {
+         "start": 158.58,
+         "end": 158.8,
+         "text": "and"
+        }
+       ],
+       "ocr": [
+        {
+         "t": 146.25,
+         "text": "B:28 | 2 State Farm | xf\u0131n\u0131ty | KI | orytto | BANK OF AMERICA | VKERS 62 | 65 | .===i | 8:28 | 3RD | :24 | JARE | 25"
+        },
+        {
+         "t": 147.25,
+         "text": "8:21 | SAZER | A State Farm | xfinity | crypto | BANK OF AMERICA | 65 | LAL 64 | 8:27 | 3RD | :24"
+        },
+        {
+         "t": 148.25,
+         "text": "Aa State Farm | xfinity | \u043e\u043f\u043d\u043e\u0435: | et | BANK OF AMERICA | LAKERS | 64 | 65 | :24 | 3RD | 8:27"
+        },
+        {
+         "t": 149.25,
+         "text": "TAKERS 64 | 65 | SSS=S | \u0417RD | 8:27 | :24"
+        },
+        {
+         "t": 152.25,
+         "text": "SZNVC"
+        },
+        {
+         "t": 153.25,
+         "text": "Ehaapas | 23"
+        },
+        {
+         "t": 154.25,
+         "text": "Cotung | LAKERS | 23"
+        },
+        {
+         "t": 155.25,
+         "text": "JAKENDS | 23 | NIME"
+        },
+        {
+         "t": 157.25,
+         "text": "d& Stale | WELCOME | State Farm | WEBL | S OHECK FOINT | WE BLOCK CYBER THREATS | S ONECK FO | COMECH PONT | IWEBLOCK CYBER THREATS | WE BLOCK CYBER THREATS | INREATS | AWE HEOCK CYBER THREATS CCHECF PONT | WE BLOCK CYBER THREATS | ER THREATS | \u2022 CHECK POINT | CEATS | WE BL | G CHECK POUNT | WE BLOCKCYBER THREATS | \u2022CEMBER 21 |00| E"
+        },
+        {
+         "t": 158.25,
+         "text": "BLOCK CYBER THREATS | IREATS | B\u00b0CHECK POINT | TWELO | MEELT | WE BLOCK CYBER THREAT\u015a | WEBEd | DECEMBER 2 | SAEES | 77"
+        }
+       ],
+       "sounds": [
+        {
+         "start": 135.0,
+         "end": 170.0,
+         "label": "speech"
+        },
+        {
+         "start": 135.5,
+         "end": 147.0,
+         "label": "basketball_bounce"
+        },
+        {
+         "start": 146.0,
+         "end": 147.0,
+         "label": "battle_cry"
+        },
+        {
+         "start": 146.0,
+         "end": 147.5,
+         "label": "booing"
+        },
+        {
+         "start": 146.5,
+         "end": 147.5,
+         "label": "playing_volleyball"
+        },
+        {
+         "start": 147.5,
+         "end": 148.5,
+         "label": "door"
+        },
+        {
+         "start": 147.5,
+         "end": 148.5,
+         "label": "door_slam"
+        },
+        {
+         "start": 148.0,
+         "end": 149.0,
+         "label": "playing_badminton"
+        },
+        {
+         "start": 148.0,
+         "end": 149.5,
+         "label": "playing_volleyball"
+        },
+        {
+         "start": 148.5,
+         "end": 149.5,
+         "label": "basketball_bounce"
+        },
+        {
+         "start": 149.5,
+         "end": 164.0,
+         "label": "music"
+        },
+        {
+         "start": 149.5,
+         "end": 150.5,
+         "label": "saxophone"
+        },
+        {
+         "start": 150.0,
+         "end": 151.0,
+         "label": "percussion"
+        },
+        {
+         "start": 150.5,
+         "end": 151.5,
+         "label": "guitar"
+        },
+        {
+         "start": 151.0,
+         "end": 153.0,
+         "label": "plucked_string_instrument"
+        },
+        {
+         "start": 153.0,
+         "end": 154.5,
+         "label": "wind_instrument"
+        },
+        {
+         "start": 154.5,
+         "end": 155.5,
+         "label": "crowd"
+        },
+        {
+         "start": 155.0,
+         "end": 156.0,
+         "label": "singing"
+        },
+        {
+         "start": 155.5,
+         "end": 156.5,
+         "label": "keyboard_musical"
+        },
+        {
+         "start": 156.0,
+         "end": 157.0,
+         "label": "plucked_string_instrument"
+        },
+        {
+         "start": 156.5,
+         "end": 157.5,
+         "label": "percussion"
+        },
+        {
+         "start": 157.0,
+         "end": 158.0,
+         "label": "duck_quack"
+        },
+        {
+         "start": 157.5,
+         "end": 160.0,
+         "label": "plucked_string_instrument"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "lebron james passes the ball",
+        "start": 146.25,
+        "end": 148.75,
+        "timecode": "00:02:26.2 -> 00:02:28.8"
+       },
+       {
+        "step": "a teammate dunks",
+        "start": 155.25,
+        "end": 158.61,
+        "timecode": "00:02:35.2 -> 00:02:38.6"
+       }
+      ],
+      "replays": []
+     },
+     {
+      "id": "obs_93e2b4aa8e",
+      "video_id": "v_df7432f2b3",
+      "title": "LeBron James drops dimes and scores first bucket for 76ers \ud83d\udd25 Preseason debut highlights",
+      "source": "https://www.youtube.com/watch?v=zHBgJqG1nJo",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-zHBgJqG1nJo.mp4",
+      "start": 59.5,
+      "end": 64.0,
+      "timecode": "00:00:59.5 -> 00:01:04.0",
+      "claim": "lebron james passes the ball, then a teammate dunks",
+      "who": "LeBron James (23), Joel Embiid (7)",
+      "entity_id": "ent_1035f0e471e4",
+      "confidence": 0.95,
+      "evidence": {
+       "summary": "LeBron passes, Embiid dunks",
+       "frames": [
+        {
+         "t": 60.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_df7432f2b3_53.9-67.3/06.jpg"
+        },
+        {
+         "t": 61.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_df7432f2b3_53.9-67.3/07.jpg"
+        },
+        {
+         "t": 62.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_df7432f2b3_53.9-67.3/08.jpg"
+        },
+        {
+         "t": 63.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_df7432f2b3_53.9-67.3/09.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 59.4,
+         "end": 59.88,
+         "text": "to cut."
+        },
+        {
+         "start": 59.98,
+         "end": 64.4,
+         "text": "There's the good ball movement from LeBron to Joel to JB along the baseline,"
+        }
+       ],
+       "ocr": [
+        {
+         "t": 60.25,
+         "text": "BARCLAYS | M.U | BARCLAYS | PROCKZ | 30 | 21 | BARCLAYS | PAL | QATAR | OATA | BARCL"
+        },
+        {
+         "t": 61.25,
+         "text": "iehater | tick | BARCLAYS | OATAR | B"
+        },
+        {
+         "t": 62.25,
+         "text": "Oicermanier | BARCLAYS | BARCLAYS"
+        },
+        {
+         "t": 63.25,
+         "text": "PHILA | 23"
+        }
+       ],
+       "sounds": [
+        {
+         "start": 49.5,
+         "end": 114.0,
+         "label": "speech"
+        },
+        {
+         "start": 59.5,
+         "end": 60.5,
+         "label": "basketball_bounce"
+        },
+        {
+         "start": 59.5,
+         "end": 60.5,
+         "label": "booing"
+        },
+        {
+         "start": 60.5,
+         "end": 61.5,
+         "label": "music"
+        },
+        {
+         "start": 61.0,
+         "end": 62.0,
+         "label": "booing"
+        },
+        {
+         "start": 62.5,
+         "end": 64.0,
+         "label": "basketball_bounce"
+        },
+        {
+         "start": 62.5,
+         "end": 63.5,
+         "label": "booing"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "lebron james passes the ball",
+        "start": 59.5,
+        "end": 61.75,
+        "timecode": "00:00:59.5 -> 00:01:01.8"
+       },
+       {
+        "step": "a teammate dunks",
+        "start": 61.75,
+        "end": 64.0,
+        "timecode": "00:01:01.8 -> 00:01:04.0"
+       }
+      ],
+      "replays": []
+     },
+     {
+      "id": "obs_c7f99bfdcf",
+      "video_id": "v_df7432f2b3",
+      "title": "LeBron James drops dimes and scores first bucket for 76ers \ud83d\udd25 Preseason debut highlights",
+      "source": "https://www.youtube.com/watch?v=zHBgJqG1nJo",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-zHBgJqG1nJo.mp4",
+      "start": 155.75,
+      "end": 163.25,
+      "timecode": "00:02:35.8 -> 00:02:43.2",
+      "claim": "lebron james passes the ball, then a teammate dunks",
+      "who": "LeBron James, jersey 23",
+      "entity_id": "ent_1035f0e471e4",
+      "confidence": 0.95,
+      "evidence": {
+       "summary": "pass to dunker, then dunk",
+       "frames": [
+        {
+         "t": 156.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_df7432f2b3_154.9-167.3/02.jpg"
+        },
+        {
+         "t": 157.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_df7432f2b3_154.9-167.3/03.jpg"
+        },
+        {
+         "t": 158.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_df7432f2b3_154.9-167.3/04.jpg"
+        },
+        {
+         "t": 159.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_df7432f2b3_154.9-167.3/05.jpg"
+        },
+        {
+         "t": 160.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_df7432f2b3_154.9-167.3/06.jpg"
+        },
+        {
+         "t": 161.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_df7432f2b3_154.9-167.3/07.jpg"
+        },
+        {
+         "t": 162.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_df7432f2b3_154.9-167.3/08.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 155.96,
+         "end": 159.02,
+         "text": "The kick cross court to Dwayne Wade,"
+        },
+        {
+         "start": 159.14,
+         "end": 160.42,
+         "text": "ready to shoot in that corner."
+        },
+        {
+         "start": 161.06,
+         "end": 163.28,
+         "text": "And then this one, Jabari just doing"
+        }
+       ],
+       "ocr": [
+        {
+         "t": 156.25,
+         "text": "SUTY\u0440"
+        },
+        {
+         "t": 157.25,
+         "text": "OCOL | \u0418\u043a\u0421, \u041e\u043bO SOT\u041e RNO | SAVIDYVE | ARCLAIS | ENTER"
+        },
+        {
+         "t": 158.25,
+         "text": "ARCLAIS | ENTER"
+        },
+        {
+         "t": 159.25,
+         "text": ":32 | YATBDO | 0o, 200\u043e 11000 2000 | BARCIAYS | ENIER"
+        },
+        {
+         "t": 160.25,
+         "text": "VISE | SPVO"
+        },
+        {
+         "t": 163.25,
+         "text": "PHILA | 33 | 887 PAL | \u0448\"m"
+        }
+       ],
+       "sounds": [
+        {
+         "start": 146.0,
+         "end": 184.5,
+         "label": "speech"
+        },
+        {
+         "start": 155.5,
+         "end": 157.5,
+         "label": "booing"
+        },
+        {
+         "start": 155.5,
+         "end": 156.5,
+         "label": "playing_table_tennis"
+        },
+        {
+         "start": 156.0,
+         "end": 157.0,
+         "label": "crowd"
+        },
+        {
+         "start": 157.5,
+         "end": 158.5,
+         "label": "music"
+        },
+        {
+         "start": 158.0,
+         "end": 160.5,
+         "label": "booing"
+        },
+        {
+         "start": 158.0,
+         "end": 159.0,
+         "label": "playing_volleyball"
+        },
+        {
+         "start": 158.5,
+         "end": 159.5,
+         "label": "basketball_bounce"
+        },
+        {
+         "start": 158.5,
+         "end": 159.5,
+         "label": "playing_squash"
+        },
+        {
+         "start": 159.0,
+         "end": 162.0,
+         "label": "crowd"
+        },
+        {
+         "start": 161.0,
+         "end": 164.5,
+         "label": "booing"
+        },
+        {
+         "start": 161.5,
+         "end": 162.5,
+         "label": "music"
+        },
+        {
+         "start": 162.5,
+         "end": 163.5,
+         "label": "playing_squash"
+        },
+        {
+         "start": 163.0,
+         "end": 164.0,
+         "label": "crowd"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "lebron james passes the ball",
+        "start": 155.75,
+        "end": 158.0,
+        "timecode": "00:02:35.8 -> 00:02:38.0"
+       },
+       {
+        "step": "a teammate dunks",
+        "start": 161.25,
+        "end": 163.25,
+        "timecode": "00:02:41.2 -> 00:02:43.2"
+       }
+      ],
+      "replays": []
+     }
+    ],
+    "rejected": [
+     {
+      "video_id": "v_8718a4de6d",
+      "start": 35.34,
+      "end": 41.73,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_8718a4de6d",
+      "start": 151.32,
+      "end": 157.13,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_df7432f2b3",
+      "start": 151.57,
+      "end": 157.92,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_8718a4de6d",
+      "start": 41.73,
+      "end": 47.23,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_8718a4de6d",
+      "start": 155.61,
+      "end": 162.95,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_8718a4de6d",
+      "start": 287.27,
+      "end": 290.94,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_8718a4de6d",
+      "start": 259.04,
+      "end": 260.63,
+      "reason": "no match"
+     }
+    ],
+    "counts": {
+     "candidates": 12,
+     "checked": 12,
+     "confirmed": 5,
+     "rejected": 7
+    },
+    "seconds": {
+     "search": 0.43,
+     "load": 0.0,
+     "check": 50.72
+    }
+   },
+   "stderr": "tlv: searching 3 videos for 2 steps\ntlv: checking 12 stretches\ntlv: checked 1 of 12\ntlv: checked 2 of 12\ntlv: checked 3 of 12\ntlv: checked 4 of 12\ntlv: checked 5 of 12\ntlv: checked 6 of 12\ntlv: checked 7 of 12\ntlv: checked 8 of 12\ntlv: checked 9 of 12\ntlv: checked 10 of 12\ntlv: checked 11 of 12\ntlv: checked 12 of 12\ntlv: found 5 in 51 s: 0 s searching, 0 s loading the model, 51 s checking (50 s of it answering)\n"
+  },
+  {
+   "id": "curry-three",
+   "query": "stephen curry makes a three pointer",
+   "then": [],
+   "argv": [
+    "uv",
+    "run",
+    "tlv",
+    "find",
+    "stephen curry makes a three pointer",
+    "--max-candidates",
+    "12",
+    "--no-cut",
+    "--json"
+   ],
+   "seconds": 38.5,
+   "exit_code": 0,
+   "output": {
+    "claim": "stephen curry makes a three pointer",
+    "confirmed": [
+     {
+      "id": "obs_c67b812a15",
+      "video_id": "v_3ee2db6c19",
+      "title": "WARRIORS at LAKERS | FULL GAME HIGHLIGHTS | April 3, 2025",
+      "source": "https://www.youtube.com/watch?v=G6go_js-qoU",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-G6go_js-qoU.mp4",
+      "start": 214.25,
+      "end": 216.25,
+      "timecode": "00:03:34.2 -> 00:03:36.2",
+      "claim": "stephen curry makes a three pointer",
+      "who": "30, GSW",
+      "entity_id": null,
+      "confidence": 0.95,
+      "evidence": {
+       "summary": "curry shoots from beyond arc",
+       "frames": [
+        {
+         "t": 214.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_209.2-219.3/06.jpg"
+        },
+        {
+         "t": 215.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_209.2-219.3/07.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 214.4,
+         "end": 215.58,
+         "text": "Now next is"
+        },
+        {
+         "start": 215.58,
+         "end": 216.6,
+         "text": "Reggie"
+        }
+       ],
+       "ocr": [
+        {
+         "t": 214.25,
+         "text": "4 \u00df | GET THE S App | AKERS.COM | 77 \u20b4 | OiD | STEPHEN CURRY | TNT | crypto.com | 7PTS 3/6FG 3 AST | SPORTS | ARENA"
+        },
+        {
+         "t": 215.25,
+         "text": "42 | GET THE 18App | AKERS.COM | U TRA | GiD OM | STEPHEN CURRY | INT | 7PTS 3/6FG 3 AST | crypto.com | SPORTS | ARENA"
+        },
+        {
+         "t": 216.25,
+         "text": "GET THE 8 App | AKERS.COM | TAS | UTRA | BiD COAY | STEPHEN CURRY | 7PTS 3/6FG 3AST | SPORTS | .com"
+        }
+       ],
+       "sounds": [
+        {
+         "start": 212.5,
+         "end": 217.5,
+         "label": "basketball_bounce"
+        },
+        {
+         "start": 213.0,
+         "end": 235.5,
+         "label": "speech"
+        },
+        {
+         "start": 213.5,
+         "end": 217.0,
+         "label": "music"
+        },
+        {
+         "start": 214.5,
+         "end": 215.5,
+         "label": "playing_volleyball"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "stephen curry makes a three pointer",
+        "start": 214.25,
+        "end": 216.25,
+        "timecode": "00:03:34.2 -> 00:03:36.2"
+       }
+      ],
+      "replays": []
+     },
+     {
+      "id": "obs_6c4b6a099f",
+      "video_id": "v_3ee2db6c19",
+      "title": "WARRIORS at LAKERS | FULL GAME HIGHLIGHTS | April 3, 2025",
+      "source": "https://www.youtube.com/watch?v=G6go_js-qoU",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-G6go_js-qoU.mp4",
+      "start": 239.25,
+      "end": 241.75,
+      "timecode": "00:03:59.2 -> 00:04:01.8",
+      "claim": "stephen curry makes a three pointer",
+      "who": "30",
+      "entity_id": null,
+      "confidence": 0.95,
+      "evidence": {
+       "summary": "curry shoots from beyond arc",
+       "frames": [
+        {
+         "t": 239.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_236.3-248.9/04.jpg"
+        },
+        {
+         "t": 241.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_236.3-248.9/05.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 240.26,
+         "end": 242.06,
+         "text": "Here comes curry three"
+        }
+       ],
+       "ocr": [
+        {
+         "t": 239.25,
+         "text": "2:10 | GET THE 8 App | LAKERS.CO | sota | SCT THE B3 | 23 | eiD- | 49 | 2:10 | GSW | INT | 37 | 2ND | LAL | 24 | SPORTS"
+        },
+        {
+         "t": 240.25,
+         "text": "AMERICAN EXPRF | \u0410\u041b | \u2192 StyRa com | 52 | 1:52 | GSW | TNT | 39 | 2ND 18 | LAL | SPORTS"
+        },
+        {
+         "t": 241.25,
+         "text": "RS.CO | 4 AMER | AN EXPRES | suehisdre | TPia com | 52 | 1:51 | GSW | TNT | 39 | 2ND 17 | LAL | SPORTS"
+        }
+       ],
+       "sounds": [
+        {
+         "start": 236.0,
+         "end": 250.5,
+         "label": "speech"
+        },
+        {
+         "start": 238.5,
+         "end": 239.5,
+         "label": "booing"
+        },
+        {
+         "start": 238.5,
+         "end": 240.0,
+         "label": "playing_volleyball"
+        },
+        {
+         "start": 239.0,
+         "end": 240.0,
+         "label": "music"
+        },
+        {
+         "start": 239.5,
+         "end": 242.0,
+         "label": "basketball_bounce"
+        },
+        {
+         "start": 239.5,
+         "end": 240.5,
+         "label": "fireworks"
+        },
+        {
+         "start": 240.0,
+         "end": 241.0,
+         "label": "wind"
+        },
+        {
+         "start": 240.5,
+         "end": 241.5,
+         "label": "water"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "stephen curry makes a three pointer",
+        "start": 239.25,
+        "end": 241.75,
+        "timecode": "00:03:59.2 -> 00:04:01.8"
+       }
+      ],
+      "replays": []
+     },
+     {
+      "id": "obs_096b94fcf8",
+      "video_id": "v_3ee2db6c19",
+      "title": "WARRIORS at LAKERS | FULL GAME HIGHLIGHTS | April 3, 2025",
+      "source": "https://www.youtube.com/watch?v=G6go_js-qoU",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-G6go_js-qoU.mp4",
+      "start": 336.75,
+      "end": 338.75,
+      "timecode": "00:05:36.8 -> 00:05:38.8",
+      "claim": "stephen curry makes a three pointer",
+      "who": "30, Golden State Warriors",
+      "entity_id": null,
+      "confidence": 0.95,
+      "evidence": {
+       "summary": "curry shoots from beyond arc",
+       "frames": [
+        {
+         "t": 337.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_333.1-341.9/05.jpg"
+        },
+        {
+         "t": 338.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_333.1-341.9/06.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 336.46,
+         "end": 337.28,
+         "text": "with a three."
+        },
+        {
+         "start": 337.56,
+         "end": 338.86,
+         "text": "Fouled as he fired the"
+        }
+       ],
+       "ocr": [
+        {
+         "t": 337.25,
+         "text": "GET THE S App | AKERS.COM | THE 9.300 22 | ULTRA | SAMEE | 23 | 68 | 6:58 | GSW | TNT | 60 | 3RD | LAL | 10 | SPORTS"
+        },
+        {
+         "t": 338.25,
+         "text": "GET THE & App | AKERS.COM | THE BA0D (XT* | ULTRA | NE | 6:57 | 68 | GSW | UNT | 60 | 3RD 24 | LAL | SPORTS | o.com"
+        }
+       ],
+       "sounds": [
+        {
+         "start": 336.0,
+         "end": 341.0,
+         "label": "playing_volleyball"
+        },
+        {
+         "start": 336.0,
+         "end": 340.5,
+         "label": "speech"
+        },
+        {
+         "start": 336.5,
+         "end": 343.0,
+         "label": "basketball_bounce"
+        },
+        {
+         "start": 336.5,
+         "end": 337.5,
+         "label": "booing"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "stephen curry makes a three pointer",
+        "start": 336.75,
+        "end": 338.75,
+        "timecode": "00:05:36.8 -> 00:05:38.8"
+       }
+      ],
+      "replays": []
+     },
+     {
+      "id": "obs_bab30f44a5",
+      "video_id": "v_3ee2db6c19",
+      "title": "WARRIORS at LAKERS | FULL GAME HIGHLIGHTS | April 3, 2025",
+      "source": "https://www.youtube.com/watch?v=G6go_js-qoU",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-G6go_js-qoU.mp4",
+      "start": 374.75,
+      "end": 376.75,
+      "timecode": "00:06:14.8 -> 00:06:16.8",
+      "claim": "stephen curry makes a three pointer",
+      "who": "30",
+      "entity_id": null,
+      "confidence": 0.95,
+      "evidence": {
+       "summary": "curry shoots from beyond the arc",
+       "frames": [
+        {
+         "t": 375.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_369.5-377.5/06.jpg"
+        },
+        {
+         "t": 376.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_369.5-377.5/07.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 374.74,
+         "end": 375.62,
+         "text": "He's taking aims."
+        },
+        {
+         "start": 375.86,
+         "end": 376.8,
+         "text": "Kaminga is there."
+        }
+       ],
+       "ocr": [
+        {
+         "t": 375.25,
+         "text": "428 | GET THE 8 App | LAKERS.COI | inia | Micholso | CEIPS | 75 | 4:20 | GSW | UNT | 64 | 3RD | LAL | 11 | SPORTS"
+        },
+        {
+         "t": 376.25,
+         "text": "4 18 | GET THE \u00ae App | LAKERS.CO | sanh iade | 75 | 4:19 | GSW | TNT | 64 | 3RD | LAL | 10 | SPORTS"
+        }
+       ],
+       "sounds": [
+        {
+         "start": 365.0,
+         "end": 379.0,
+         "label": "speech"
+        },
+        {
+         "start": 373.5,
+         "end": 376.5,
+         "label": "booing"
+        },
+        {
+         "start": 374.5,
+         "end": 378.5,
+         "label": "basketball_bounce"
+        },
+        {
+         "start": 376.5,
+         "end": 377.5,
+         "label": "bird_chirp_tweet"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "stephen curry makes a three pointer",
+        "start": 374.75,
+        "end": 376.75,
+        "timecode": "00:06:14.8 -> 00:06:16.8"
+       }
+      ],
+      "replays": []
+     },
+     {
+      "id": "obs_3cf98a396c",
+      "video_id": "v_3ee2db6c19",
+      "title": "WARRIORS at LAKERS | FULL GAME HIGHLIGHTS | April 3, 2025",
+      "source": "https://www.youtube.com/watch?v=G6go_js-qoU",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-G6go_js-qoU.mp4",
+      "start": 458.25,
+      "end": 459.25,
+      "timecode": "00:07:38.2 -> 00:07:39.2",
+      "claim": "stephen curry makes a three pointer",
+      "who": "30",
+      "entity_id": null,
+      "confidence": 0.95,
+      "evidence": {
+       "summary": "curry in corner, shot",
+       "frames": [
+        {
+         "t": 458.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_454.5-462.1/05.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 457.94,
+         "end": 458.9,
+         "text": "Jimmy Butler!"
+        }
+       ],
+       "ocr": [
+        {
+         "t": 458.25,
+         "text": "Ratuter | 30 | 91 | 10:36 | GSW | TNT | 80 | 4TH | LAL | 23 | NBA | SPORTS"
+        },
+        {
+         "t": 459.25,
+         "text": "959 | GET THE 8 Apo | LAKERS.CO | OiD TOwY | KEPS | 9:59 | 93 | GSW | TNT | 80 | 4TH 13 | LAL | SPORTS"
+        }
+       ],
+       "sounds": [
+        {
+         "start": 411.0,
+         "end": 464.5,
+         "label": "speech"
+        },
+        {
+         "start": 457.5,
+         "end": 458.5,
+         "label": "battle_cry"
+        },
+        {
+         "start": 457.5,
+         "end": 458.5,
+         "label": "booing"
+        },
+        {
+         "start": 458.0,
+         "end": 459.5,
+         "label": "playing_volleyball"
+        },
+        {
+         "start": 458.5,
+         "end": 460.0,
+         "label": "basketball_bounce"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "stephen curry makes a three pointer",
+        "start": 458.25,
+        "end": 459.25,
+        "timecode": "00:07:38.2 -> 00:07:39.2"
+       }
+      ],
+      "replays": []
+     },
+     {
+      "id": "obs_a8b6592ff7",
+      "video_id": "v_3ee2db6c19",
+      "title": "WARRIORS at LAKERS | FULL GAME HIGHLIGHTS | April 3, 2025",
+      "source": "https://www.youtube.com/watch?v=G6go_js-qoU",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-G6go_js-qoU.mp4",
+      "start": 549.75,
+      "end": 551.75,
+      "timecode": "00:09:09.8 -> 00:09:11.8",
+      "claim": "stephen curry makes a three pointer",
+      "who": "30",
+      "entity_id": null,
+      "confidence": 0.95,
+      "evidence": {
+       "summary": "curry shooting from beyond arc",
+       "frames": [
+        {
+         "t": 550.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_541.7-552.8/09.jpg"
+        },
+        {
+         "t": 551.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_541.7-552.8/10.jpg"
+        }
+       ],
+       "transcript": [],
+       "ocr": [
+        {
+         "t": 550.25,
+         "text": "S PLCE IN TOGRANEN | LAKERS.COI | S PLANIN TOURNAMENT V | ULTRA | Mchelae) | SiD TOMY | RRS | 109 | 3:49 | GSW | TNT | 100 | 4TH 18 | LAL | SPORTS | NBA"
+        },
+        {
+         "t": 551.25,
+         "text": "SE FELE-IN TOORMANEN | LAKERS.CO | | SoFi | S PLAN\u0102 TOURNAMENT | EMchole l ULTRA | Catale: | 109 | 3:48 | GSW | TNT | 100 | 4TH | LAL | 17 | SPORTS | NBA"
+        }
+       ],
+       "sounds": [
+        {
+         "start": 548.0,
+         "end": 554.0,
+         "label": "music"
+        },
+        {
+         "start": 548.0,
+         "end": 550.0,
+         "label": "speech"
+        },
+        {
+         "start": 549.0,
+         "end": 550.5,
+         "label": "basketball_bounce"
+        },
+        {
+         "start": 549.0,
+         "end": 550.0,
+         "label": "booing"
+        },
+        {
+         "start": 549.5,
+         "end": 550.5,
+         "label": "bird"
+        },
+        {
+         "start": 550.0,
+         "end": 551.0,
+         "label": "bird_chirp_tweet"
+        },
+        {
+         "start": 550.0,
+         "end": 551.0,
+         "label": "bird_vocalization"
+        },
+        {
+         "start": 550.5,
+         "end": 551.5,
+         "label": "brass_instrument"
+        },
+        {
+         "start": 550.5,
+         "end": 552.0,
+         "label": "saxophone"
+        },
+        {
+         "start": 551.0,
+         "end": 552.0,
+         "label": "guitar"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "stephen curry makes a three pointer",
+        "start": 549.75,
+        "end": 551.75,
+        "timecode": "00:09:09.8 -> 00:09:11.8"
+       }
+      ],
+      "replays": []
+     },
+     {
+      "id": "obs_1e13a45342",
+      "video_id": "v_3ee2db6c19",
+      "title": "WARRIORS at LAKERS | FULL GAME HIGHLIGHTS | April 3, 2025",
+      "source": "https://www.youtube.com/watch?v=G6go_js-qoU",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-G6go_js-qoU.mp4",
+      "start": 567.37,
+      "end": 569.25,
+      "timecode": "00:09:27.4 -> 00:09:29.2",
+      "claim": "stephen curry makes a three pointer",
+      "who": "30, GSW",
+      "entity_id": null,
+      "confidence": 0.95,
+      "evidence": {
+       "summary": "curry shoots from beyond arc",
+       "frames": [
+        {
+         "t": 567.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_567.4-574.9/01.jpg"
+        },
+        {
+         "t": 568.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_567.4-574.9/02.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 566.4,
+         "end": 568.2,
+         "text": "Three sets of spring"
+        },
+        {
+         "start": 568.2,
+         "end": 569.04,
+         "text": "Curry three"
+        }
+       ],
+       "ocr": [
+        {
+         "t": 568.25,
+         "text": "201 | GET THE & App | AKERS.COM | SiD ONY | 111 | 2:07 | GSW | UNT | 104 | 4TH | LAL | 8 | SPORTS"
+        },
+        {
+         "t": 569.25,
+         "text": "2:06 | GET THE & App | AKERS.COM | S\u00c3o CITTHE BApp GET TH\u0141\u0142\u015b\u015b\u00d9 | THC 5300 = | ULTRA | TODAY | 111 | 2:06 | GSW | TNT | 104 | 4TH 24 | LAL | SPORTS"
+        }
+       ],
+       "sounds": [
+        {
+         "start": 552.0,
+         "end": 569.0,
+         "label": "speech"
+        },
+        {
+         "start": 566.0,
+         "end": 568.0,
+         "label": "basketball_bounce"
+        },
+        {
+         "start": 567.5,
+         "end": 568.5,
+         "label": "booing"
+        },
+        {
+         "start": 567.5,
+         "end": 568.5,
+         "label": "music"
+        },
+        {
+         "start": 568.0,
+         "end": 569.5,
+         "label": "cheering"
+        },
+        {
+         "start": 568.0,
+         "end": 569.5,
+         "label": "crowd"
+        },
+        {
+         "start": 568.5,
+         "end": 570.0,
+         "label": "basketball_bounce"
+        },
+        {
+         "start": 569.0,
+         "end": 570.5,
+         "label": "engine"
+        },
+        {
+         "start": 569.0,
+         "end": 570.0,
+         "label": "playing_badminton"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "stephen curry makes a three pointer",
+        "start": 567.37,
+        "end": 569.25,
+        "timecode": "00:09:27.4 -> 00:09:29.2"
+       }
+      ],
+      "replays": []
+     },
+     {
+      "id": "obs_b9ec5d8c33",
+      "video_id": "v_3ee2db6c19",
+      "title": "WARRIORS at LAKERS | FULL GAME HIGHLIGHTS | April 3, 2025",
+      "source": "https://www.youtube.com/watch?v=G6go_js-qoU",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-G6go_js-qoU.mp4",
+      "start": 584.25,
+      "end": 587.38,
+      "timecode": "00:09:44.2 -> 00:09:47.4",
+      "claim": "stephen curry makes a three pointer",
+      "who": "30",
+      "entity_id": null,
+      "confidence": 0.95,
+      "evidence": {
+       "summary": "curry shoots from beyond arc",
+       "frames": [
+        {
+         "t": 584.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_576.0-587.4/09.jpg"
+        },
+        {
+         "t": 585.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_576.0-587.4/10.jpg"
+        },
+        {
+         "t": 586.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_576.0-587.4/11.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 584.14,
+         "end": 585.18,
+         "text": "It's Pajemski."
+        },
+        {
+         "start": 585.36,
+         "end": 586.06,
+         "text": "His three."
+        },
+        {
+         "start": 586.48,
+         "end": 587.18,
+         "text": "Goal!"
+        }
+       ],
+       "ocr": [
+        {
+         "t": 584.25,
+         "text": "134 | GET THE 9 4pp | AKERS.COM | VERPL | ULTRA | BiD WONY | 00 | 114 | 1:34 | GSW | TNT | 107 | 4TH | LAL | SPORTS"
+        },
+        {
+         "t": 585.25,
+         "text": "GET THE 8 4pp | AKERS.COM | ULTRA | BiD TOuY | 114 | 1:33 | GSW | UNT | 107 | 4T\u043d | LAL | 6 | SPORTS"
+        },
+        {
+         "t": 586.25,
+         "text": "AKERS.COM | ULTRA | 00 | 114 | 1:32 | GSW | UNT | tg com | 107 | 4TH 24 | LAL | SPORTS"
+        },
+        {
+         "t": 587.25,
+         "text": "BALL | WARK | 45 | WARRIOR | WARRIORD | TBAL | GSW 117 | 1:32 | TNT | LAL 107 | 4TH 24 | SPORTS | ODZIEMS"
+        }
+       ],
+       "sounds": [
+        {
+         "start": 580.0,
+         "end": 593.0,
+         "label": "speech"
+        },
+        {
+         "start": 583.0,
+         "end": 584.5,
+         "label": "basketball_bounce"
+        },
+        {
+         "start": 583.5,
+         "end": 586.0,
+         "label": "playing_volleyball"
+        },
+        {
+         "start": 584.5,
+         "end": 585.5,
+         "label": "booing"
+        },
+        {
+         "start": 585.0,
+         "end": 586.0,
+         "label": "basketball_bounce"
+        },
+        {
+         "start": 585.5,
+         "end": 586.5,
+         "label": "slap_smack"
+        },
+        {
+         "start": 586.5,
+         "end": 587.5,
+         "label": "door"
+        },
+        {
+         "start": 586.5,
+         "end": 587.5,
+         "label": "door_slam"
+        },
+        {
+         "start": 586.5,
+         "end": 587.5,
+         "label": "music"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "stephen curry makes a three pointer",
+        "start": 584.25,
+        "end": 587.38,
+        "timecode": "00:09:44.2 -> 00:09:47.4"
+       }
+      ],
+      "replays": []
+     }
+    ],
+    "rejected": [
+     {
+      "video_id": "v_3ee2db6c19",
+      "start": 645.98,
+      "end": 651.05,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_8718a4de6d",
+      "start": 21.69,
+      "end": 27.63,
+      "reason": "no match"
+     }
+    ],
+    "counts": {
+     "candidates": 12,
+     "checked": 10,
+     "confirmed": 8,
+     "rejected": 2
+    },
+    "seconds": {
+     "search": 0.39,
+     "load": 0.0,
+     "check": 37.96
+    }
+   },
+   "stderr": "tlv: searching 3 videos for 1 steps\ntlv: checking 10 stretches\ntlv: checked 1 of 10\ntlv: checked 2 of 10\ntlv: checked 3 of 10\ntlv: checked 4 of 10\ntlv: checked 5 of 10\ntlv: checked 6 of 10\ntlv: checked 7 of 10\ntlv: checked 8 of 10\ntlv: checked 9 of 10\ntlv: checked 10 of 10\ntlv: found 8 in 38 s: 0 s searching, 0 s loading the model, 38 s checking (38 s of it answering)\n"
+  },
+  {
+   "id": "lebron-dunk",
+   "query": "lebron james dunks",
+   "then": [],
+   "argv": [
+    "uv",
+    "run",
+    "tlv",
+    "find",
+    "lebron james dunks",
+    "--max-candidates",
+    "12",
+    "--no-cut",
+    "--json"
+   ],
+   "seconds": 43.3,
+   "exit_code": 0,
+   "output": {
+    "claim": "lebron james dunks",
+    "confirmed": [
+     {
+      "id": "obs_e9ff9d4d4c",
+      "video_id": "v_8718a4de6d",
+      "title": "LeBron James TURNED BACK THE CLOCK With 29 PTS vs 76ERS | December 7, 2025",
+      "source": "https://www.youtube.com/watch?v=oyk2QtdUtKE",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-oyk2QtdUtKE.mp4",
+      "start": 45.25,
+      "end": 46.25,
+      "timecode": "00:00:45.2 -> 00:00:46.2",
+      "claim": "lebron james dunks",
+      "who": "23",
+      "entity_id": null,
+      "confidence": 0.95,
+      "evidence": {
+       "summary": "dunk on 0:47.8",
+       "frames": [
+        {
+         "t": 45.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_38.7-50.2/08.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 45.22,
+         "end": 46.36,
+         "text": "to finish out with a nice left"
+        }
+       ],
+       "ocr": [
+        {
+         "t": 45.25,
+         "text": "omAare"
+        },
+        {
+         "t": 46.25,
+         "text": "SAMES | 23 | 33"
+        }
+       ],
+       "sounds": [
+        {
+         "start": 33.5,
+         "end": 78.0,
+         "label": "speech"
+        },
+        {
+         "start": 44.5,
+         "end": 47.5,
+         "label": "playing_squash"
+        },
+        {
+         "start": 44.5,
+         "end": 45.5,
+         "label": "playing_volleyball"
+        },
+        {
+         "start": 45.5,
+         "end": 46.5,
+         "label": "basketball_bounce"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "lebron james dunks",
+        "start": 45.25,
+        "end": 46.25,
+        "timecode": "00:00:45.2 -> 00:00:46.2"
+       }
+      ],
+      "replays": []
+     },
+     {
+      "id": "obs_fdf0d9ac91",
+      "video_id": "v_8718a4de6d",
+      "title": "LeBron James TURNED BACK THE CLOCK With 29 PTS vs 76ERS | December 7, 2025",
+      "source": "https://www.youtube.com/watch?v=oyk2QtdUtKE",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-oyk2QtdUtKE.mp4",
+      "start": 68.75,
+      "end": 70.75,
+      "timecode": "00:01:08.8 -> 00:01:10.8",
+      "claim": "lebron james dunks",
+      "who": "23",
+      "entity_id": "ent_1035f0e471e4",
+      "confidence": 0.95,
+      "evidence": {
+       "summary": "dunk on 1:09.2",
+       "frames": [
+        {
+         "t": 69.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_65.6-77.5/04.jpg"
+        },
+        {
+         "t": 70.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_65.6-77.5/05.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 68.72,
+         "end": 68.9,
+         "text": "enough?"
+        },
+        {
+         "start": 69.2,
+         "end": 70.76,
+         "text": "40, almost 41 years of age."
+        }
+       ],
+       "ocr": [
+        {
+         "t": 69.25,
+         "text": "COIR | 6 | 23 | ticketmaster"
+        },
+        {
+         "t": 70.25,
+         "text": "T+TISSOT | BUNG/C | 77"
+        }
+       ],
+       "sounds": [
+        {
+         "start": 33.5,
+         "end": 78.0,
+         "label": "speech"
+        },
+        {
+         "start": 67.5,
+         "end": 69.0,
+         "label": "basketball_bounce"
+        },
+        {
+         "start": 69.0,
+         "end": 70.0,
+         "label": "booing"
+        },
+        {
+         "start": 69.0,
+         "end": 72.0,
+         "label": "playing_volleyball"
+        },
+        {
+         "start": 69.5,
+         "end": 70.5,
+         "label": "air_horn"
+        },
+        {
+         "start": 70.0,
+         "end": 71.0,
+         "label": "music"
+        },
+        {
+         "start": 70.5,
+         "end": 71.5,
+         "label": "booing"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "lebron james dunks",
+        "start": 68.75,
+        "end": 70.75,
+        "timecode": "00:01:08.8 -> 00:01:10.8"
+       }
+      ],
+      "replays": []
+     },
+     {
+      "id": "obs_218d032723",
+      "video_id": "v_8718a4de6d",
+      "title": "LeBron James TURNED BACK THE CLOCK With 29 PTS vs 76ERS | December 7, 2025",
+      "source": "https://www.youtube.com/watch?v=oyk2QtdUtKE",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-oyk2QtdUtKE.mp4",
+      "start": 157.0,
+      "end": 158.5,
+      "timecode": "00:02:37.0 -> 00:02:38.5",
+      "claim": "lebron james dunks",
+      "who": "23",
+      "entity_id": null,
+      "confidence": 0.95,
+      "evidence": {
+       "summary": "dunk in frame 7",
+       "frames": [
+        {
+         "t": 157.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_148.3-165.9/07.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 157.0,
+         "end": 157.52,
+         "text": "at the rim"
+        },
+        {
+         "start": 157.52,
+         "end": 158.58,
+         "text": "the way James Borey"
+        }
+       ],
+       "ocr": [
+        {
+         "t": 157.25,
+         "text": "d& Stale | WELCOME | State Farm | WEBL | S OHECK FOINT | WE BLOCK CYBER THREATS | S ONECK FO | COMECH PONT | IWEBLOCK CYBER THREATS | WE BLOCK CYBER THREATS | INREATS | AWE HEOCK CYBER THREATS CCHECF PONT | WE BLOCK CYBER THREATS | ER THREATS | \u2022 CHECK POINT | CEATS | WE BL | G CHECK POUNT | WE BLOCKCYBER THREATS | \u2022CEMBER 21 |00| E"
+        },
+        {
+         "t": 158.25,
+         "text": "BLOCK CYBER THREATS | IREATS | B\u00b0CHECK POINT | TWELO | MEELT | WE BLOCK CYBER THREAT\u015a | WEBEd | DECEMBER 2 | SAEES | 77"
+        }
+       ],
+       "sounds": [
+        {
+         "start": 135.0,
+         "end": 170.0,
+         "label": "speech"
+        },
+        {
+         "start": 149.5,
+         "end": 164.0,
+         "label": "music"
+        },
+        {
+         "start": 156.5,
+         "end": 157.5,
+         "label": "percussion"
+        },
+        {
+         "start": 157.0,
+         "end": 158.0,
+         "label": "duck_quack"
+        },
+        {
+         "start": 157.5,
+         "end": 160.0,
+         "label": "plucked_string_instrument"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "lebron james dunks",
+        "start": 157.0,
+        "end": 158.5,
+        "timecode": "00:02:37.0 -> 00:02:38.5"
+       }
+      ],
+      "replays": []
+     }
+    ],
+    "rejected": [
+     {
+      "video_id": "v_8718a4de6d",
+      "start": 287.27,
+      "end": 290.94,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_8718a4de6d",
+      "start": 282.0,
+      "end": 286.64,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_df7432f2b3",
+      "start": 14.9,
+      "end": 20.97,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_3ee2db6c19",
+      "start": 514.95,
+      "end": 520.09,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_8718a4de6d",
+      "start": 326.99,
+      "end": 334.89,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_8718a4de6d",
+      "start": 334.89,
+      "end": 342.8,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_8718a4de6d",
+      "start": 229.4,
+      "end": 235.19,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_df7432f2b3",
+      "start": 234.33,
+      "end": 241.03,
+      "reason": "no match"
+     }
+    ],
+    "counts": {
+     "candidates": 12,
+     "checked": 11,
+     "confirmed": 3,
+     "rejected": 8
+    },
+    "seconds": {
+     "search": 0.3,
+     "load": 0.0,
+     "check": 42.78
+    }
+   },
+   "stderr": "tlv: searching 3 videos for 1 steps\ntlv: checking 11 stretches\ntlv: checked 1 of 11\ntlv: checked 2 of 11\ntlv: checked 3 of 11\ntlv: checked 4 of 11\ntlv: checked 5 of 11\ntlv: checked 6 of 11\ntlv: checked 7 of 11\ntlv: checked 8 of 11\ntlv: waiting for another model run to finish before vlm\ntlv: checked 9 of 11\ntlv: checked 10 of 11\ntlv: checked 11 of 11\ntlv: found 3 in 43 s: 0 s searching, 0 s loading the model, 43 s checking (42 s of it answering)\n"
+  },
+  {
+   "id": "lebron-stats-graphic",
+   "query": "an on-screen graphic shows lebron james's stats",
+   "then": [],
+   "argv": [
+    "uv",
+    "run",
+    "tlv",
+    "find",
+    "an on-screen graphic shows lebron james's stats",
+    "--max-candidates",
+    "12",
+    "--no-cut",
+    "--json"
+   ],
+   "seconds": 43.9,
+   "exit_code": 0,
+   "output": {
+    "claim": "an on-screen graphic shows lebron james's stats",
+    "confirmed": [
+     {
+      "id": "obs_7c7935b493",
+      "video_id": "v_8718a4de6d",
+      "title": "LeBron James TURNED BACK THE CLOCK With 29 PTS vs 76ERS | December 7, 2025",
+      "source": "https://www.youtube.com/watch?v=oyk2QtdUtKE",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-oyk2QtdUtKE.mp4",
+      "start": 327.5,
+      "end": 337.89,
+      "timecode": "00:05:27.5 -> 00:05:37.9",
+      "claim": "an on-screen graphic shows lebron james's stats",
+      "who": "LeBron James",
+      "entity_id": "ent_1035f0e471e4",
+      "confidence": 1.0,
+      "evidence": {
+       "summary": "stats graphic visible from frame 3",
+       "frames": [
+        {
+         "t": 328.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_324.0-337.9/03.jpg"
+        },
+        {
+         "t": 330.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_324.0-337.9/04.jpg"
+        },
+        {
+         "t": 331.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_324.0-337.9/05.jpg"
+        },
+        {
+         "t": 333.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_324.0-337.9/06.jpg"
+        },
+        {
+         "t": 335.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_324.0-337.9/07.jpg"
+        },
+        {
+         "t": 337.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_324.0-337.9/08.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 327.46,
+         "end": 327.6,
+         "text": "it."
+        },
+        {
+         "start": 327.7,
+         "end": 329.2,
+         "text": "We know what we like to do in that situation,"
+        },
+        {
+         "start": 329.2,
+         "end": 330.32,
+         "text": "and then we execute it to a T."
+        },
+        {
+         "start": 330.7,
+         "end": 332.82,
+         "text": "All right, so you often talk about you're going to do"
+        },
+        {
+         "start": 332.82,
+         "end": 335.42,
+         "text": "whatever it requires to win the game on that night, right?"
+        },
+        {
+         "start": 335.5,
+         "end": 337.12,
+         "text": "In Toronto, it was making that extra pass."
+        },
+        {
+         "start": 337.6,
+         "end": 337.92,
+         "text": "Tonight,"
+        }
+       ],
+       "ocr": [
+        {
+         "t": 328.25,
+         "text": "0.0 12 | FG | 3-\u0420\u0422 | PTS | REB | AST | LEBRON | LAKERS | 23 | JAMES | 12/17 | 29 | 4/6 | 7"
+        },
+        {
+         "t": 329.25,
+         "text": "e va Lung | 1121 | FG | 3-\u0420\u0422 | PTS | REB | AST | LEBRON | 23 | LAKERS | JAMES | 12/17 | 29 | 4/6 | 7"
+        },
+        {
+         "t": 330.25,
+         "text": "oe ve Lag | 0.0\u1ea0\u1ea1 112 | US LEE | R5108 | FG | PTS | REB | AST | 3-\u0420\u0422 | LEBRON | LAKERS | 23 | JAMES | 12/17 | 29 | 4/6 | 7"
+        },
+        {
+         "t": 331.25,
+         "text": "0.0 = 112 | L0E A | FG | PTS | REB | AST | 3-\u0420\u0422 | LEBRON | AKERS 23 | JAMES | 12/17 | 29 | 4/6 | 7"
+        },
+        {
+         "t": 332.25,
+         "text": "FG | AST | 3-\u0420\u0422 | PTS | REB | LEBRON | 23 | AKERS | JAMES | 12/17 | 29 | 4/6 | 6 | 7"
+        },
+        {
+         "t": 333.25,
+         "text": "25 | 00- 12 | FG | PTS | REB | AST | 3-\u0420\u0422 | LEBRON | 23 | AKERS | JAMES | 12/17 | 29 | 4/6 | 7"
+        },
+        {
+         "t": 334.25,
+         "text": "dinity !H | \u0131z\u0142a | YDE6 VE LUS | 0.0 =* | 3-\u0420\u0422 | PTS | FG | REB | AST | LEBRON | 23 | LAKERS | JAMES | 12/17 | 29 | 4/6 | 7 | 10"
+        },
+        {
+         "t": 335.25,
+         "text": "AEAN | dhnity 2nC | 25 | 25 | Yo v LuRS | FG | AST | REB | 3-\u0420\u0422 | LEBRON | PTS | 23 | AKERS | JAMES | 12/17 | 29 | 4/6 | 6 | 7"
+        },
+        {
+         "t": 336.25,
+         "text": "sa | SETY DA DRR | S1d | Id-E | ISV | EZ | SaD\u00e9 | L1/Z1 | 6Z | 9/\u20ba | L"
+        },
+        {
+         "t": 337.25,
+         "text": "FG | PTS | 3-\u0420\u0422 | REB | AST | LEBRON | AKERS | 23 | JAMES | 12/17 | 29 | 4/6 | 7"
+        }
+       ],
+       "sounds": [
+        {
+         "start": 318.5,
+         "end": 421.5,
+         "label": "speech"
+        },
+        {
+         "start": 325.5,
+         "end": 341.0,
+         "label": "booing"
+        },
+        {
+         "start": 329.0,
+         "end": 330.0,
+         "label": "bowling_impact"
+        },
+        {
+         "start": 329.5,
+         "end": 331.0,
+         "label": "basketball_bounce"
+        },
+        {
+         "start": 333.0,
+         "end": 334.0,
+         "label": "bird"
+        },
+        {
+         "start": 333.0,
+         "end": 334.0,
+         "label": "squeak"
+        },
+        {
+         "start": 333.5,
+         "end": 334.5,
+         "label": "basketball_bounce"
+        },
+        {
+         "start": 335.5,
+         "end": 336.5,
+         "label": "basketball_bounce"
+        },
+        {
+         "start": 337.5,
+         "end": 338.5,
+         "label": "basketball_bounce"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "an on-screen graphic shows lebron james's stats",
+        "start": 327.5,
+        "end": 337.89,
+        "timecode": "00:05:27.5 -> 00:05:37.9"
+       }
+      ],
+      "replays": []
+     },
+     {
+      "id": "obs_c2bf9438a6",
+      "video_id": "v_3ee2db6c19",
+      "title": "WARRIORS at LAKERS | FULL GAME HIGHLIGHTS | April 3, 2025",
+      "source": "https://www.youtube.com/watch?v=G6go_js-qoU",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-G6go_js-qoU.mp4",
+      "start": 516.0,
+      "end": 523.09,
+      "timecode": "00:08:36.0 -> 00:08:43.1",
+      "claim": "an on-screen graphic shows lebron james's stats",
+      "who": "LeBron James",
+      "entity_id": null,
+      "confidence": 0.95,
+      "evidence": {
+       "summary": "LeBron James stats on screen",
+       "frames": [
+        {
+         "t": 516.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_511.9-523.1/04.jpg"
+        },
+        {
+         "t": 518.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_511.9-523.1/05.jpg"
+        },
+        {
+         "t": 519.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_511.9-523.1/06.jpg"
+        },
+        {
+         "t": 520.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_511.9-523.1/07.jpg"
+        },
+        {
+         "t": 522.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_511.9-523.1/08.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 515.84,
+         "end": 519.5,
+         "text": "in the room, on the road, and passed it out."
+        },
+        {
+         "start": 519.96,
+         "end": 520.88,
+         "text": "Coming to the win it."
+        },
+        {
+         "start": 521.16,
+         "end": 522.62,
+         "text": "What a cut, what a feat."
+        },
+        {
+         "start": 523.06,
+         "end": 523.12,
+         "text": "The"
+        }
+       ],
+       "ocr": [
+        {
+         "t": 516.25,
+         "text": "GET THE 5 App | AKERS.COM | 7 FANDI | UEL | crypto.com | LEBRON JAMES | ARENA | TNT | 27 PTS 8/11 FG 8/9 FT | SPORTS"
+        },
+        {
+         "t": 517.25,
+         "text": "643 | GET THE SApp | AKERS.COM | DUEL | 7 FA | UU TRA | GiD A | SYENA Com | LEBRON JAMES | TNT | ARE | 27 PTS 8/11 FG 8/9 FT | SPORTS"
+        },
+        {
+         "t": 518.25,
+         "text": "642 | GET THE 5 App | AKERS.COM | LSA D | VULTRA | BiD TOMAY | AYENA Com | LEBRON JAMES | UNT | 27 PTS 8/11 FG 8/9 FT | ARE | SPORTS"
+        },
+        {
+         "t": 519.25,
+         "text": "GET THE 9 App | AKERS.COM | 27 | VULTRA | SiD fOuY | GSW | E\u00d1g com | INT | LAL | SPORTS"
+        },
+        {
+         "t": 520.25,
+         "text": "6:40 | GET THE 8 App | AKERS.COM | aLaker | BiD TONY | 103 | 6:40 | GSW | TNT | 92 | LAL | 4TH | 12 | 1g com | SPORTS"
+        },
+        {
+         "t": 521.25,
+         "text": "6:39 | GET THE 8 App | AKERS.COM | Ker: | NULTRA | SiD SONY | 103 | 6:39 | GSW | TNT | 92 | LAL | 4TH 24 | tg-com | SPORTS"
+        },
+        {
+         "t": 522.25,
+         "text": "6:38 | GET THE 8 App | AKERS.COM | Lakers | IULTRA | 23 | RiD OwY | 105 | 6:38 | TNT | 92 | 4TH 24 | LAL | SPORTS | o.com"
+        }
+       ],
+       "sounds": [
+        {
+         "start": 499.5,
+         "end": 516.5,
+         "label": "speech"
+        },
+        {
+         "start": 515.5,
+         "end": 521.5,
+         "label": "basketball_bounce"
+        },
+        {
+         "start": 516.0,
+         "end": 518.0,
+         "label": "bird"
+        },
+        {
+         "start": 516.0,
+         "end": 517.0,
+         "label": "bird_chirp_tweet"
+        },
+        {
+         "start": 516.0,
+         "end": 517.0,
+         "label": "bird_vocalization"
+        },
+        {
+         "start": 517.0,
+         "end": 534.5,
+         "label": "speech"
+        },
+        {
+         "start": 518.5,
+         "end": 519.5,
+         "label": "liquid_trickle_dribble"
+        },
+        {
+         "start": 519.5,
+         "end": 520.5,
+         "label": "bird_chirp_tweet"
+        },
+        {
+         "start": 519.5,
+         "end": 520.5,
+         "label": "cow_moo"
+        },
+        {
+         "start": 519.5,
+         "end": 520.5,
+         "label": "playing_squash"
+        },
+        {
+         "start": 520.5,
+         "end": 523.0,
+         "label": "booing"
+        },
+        {
+         "start": 521.5,
+         "end": 522.5,
+         "label": "bowling_impact"
+        },
+        {
+         "start": 522.0,
+         "end": 524.0,
+         "label": "playing_volleyball"
+        },
+        {
+         "start": 523.0,
+         "end": 526.0,
+         "label": "basketball_bounce"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "an on-screen graphic shows lebron james's stats",
+        "start": 516.0,
+        "end": 523.09,
+        "timecode": "00:08:36.0 -> 00:08:43.1"
+       }
+      ],
+      "replays": []
+     },
+     {
+      "id": "obs_4b732ff92a",
+      "video_id": "v_3ee2db6c19",
+      "title": "WARRIORS at LAKERS | FULL GAME HIGHLIGHTS | April 3, 2025",
+      "source": "https://www.youtube.com/watch?v=G6go_js-qoU",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-G6go_js-qoU.mp4",
+      "start": 572.25,
+      "end": 577.67,
+      "timecode": "00:09:32.2 -> 00:09:37.7",
+      "claim": "an on-screen graphic shows lebron james's stats",
+      "who": "LeBron James",
+      "entity_id": null,
+      "confidence": 0.95,
+      "evidence": {
+       "summary": "LeBron James's stats shown on screen",
+       "frames": [
+        {
+         "t": 572.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_568.9-577.7/04.jpg"
+        },
+        {
+         "t": 573.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_568.9-577.7/05.jpg"
+        },
+        {
+         "t": 574.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_568.9-577.7/06.jpg"
+        },
+        {
+         "t": 576.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_568.9-577.7/07.jpg"
+        },
+        {
+         "t": 577.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_568.9-577.7/08.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 572.28,
+         "end": 574.06,
+         "text": "Achimura gets off to LeBron."
+        },
+        {
+         "start": 574.4,
+         "end": 575.38,
+         "text": "Green is right there."
+        },
+        {
+         "start": 575.68,
+         "end": 576.76,
+         "text": "Here's a three LeBron."
+        },
+        {
+         "start": 577.08,
+         "end": 578.24,
+         "text": "Come on."
+        }
+       ],
+       "ocr": [
+        {
+         "t": 572.25,
+         "text": "GET THE 8 App | LAKERS.CO | sustafte | \u0406 \u042f\u0423\u042f | LEBRON JAMES | TNT | 8 PTS 1ST HALF 22 PTS 2ND HALF | SPORTS"
+        },
+        {
+         "t": 573.25,
+         "text": "GET THE % App | LAKERS.CO | NULTRA | Condate: | GSW | TNT | LAL | SPORTS | TARTS"
+        },
+        {
+         "t": 574.25,
+         "text": "IS4 | GET THE 8 App | LAKERS.CO | Michole N ULTRA | VS | Coudate | \u042fR\u0423R\u042f | GiD OMY | LERS | 114 | 1:54 | GSW | TNT | LAL 104 4TH 14 | SPORTS | AERS"
+        },
+        {
+         "t": 575.25,
+         "text": "153 | GET THE 8 App | LAKERS.COI | VS | UUTRA | Costate | (chelao | \u042fR\u0423R\u042f | SiD ONY | LEIRS | 114 | 1:53 | GSW | TNT | LAL 104 4TH 13 | SPORTS"
+        },
+        {
+         "t": 576.25,
+         "text": "Isa | GET THE 9 App | LAKERS.CO | Mchelik NULTRA | Culate | SRRE | 114 | 1:52 | GSW | TNT | LAL 104 4TH 12 | SPORTS | NBA"
+        },
+        {
+         "t": 577.25,
+         "text": "IS1 | GET THE & App | LAKERS.COI | SMicholo NULTRA | 114 | 1:51 | GSW | TNT | LAL 104 4TH 24 | SPORTS"
+        }
+       ],
+       "sounds": [
+        {
+         "start": 570.5,
+         "end": 573.5,
+         "label": "basketball_bounce"
+        },
+        {
+         "start": 570.5,
+         "end": 576.0,
+         "label": "speech"
+        },
+        {
+         "start": 572.0,
+         "end": 576.5,
+         "label": "booing"
+        },
+        {
+         "start": 573.0,
+         "end": 574.0,
+         "label": "playing_volleyball"
+        },
+        {
+         "start": 573.5,
+         "end": 574.5,
+         "label": "music"
+        },
+        {
+         "start": 574.0,
+         "end": 575.0,
+         "label": "playing_squash"
+        },
+        {
+         "start": 574.5,
+         "end": 575.5,
+         "label": "playing_volleyball"
+        },
+        {
+         "start": 575.0,
+         "end": 577.5,
+         "label": "basketball_bounce"
+        },
+        {
+         "start": 575.0,
+         "end": 576.0,
+         "label": "bird"
+        },
+        {
+         "start": 575.5,
+         "end": 576.5,
+         "label": "air_horn"
+        },
+        {
+         "start": 576.0,
+         "end": 577.0,
+         "label": "thump_thud"
+        },
+        {
+         "start": 576.5,
+         "end": 577.5,
+         "label": "door_slam"
+        },
+        {
+         "start": 577.0,
+         "end": 578.0,
+         "label": "door"
+        },
+        {
+         "start": 577.0,
+         "end": 578.0,
+         "label": "race_car"
+        },
+        {
+         "start": 577.0,
+         "end": 578.0,
+         "label": "vehicle_skidding"
+        },
+        {
+         "start": 577.5,
+         "end": 578.5,
+         "label": "music"
+        },
+        {
+         "start": 577.5,
+         "end": 578.5,
+         "label": "speech"
+        },
+        {
+         "start": 577.5,
+         "end": 578.5,
+         "label": "trombone"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "an on-screen graphic shows lebron james's stats",
+        "start": 572.25,
+        "end": 577.67,
+        "timecode": "00:09:32.2 -> 00:09:37.7"
+       }
+      ],
+      "replays": []
+     },
+     {
+      "id": "obs_f1acc07dad",
+      "video_id": "v_8718a4de6d",
+      "title": "LeBron James TURNED BACK THE CLOCK With 29 PTS vs 76ERS | December 7, 2025",
+      "source": "https://www.youtube.com/watch?v=oyk2QtdUtKE",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-oyk2QtdUtKE.mp4",
+      "start": 339.8,
+      "end": 350.25,
+      "timecode": "00:05:39.8 -> 00:05:50.2",
+      "claim": "an on-screen graphic shows lebron james's stats",
+      "who": "23, LAKERS",
+      "entity_id": "ent_1035f0e471e4",
+      "confidence": 0.95,
+      "evidence": {
+       "summary": "stats visible on screen",
+       "frames": [
+        {
+         "t": 340.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_339.8-353.7/01.jpg"
+        },
+        {
+         "t": 342.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_339.8-353.7/02.jpg"
+        },
+        {
+         "t": 344.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_339.8-353.7/03.jpg"
+        },
+        {
+         "t": 345.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_339.8-353.7/04.jpg"
+        },
+        {
+         "t": 347.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_339.8-353.7/05.jpg"
+        },
+        {
+         "t": 349.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_339.8-353.7/06.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 339.7,
+         "end": 340.36,
+         "text": "five for six."
+        },
+        {
+         "start": 340.48,
+         "end": 341.62,
+         "text": "You hit the three straight jump shots."
+        },
+        {
+         "start": 341.78,
+         "end": 343.34,
+         "text": "Where did you see that that was needed,"
+        },
+        {
+         "start": 343.34,
+         "end": 344.86,
+         "text": "and how were you able to execute it?"
+        },
+        {
+         "start": 344.96,
+         "end": 347.82,
+         "text": "Yeah, you know, the end of a road trip, you know,"
+        },
+        {
+         "start": 347.88,
+         "end": 349.88,
+         "text": "it can be a lot of tired legs or whatever the case may be,"
+        },
+        {
+         "start": 349.9,
+         "end": 351.64,
+         "text": "so I"
+        }
+       ],
+       "ocr": [
+        {
+         "t": 340.25,
+         "text": "Va Lg | L8 CW | Do vo RuS | 0.0\u1ea1\u1ea0 12 | PTS | FG | REB | AST | 3-\u0420\u0422 | LEBRON | LAKERS | 23 | JAMES | 12/17 | 29 | 4/6 | 7"
+        },
+        {
+         "t": 341.25,
+         "text": "0.0 - 112 | LOL AELES | FG | REB | AST | LEBRON | 3-\u0420\u0422 | PTS | AKERS 23 | JAMES | 12/17 | 29 | 4/6 | 7"
+        },
+        {
+         "t": 342.25,
+         "text": "0.0\u00bf$ | FG | 3-\u0420\u0422 | REB | AST | LEBRON | PTS | AKERS | 23 | JAMES | 12/17 | 29 | 4/6 | 7"
+        },
+        {
+         "t": 343.25,
+         "text": "112 L | 0.0 =* | AST | PTS | FG | 3-\u0420\u0422 | REB | LEBRON | LAKERS | 23 | JAMES | 12/17 | 29 | 4/6 | 7"
+        },
+        {
+         "t": 344.25,
+         "text": "FG | PTS | REB | AST | 3-\u0420\u0422 | LEBRON | LAKERS | 23 | JAMES | 12/17 | 29 | 4/6 | 6 | 7"
+        },
+        {
+         "t": 345.25,
+         "text": "PTS | FG | 3-\u0420\u0422 | REB | AST | LEBRON | L\u0104KERS | 23 | JAMES | 12/17 | 29 | 4/6 | 7 | 6"
+        },
+        {
+         "t": 346.25,
+         "text": "ACON\u00ae | EETT|CO | 0.0 12 | | FG | 3-\u0420\u0422 | REB | AST | LEBRON | PTS | LAKERS | 23 | JAMES | 12/17 | 29 | 4/6 | 7"
+        },
+        {
+         "t": 347.25,
+         "text": "va hang | 0.0 =\u2022 112 | LOL ANE | FG | 3-\u0420\u0422 | PTS | REB | AST | LEBRON | AKERS 23 | JAMES | 12/17 | 29 | 4/6 | 7"
+        },
+        {
+         "t": 348.25,
+         "text": "28 | A6 Y Lg | I=iTI | ElTLD | 3-\u0420\u0422 | PTS | FG | REB | AST | LEBRON | LAKERS | 23 | JAMES | 12/17 | 29 | 4/6 | 7"
+        },
+        {
+         "t": 349.25,
+         "text": "\u0441\u0437 \u041a\u0430\u043d\u044f | 12a | \u2022 LUERS | LUERS | THIS SEASON | S LOS ANGELES | 8-0 IN CLUTCH GAMES - LEADS NBA | AKERS | LAKERS | FINAL 5 MIN OF 4TH QTR W/ SCORE WITHIN 5 PTS"
+        },
+        {
+         "t": 350.25,
+         "text": "\u041aA\u0415O\u2022 | \u2192 Luerg | 2% | THIS SEASON | LOS ANGELES | 8-0 IN CLUTCH GAMES - LEADS NBA | AKERS | LAKERS | FINAL 5 MIN OF 4TH QTR W/ SCORE WITHIN 5 PTS | AVFR"
+        }
+       ],
+       "sounds": [
+        {
+         "start": 318.5,
+         "end": 421.5,
+         "label": "speech"
+        },
+        {
+         "start": 325.5,
+         "end": 341.0,
+         "label": "booing"
+        },
+        {
+         "start": 339.0,
+         "end": 340.0,
+         "label": "playing_volleyball"
+        },
+        {
+         "start": 339.5,
+         "end": 340.5,
+         "label": "playing_squash"
+        },
+        {
+         "start": 340.5,
+         "end": 342.5,
+         "label": "basketball_bounce"
+        },
+        {
+         "start": 341.5,
+         "end": 344.5,
+         "label": "booing"
+        },
+        {
+         "start": 345.0,
+         "end": 346.5,
+         "label": "crowd"
+        },
+        {
+         "start": 345.5,
+         "end": 348.5,
+         "label": "booing"
+        },
+        {
+         "start": 348.5,
+         "end": 349.5,
+         "label": "laughter"
+        },
+        {
+         "start": 349.5,
+         "end": 350.5,
+         "label": "playing_squash"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "an on-screen graphic shows lebron james's stats",
+        "start": 339.8,
+        "end": 350.25,
+        "timecode": "00:05:39.8 -> 00:05:50.2"
+       }
+      ],
+      "replays": []
+     },
+     {
+      "id": "obs_819ac58a9c",
+      "video_id": "v_8718a4de6d",
+      "title": "LeBron James TURNED BACK THE CLOCK With 29 PTS vs 76ERS | December 7, 2025",
+      "source": "https://www.youtube.com/watch?v=oyk2QtdUtKE",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-oyk2QtdUtKE.mp4",
+      "start": 347.7,
+      "end": 359.75,
+      "timecode": "00:05:47.7 -> 00:05:59.8",
+      "claim": "an on-screen graphic shows lebron james's stats",
+      "who": "23, LAKERS",
+      "entity_id": "ent_1035f0e471e4",
+      "confidence": 0.95,
+      "evidence": {
+       "summary": "stats visible on screen",
+       "frames": [
+        {
+         "t": 348.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_347.7-361.6/01.jpg"
+        },
+        {
+         "t": 350.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_347.7-361.6/02.jpg"
+        },
+        {
+         "t": 352.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_347.7-361.6/03.jpg"
+        },
+        {
+         "t": 353.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_347.7-361.6/04.jpg"
+        },
+        {
+         "t": 355.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_347.7-361.6/05.jpg"
+        },
+        {
+         "t": 357.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_347.7-361.6/06.jpg"
+        },
+        {
+         "t": 358.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_347.7-361.6/07.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 347.54,
+         "end": 347.82,
+         "text": "you know,"
+        },
+        {
+         "start": 347.88,
+         "end": 349.88,
+         "text": "it can be a lot of tired legs or whatever the case may be,"
+        },
+        {
+         "start": 349.9,
+         "end": 352.06,
+         "text": "so I feel great."
+        },
+        {
+         "start": 352.42,
+         "end": 353.2,
+         "text": "I feel great."
+        },
+        {
+         "start": 353.54,
+         "end": 356.02,
+         "text": "Felt really good today when we had our shoot around this morning."
+        },
+        {
+         "start": 356.7,
+         "end": 358.76,
+         "text": "And felt really good when I came out here to play for the game, too."
+        },
+        {
+         "start": 359.2,
+         "end": 360.02,
+         "text": "I mean, look, Austin"
+        }
+       ],
+       "ocr": [
+        {
+         "t": 348.25,
+         "text": "28 | A6 Y Lg | I=iTI | ElTLD | 3-\u0420\u0422 | PTS | FG | REB | AST | LEBRON | LAKERS | 23 | JAMES | 12/17 | 29 | 4/6 | 7"
+        },
+        {
+         "t": 349.25,
+         "text": "\u0441\u0437 \u041a\u0430\u043d\u044f | 12a | \u2022 LUERS | LUERS | THIS SEASON | S LOS ANGELES | 8-0 IN CLUTCH GAMES - LEADS NBA | AKERS | LAKERS | FINAL 5 MIN OF 4TH QTR W/ SCORE WITHIN 5 PTS"
+        },
+        {
+         "t": 350.25,
+         "text": "\u041aA\u0415O\u2022 | \u2192 Luerg | 2% | THIS SEASON | LOS ANGELES | 8-0 IN CLUTCH GAMES - LEADS NBA | AKERS | LAKERS | FINAL 5 MIN OF 4TH QTR W/ SCORE WITHIN 5 PTS | AVFR"
+        },
+        {
+         "t": 351.25,
+         "text": "Nev Liung | 1-& cristo.com \u2022 | \u041bEEETT | J.09 | THIS SEASON | S LOS ANGELES | 8-0 IN CLUTCH GAMES - LEADS NBA | AKERS | LAKERS | FINAL 5 MIN OF 4TH QTR W/ SCORE WITHIN 5 PTS | AKER"
+        },
+        {
+         "t": 352.25,
+         "text": "\u043di Z\u0430\u043d\u0438\u0440 | Keo va Lung | 1& OVRS | YO Yo LuiRg | THIS SEASON | S LOS ANGELES | 8-0 IN CLUTCH GAMES - LEADS NBA | AKERS | LAKERS | FINAL 5 MIN OF 4TH QTR W/ SCORE WITHIN 5 PTS | AKEK | SPECTRUM"
+        },
+        {
+         "t": 353.25,
+         "text": "25 | 0.0\u1ea1\u1ea0\u1ea112 | THIS SEASON | LOS ANGELES | 8-0 IN CLUTCH GAMES - LEADS NBA | AKERS | LAKERS | FINAL 5 MIN OF 4TH QTR W/ SCORE WITHIN 5 PTS | SPECTRUM | SPORTSNET"
+        },
+        {
+         "t": 354.25,
+         "text": "EETT | 0.0 -\u2022 112 | 0 | THIS SEASON | LOS ANGELES | 8-0 IN CLUTCH GAMES - LEADS NBA | TAKERS | LAKERS | FINAL 5 MIN OF 4TH QTR W/ SCORE WITHIN 5 PTS | SPORTSNET | ECTHUM"
+        },
+        {
+         "t": 355.25,
+         "text": "EETT | 0.0 - 112 | THIS SEASON | HARFRS | LOS ANGELES | 8-0 IN CLUTCH GAMES - LEADS NBA | LAKERS | FINAL 5 MIN OF 4TH QTR W/ SCORE WITHIN 5 PTS | EEINUM | SPORTSNET"
+        },
+        {
+         "t": 356.25,
+         "text": "0.0 -\u2022 12 | | THIS SEASON | LOS ANGELES | 8-0 IN CLUTCH GAMES - LEADS NBA | AKERS | LAKERS | FINAL 5 MIN OF 4TH QTR W/ SCORE WITHIN 5 PTS | SPORTSNET"
+        },
+        {
+         "t": 357.25,
+         "text": "eFETT | 0.0 ** 12 | L201 | THIS SEASON | FRS LOS ANGELES | 8-0 IN CLUTCH GAMES - LEADS NBA | TAKERS | LAKERS | FINAL 5 MIN OF 4TH QTR W/ SCORE WITHIN 5 PTS | PPORTSNET SP"
+        },
+        {
+         "t": 358.25,
+         "text": "FETR | 0.0 - 112 | | THIS SEASON D | ARERS | LOS ANGELES | 8-0 IN CLUTCH GAMES - LEADS NBA | LAKERS | FINAL 5 MIN OF 4TH QTR W/ SCORE WITHIN 5 PTS | SOKNET"
+        },
+        {
+         "t": 359.25,
+         "text": "0.0 - 112 | 10. | THIS SEASON | LOS ANGELES | 8-0 IN CLUTCH GAMES - LEADS NBA | LAKERS | LAKERS | FINAL 5 MIN OF 4TH QTR W/ SCORE WITHIN 5 PTS"
+        }
+       ],
+       "sounds": [
+        {
+         "start": 318.5,
+         "end": 421.5,
+         "label": "speech"
+        },
+        {
+         "start": 345.5,
+         "end": 348.5,
+         "label": "booing"
+        },
+        {
+         "start": 348.5,
+         "end": 349.5,
+         "label": "laughter"
+        },
+        {
+         "start": 349.5,
+         "end": 350.5,
+         "label": "playing_squash"
+        },
+        {
+         "start": 351.0,
+         "end": 352.0,
+         "label": "booing"
+        },
+        {
+         "start": 352.0,
+         "end": 353.0,
+         "label": "person_walking"
+        },
+        {
+         "start": 353.0,
+         "end": 354.5,
+         "label": "booing"
+        },
+        {
+         "start": 353.0,
+         "end": 354.0,
+         "label": "playing_squash"
+        },
+        {
+         "start": 353.5,
+         "end": 354.5,
+         "label": "bowling_impact"
+        },
+        {
+         "start": 356.0,
+         "end": 357.0,
+         "label": "booing"
+        },
+        {
+         "start": 356.0,
+         "end": 357.0,
+         "label": "playing_squash"
+        },
+        {
+         "start": 358.0,
+         "end": 359.5,
+         "label": "playing_squash"
+        },
+        {
+         "start": 358.5,
+         "end": 364.0,
+         "label": "booing"
+        },
+        {
+         "start": 359.0,
+         "end": 360.0,
+         "label": "bowling_impact"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "an on-screen graphic shows lebron james's stats",
+        "start": 347.7,
+        "end": 359.75,
+        "timecode": "00:05:47.7 -> 00:05:59.8"
+       }
+      ],
+      "replays": []
+     },
+     {
+      "id": "obs_a1768555a1",
+      "video_id": "v_8718a4de6d",
+      "title": "LeBron James TURNED BACK THE CLOCK With 29 PTS vs 76ERS | December 7, 2025",
+      "source": "https://www.youtube.com/watch?v=oyk2QtdUtKE",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-oyk2QtdUtKE.mp4",
+      "start": 355.6,
+      "end": 369.51,
+      "timecode": "00:05:55.6 -> 00:06:09.5",
+      "claim": "an on-screen graphic shows lebron james's stats",
+      "who": "LeBron James",
+      "entity_id": "ent_1035f0e471e4",
+      "confidence": 0.95,
+      "evidence": {
+       "summary": "on-screen text shows stats",
+       "frames": [
+        {
+         "t": 356.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_355.6-369.5/01.jpg"
+        },
+        {
+         "t": 358.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_355.6-369.5/02.jpg"
+        },
+        {
+         "t": 359.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_355.6-369.5/03.jpg"
+        },
+        {
+         "t": 361.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_355.6-369.5/04.jpg"
+        },
+        {
+         "t": 363.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_355.6-369.5/05.jpg"
+        },
+        {
+         "t": 365.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_355.6-369.5/06.jpg"
+        },
+        {
+         "t": 366.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_355.6-369.5/07.jpg"
+        },
+        {
+         "t": 368.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_355.6-369.5/08.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 355.56,
+         "end": 356.02,
+         "text": "this morning."
+        },
+        {
+         "start": 356.7,
+         "end": 358.76,
+         "text": "And felt really good when I came out here to play for the game, too."
+        },
+        {
+         "start": 359.2,
+         "end": 361.58,
+         "text": "I mean, look, Austin had a heavy load in the back -to -back."
+        },
+        {
+         "start": 361.7,
+         "end": 364.78,
+         "text": "We know Luka had to fly back and forth, right, to witness the birth."
+        },
+        {
+         "start": 364.88,
+         "end": 367.44,
+         "text": "So, did you kind of, was that part of what you could sense that,"
+        },
+        {
+         "start": 367.52,
+         "end": 369.56,
+         "text": "all right, tonight's going to be a night where I need a little more"
+        }
+       ],
+       "ocr": [
+        {
+         "t": 356.25,
+         "text": "0.0 -\u2022 12 | | THIS SEASON | LOS ANGELES | 8-0 IN CLUTCH GAMES - LEADS NBA | AKERS | LAKERS | FINAL 5 MIN OF 4TH QTR W/ SCORE WITHIN 5 PTS | SPORTSNET"
+        },
+        {
+         "t": 357.25,
+         "text": "eFETT | 0.0 ** 12 | L201 | THIS SEASON | FRS LOS ANGELES | 8-0 IN CLUTCH GAMES - LEADS NBA | TAKERS | LAKERS | FINAL 5 MIN OF 4TH QTR W/ SCORE WITHIN 5 PTS | PPORTSNET SP"
+        },
+        {
+         "t": 358.25,
+         "text": "FETR | 0.0 - 112 | | THIS SEASON D | ARERS | LOS ANGELES | 8-0 IN CLUTCH GAMES - LEADS NBA | LAKERS | FINAL 5 MIN OF 4TH QTR W/ SCORE WITHIN 5 PTS | SOKNET"
+        },
+        {
+         "t": 359.25,
+         "text": "0.0 - 112 | 10. | THIS SEASON | LOS ANGELES | 8-0 IN CLUTCH GAMES - LEADS NBA | LAKERS | LAKERS | FINAL 5 MIN OF 4TH QTR W/ SCORE WITHIN 5 PTS"
+        },
+        {
+         "t": 360.25,
+         "text": "112 | LOE AMELES U | 0.0 | THE EREON R | THIS SEASON | KERS LOS ANGELES | 8-0 IN CLUTCH GAMES - LEADS NBA | AKERS | LAKERS | FINAL 5 MIN OF 4TH QTR W/ SCORE WITHIN 5 PTS"
+        },
+        {
+         "t": 361.25,
+         "text": "||\u0401\u04221 | THIS SEASON | LOS ANGELES | 8-0 IN CLUTCH GAMES - LEADS NBA | AKERS | LAKERS | FINAL 5 MIN OF 4TH QTR W/ SCORE WITHIN 5 PTS | GUN"
+        },
+        {
+         "t": 362.25,
+         "text": "|=EST1 | LAKER"
+        },
+        {
+         "t": 363.25,
+         "text": "Kao va Lng | as | \u2022 Auiry"
+        },
+        {
+         "t": 364.25,
+         "text": "WeRov | 26 | - & CrER\u0430 | MEOEED [ EE7T | TAKE"
+        },
+        {
+         "t": 365.25,
+         "text": "25 | LAKE"
+        },
+        {
+         "t": 366.25,
+         "text": "JAKI"
+        },
+        {
+         "t": 367.25,
+         "text": "TAKI"
+        },
+        {
+         "t": 368.25,
+         "text": "Kov Lun"
+        },
+        {
+         "t": 369.25,
+         "text": "eral | Bn dn 9E"
+        }
+       ],
+       "sounds": [
+        {
+         "start": 318.5,
+         "end": 421.5,
+         "label": "speech"
+        },
+        {
+         "start": 356.0,
+         "end": 357.0,
+         "label": "booing"
+        },
+        {
+         "start": 356.0,
+         "end": 357.0,
+         "label": "playing_squash"
+        },
+        {
+         "start": 358.0,
+         "end": 359.5,
+         "label": "playing_squash"
+        },
+        {
+         "start": 358.5,
+         "end": 364.0,
+         "label": "booing"
+        },
+        {
+         "start": 359.0,
+         "end": 360.0,
+         "label": "bowling_impact"
+        },
+        {
+         "start": 360.0,
+         "end": 361.0,
+         "label": "playing_squash"
+        },
+        {
+         "start": 362.0,
+         "end": 363.0,
+         "label": "bowling_impact"
+        },
+        {
+         "start": 364.0,
+         "end": 365.0,
+         "label": "playing_tennis"
+        },
+        {
+         "start": 364.5,
+         "end": 366.0,
+         "label": "booing"
+        },
+        {
+         "start": 366.5,
+         "end": 369.5,
+         "label": "booing"
+        },
+        {
+         "start": 368.5,
+         "end": 369.5,
+         "label": "playing_squash"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "an on-screen graphic shows lebron james's stats",
+        "start": 355.6,
+        "end": 369.51,
+        "timecode": "00:05:55.6 -> 00:06:09.5"
+       }
+      ],
+      "replays": []
+     }
+    ],
+    "rejected": [
+     {
+      "video_id": "v_8718a4de6d",
+      "start": 317.62,
+      "end": 319.08,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_3ee2db6c19",
+      "start": 725.86,
+      "end": 732.24,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_8718a4de6d",
+      "start": 253.58,
+      "end": 259.04,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_3ee2db6c19",
+      "start": 475.18,
+      "end": 479.78,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_df7432f2b3",
+      "start": 14.9,
+      "end": 20.97,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_8718a4de6d",
+      "start": 331.89,
+      "end": 345.8,
+      "reason": "same moment as obs_7c7935b493"
+     }
+    ],
+    "counts": {
+     "candidates": 12,
+     "checked": 12,
+     "confirmed": 6,
+     "rejected": 6
+    },
+    "seconds": {
+     "search": 0.33,
+     "load": 0.0,
+     "check": 43.42
+    }
+   },
+   "stderr": "tlv: searching 3 videos for 1 steps\ntlv: checking 12 stretches\ntlv: checked 1 of 12\ntlv: checked 2 of 12\ntlv: checked 3 of 12\ntlv: checked 4 of 12\ntlv: checked 5 of 12\ntlv: checked 6 of 12\ntlv: checked 7 of 12\ntlv: checked 8 of 12\ntlv: checked 9 of 12\ntlv: checked 10 of 12\ntlv: checked 11 of 12\ntlv: checked 12 of 12\ntlv: found 6 in 44 s: 0 s searching, 0 s loading the model, 43 s checking (43 s of it answering)\n"
+  },
+  {
+   "id": "fernandez-mention",
+   "query": "the commentators talk about jordi fernandez",
+   "then": [],
+   "argv": [
+    "uv",
+    "run",
+    "tlv",
+    "find",
+    "the commentators talk about jordi fernandez",
+    "--max-candidates",
+    "12",
+    "--no-cut",
+    "--json"
+   ],
+   "seconds": 0.3,
+   "exit_code": 0,
+   "output": {
+    "claim": "the commentators talk about jordi fernandez",
+    "confirmed": [
+     {
+      "id": "obs_1ed473577c",
+      "video_id": "v_df7432f2b3",
+      "title": "LeBron James drops dimes and scores first bucket for 76ers \ud83d\udd25 Preseason debut highlights",
+      "source": "https://www.youtube.com/watch?v=zHBgJqG1nJo",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-zHBgJqG1nJo.mp4",
+      "start": 167.02,
+      "end": 167.84,
+      "timecode": "00:02:47.0 -> 00:02:47.8",
+      "claim": "the commentators talk about jordi fernandez",
+      "who": "",
+      "entity_id": null,
+      "confidence": 1.0,
+      "evidence": {
+       "summary": "heard \"Jordy Fernandez\"",
+       "frames": [
+        {
+         "t": 167.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/v_df7432f2b3/t00167250.jpg"
+        },
+        {
+         "t": 167.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/v_df7432f2b3/t00167750.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 167.02,
+         "end": 167.84,
+         "text": "Jordy Fernandez"
+        }
+       ],
+       "ocr": [
+        {
+         "t": 167.25,
+         "text": "ARCLAYS | jete | ibaba | \u2022 BARC | Soo\u043a\u0443 | B | BARSHAYS | BKN | PHI | *ELIET | 31 | 32 | BONUS | BONUS | :20.9 | :14 | 1ST"
+        }
+       ],
+       "sounds": [
+        {
+         "start": 146.0,
+         "end": 184.5,
+         "label": "speech"
+        },
+        {
+         "start": 167.0,
+         "end": 168.0,
+         "label": "air_horn"
+        },
+        {
+         "start": 167.0,
+         "end": 168.0,
+         "label": "truck"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "the commentators talk about jordi fernandez",
+        "start": 167.02,
+        "end": 167.84,
+        "timecode": "00:02:47.0 -> 00:02:47.8"
+       }
+      ],
+      "replays": []
+     },
+     {
+      "id": "obs_bbcadb6ed9",
+      "video_id": "v_df7432f2b3",
+      "title": "LeBron James drops dimes and scores first bucket for 76ers \ud83d\udd25 Preseason debut highlights",
+      "source": "https://www.youtube.com/watch?v=zHBgJqG1nJo",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-zHBgJqG1nJo.mp4",
+      "start": 194.48,
+      "end": 195.26,
+      "timecode": "00:03:14.5 -> 00:03:15.3",
+      "claim": "the commentators talk about jordi fernandez",
+      "who": "",
+      "entity_id": null,
+      "confidence": 1.0,
+      "evidence": {
+       "summary": "heard \"Jordy Fernandez\"",
+       "frames": [
+        {
+         "t": 194.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/v_df7432f2b3/t00194750.jpg"
+        },
+        {
+         "t": 195.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/v_df7432f2b3/t00195250.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 194.48,
+         "end": 195.26,
+         "text": "Jordy Fernandez"
+        }
+       ],
+       "ocr": [
+        {
+         "t": 195.25,
+         "text": "Paro la | PHI | BKN | 31 | 32 | BONUS | BONUS | 1ST | :12.3"
+        }
+       ],
+       "sounds": [
+        {
+         "start": 186.0,
+         "end": 209.0,
+         "label": "speech"
+        },
+        {
+         "start": 194.0,
+         "end": 195.0,
+         "label": "basketball_bounce"
+        },
+        {
+         "start": 194.0,
+         "end": 195.0,
+         "label": "bowling_impact"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "the commentators talk about jordi fernandez",
+        "start": 194.48,
+        "end": 195.26,
+        "timecode": "00:03:14.5 -> 00:03:15.3"
+       }
+      ],
+      "replays": []
+     }
+    ],
+    "rejected": [],
+    "counts": {
+     "candidates": 2,
+     "checked": 2,
+     "confirmed": 2,
+     "rejected": 0
+    },
+    "seconds": {
+     "search": 0.06,
+     "load": 0.0,
+     "check": 0.0
+    }
+   },
+   "stderr": "tlv: searching 3 videos for 1 steps\ntlv: listening to 2 stretches\ntlv: found 2 in 0 s: 0 s searching, 0 s loading the model, 0 s checking (0 s of it answering)\n"
+  },
+  {
+   "id": "end-of-quarter-buzzer",
+   "query": "the buzzer sounds at the end of a quarter",
+   "then": [],
+   "argv": [
+    "uv",
+    "run",
+    "tlv",
+    "find",
+    "the buzzer sounds at the end of a quarter",
+    "--max-candidates",
+    "12",
+    "--no-cut",
+    "--json"
+   ],
+   "seconds": 25.0,
+   "exit_code": 0,
+   "output": {
+    "claim": "the buzzer sounds at the end of a quarter",
+    "confirmed": [
+     {
+      "id": "obs_3a1fac15cb",
+      "video_id": "v_3ee2db6c19",
+      "title": "WARRIORS at LAKERS | FULL GAME HIGHLIGHTS | April 3, 2025",
+      "source": "https://www.youtube.com/watch?v=G6go_js-qoU",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-G6go_js-qoU.mp4",
+      "start": 259.56,
+      "end": 267.0,
+      "timecode": "00:04:19.6 -> 00:04:27.0",
+      "claim": "the buzzer sounds at the end of a quarter",
+      "who": "referee",
+      "entity_id": null,
+      "confidence": 1.0,
+      "evidence": {
+       "summary": "clock shows 0:00, buzzer sound",
+       "frames": [
+        {
+         "t": 260.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_259.6-274.4/01.jpg"
+        },
+        {
+         "t": 262.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_259.6-274.4/02.jpg"
+        },
+        {
+         "t": 264.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_259.6-274.4/03.jpg"
+        },
+        {
+         "t": 266.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_259.6-274.4/04.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 261.02,
+         "end": 262.22,
+         "text": "The other way."
+        },
+        {
+         "start": 262.42,
+         "end": 263.0,
+         "text": "Two seconds."
+        },
+        {
+         "start": 263.4,
+         "end": 264.02,
+         "text": "Prozemski."
+        },
+        {
+         "start": 264.46,
+         "end": 265.12,
+         "text": "One."
+        },
+        {
+         "start": 265.36,
+         "end": 267.08,
+         "text": "Off the"
+        }
+       ],
+       "ocr": [
+        {
+         "t": 260.25,
+         "text": "GET THE 5App | PAKERS.COM | BiD T | 57 | 2.6 | GSW | TNT | 2ND | YENO Com | SPORTS"
+        },
+        {
+         "t": 261.25,
+         "text": "57 | 2.6 | GSW | E | TNT | 47 | 2ND | LAL | SPORTS"
+        },
+        {
+         "t": 262.25,
+         "text": "57 | 2.0 | GSW | TNT | 47 | 2ND | LAL | SPORTS"
+        },
+        {
+         "t": 263.25,
+         "text": "YARA | CAN t | SE AMERICAN EXPRE | ESS | OLTRA | Mchelk | < | 57 | 1.0 | GSW | TNT | 47 | 2ND | LAL | SPORTS"
+        },
+        {
+         "t": 264.25,
+         "text": "00 | TATISSOT | GET THE SApp | LAKERS.CO | TMchuio h ULTRA | \u00c5i AI | Catahe | SAYR | SiD fOY | 57 | 0.0 | GSW | UNT | 47 | 2ND | LAL | SPORTS"
+        },
+        {
+         "t": 265.25,
+         "text": "0.0 | ITISSOT | GET THE 8 App | PAnA\u0421 | LAKERS.CO | Mchelab N ULTRA | 15 | Castiste | AiD CODAY | 57 | 0.0 | GSW | TNT | EIRS | 47 | 2ND | LAL | SPORTS"
+        },
+        {
+         "t": 266.25,
+         "text": "00 | GET THE % App | LAKERS.COI | ULTP | Cadiste | Michelab | 71 | 57 | 0.0 | GSW | TNT | 47 | 2ND | LAL | SPORTS"
+        }
+       ],
+       "sounds": [
+        {
+         "start": 251.5,
+         "end": 260.0,
+         "label": "speech"
+        },
+        {
+         "start": 260.0,
+         "end": 261.5,
+         "label": "fly_buzz"
+        },
+        {
+         "start": 260.0,
+         "end": 261.0,
+         "label": "race_car"
+        },
+        {
+         "start": 260.0,
+         "end": 261.0,
+         "label": "vehicle_skidding"
+        },
+        {
+         "start": 260.5,
+         "end": 261.5,
+         "label": "insect"
+        },
+        {
+         "start": 260.5,
+         "end": 261.5,
+         "label": "mosquito_buzz"
+        },
+        {
+         "start": 261.0,
+         "end": 262.0,
+         "label": "music"
+        },
+        {
+         "start": 261.0,
+         "end": 266.0,
+         "label": "speech"
+        },
+        {
+         "start": 261.0,
+         "end": 262.0,
+         "label": "trombone"
+        },
+        {
+         "start": 261.5,
+         "end": 262.5,
+         "label": "basketball_bounce"
+        },
+        {
+         "start": 261.5,
+         "end": 264.5,
+         "label": "booing"
+        },
+        {
+         "start": 262.0,
+         "end": 263.0,
+         "label": "playing_volleyball"
+        },
+        {
+         "start": 262.5,
+         "end": 263.5,
+         "label": "music"
+        },
+        {
+         "start": 263.0,
+         "end": 264.0,
+         "label": "basketball_bounce"
+        },
+        {
+         "start": 263.5,
+         "end": 264.5,
+         "label": "playing_volleyball"
+        },
+        {
+         "start": 264.0,
+         "end": 265.0,
+         "label": "applause"
+        },
+        {
+         "start": 264.0,
+         "end": 265.0,
+         "label": "clapping"
+        },
+        {
+         "start": 264.5,
+         "end": 265.5,
+         "label": "screaming"
+        },
+        {
+         "start": 265.5,
+         "end": 267.5,
+         "label": "cheering"
+        },
+        {
+         "start": 265.5,
+         "end": 267.5,
+         "label": "crowd"
+        },
+        {
+         "start": 266.0,
+         "end": 267.0,
+         "label": "slap_smack"
+        },
+        {
+         "start": 266.5,
+         "end": 269.0,
+         "label": "booing"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "the buzzer sounds at the end of a quarter",
+        "start": 259.56,
+        "end": 267.0,
+        "timecode": "00:04:19.6 -> 00:04:27.0"
+       }
+      ],
+      "replays": []
+     },
+     {
+      "id": "obs_a43cf88e6c",
+      "video_id": "v_3ee2db6c19",
+      "title": "WARRIORS at LAKERS | FULL GAME HIGHLIGHTS | April 3, 2025",
+      "source": "https://www.youtube.com/watch?v=G6go_js-qoU",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-G6go_js-qoU.mp4",
+      "start": 620.5,
+      "end": 623.5,
+      "timecode": "00:10:20.5 -> 00:10:23.5",
+      "claim": "the buzzer sounds at the end of a quarter",
+      "who": "referee",
+      "entity_id": null,
+      "confidence": 1.0,
+      "evidence": {
+       "summary": "clock shows 0:00, buzzer sounds",
+       "frames": [
+        {
+         "t": 621.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_615.9-628.1/04.jpg"
+        },
+        {
+         "t": 622.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_615.9-628.1/05.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 620.74,
+         "end": 623.06,
+         "text": "No, it's knocked out by Hachimura."
+        },
+        {
+         "start": 623.4,
+         "end": 623.62,
+         "text": "Picked"
+        }
+       ],
+       "ocr": [
+        {
+         "t": 621.25,
+         "text": "25 | GET THE 5 App | LAKERS.COI | SI | SRRS | 22.6 | 121 | GSW | TNT | 116 4TH 0.0 | LAL | SPORTS"
+        },
+        {
+         "t": 622.25,
+         "text": "2 15 | CET THE 5 App | LAKERS.CO | TUES, | 7:30PM | SRYR | SID TODAY | 121 21.6 | GSW | TNT | 116 4TH 0.0 | LAL | NBA | SPORTS"
+        },
+        {
+         "t": 623.25,
+         "text": "GET THE 5.ApD | Frek | LAKERS.CO | TUESS | 7:30PM | Trabsiehu | Cpadlat | TOLAY | 121 | 20.6 | GSW | TNT | 116 | LAL | 4TH | (NBA | SPORTS"
+        }
+       ],
+       "sounds": [
+        {
+         "start": 611.5,
+         "end": 628.0,
+         "label": "speech"
+        },
+        {
+         "start": 618.5,
+         "end": 621.0,
+         "label": "basketball_bounce"
+        },
+        {
+         "start": 618.5,
+         "end": 622.0,
+         "label": "booing"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "the buzzer sounds at the end of a quarter",
+        "start": 620.5,
+        "end": 623.5,
+        "timecode": "00:10:20.5 -> 00:10:23.5"
+       }
+      ],
+      "replays": []
+     },
+     {
+      "id": "obs_b1bb679565",
+      "video_id": "v_8718a4de6d",
+      "title": "LeBron James TURNED BACK THE CLOCK With 29 PTS vs 76ERS | December 7, 2025",
+      "source": "https://www.youtube.com/watch?v=oyk2QtdUtKE",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-oyk2QtdUtKE.mp4",
+      "start": 315.0,
+      "end": 318.0,
+      "timecode": "00:05:15.0 -> 00:05:18.0",
+      "claim": "the buzzer sounds at the end of a quarter",
+      "who": "LeBron James",
+      "entity_id": "ent_1035f0e471e4",
+      "confidence": 1.0,
+      "evidence": {
+       "summary": "buzzer sounds, clock shows 0:00",
+       "frames": [
+        {
+         "t": 315.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_309.7-320.6/05.jpg"
+        },
+        {
+         "t": 317.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_309.7-320.6/06.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 314.76,
+         "end": 317.38,
+         "text": "steal and the game is over"
+        }
+       ],
+       "ocr": [
+        {
+         "t": 315.25,
+         "text": "0.0 | TA TISSOT | \u00ae crypto.com | & State Farm | xf\u0131n\u0131ty | crypto | CRICA | LKERS 112 | 108 | BONUS | BONUS | 4TH | :00.0"
+        },
+        {
+         "t": 316.25,
+         "text": "0.0 | *A TISSOT | TATISSOT | \u00ae crypto.com | & State Farm | xf\u0131n\u0131ty | onintos | JERICA | LAKFRS 112 | 108 | BONUS | BONUS | FINAL"
+        },
+        {
+         "t": 317.25,
+         "text": "\u2022 crypto.com | xfini | onyato | LAKTRS | 112 | 108 | BONUS | BONUS | FINAL"
+        }
+       ],
+       "sounds": [
+        {
+         "start": 310.5,
+         "end": 318.0,
+         "label": "speech"
+        },
+        {
+         "start": 313.5,
+         "end": 317.5,
+         "label": "booing"
+        },
+        {
+         "start": 314.5,
+         "end": 315.5,
+         "label": "shout"
+        },
+        {
+         "start": 315.0,
+         "end": 316.5,
+         "label": "playing_volleyball"
+        },
+        {
+         "start": 316.0,
+         "end": 317.0,
+         "label": "music"
+        },
+        {
+         "start": 316.5,
+         "end": 317.5,
+         "label": "basketball_bounce"
+        },
+        {
+         "start": 317.0,
+         "end": 318.0,
+         "label": "playing_volleyball"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "the buzzer sounds at the end of a quarter",
+        "start": 315.0,
+        "end": 318.0,
+        "timecode": "00:05:15.0 -> 00:05:18.0"
+       }
+      ],
+      "replays": []
+     },
+     {
+      "id": "obs_5065f8d0f8",
+      "video_id": "v_df7432f2b3",
+      "title": "LeBron James drops dimes and scores first bucket for 76ers \ud83d\udd25 Preseason debut highlights",
+      "source": "https://www.youtube.com/watch?v=zHBgJqG1nJo",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-zHBgJqG1nJo.mp4",
+      "start": 181.25,
+      "end": 182.5,
+      "timecode": "00:03:01.2 -> 00:03:02.5",
+      "claim": "the buzzer sounds at the end of a quarter",
+      "who": "Philadelphia 76ers",
+      "entity_id": null,
+      "confidence": 1.0,
+      "evidence": {
+       "summary": "game clock shows 0:00",
+       "frames": [
+        {
+         "t": 181.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_df7432f2b3_176.7-186.0/05.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 181.22,
+         "end": 182.54,
+         "text": "after that"
+        }
+       ],
+       "ocr": [
+        {
+         "t": 181.25,
+         "text": "JANES | 32 | @ | Alibaba | A NI | mirares | PHILA | 45 | PHI | BKN | 31 | 32 | BONUS | BONUS | :06 | :12.3 | 1ST"
+        },
+        {
+         "t": 182.25,
+         "text": "31 | L:-POPE | 2i10 3\u04567 | ME | SAME | Alibaba | \u2022 Alibaba | 1 | JAMES | 23 | Emirates | PHI | BKN | 31 | 32 | BONUS | BONUS | 0.0 | :12.:3 | 1ST"
+        }
+       ],
+       "sounds": [
+        {
+         "start": 146.0,
+         "end": 184.5,
+         "label": "speech"
+        },
+        {
+         "start": 180.5,
+         "end": 181.5,
+         "label": "basketball_bounce"
+        },
+        {
+         "start": 180.5,
+         "end": 181.5,
+         "label": "playing_volleyball"
+        },
+        {
+         "start": 181.5,
+         "end": 182.5,
+         "label": "booing"
+        },
+        {
+         "start": 181.5,
+         "end": 182.5,
+         "label": "playing_tennis"
+        },
+        {
+         "start": 182.0,
+         "end": 184.0,
+         "label": "basketball_bounce"
+        },
+        {
+         "start": 182.0,
+         "end": 183.0,
+         "label": "crowd"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "the buzzer sounds at the end of a quarter",
+        "start": 181.25,
+        "end": 182.5,
+        "timecode": "00:03:01.2 -> 00:03:02.5"
+       }
+      ],
+      "replays": []
+     },
+     {
+      "id": "obs_2d8a2eedce",
+      "video_id": "v_3ee2db6c19",
+      "title": "WARRIORS at LAKERS | FULL GAME HIGHLIGHTS | April 3, 2025",
+      "source": "https://www.youtube.com/watch?v=G6go_js-qoU",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-G6go_js-qoU.mp4",
+      "start": 418.5,
+      "end": 421.75,
+      "timecode": "00:06:58.5 -> 00:07:01.8",
+      "claim": "the buzzer sounds at the end of a quarter",
+      "who": "Lakers",
+      "entity_id": null,
+      "confidence": 0.95,
+      "evidence": {
+       "summary": "clock shows 0:00.0, buzzer sound",
+       "frames": [
+        {
+         "t": 419.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_410.3-423.4/06.jpg"
+        },
+        {
+         "t": 420.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_410.3-423.4/07.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 419.12,
+         "end": 419.96,
+         "text": "Did you see?"
+        },
+        {
+         "start": 420.22,
+         "end": 421.52,
+         "text": "Two gives Donchik seven."
+        },
+        {
+         "start": 421.58,
+         "end": 421.78,
+         "text": "Well,"
+        }
+       ],
+       "ocr": [
+        {
+         "t": 419.25,
+         "text": "222 | TETISSOT | GET THE & App | LAKERS.COI | SiD TouY | AKEPS | 22.2 | 85 | GSW | TNT | 75 | 3RD 0.0 | LAL | SPORTS | NBA"
+        },
+        {
+         "t": 420.25,
+         "text": "22.2 | GET THE App | LAKERS.COI | Micholio N | AKERS | 85 | 22.2 | GSW | TNT | LAL | 75 | 3RD 0.0 | SPORTS"
+        },
+        {
+         "t": 421.25,
+         "text": "LAKEPS | 77 | 85 | 22.1 | GSW | TNT | 77 | 3RD | LAL | NBA | SPORTS"
+        }
+       ],
+       "sounds": [
+        {
+         "start": 411.0,
+         "end": 464.5,
+         "label": "speech"
+        },
+        {
+         "start": 417.5,
+         "end": 420.0,
+         "label": "booing"
+        },
+        {
+         "start": 418.5,
+         "end": 419.5,
+         "label": "fly_buzz"
+        },
+        {
+         "start": 418.5,
+         "end": 419.5,
+         "label": "music"
+        },
+        {
+         "start": 420.0,
+         "end": 421.0,
+         "label": "music"
+        },
+        {
+         "start": 420.5,
+         "end": 421.5,
+         "label": "basketball_bounce"
+        },
+        {
+         "start": 421.0,
+         "end": 423.0,
+         "label": "booing"
+        },
+        {
+         "start": 421.0,
+         "end": 422.0,
+         "label": "playing_volleyball"
+        },
+        {
+         "start": 421.5,
+         "end": 422.5,
+         "label": "battle_cry"
+        },
+        {
+         "start": 421.5,
+         "end": 422.5,
+         "label": "shout"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "the buzzer sounds at the end of a quarter",
+        "start": 418.5,
+        "end": 421.75,
+        "timecode": "00:06:58.5 -> 00:07:01.8"
+       }
+      ],
+      "replays": []
+     }
+    ],
+    "rejected": [
+     {
+      "video_id": "v_3ee2db6c19",
+      "start": 630.53,
+      "end": 632.76,
+      "reason": "step 1 is not heard: no sound or game clock in the index shows it"
+     },
+     {
+      "video_id": "v_3ee2db6c19",
+      "start": 500.27,
+      "end": 503.74,
+      "reason": "step 1 is not heard: no sound or game clock in the index shows it"
+     },
+     {
+      "video_id": "v_3ee2db6c19",
+      "start": 584.38,
+      "end": 586.95,
+      "reason": "step 1 is not heard: no sound or game clock in the index shows it"
+     },
+     {
+      "video_id": "v_8718a4de6d",
+      "start": 223.61,
+      "end": 229.4,
+      "reason": "step 1 is not heard: no sound or game clock in the index shows it"
+     },
+     {
+      "video_id": "v_3ee2db6c19",
+      "start": 285.82,
+      "end": 288.42,
+      "reason": "step 1 is not heard: no sound or game clock in the index shows it"
+     },
+     {
+      "video_id": "v_8718a4de6d",
+      "start": 162.95,
+      "end": 164.11,
+      "reason": "step 1 is not heard: no sound or game clock in the index shows it"
+     }
+    ],
+    "counts": {
+     "candidates": 12,
+     "checked": 11,
+     "confirmed": 5,
+     "rejected": 6
+    },
+    "seconds": {
+     "search": 5.07,
+     "load": 0.0,
+     "check": 19.79
+    }
+   },
+   "stderr": "tlv: searching 3 videos for 1 steps\ntlv: checking 11 stretches\ntlv: checked 1 of 11\ntlv: checked 2 of 11\ntlv: checked 3 of 11\ntlv: checked 4 of 11\ntlv: checked 5 of 11\ntlv: checked 6 of 11\ntlv: checked 7 of 11\ntlv: checked 8 of 11\ntlv: checked 9 of 11\ntlv: checked 10 of 11\ntlv: checked 11 of 11\ntlv: found 5 in 25 s: 5 s searching, 0 s loading the model, 20 s checking (20 s of it answering)\n"
+  },
+  {
+   "id": "lebron-fast-break-dunk",
+   "query": "lebron james dunks on a fast break",
+   "then": [],
+   "argv": [
+    "uv",
+    "run",
+    "tlv",
+    "find",
+    "lebron james dunks on a fast break",
+    "--max-candidates",
+    "12",
+    "--no-cut",
+    "--json"
+   ],
+   "seconds": 49.4,
+   "exit_code": 0,
+   "output": {
+    "claim": "lebron james dunks on a fast break",
+    "confirmed": [
+     {
+      "id": "obs_dca9c6b3c2",
+      "video_id": "v_8718a4de6d",
+      "title": "LeBron James TURNED BACK THE CLOCK With 29 PTS vs 76ERS | December 7, 2025",
+      "source": "https://www.youtube.com/watch?v=oyk2QtdUtKE",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-oyk2QtdUtKE.mp4",
+      "start": 68.75,
+      "end": 71.75,
+      "timecode": "00:01:08.8 -> 00:01:11.8",
+      "claim": "lebron james dunks on a fast break",
+      "who": "23",
+      "entity_id": "ent_1035f0e471e4",
+      "confidence": 0.95,
+      "evidence": {
+       "summary": "dunk on fast break",
+       "frames": [
+        {
+         "t": 69.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_65.6-77.5/04.jpg"
+        },
+        {
+         "t": 70.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_65.6-77.5/05.jpg"
+        },
+        {
+         "t": 71.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_65.6-77.5/06.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 68.72,
+         "end": 68.9,
+         "text": "enough?"
+        },
+        {
+         "start": 69.2,
+         "end": 70.76,
+         "text": "40, almost 41 years of age."
+        },
+        {
+         "start": 71.14,
+         "end": 71.76,
+         "text": "Come on, I"
+        }
+       ],
+       "ocr": [
+        {
+         "t": 69.25,
+         "text": "COIR | 6 | 23 | ticketmaster"
+        },
+        {
+         "t": 70.25,
+         "text": "T+TISSOT | BUNG/C | 77"
+        },
+        {
+         "t": 71.25,
+         "text": "*TISSOT | \u010cI\u0107"
+        }
+       ],
+       "sounds": [
+        {
+         "start": 33.5,
+         "end": 78.0,
+         "label": "speech"
+        },
+        {
+         "start": 67.5,
+         "end": 69.0,
+         "label": "basketball_bounce"
+        },
+        {
+         "start": 69.0,
+         "end": 70.0,
+         "label": "booing"
+        },
+        {
+         "start": 69.0,
+         "end": 72.0,
+         "label": "playing_volleyball"
+        },
+        {
+         "start": 69.5,
+         "end": 70.5,
+         "label": "air_horn"
+        },
+        {
+         "start": 70.0,
+         "end": 71.0,
+         "label": "music"
+        },
+        {
+         "start": 70.5,
+         "end": 71.5,
+         "label": "booing"
+        },
+        {
+         "start": 71.0,
+         "end": 72.5,
+         "label": "basketball_bounce"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "lebron james dunks on a fast break",
+        "start": 68.75,
+        "end": 71.75,
+        "timecode": "00:01:08.8 -> 00:01:11.8"
+       }
+      ],
+      "replays": []
+     },
+     {
+      "id": "obs_218d032723",
+      "video_id": "v_8718a4de6d",
+      "title": "LeBron James TURNED BACK THE CLOCK With 29 PTS vs 76ERS | December 7, 2025",
+      "source": "https://www.youtube.com/watch?v=oyk2QtdUtKE",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-oyk2QtdUtKE.mp4",
+      "start": 157.0,
+      "end": 158.5,
+      "timecode": "00:02:37.0 -> 00:02:38.5",
+      "claim": "lebron james dunks on a fast break",
+      "who": "23",
+      "entity_id": null,
+      "confidence": 0.95,
+      "evidence": {
+       "summary": "dunk on fast break",
+       "frames": [
+        {
+         "t": 157.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_148.3-165.9/07.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 157.0,
+         "end": 157.52,
+         "text": "at the rim"
+        },
+        {
+         "start": 157.52,
+         "end": 158.58,
+         "text": "the way James Borey"
+        }
+       ],
+       "ocr": [
+        {
+         "t": 157.25,
+         "text": "d& Stale | WELCOME | State Farm | WEBL | S OHECK FOINT | WE BLOCK CYBER THREATS | S ONECK FO | COMECH PONT | IWEBLOCK CYBER THREATS | WE BLOCK CYBER THREATS | INREATS | AWE HEOCK CYBER THREATS CCHECF PONT | WE BLOCK CYBER THREATS | ER THREATS | \u2022 CHECK POINT | CEATS | WE BL | G CHECK POUNT | WE BLOCKCYBER THREATS | \u2022CEMBER 21 |00| E"
+        },
+        {
+         "t": 158.25,
+         "text": "BLOCK CYBER THREATS | IREATS | B\u00b0CHECK POINT | TWELO | MEELT | WE BLOCK CYBER THREAT\u015a | WEBEd | DECEMBER 2 | SAEES | 77"
+        }
+       ],
+       "sounds": [
+        {
+         "start": 135.0,
+         "end": 170.0,
+         "label": "speech"
+        },
+        {
+         "start": 149.5,
+         "end": 164.0,
+         "label": "music"
+        },
+        {
+         "start": 156.5,
+         "end": 157.5,
+         "label": "percussion"
+        },
+        {
+         "start": 157.0,
+         "end": 158.0,
+         "label": "duck_quack"
+        },
+        {
+         "start": 157.5,
+         "end": 160.0,
+         "label": "plucked_string_instrument"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "lebron james dunks on a fast break",
+        "start": 157.0,
+        "end": 158.5,
+        "timecode": "00:02:37.0 -> 00:02:38.5"
+       }
+      ],
+      "replays": []
+     }
+    ],
+    "rejected": [
+     {
+      "video_id": "v_8718a4de6d",
+      "start": 287.27,
+      "end": 290.94,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_8718a4de6d",
+      "start": 307.82,
+      "end": 312.72,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_8718a4de6d",
+      "start": 41.73,
+      "end": 47.23,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_8718a4de6d",
+      "start": 229.4,
+      "end": 235.19,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_8718a4de6d",
+      "start": 282.0,
+      "end": 286.64,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_df7432f2b3",
+      "start": 14.9,
+      "end": 20.97,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_df7432f2b3",
+      "start": 234.33,
+      "end": 241.03,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_3ee2db6c19",
+      "start": 514.95,
+      "end": 520.09,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_8718a4de6d",
+      "start": 326.99,
+      "end": 334.89,
+      "reason": "no match"
+     }
+    ],
+    "counts": {
+     "candidates": 12,
+     "checked": 11,
+     "confirmed": 2,
+     "rejected": 9
+    },
+    "seconds": {
+     "search": 5.6,
+     "load": 0.0,
+     "check": 43.62
+    }
+   },
+   "stderr": "tlv: searching 3 videos for 1 steps\ntlv: checking 11 stretches\ntlv: waiting for another model run to finish before vlm\ntlv: checked 1 of 11\ntlv: checked 2 of 11\ntlv: checked 3 of 11\ntlv: checked 4 of 11\ntlv: checked 5 of 11\ntlv: checked 6 of 11\ntlv: checked 7 of 11\ntlv: checked 8 of 11\ntlv: checked 9 of 11\ntlv: checked 10 of 11\ntlv: checked 11 of 11\ntlv: found 2 in 49 s: 6 s searching, 0 s loading the model, 44 s checking (43 s of it answering)\n"
+  },
+  {
+   "id": "alley-oop",
+   "query": "a player dunks an alley-oop",
+   "then": [],
+   "argv": [
+    "uv",
+    "run",
+    "tlv",
+    "find",
+    "a player dunks an alley-oop",
+    "--max-candidates",
+    "12",
+    "--no-cut",
+    "--json"
+   ],
+   "seconds": 35.7,
+   "exit_code": 0,
+   "output": {
+    "claim": "a player dunks an alley-oop",
+    "confirmed": [
+     {
+      "id": "obs_22643679c9",
+      "video_id": "v_8718a4de6d",
+      "title": "LeBron James TURNED BACK THE CLOCK With 29 PTS vs 76ERS | December 7, 2025",
+      "source": "https://www.youtube.com/watch?v=oyk2QtdUtKE",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-oyk2QtdUtKE.mp4",
+      "start": 69.75,
+      "end": 71.55,
+      "timecode": "00:01:09.8 -> 00:01:11.6",
+      "claim": "a player dunks an alley-oop",
+      "who": "23",
+      "entity_id": null,
+      "confidence": 0.95,
+      "evidence": {
+       "summary": "dunk alley-oop",
+       "frames": [
+        {
+         "t": 70.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_63.6-71.6/07.jpg"
+        },
+        {
+         "t": 71.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_63.6-71.6/08.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 69.58,
+         "end": 70.76,
+         "text": "41 years of age."
+        },
+        {
+         "start": 71.14,
+         "end": 71.58,
+         "text": "Come on,"
+        }
+       ],
+       "ocr": [
+        {
+         "t": 70.25,
+         "text": "T+TISSOT | BUNG/C | 77"
+        },
+        {
+         "t": 71.25,
+         "text": "*TISSOT | \u010cI\u0107"
+        }
+       ],
+       "sounds": [
+        {
+         "start": 33.5,
+         "end": 78.0,
+         "label": "speech"
+        },
+        {
+         "start": 69.0,
+         "end": 70.0,
+         "label": "booing"
+        },
+        {
+         "start": 69.0,
+         "end": 72.0,
+         "label": "playing_volleyball"
+        },
+        {
+         "start": 69.5,
+         "end": 70.5,
+         "label": "air_horn"
+        },
+        {
+         "start": 70.0,
+         "end": 71.0,
+         "label": "music"
+        },
+        {
+         "start": 70.5,
+         "end": 71.5,
+         "label": "booing"
+        },
+        {
+         "start": 71.0,
+         "end": 72.5,
+         "label": "basketball_bounce"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "a player dunks an alley-oop",
+        "start": 69.75,
+        "end": 71.55,
+        "timecode": "00:01:09.8 -> 00:01:11.6"
+       }
+      ],
+      "replays": []
+     },
+     {
+      "id": "obs_ede142cb8d",
+      "video_id": "v_8718a4de6d",
+      "title": "LeBron James TURNED BACK THE CLOCK With 29 PTS vs 76ERS | December 7, 2025",
+      "source": "https://www.youtube.com/watch?v=oyk2QtdUtKE",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-oyk2QtdUtKE.mp4",
+      "start": 156.25,
+      "end": 158.5,
+      "timecode": "00:02:36.2 -> 00:02:38.5",
+      "claim": "a player dunks an alley-oop",
+      "who": "23",
+      "entity_id": null,
+      "confidence": 0.95,
+      "evidence": {
+       "summary": "dunk alley-oop",
+       "frames": [
+        {
+         "t": 156.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_154.1-167.1/03.jpg"
+        },
+        {
+         "t": 157.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_8718a4de6d_154.1-167.1/04.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 156.18,
+         "end": 157.52,
+         "text": "finish it at the rim"
+        },
+        {
+         "start": 157.52,
+         "end": 158.58,
+         "text": "the way James Borey"
+        }
+       ],
+       "ocr": [
+        {
+         "t": 157.25,
+         "text": "d& Stale | WELCOME | State Farm | WEBL | S OHECK FOINT | WE BLOCK CYBER THREATS | S ONECK FO | COMECH PONT | IWEBLOCK CYBER THREATS | WE BLOCK CYBER THREATS | INREATS | AWE HEOCK CYBER THREATS CCHECF PONT | WE BLOCK CYBER THREATS | ER THREATS | \u2022 CHECK POINT | CEATS | WE BL | G CHECK POUNT | WE BLOCKCYBER THREATS | \u2022CEMBER 21 |00| E"
+        },
+        {
+         "t": 158.25,
+         "text": "BLOCK CYBER THREATS | IREATS | B\u00b0CHECK POINT | TWELO | MEELT | WE BLOCK CYBER THREAT\u015a | WEBEd | DECEMBER 2 | SAEES | 77"
+        }
+       ],
+       "sounds": [
+        {
+         "start": 135.0,
+         "end": 170.0,
+         "label": "speech"
+        },
+        {
+         "start": 149.5,
+         "end": 164.0,
+         "label": "music"
+        },
+        {
+         "start": 155.5,
+         "end": 156.5,
+         "label": "keyboard_musical"
+        },
+        {
+         "start": 156.0,
+         "end": 157.0,
+         "label": "plucked_string_instrument"
+        },
+        {
+         "start": 156.5,
+         "end": 157.5,
+         "label": "percussion"
+        },
+        {
+         "start": 157.0,
+         "end": 158.0,
+         "label": "duck_quack"
+        },
+        {
+         "start": 157.5,
+         "end": 160.0,
+         "label": "plucked_string_instrument"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "a player dunks an alley-oop",
+        "start": 156.25,
+        "end": 158.5,
+        "timecode": "00:02:36.2 -> 00:02:38.5"
+       }
+      ],
+      "replays": []
+     },
+     {
+      "id": "obs_1708297910",
+      "video_id": "v_df7432f2b3",
+      "title": "LeBron James drops dimes and scores first bucket for 76ers \ud83d\udd25 Preseason debut highlights",
+      "source": "https://www.youtube.com/watch?v=zHBgJqG1nJo",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-zHBgJqG1nJo.mp4",
+      "start": 161.25,
+      "end": 163.25,
+      "timecode": "00:02:41.2 -> 00:02:43.2",
+      "claim": "a player dunks an alley-oop",
+      "who": "33",
+      "entity_id": null,
+      "confidence": 0.95,
+      "evidence": {
+       "summary": "dunk alley-oop",
+       "frames": [
+        {
+         "t": 161.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_df7432f2b3_154.9-167.3/07.jpg"
+        },
+        {
+         "t": 162.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_df7432f2b3_154.9-167.3/08.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 161.06,
+         "end": 163.28,
+         "text": "And then this one, Jabari just doing"
+        }
+       ],
+       "ocr": [
+        {
+         "t": 163.25,
+         "text": "PHILA | 33 | 887 PAL | \u0448\"m"
+        }
+       ],
+       "sounds": [
+        {
+         "start": 146.0,
+         "end": 184.5,
+         "label": "speech"
+        },
+        {
+         "start": 159.0,
+         "end": 162.0,
+         "label": "crowd"
+        },
+        {
+         "start": 161.0,
+         "end": 164.5,
+         "label": "booing"
+        },
+        {
+         "start": 161.5,
+         "end": 162.5,
+         "label": "music"
+        },
+        {
+         "start": 162.5,
+         "end": 163.5,
+         "label": "playing_squash"
+        },
+        {
+         "start": 163.0,
+         "end": 164.0,
+         "label": "crowd"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "a player dunks an alley-oop",
+        "start": 161.25,
+        "end": 163.25,
+        "timecode": "00:02:41.2 -> 00:02:43.2"
+       }
+      ],
+      "replays": []
+     }
+    ],
+    "rejected": [
+     {
+      "video_id": "v_df7432f2b3",
+      "start": 84.17,
+      "end": 95.8,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_8718a4de6d",
+      "start": 37.67,
+      "end": 40.19,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_3ee2db6c19",
+      "start": 43.34,
+      "end": 43.88,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_df7432f2b3",
+      "start": 234.33,
+      "end": 241.03,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_df7432f2b3",
+      "start": 199.93,
+      "end": 204.33,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_8718a4de6d",
+      "start": 201.08,
+      "end": 201.99,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_8718a4de6d",
+      "start": 171.69,
+      "end": 174.93,
+      "reason": "no match"
+     }
+    ],
+    "counts": {
+     "candidates": 12,
+     "checked": 10,
+     "confirmed": 3,
+     "rejected": 7
+    },
+    "seconds": {
+     "search": 0.39,
+     "load": 0.0,
+     "check": 35.04
+    }
+   },
+   "stderr": "tlv: searching 3 videos for 1 steps\ntlv: checking 10 stretches\ntlv: checked 1 of 10\ntlv: checked 2 of 10\ntlv: checked 3 of 10\ntlv: checked 4 of 10\ntlv: checked 5 of 10\ntlv: checked 6 of 10\ntlv: checked 7 of 10\ntlv: checked 8 of 10\ntlv: checked 9 of 10\ntlv: checked 10 of 10\ntlv: found 3 in 35 s: 0 s searching, 0 s loading the model, 35 s checking (35 s of it answering)\n"
+  },
+  {
+   "id": "durant-three",
+   "query": "kevin durant makes a three pointer",
+   "then": [],
+   "argv": [
+    "uv",
+    "run",
+    "tlv",
+    "find",
+    "kevin durant makes a three pointer",
+    "--max-candidates",
+    "12",
+    "--no-cut",
+    "--json"
+   ],
+   "seconds": 44.0,
+   "exit_code": 0,
+   "output": {
+    "claim": "kevin durant makes a three pointer",
+    "confirmed": [],
+    "rejected": [
+     {
+      "video_id": "v_8718a4de6d",
+      "start": 21.69,
+      "end": 27.63,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_3ee2db6c19",
+      "start": 214.05,
+      "end": 216.28,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_df7432f2b3",
+      "start": 206.73,
+      "end": 211.32,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_8718a4de6d",
+      "start": 96.25,
+      "end": 101.13,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_3ee2db6c19",
+      "start": 557.16,
+      "end": 560.49,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_3ee2db6c19",
+      "start": 336.07,
+      "end": 338.87,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_3ee2db6c19",
+      "start": 323.29,
+      "end": 326.96,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_df7432f2b3",
+      "start": 225.45,
+      "end": 232.3,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_3ee2db6c19",
+      "start": 277.88,
+      "end": 280.31,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_3ee2db6c19",
+      "start": 618.85,
+      "end": 625.09,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_df7432f2b3",
+      "start": 151.57,
+      "end": 157.92,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_df7432f2b3",
+      "start": 157.92,
+      "end": 164.27,
+      "reason": "no match"
+     }
+    ],
+    "counts": {
+     "candidates": 12,
+     "checked": 12,
+     "confirmed": 0,
+     "rejected": 12
+    },
+    "seconds": {
+     "search": 0.31,
+     "load": 0.0,
+     "check": 43.51
+    }
+   },
+   "stderr": "tlv: searching 3 videos for 1 steps\ntlv: checking 12 stretches\ntlv: checked 1 of 12\ntlv: checked 2 of 12\ntlv: checked 3 of 12\ntlv: checked 4 of 12\ntlv: checked 5 of 12\ntlv: checked 6 of 12\ntlv: checked 7 of 12\ntlv: checked 8 of 12\ntlv: checked 9 of 12\ntlv: checked 10 of 12\ntlv: checked 11 of 12\ntlv: checked 12 of 12\ntlv: found 0 in 44 s: 0 s searching, 0 s loading the model, 44 s checking (43 s of it answering)\n"
+  },
+  {
+   "id": "coach-interview",
+   "query": "a coach is interviewed during the game",
+   "then": [],
+   "argv": [
+    "uv",
+    "run",
+    "tlv",
+    "find",
+    "a coach is interviewed during the game",
+    "--max-candidates",
+    "12",
+    "--no-cut",
+    "--json"
+   ],
+   "seconds": 44.6,
+   "exit_code": 0,
+   "output": {
+    "claim": "a coach is interviewed during the game",
+    "confirmed": [
+     {
+      "id": "obs_7b127b98b6",
+      "video_id": "v_3ee2db6c19",
+      "title": "WARRIORS at LAKERS | FULL GAME HIGHLIGHTS | April 3, 2025",
+      "source": "https://www.youtube.com/watch?v=G6go_js-qoU",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-G6go_js-qoU.mp4",
+      "start": 112.77,
+      "end": 125.03,
+      "timecode": "00:01:52.8 -> 00:02:05.0",
+      "claim": "a coach is interviewed during the game",
+      "who": "Steve Kerr",
+      "entity_id": null,
+      "confidence": 1.0,
+      "evidence": {
+       "summary": "interview during game",
+       "frames": [
+        {
+         "t": 113.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_112.8-125.0/01.jpg"
+        },
+        {
+         "t": 114.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_112.8-125.0/02.jpg"
+        },
+        {
+         "t": 115.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_112.8-125.0/03.jpg"
+        },
+        {
+         "t": 116.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_112.8-125.0/04.jpg"
+        },
+        {
+         "t": 117.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_112.8-125.0/05.jpg"
+        },
+        {
+         "t": 118.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_112.8-125.0/06.jpg"
+        },
+        {
+         "t": 119.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_112.8-125.0/07.jpg"
+        },
+        {
+         "t": 120.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_112.8-125.0/08.jpg"
+        },
+        {
+         "t": 121.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_112.8-125.0/09.jpg"
+        },
+        {
+         "t": 122.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_112.8-125.0/10.jpg"
+        },
+        {
+         "t": 123.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_112.8-125.0/11.jpg"
+        },
+        {
+         "t": 124.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_112.8-125.0/12.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 114.18,
+         "end": 117.3,
+         "text": "Was that some of the mismatches that they were creating or more of an effort?"
+        },
+        {
+         "start": 118.12,
+         "end": 123.48,
+         "text": "Well, I thought we overran several where they took long threes, long rebounds,"
+        },
+        {
+         "start": 123.62,
+         "end": 125.22,
+         "text": "and we were all in the paint instead"
+        }
+       ],
+       "ocr": [
+        {
+         "t": 113.25,
+         "text": "BE LAST UFBS | IN) SPORTS | INT SPORTS"
+        },
+        {
+         "t": 115.25,
+         "text": "5555559: | U SPOPTS TNY SPORTS"
+        },
+        {
+         "t": 116.25,
+         "text": "NiEESF | - 47 | S55SSES | TWSPORTS TINT SPORTS"
+        },
+        {
+         "t": 117.25,
+         "text": "TIEEF | WS55S89"
+        },
+        {
+         "t": 118.25,
+         "text": "(N) SPORTS | SPORTS"
+        },
+        {
+         "t": 121.25,
+         "text": "122 26/712:00| A30 | STEVE | KERR"
+        },
+        {
+         "t": 122.25,
+         "text": "122 26/212:00 A3S10T | 1ST QUARTER | STERR | 3-PT | GSW 5/9 | LAL 4/16"
+        },
+        {
+         "t": 123.25,
+         "text": "AST OFUS | JCA Health | UCLA Health | ACLA Health | 2221 26/212:00 | uclahealth.org | CLA Health | 1ST QUARTER | 3-\u0420\u0422 | GSW 5/9 | LAL 4/16 | KERR"
+        },
+        {
+         "t": 124.25,
+         "text": "LELASTIFUS | Health | JCLA Health | io\u0441xs| 12 Os | CLA Health | TOSHI | 1ST QUARTER | STEVE | 3-P\u0422 | GSW 5/9 LAL 4/16 | KERR"
+        }
+       ],
+       "sounds": [
+        {
+         "start": 109.5,
+         "end": 138.0,
+         "label": "speech"
+        },
+        {
+         "start": 113.5,
+         "end": 114.5,
+         "label": "music"
+        },
+        {
+         "start": 115.5,
+         "end": 116.5,
+         "label": "playing_volleyball"
+        },
+        {
+         "start": 116.5,
+         "end": 117.5,
+         "label": "music"
+        },
+        {
+         "start": 116.5,
+         "end": 117.5,
+         "label": "saxophone"
+        },
+        {
+         "start": 117.0,
+         "end": 118.0,
+         "label": "playing_squash"
+        },
+        {
+         "start": 117.5,
+         "end": 118.5,
+         "label": "crowd"
+        },
+        {
+         "start": 117.5,
+         "end": 118.5,
+         "label": "playing_badminton"
+        },
+        {
+         "start": 118.0,
+         "end": 119.0,
+         "label": "water"
+        },
+        {
+         "start": 119.5,
+         "end": 120.5,
+         "label": "booing"
+        },
+        {
+         "start": 119.5,
+         "end": 120.5,
+         "label": "trombone"
+        },
+        {
+         "start": 121.5,
+         "end": 123.0,
+         "label": "playing_squash"
+        },
+        {
+         "start": 124.0,
+         "end": 129.0,
+         "label": "playing_squash"
+        },
+        {
+         "start": 124.5,
+         "end": 125.5,
+         "label": "booing"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "a coach is interviewed during the game",
+        "start": 112.77,
+        "end": 125.03,
+        "timecode": "00:01:52.8 -> 00:02:05.0"
+       }
+      ],
+      "replays": []
+     },
+     {
+      "id": "obs_ac83c03583",
+      "video_id": "v_3ee2db6c19",
+      "title": "WARRIORS at LAKERS | FULL GAME HIGHLIGHTS | April 3, 2025",
+      "source": "https://www.youtube.com/watch?v=G6go_js-qoU",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-G6go_js-qoU.mp4",
+      "start": 119.03,
+      "end": 136.1,
+      "timecode": "00:01:59.0 -> 00:02:16.1",
+      "claim": "a coach is interviewed during the game",
+      "who": "Steve Kerr",
+      "entity_id": null,
+      "confidence": 1.0,
+      "evidence": {
+       "summary": "Steve Kerr is interviewed during game",
+       "frames": [
+        {
+         "t": 119.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_119.0-136.1/01.jpg"
+        },
+        {
+         "t": 121.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_119.0-136.1/02.jpg"
+        },
+        {
+         "t": 122.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_119.0-136.1/03.jpg"
+        },
+        {
+         "t": 124.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_119.0-136.1/04.jpg"
+        },
+        {
+         "t": 125.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_119.0-136.1/05.jpg"
+        },
+        {
+         "t": 126.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_119.0-136.1/06.jpg"
+        },
+        {
+         "t": 128.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_119.0-136.1/07.jpg"
+        },
+        {
+         "t": 129.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_119.0-136.1/08.jpg"
+        },
+        {
+         "t": 131.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_119.0-136.1/09.jpg"
+        },
+        {
+         "t": 132.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_119.0-136.1/10.jpg"
+        },
+        {
+         "t": 133.75,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_119.0-136.1/11.jpg"
+        },
+        {
+         "t": 135.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_119.0-136.1/12.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 118.96,
+         "end": 123.48,
+         "text": "we overran several where they took long threes, long rebounds,"
+        },
+        {
+         "start": 123.62,
+         "end": 127.5,
+         "text": "and we were all in the paint instead of, you know, kind of getting to the elbows,"
+        },
+        {
+         "start": 127.64,
+         "end": 128.62,
+         "text": "getting to those long ones."
+        },
+        {
+         "start": 128.78,
+         "end": 130.54,
+         "text": "But great final five minutes."
+        },
+        {
+         "start": 130.66,
+         "end": 131.8,
+         "text": "We only gave up two points."
+        },
+        {
+         "start": 132.52,
+         "end": 134.88,
+         "text": "Much better control of the game at that end."
+        },
+        {
+         "start": 135.04,
+         "end": 136.18,
+         "text": "But, yeah, we"
+        }
+       ],
+       "ocr": [
+        {
+         "t": 121.25,
+         "text": "122 26/712:00| A30 | STEVE | KERR"
+        },
+        {
+         "t": 122.25,
+         "text": "122 26/212:00 A3S10T | 1ST QUARTER | STERR | 3-PT | GSW 5/9 | LAL 4/16"
+        },
+        {
+         "t": 123.25,
+         "text": "AST OFUS | JCA Health | UCLA Health | ACLA Health | 2221 26/212:00 | uclahealth.org | CLA Health | 1ST QUARTER | 3-\u0420\u0422 | GSW 5/9 | LAL 4/16 | KERR"
+        },
+        {
+         "t": 124.25,
+         "text": "LELASTIFUS | Health | JCLA Health | io\u0441xs| 12 Os | CLA Health | TOSHI | 1ST QUARTER | STEVE | 3-P\u0422 | GSW 5/9 LAL 4/16 | KERR"
+        },
+        {
+         "t": 125.25,
+         "text": "SIL | 220 26 212:00 | LOCKS 13 O | TOSHI | 101 | KUNINGA | 1ST QUARTER | STEVE | 3-\u0420\u0422 | GSW 5/9 LAL 4/16 | KERR"
+        },
+        {
+         "t": 126.25,
+         "text": "CALIFO | RTAINMENT DESTINATIO 22 $26/212:00 LCHEl 10 0g | NTERTAINMENT DESTINATION | 1ST QUARTER | STEVE | 3-\u0420\u0422 | GSW 5/9 LAL 4/16 | KERR"
+        },
+        {
+         "t": 127.25,
+         "text": "NTERTAINMENT DESTINA 22 26/212:00/ aLO\u00c7E | #1 ENTERTAINMENT DESTINATION | ALL | 1ST QUARTER | 3-P\u0422 | STEVE | GSW 5/9 LAL 4/16 | KERR"
+        },
+        {
+         "t": 128.25,
+         "text": "THE LAST OF US | THE LAST OF UST | IHE | LASTUFUS | ITS | PRESENTS PRESENTS | 22 | 26/212:00 BLOCKS 1 0 | PRESENTS PRESENI | 00 0="
+        },
+        {
+         "t": 129.25,
+         "text": "I 1 13 | m\u20ac | 122 26/212:00\u0219\u015a\u0219\u015a"
+        },
+        {
+         "t": 130.25,
+         "text": "Himex | LASTIFL | HALSE | ILOCKS| 13 O | 222 ( 26/212:00 | HALSE"
+        },
+        {
+         "t": 131.25,
+         "text": "INE LAST OFUS | Himex | JULY 6 | FOR MY LAST TRICK | HALSEY | HALSEY | FOR MY LAST TRICK 122( 26/212:00 BLOCKI"
+        },
+        {
+         "t": 132.25,
+         "text": "LELAST OFUS | API IL 13 | meix | mBImex | TELASTIFUS | LAST IFES | JULY 6 | FOR MY LAST TRICK | HALSEY | HALSEY | FOR MY LAS 22 ( 26/212:00/ BLOC"
+        },
+        {
+         "t": 133.25,
+         "text": "LE LAS | THE LAST OFU | HiImex | FOR MY LAST TRICK | HALSEY | HALSEY FON 22( 26/212:00/BLOCKS|"
+        },
+        {
+         "t": 134.25,
+         "text": "E I mex | LAST WFUS | APD 1 13 | TELASILFOS | FOR MY L | HALSEY | HALSEY 22 26/212:00/ COUR | 'YAAMAVA' THEATER | \u0417\u0420"
+        },
+        {
+         "t": 135.25,
+         "text": "LSTLE | FOR MY 1 | HALSEY | THEATER | HAL 22(26|212:00 | YAAMAVA' THEATER"
+        }
+       ],
+       "sounds": [
+        {
+         "start": 109.5,
+         "end": 138.0,
+         "label": "speech"
+        },
+        {
+         "start": 119.5,
+         "end": 120.5,
+         "label": "booing"
+        },
+        {
+         "start": 119.5,
+         "end": 120.5,
+         "label": "trombone"
+        },
+        {
+         "start": 121.5,
+         "end": 123.0,
+         "label": "playing_squash"
+        },
+        {
+         "start": 124.0,
+         "end": 129.0,
+         "label": "playing_squash"
+        },
+        {
+         "start": 124.5,
+         "end": 125.5,
+         "label": "booing"
+        },
+        {
+         "start": 128.5,
+         "end": 129.5,
+         "label": "music"
+        },
+        {
+         "start": 130.0,
+         "end": 132.0,
+         "label": "booing"
+        },
+        {
+         "start": 130.5,
+         "end": 131.5,
+         "label": "basketball_bounce"
+        },
+        {
+         "start": 130.5,
+         "end": 132.5,
+         "label": "playing_squash"
+        },
+        {
+         "start": 131.5,
+         "end": 132.5,
+         "label": "music"
+        },
+        {
+         "start": 132.0,
+         "end": 133.0,
+         "label": "sneeze"
+        },
+        {
+         "start": 133.0,
+         "end": 134.0,
+         "label": "music"
+        },
+        {
+         "start": 133.0,
+         "end": 134.5,
+         "label": "playing_squash"
+        },
+        {
+         "start": 133.5,
+         "end": 134.5,
+         "label": "singing"
+        },
+        {
+         "start": 135.0,
+         "end": 136.0,
+         "label": "saxophone"
+        },
+        {
+         "start": 135.0,
+         "end": 136.0,
+         "label": "trombone"
+        },
+        {
+         "start": 135.5,
+         "end": 137.5,
+         "label": "playing_squash"
+        },
+        {
+         "start": 136.0,
+         "end": 137.0,
+         "label": "music"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "a coach is interviewed during the game",
+        "start": 119.03,
+        "end": 136.1,
+        "timecode": "00:01:59.0 -> 00:02:16.1"
+       }
+      ],
+      "replays": []
+     },
+     {
+      "id": "obs_b20db76424",
+      "video_id": "v_3ee2db6c19",
+      "title": "WARRIORS at LAKERS | FULL GAME HIGHLIGHTS | April 3, 2025",
+      "source": "https://www.youtube.com/watch?v=G6go_js-qoU",
+      "local_path": "/Users/aktanazat/.local/share/tlv/media/Youtube-G6go_js-qoU.mp4",
+      "start": 424.66,
+      "end": 436.7,
+      "timecode": "00:07:04.7 -> 00:07:16.7",
+      "claim": "a coach is interviewed during the game",
+      "who": "Lakers coach",
+      "entity_id": null,
+      "confidence": 1.0,
+      "evidence": {
+       "summary": "Lakers jersey, interview setup",
+       "frames": [
+        {
+         "t": 425.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_424.7-436.7/01.jpg"
+        },
+        {
+         "t": 426.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_424.7-436.7/02.jpg"
+        },
+        {
+         "t": 427.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_424.7-436.7/03.jpg"
+        },
+        {
+         "t": 428.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_424.7-436.7/04.jpg"
+        },
+        {
+         "t": 429.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_424.7-436.7/05.jpg"
+        },
+        {
+         "t": 430.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_424.7-436.7/06.jpg"
+        },
+        {
+         "t": 431.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_424.7-436.7/07.jpg"
+        },
+        {
+         "t": 432.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_424.7-436.7/08.jpg"
+        },
+        {
+         "t": 433.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_424.7-436.7/09.jpg"
+        },
+        {
+         "t": 434.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_424.7-436.7/10.jpg"
+        },
+        {
+         "t": 435.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_424.7-436.7/11.jpg"
+        },
+        {
+         "t": 436.25,
+         "path": "/Users/aktanazat/.local/share/tlv/frames/checked/v_3ee2db6c19_424.7-436.7/12.jpg"
+        }
+       ],
+       "transcript": [
+        {
+         "start": 424.52,
+         "end": 426.64,
+         "text": "will add up over the quarter to finally close this gap?"
+        },
+        {
+         "start": 427.64,
+         "end": 429.98,
+         "text": "We got to do a better job on the defensive glass."
+        },
+        {
+         "start": 430.22,
+         "end": 433.7,
+         "text": "What will you tell Luka to encourage him to not look at that poor shooting performance so far,"
+        },
+        {
+         "start": 433.74,
+         "end": 436.62,
+         "text": "but keep being the same Luka, the aggressive self you need to be a game changer?"
+        }
+       ],
+       "ocr": [
+        {
+         "t": 425.25,
+         "text": "\u041d\u0406\u0412\u0410"
+        },
+        {
+         "t": 426.25,
+         "text": "C\u041d\u0406\u0412\u0410 | TND SPORTS"
+        },
+        {
+         "t": 427.25,
+         "text": "\u041dI\u0412A | INT SPORTS"
+        },
+        {
+         "t": 428.25,
+         "text": "JAKEPS | INT SPORTS Y"
+        },
+        {
+         "t": 429.25,
+         "text": "unpjoq | TAKERS | INT SPORTS"
+        },
+        {
+         "t": 430.25,
+         "text": "A YAKESK | YJAKERSK | J XYARES | O XVARESK | SUPERIOR LIGHT BEER | YWAKERS | a >\u0423ARES | Mohel\u00f3 I ULTRA | SUP\u00ae | 9:0F LASTWEST BANKGHT BEER | TAKERS"
+        },
+        {
+         "t": 431.25,
+         "text": "INERS | AJERS | RIOR LIGHT BEER | WARERSA | BoYuoE | AKERS | Y JARERS | Misbelo\u00f3 ULTRA | SUPERIOR LIGH1 | SUPERIO | Mihel\u00f3 II ULTRA | 19:04 WEEAST WESTRANKT BEER | \u2022 CcaCola | 29 | LAKERS"
+        },
+        {
+         "t": 432.25,
+         "text": "AKERS | LIGHT BEER | JAKERS | BioYaneg | AKERS | Midelol ULTRA | JAKERS' | SUPERIOR LI | SUPERIOR LIGHT | Mitel\u00f3 I ULTRA | 19:04 WEASTWESTBANK EER | * CocoCola | ULTRA | AKERS"
+        },
+        {
+         "t": 433.25,
+         "text": "IKEI | YIARERS | HT BEER | JAKERSS | BiloYazo | TAKERS | Micrelo ULTRA | WAKERSA! | SUPERIOR LIGH | SUPERIOR LIGHT BEE | Mohel\u00f3 I ULTRA | \u2022CocaCola \u2022 | LAKERS"
+        },
+        {
+         "t": 434.25,
+         "text": "TAKERS | JAKERS | CAKERS | BEER | JAKERS | BioYazoi | \u2022 XJAKERS | Michelob ULTRA | WAKERSA< | SUPERIOR LIGHT B | SUPERIOR LIGHT BEER | Mshel\u00f3 II ULTRA | 9:04' B EAST WEST BANK | \u2022 Co Cla. | KERS"
+        },
+        {
+         "t": 435.25,
+         "text": "SEER | BioVAEK | Michelot ULTRA | SUPERIOR LIGHT BEF | SUPERIOR LIGHT BEER | Moel\u00f3 ULTRA | 9:04 BBEAST WEST BANK | *Coca Cada | ILTRA | LAKERS"
+        },
+        {
+         "t": 436.25,
+         "text": "R | Michelob ULTRA | SUPERIOR LIGHT BEER | SUPERIOR LIGHT BEER | 9:04' BBEASTWESTBANK MOReG6 ULTRA | \u2022 CeaCla.. | ULTRA | 29 | LAKERS"
+        }
+       ],
+       "sounds": [
+        {
+         "start": 411.0,
+         "end": 464.5,
+         "label": "speech"
+        },
+        {
+         "start": 423.0,
+         "end": 428.5,
+         "label": "music"
+        },
+        {
+         "start": 425.0,
+         "end": 426.0,
+         "label": "tambourine"
+        },
+        {
+         "start": 426.5,
+         "end": 427.5,
+         "label": "cow_moo"
+        },
+        {
+         "start": 429.0,
+         "end": 431.5,
+         "label": "playing_squash"
+        },
+        {
+         "start": 429.5,
+         "end": 431.0,
+         "label": "emergency_vehicle"
+        },
+        {
+         "start": 430.0,
+         "end": 431.0,
+         "label": "police_siren"
+        },
+        {
+         "start": 430.5,
+         "end": 431.5,
+         "label": "booing"
+        },
+        {
+         "start": 432.5,
+         "end": 433.5,
+         "label": "door"
+        },
+        {
+         "start": 432.5,
+         "end": 433.5,
+         "label": "truck"
+        },
+        {
+         "start": 433.0,
+         "end": 434.0,
+         "label": "booing"
+        },
+        {
+         "start": 434.0,
+         "end": 435.0,
+         "label": "music"
+        },
+        {
+         "start": 434.0,
+         "end": 435.0,
+         "label": "tambourine"
+        }
+       ]
+      },
+      "steps": [
+       {
+        "step": "a coach is interviewed during the game",
+        "start": 424.66,
+        "end": 436.7,
+        "timecode": "00:07:04.7 -> 00:07:16.7"
+       }
+      ],
+      "replays": []
+     }
+    ],
+    "rejected": [
+     {
+      "video_id": "v_3ee2db6c19",
+      "start": 658.52,
+      "end": 662.93,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_8718a4de6d",
+      "start": 413.93,
+      "end": 421.84,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_8718a4de6d",
+      "start": 406.03,
+      "end": 413.93,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_8718a4de6d",
+      "start": 319.08,
+      "end": 326.99,
+      "reason": "no match"
+     },
+     {
+      "video_id": "v_3ee2db6c19",
+      "start": 109.75,
+      "end": 118.77,
+      "reason": "same moment as obs_7b127b98b6"
+     },
+     {
+      "video_id": "v_3ee2db6c19",
+      "start": 131.03,
+      "end": 137.75,
+      "reason": "same moment as obs_ac83c03583"
+     },
+     {
+      "video_id": "v_3ee2db6c19",
+      "start": 421.75,
+      "end": 430.66,
+      "reason": "same moment as obs_b20db76424"
+     },
+     {
+      "video_id": "v_3ee2db6c19",
+      "start": 430.7,
+      "end": 439.75,
+      "reason": "same moment as obs_b20db76424"
+     }
+    ],
+    "counts": {
+     "candidates": 12,
+     "checked": 11,
+     "confirmed": 3,
+     "rejected": 8
+    },
+    "seconds": {
+     "search": 0.31,
+     "load": 0.0,
+     "check": 44.1
+    }
+   },
+   "stderr": "tlv: searching 3 videos for 1 steps\ntlv: checking 11 stretches\ntlv: checked 1 of 11\ntlv: checked 2 of 11\ntlv: checked 3 of 11\ntlv: checked 4 of 11\ntlv: checked 5 of 11\ntlv: checked 6 of 11\ntlv: checked 7 of 11\ntlv: checked 8 of 11\ntlv: checked 9 of 11\ntlv: checked 10 of 11\ntlv: checked 11 of 11\ntlv: found 3 in 44 s: 0 s searching, 0 s loading the model, 44 s checking (44 s of it answering)\n"
+  }
+ ]
+}
