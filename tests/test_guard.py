@@ -49,6 +49,7 @@ HOG = textwrap.dedent(
                 "began": began,
                 "ended": time.time(),
                 "code": __file__,
+                "cwd": os.getcwd(),  # as model libraries resolve relative paths at import
             }
         return handle
 
@@ -157,6 +158,19 @@ def test_a_host_started_inside_another_checkout_runs_its_starters_code(hog, tmp_
     (other / "hog.py").write_text(HOG)
     monkeypatch.chdir(other)
     assert _run(hog)["code"] == str(tmp_path / "hog.py")
+
+
+def test_models_still_start_once_the_folder_the_host_was_started_from_is_gone(hog, tmp_path, monkeypatch):
+    """The host outlives the caller that starts it; on 2026-10-13 a host started from a worktree
+    failed every model it started after the worktree was removed."""
+    worktree = tmp_path / "worktree"
+    worktree.mkdir()
+    monkeypatch.chdir(worktree)
+    first = _run(hog)["pid"]
+    monkeypatch.chdir(tmp_path)
+    worktree.rmdir()
+    os.utime(Path(guard.__file__).with_name("models") / "protocol.py")  # a fresh child is needed
+    assert _run(hog)["pid"] != first
 
 
 @pytest.mark.parametrize(

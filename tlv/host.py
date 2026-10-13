@@ -324,6 +324,10 @@ def main() -> None:
         if not _take(lock):
             return  # another host serves this socket
         path = guard.socket_path()
+        # Work in the run folder, which lasts as long as the host: a host outlives the caller that
+        # started it, and on 2026-10-13 one started from a worktree failed every model it started
+        # once the worktree was removed.
+        os.chdir(path.parent)
         path.unlink(missing_ok=True)
         host = Host()
         with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as server:
