@@ -6,8 +6,8 @@ import json
 import numpy as np
 import pytest
 
-from tlv import embed, guard
-from tlv.index import spans
+from tlv import embed, guard, store
+from tlv.index import frames, spans, vision
 
 
 @pytest.mark.parametrize(
@@ -161,7 +161,10 @@ def scene(db, video):
 
 def test_a_word_belongs_to_the_span_holding_its_middle(scene):
     db, _ = scene
-    transcripts = [spans.gather(db, "v_test", start, end).transcript for start, end in [(0.0, 4.0), (4.0, 8.0)]]
+    transcripts = [
+        spans.gather(db, "v_test", start, end, vision.text_times(8.0)).transcript
+        for start, end in [(0.0, 4.0), (4.0, 8.0)]
+    ]
     assert transcripts == ["left", "right"]
 
 
@@ -169,9 +172,9 @@ def test_a_word_belongs_to_the_span_holding_its_middle(scene):
 def captioner(monkeypatch):
     """Stands in for the vision-language and text-embedding models, answering a job of one question
     or a batch as the model worker does. Captions are numbered in the order they are made, "jobs"
-    lists how many questions each job asked, and a test may set the shot kind the model answers
-    and the job at which it stops."""
-    answer = {"shot": "replay", "made": 0, "jobs": [], "fails_at": None}
+    lists how many questions each job asked and "pictures" how many frames each question showed,
+    and a test may set the shot kind the model answers and the job at which it stops."""
+    answer = {"shot": "replay", "made": 0, "jobs": [], "pictures": [], "fails_at": None}
 
     def caption():
         answer["made"] += 1
@@ -188,7 +191,9 @@ def captioner(monkeypatch):
             return None
 
         def call(self, job):
-            answer["jobs"].append(len(job.get("batch", [job])))
+            questions = job.get("batch", [job])
+            answer["jobs"].append(len(questions))
+            answer["pictures"] += [len(question["images"]) for question in questions]
             if len(answer["jobs"]) == answer["fails_at"]:
                 raise RuntimeError("the model stopped")
             return {"results": [caption() for _ in job["batch"]]} if "batch" in job else caption()
@@ -255,6 +260,61 @@ def test_an_interrupted_run_keeps_the_jobs_done_and_the_rerun_captions_the_rest(
     spans.run(db, video, None)
     made = [f"caption {n}" for n in range(1, 16)]
     assert (interrupted, in_order(db)) == ([*made[:8], *[None] * 7], made)
+
+
+SLIDE = ["Backpropagation", "An algorithm that trains the weights of a neural network"]
+LINE = ["cargo build --release"]
+
+
+def two_minutes(db, turn_per_s, screen):
+    """A two-minute shot with a frame every 0.5 s, its picture turning `turn_per_s` radians a second
+    in SigLIP space, and `screen(t)` the lines each text read finds."""
+    db.execute("UPDATE videos SET duration = 120.0 WHERE video_id = 'v_test'")
+    add_rows(db, "shots", [{"idx": 0, "start": 0.0, "end": 120.0}])
+    pictures = [np.array([np.cos(turn_per_s * t), np.sin(turn_per_s * t)]) for t in frames.times(120.0)]
+    add_rows(
+        db,
+        "frames",
+        [
+            {"t": t, "path": f"t{t}.jpg", "shot_idx": 0, "embedding": store.to_blob(picture)}
+            for t, picture in zip(frames.times(120.0), pictures, strict=True)
+        ],
+    )
+    add_rows(db, "ocr", [ocr(t, line) for t in vision.text_times(120.0) for line in screen(t)])
+    return db.execute("SELECT * FROM videos WHERE video_id = 'v_test'").fetchone()
+
+
+@pytest.mark.parametrize(
+    ("turn_per_s", "screen", "pictures"),
+    [
+        # The guard: a still slide costs 15 pictures in two minutes (7.5 a minute of video), not 60.
+        (0.0, lambda t: SLIDE, [1] * 15),
+        (0.0, lambda t: SLIDE + (LINE if t > 5 else []), [2] + [1] * 14),
+        # A frame is the picture a quarter second past its time, and text is read once a second, so
+        # a line first read at 2.25 s may have come up after the 1.25 s frame, and one first read at
+        # 8.25 s before the 7.25 s frame.
+        (0.0, lambda t: SLIDE + (LINE if t > 2 else []), [2] + [1] * 14),
+        (0.0, lambda t: SLIDE + (LINE if t > 8 else []), [2] + [1] * 14),
+        (0.0, lambda t: LINE if t < 5 else [], [2] + [1] * 14),
+        # Each picture is within 0.995 of the one 2 s before it, but not of the one 4 s before.
+        (0.03, lambda t: SLIDE, [2] * 15),
+        (1.0, lambda t: SLIDE, [4] * 15),
+    ],
+    ids=[
+        "still slide",
+        "a line comes up",
+        "a line comes up just after a picture",
+        "a line comes up just before a picture",
+        "the text goes away",
+        "slow pan",
+        "moving picture",
+    ],
+)
+def test_a_frame_repeating_the_picture_and_text_shown_before_it_is_left_out(
+    db, video, captioner, turn_per_s, screen, pictures
+):
+    spans.run(db, two_minutes(db, turn_per_s, screen), None)
+    assert captioner["pictures"] == pictures
 
 
 @pytest.mark.parametrize(("shot", "replay"), [("replay", 1), ("live", 0), ("crowd", None)])

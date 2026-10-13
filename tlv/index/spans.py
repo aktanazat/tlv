@@ -2,9 +2,11 @@
 structured caption from the vision-language model, a text embedding for search, and a caption
 observation tied to its time range and evidence.
 
-A caption is kept across reruns while its span and everything the model saw (frames, speech,
-on-screen text, prompt, model) are unchanged. Spans go to the model BATCH to a job, and a job's
-captions are saved as soon as it returns, so an interrupted run resumes where it stopped.
+The model sees up to FRAMES_PER_SPAN frames spread over a span, less those repeating the picture
+and on-screen text of the frame shown before them, so a still slide or terminal costs it one
+picture. A caption is kept across reruns while its span and everything the model saw (frames,
+speech, on-screen text, prompt, model) are unchanged. Spans go to the model BATCH to a job, and a
+job's captions are saved as soon as it returns, so an interrupted run resumes where it stopped.
 """
 
 from __future__ import annotations
@@ -14,17 +16,30 @@ import json
 import math
 import re
 import sqlite3
+from bisect import bisect_left, bisect_right
+from collections import Counter
 from dataclasses import asdict, dataclass
 from typing import Any
 
 from tlv import embed, guard, store
-from tlv.index import frames
+from tlv.index import frames, vision
 from tlv.models import vlm
 
 VERSION = 1
 MIN_S = 2.0
 MAX_S = 8.0
 FRAMES_PER_SPAN = 4
+# A picked frame showing what the frame shown before it did is left out. Two pictures match at a
+# SigLIP cosine of SAME_PICTURE or more. In the everyday set a chart coming up on a slide reads
+# 0.985 to the picture before it, and a talking head two seconds on mostly reads under 0.995 (the
+# meeting keeps 90% of its pictures; 63% at 0.99), while a lecture slide under its moving webcam
+# inset reads over it in half the picked frames.
+SAME_PICTURE = 0.995
+# SigLIP sees a terminal before and after a new line as one picture (cosine 1.0), so the text on
+# screen must hold too: no read from one picture to the other may gain or lose NEW_WORDS words
+# against the first. OCR on a still slide gains or loses one now and then, a formula read as
+# "wme"; a new line, bullet or command brings two or more ("cargo build").
+NEW_WORDS = 2
 MAX_TOKENS = 400
 # Spans per model job. The model writes a job's answers together, taking up the next span as an
 # answer ends, so a span costs less model time than in a job of its own; eight keep a job under
@@ -38,6 +53,8 @@ SHOTS = ("live", "replay", "crowd", "bench", "interview", "studio", "graphic", "
 NAME_SOURCES = ("on_screen", "speech")
 JERSEY = re.compile(r"#?\s*(\d{1,2})")
 WORD = re.compile(r"[a-z0-9]+")
+# A word on screen, for telling whether the text changed: shorter runs are mostly OCR specks.
+SCREEN_WORD = re.compile(r"[a-z0-9]{3,}")
 # A string field of an answer cut off before its JSON closed.
 FIELD = re.compile(r'"(caption|action|shot)"\s*:\s*"((?:[^"\\]|\\.)*)"')
 
@@ -92,9 +109,10 @@ def run(db: sqlite3.Connection, video: sqlite3.Row, progress: guard.Progress | N
         (row["start"], row["end"])
         for row in db.execute("SELECT start, end FROM shots WHERE video_id = ? ORDER BY idx", (video_id,))
     ]
+    reads = vision.text_times(video["duration"])
     spans = []
     for start, end in build(shots):
-        seen = gather(db, video_id, start, end)
+        seen = gather(db, video_id, start, end, reads)
         text = prompt(seen)
         spans.append(Span(f"{video_id}:{start:.3f}", start, end, seen, text, digest(start, end, seen, text)))
     todo = _replace(db, video_id, spans, recaption)
@@ -190,16 +208,20 @@ def _group(run: list[tuple[float, float]]) -> list[tuple[float, float]]:
     return groups
 
 
-def gather(db: sqlite3.Connection, video_id: str, start: float, end: float) -> Inputs:
-    """The frames, words, on-screen text and sounds inside [start, end)."""
-    paths = [
-        row["path"]
-        for row in db.execute(
-            "SELECT path FROM frames WHERE video_id = ? AND t >= ? AND t < ? ORDER BY t", (video_id, start, end)
-        )
-    ]
-    if len(paths) > FRAMES_PER_SPAN:
-        paths = [paths[(2 * i + 1) * len(paths) // (2 * FRAMES_PER_SPAN)] for i in range(FRAMES_PER_SPAN)]
+def gather(db: sqlite3.Connection, video_id: str, start: float, end: float, reads: list[float]) -> Inputs:
+    """The frames, words, on-screen text and sounds inside [start, end): FRAMES_PER_SPAN frames
+    spread over the span, less each repeating the frame shown before it. `reads` are the times
+    the video's text is read at, vision.text_times."""
+    picked = db.execute(
+        "SELECT t, path, embedding FROM frames WHERE video_id = ? AND t >= ? AND t < ? ORDER BY t",
+        (video_id, start, end),
+    ).fetchall()
+    if len(picked) > FRAMES_PER_SPAN:
+        picked = [picked[(2 * i + 1) * len(picked) // (2 * FRAMES_PER_SPAN)] for i in range(FRAMES_PER_SPAN)]
+    shown = picked[:1]
+    for frame in picked[1:]:
+        if not _repeats(db, video_id, reads, shown[-1], frame):
+            shown.append(frame)
     words = [
         word["w"]
         for row in db.execute(
@@ -225,7 +247,32 @@ def gather(db: sqlite3.Connection, video_id: str, start: float, end: float) -> I
             (video_id, end, start),
         )
     ]
-    return Inputs(paths, " ".join(words), ocr, sounds)
+    return Inputs([frame["path"] for frame in shown], " ".join(words), ocr, sounds)
+
+
+def _repeats(db: sqlite3.Connection, video_id: str, reads: list[float], shown: sqlite3.Row, frame: sqlite3.Row) -> bool:
+    """Whether `frame` shows what `shown`, a frame before it, did: their SigLIP vectors within
+    SAME_PICTURE, and no read of the text on screen from one picture to the other gaining or losing
+    NEW_WORDS words against the first."""
+    if shown["embedding"] is None or frame["embedding"] is None:
+        return False
+    if float(store.from_blob(shown["embedding"]) @ store.from_blob(frame["embedding"])) < SAME_PICTURE:
+        return False
+    # A frame is the picture as it stands just before half a step past its time (ffmpeg's fps
+    # filter gives each step the last frame rounding to it), and a read is the picture at its
+    # time, so the reads from the last one at or before the first picture to the first one at or
+    # after the second hold every change between them. A read with no text is an empty screen.
+    step = frames.EVERY_S * vision.TEXT_EVERY
+    after, before = shown["t"] + frames.EVERY_S / 2 - step, frame["t"] + frames.EVERY_S / 2 + step
+    window = reads[bisect_right(reads, after) : bisect_left(reads, before)]
+    words: dict[float, Counter[str]] = {t: Counter() for t in window}
+    for row in db.execute(
+        "SELECT t, text FROM ocr WHERE video_id = ? AND t > ? AND t < ? AND conf >= ?",
+        (video_id, after, before, OCR_MIN_CONF),
+    ):
+        words.setdefault(row["t"], Counter()).update(SCREEN_WORD.findall(row["text"].lower()))
+    read = [words[t] for t in sorted(words)]
+    return all((later - read[0]).total() < NEW_WORDS and (read[0] - later).total() < NEW_WORDS for later in read[1:])
 
 
 def prompt(seen: Inputs) -> str:

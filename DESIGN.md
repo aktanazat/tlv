@@ -15,7 +15,9 @@ query ─▶ plan ─▶ retrieve ─▶ connect ─▶ inspect ─▶ answer (c
 
 - **Index** (`tlv/index/`): camera cuts, frames every 0.5 s with image embeddings, speech with
   word times, on-screen text, faces and bodies, audio events, then spans of a few seconds with
-  a structured caption from the vision-language model. Each caption becomes an observation.
+  a structured caption from the vision-language model, which sees up to four of the span's
+  frames; a frame repeating the picture and on-screen text shown before it is left out, so a
+  still slide is shown once. Each caption becomes an observation.
   Speech is transcribed in pieces of one to two minutes of audio, one model job each, so a
   search waits behind one piece, never a whole video. Two pieces share 6 s around a seam placed
   in the quietest half second (a pause when there is one) and are joined at a word both heard

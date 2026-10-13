@@ -64,13 +64,20 @@ def detect(paths: Sequence[str | Path]) -> list[list[Detection]]:
     return [_detections(seen) for seen in _images(paths, text=False, detect=True)]
 
 
+def text_times(duration: float) -> list[float]:
+    """The times `run` reads text at in a video `duration` seconds long: every TEXT_EVERY-th time
+    of the grid tlv.index.frames samples on."""
+    return frames.times(duration)[::TEXT_EVERY]
+
+
 def run(db: sqlite3.Connection, video: sqlite3.Row, progress: guard.Progress | None) -> None:
     """Reads text once a second and finds faces and bodies twice a second, on full-resolution
     frames on the grid tlv.index.frames samples on. It needs no other stage's rows, so it runs on
     the Neural Engine while the stages before the captions use the CPU and the GPU."""
     video_id = video["video_id"]
     times = frames.times(video["duration"])
-    samples = [{"t": t, "text": i % TEXT_EVERY == 0, "detect": True} for i, t in enumerate(times)]
+    reads = set(text_times(video["duration"]))
+    samples = [{"t": t, "text": t in reads, "detect": True} for t in times]
     ocr: list[tuple[Any, ...]] = []
     detections: list[tuple[Any, ...]] = []
     for done, seen in enumerate(run_helper("video", {"path": str(decodable(video)), "samples": samples}), 1):
