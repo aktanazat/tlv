@@ -115,9 +115,9 @@ Eleven labeled queries over three NBA highlight videos, 23 events in all (`eval/
 |---|---|---|
 | events found | 15 of 23 | 17 of 23 |
 | clips returned | 52 | 42 |
-| wrong clips | 25 | 19 |
-| extra clips of an event already found | 6 | 2 |
-| precision (ambiguous clips left out) | 0.33 | 0.45 |
+| wrong clips | 25 | 18 |
+| extra clips of an event already found | 5 | 2 |
+| precision (ambiguous clips left out) | 0.33 | 0.46 |
 | seconds per query | 42 | 47 |
 | cost | paid API | none |
 

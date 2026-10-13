@@ -1,5 +1,5 @@
 {
-  "method": "Labeled by hand from the three local videos: 1 fps contact sheets of every video, score-bug crops at 1 fps to time each basket by the score change and the shot-clock reset, and full-resolution crops at 0.04-0.5 s steps to read jersey numbers and tell dunks from layups. YouTube's automatic captions were used only as a search aid (spoken mentions, play locations). Neither system's output was read before these labels were written. Each event lists the live range first, then every replay of the same moment. Times are m:ss.s from the start of the local file. 'ambiguous' holds moments the labels could not settle; a clip there is neither credited nor penalized.",
+  "method": "Labeled by hand from the three local videos: 1 fps contact sheets of every video, score-bug crops at 1 fps to time each basket by the score change and the shot-clock reset, and full-resolution crops at 0.04-0.5 s steps to read jersey numbers and tell dunks from layups. YouTube's automatic captions were used only as a search aid (spoken mentions, play locations). Neither system's output was read before these labels were written. Each event lists the live range first, then every replay of the same moment. Times are m:ss.s from the start of the local file. 'ambiguous' holds moments the labels could not settle; a clip there is neither credited nor penalized. One correction came after both systems had run: the oyk2 2:19.5 play was first labeled a LeBron fast-break dunk, but its replay (2:36.0-2:37.5) shows LeBron throwing the lob and Hachimura (#28) dunking it over Maxey, and the commentary says 'LeBron with the great alley'. It is now an event of lebron-pass-dunk and alley-oop and not of lebron-dunk or lebron-fast-break-dunk; both systems are scored against the corrected labels.",
   "videos": {
     "oyk2QtdUtKE": {
       "title": "LeBron James TURNED BACK THE CLOCK With 29 PTS vs 76ERS | December 7, 2025",
@@ -66,6 +66,11 @@
           "video": "zHBgJqG1nJo",
           "ranges": [["2:25.5", "2:28.0"], ["2:39.0", "2:43.5"]],
           "note": "LeBron whips a pass down low to Jabari Walker (#33), who catches it on the floor and dunks (2:27.0-2:27.4); replay 2:39-2:43."
+        },
+        {
+          "video": "oyk2QtdUtKE",
+          "ranges": [["2:19.5", "2:28.0"], ["2:30.0", "2:38.5"], ["2:39.0", "2:43.5"]],
+          "note": "62-64: LeBron leads the break and lobs to Hachimura (#28), who dunks over Maxey (#0) (live 2:26; replay lob 2:36.3, dunk 2:37.0-2:38.5); overhead replay 2:39-2:43.5."
         }
       ],
       "ambiguous": [
@@ -110,11 +115,6 @@
           "video": "oyk2QtdUtKE",
           "ranges": [["1:01.5", "1:05.0"], ["1:06.5", "1:12.0"]],
           "note": "Cutting one-hand dunk off a Luka pass; replay 1:06.5-1:12."
-        },
-        {
-          "video": "oyk2QtdUtKE",
-          "ranges": [["2:19.5", "2:28.0"], ["2:30.0", "2:38.5"], ["2:39.0", "2:43.5"]],
-          "note": "Fast-break dunk; two replays."
         }
       ],
       "ambiguous": [
@@ -124,7 +124,7 @@
           "note": "Coast-to-coast drive; the finish looks like a layup, but the camera does not settle it."
         }
       ],
-      "notes": "Every LeBron basket shown in G6go and zHBg is a layup, floater or jumper."
+      "notes": "Every LeBron basket shown in G6go and zHBg is a layup, floater or jumper. Not an event: oyk2 2:19.5-2:43.5, LeBron's lob that Hachimura (#28) dunks."
     },
     "lebron-stats-graphic": {
       "events": [
@@ -190,21 +190,20 @@
       "notes": "Truth is the game clock reaching 0.0 at the end of a period, half and game end included; the horn was not checked separately in the audio. Not events: the shot clock at 0.0 (G6go 6:59 and 10:21-10:22; zHBg 3:02-3:04 during a stoppage at 1st :12.3). G6go's 1st and 3rd quarter ends and zHBg's end of the 1st quarter are not shown."
     },
     "lebron-fast-break-dunk": {
-      "events": [
-        {
-          "video": "oyk2QtdUtKE",
-          "ranges": [["2:19.5", "2:28.0"], ["2:30.0", "2:38.5"], ["2:39.0", "2:43.5"]],
-          "note": "Fast-break dunk; two replays."
-        }
-      ],
+      "events": [],
       "ambiguous": [
         {
           "video": "oyk2QtdUtKE",
           "ranges": [["0:36.0", "0:46.5"]],
           "note": "Coast-to-coast drive; the finish looks like a layup, but the camera does not settle it."
+        },
+        {
+          "video": "oyk2QtdUtKE",
+          "ranges": [["1:01.5", "1:05.0"], ["1:06.5", "1:12.0"]],
+          "note": "LeBron's cutting dunk off a Luka pass, 25-27. First labeled a half-court play; the commentary calls it transition ('how do you not pick up LeBron in transition'), so it is left unsettled."
         }
       ],
-      "notes": "The oyk2 1:01.5 cutting dunk is a half-court play and not an event."
+      "notes": "oyk2 2:19.5-2:43.5 is LeBron's lob that Hachimura (#28) dunks, not an event."
     },
     "alley-oop": {
       "events": [
@@ -212,6 +211,11 @@
           "video": "oyk2QtdUtKE",
           "ranges": [["3:07.0", "3:14.0"], ["3:14.0", "3:22.0"]],
           "note": "LeBron's lob to Ayton, caught in the air and dunked; CARL'S CAM replay 3:14-3:22."
+        },
+        {
+          "video": "oyk2QtdUtKE",
+          "ranges": [["2:19.5", "2:28.0"], ["2:30.0", "2:38.5"], ["2:39.0", "2:43.5"]],
+          "note": "LeBron's lob on the break, caught at the rim by Hachimura (#28) and dunked over Maxey (replay 2:36.3-2:38.5); the commentary says 'LeBron with the great alley'."
         }
       ],
       "ambiguous": [
