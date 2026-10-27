@@ -2,8 +2,10 @@
 
 Local video understanding for terminal agents. `tlv` indexes videos on this Mac with open
 models, finds moments in them, checks each moment by looking at its frames, and cuts clips.
-Nothing leaves the machine and nothing costs money. Every answer points back to a video and an
-exact time range, with the frames, transcript and on-screen text behind it.
+Video and frames stay on the Mac. With `TYPESAFE_API_KEY` in its environment, `find` also sends
+the claim and nearby transcript lines to TypeSafe to check who made a confirmed play.
+Without that key, searching stays local. Every answer points back to a video and an exact time
+range, with the frames, transcript and on-screen text behind it.
 
 The same operations run as CLI commands and as MCP tools (`tlv mcp`). The commands and tool
 names are those of the earlier Twelve Labs client, so agents that used it need no changes.
@@ -37,6 +39,10 @@ uv run tlv --help
 
 Model weights download from Hugging Face on first use into `~/.cache/huggingface`. Models run one
 at a time, each in a child process held to a memory cap, so indexing waits its turn on a busy Mac.
+The face recognition weights downloaded from InsightFace are licensed for non-commercial research
+use. Commercial use requires separate permission from InsightFace; the weights are not included
+in this repository.
+
 
 A background model host, one per user, keeps the models loaded between searches, so only the
 first search after a pause pays to load them. It lets a model go after 10 minutes unused

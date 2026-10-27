@@ -1,9 +1,11 @@
 # tlv: local video understanding
 
-tlv finds moments in videos and proves them. It runs on this Mac with open models; nothing
-leaves the machine and nothing costs money. It replaces a Twelve Labs client with the same
-commands and MCP tools, and it is built to beat it on the cases Twelve Labs gets wrong:
-replays counted as new plays, times that drift by seconds, and confident claims nobody checked.
+tlv finds moments in videos and checks them against the frames. Its models run on this Mac.
+If `TYPESAFE_API_KEY` is present, a confirmed play's claim and nearby transcript lines go to
+TypeSafe for an additional credit check; video and frames stay here. Without that key, searching
+stays local. It replaces a Twelve Labs client with the same commands and MCP tools, and aims to
+address cases the earlier client got wrong: replays counted as new plays, times that drift by
+seconds, and confident claims nobody checked.
 
 ## Shape
 
