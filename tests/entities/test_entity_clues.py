@@ -60,6 +60,14 @@ def test_said_finds_known_names_in_timed_words(timed, expected):
     assert said(timed, NAMES) == expected
 
 
+def test_said_prefers_the_longest_name_and_follows_the_names_it_is_given():
+    names = ["Gary Payton", "Gary Payton II"]
+    assert said([("Gary Payton II scores", 1.0)], names) == [("Gary Payton II", 1.0)]
+    assert said([("Gary Payton", 1.0)], names) == [("Gary Payton", 1.0)]
+    assert said([("Payton", 1.0)], names) == []  # two names share it
+    assert said([("Payton", 1.0)], names[:1]) == [("Gary Payton", 1.0)]  # now only one has it
+
+
 def clue(kind, value, t, **extra):
     return {"kind": kind, "value": value, "t": t, **extra}
 

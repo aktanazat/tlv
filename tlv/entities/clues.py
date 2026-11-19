@@ -12,6 +12,7 @@ import re
 import unicodedata
 from collections import Counter, defaultdict
 from collections.abc import Iterable, Sequence
+from functools import lru_cache
 from itertools import pairwise
 from typing import Any
 
@@ -38,8 +39,13 @@ CENTER_BAND = (0.25, 0.75)
 
 def words(text: str) -> list[str]:
     """Lowercase words without accents: "Luka  Dončić!" -> ["luka", "doncic"]."""
+    return list(_words(text))
+
+
+@lru_cache(maxsize=1 << 16)
+def _words(text: str) -> tuple[str, ...]:
     plain = "".join(c for c in unicodedata.normalize("NFKD", text) if not unicodedata.combining(c))
-    return re.findall(r"[a-z0-9']+", plain.lower())
+    return tuple(re.findall(r"[a-z0-9']+", plain.lower()))
 
 
 def jersey(lines: Iterable[tuple[str, float, Box]]) -> tuple[str, Box] | None:
@@ -68,21 +74,14 @@ def said(timed: Sequence[tuple[str, float]], names: Sequence[str]) -> list[tuple
     """Each mention of a known name in timed text, (word, time) pairs, with its time: the full
     name word for word, or one word that no other known name has (at least MIN_WORD long).
     Names spelled alike ("LEBRON JAMES", "LeBron James") count as one, the first given."""
-    tokens = [(w, t) for text, t in timed for w in words(text)]
-    unique: dict[tuple[str, ...], str] = {}
-    for name in names:
-        unique.setdefault(tuple(words(name)), name)
-    unique.pop((), None)
-    spelled = sorted(((list(parts), name) for parts, name in unique.items()), key=lambda p: -len(p[0]))
-    owners: dict[str, set[str]] = defaultdict(set)
-    for parts, name in spelled:
-        for word in parts:
-            owners[word].add(name)
+    tokens = [(w, t) for text, t in timed for w in _words(text)]
+    plain = tuple(w for w, _ in tokens)
+    starting, owners = _known(tuple(names))
     found = []
     i = 0
     while i < len(tokens):
-        full = next(((p, n) for p, n in spelled if [w for w, _ in tokens[i : i + len(p)]] == p), None)
         word, t = tokens[i]
+        full = next(((p, n) for p, n in starting.get(word, ()) if plain[i : i + len(p)] == p), None)
         if full:
             found.append((full[1], t))
             i += len(full[0])
@@ -91,6 +90,23 @@ def said(timed: Sequence[tuple[str, float]], names: Sequence[str]) -> list[tuple
             found.append((next(iter(owners[word])), t))
         i += 1
     return found
+
+
+@lru_cache(maxsize=64)
+def _known(names: tuple[str, ...]) -> tuple[dict[str, list[tuple[tuple[str, ...], str]]], dict[str, set[str]]]:
+    """For `said`: the names' spellings by their first word, longest first, and each word's names."""
+    unique: dict[tuple[str, ...], str] = {}
+    for name in names:
+        unique.setdefault(_words(name), name)
+    unique.pop((), None)
+    spelled = sorted(unique.items(), key=lambda p: -len(p[0]))
+    starting: dict[str, list[tuple[tuple[str, ...], str]]] = defaultdict(list)
+    owners: dict[str, set[str]] = defaultdict(set)
+    for parts, name in spelled:
+        starting[parts[0]].append((parts, name))
+        for word in parts:
+            owners[word].add(name)
+    return dict(starting), dict(owners)
 
 
 def mentions(text: str, names: Sequence[str]) -> list[str]:
